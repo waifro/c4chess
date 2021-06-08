@@ -5,7 +5,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <SDl2/SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 
 extern SDL_Color PP4M_BLACK;
 extern SDL_Color PP4M_WHITE;
