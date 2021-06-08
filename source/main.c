@@ -12,7 +12,7 @@ int main (int argc, char *argv[]) {
 
     global_renderer = pp4m_Init(global_window, "scacchi", 1270, 720);
 
-    for(;;) {}
+    GAME_Game();
 
     pp4m_Quit();
 
