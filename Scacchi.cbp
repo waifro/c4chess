@@ -36,7 +36,36 @@
 		<ExtraCommands>
 			<Add after="XCOPY $(#sdl2)\bin\*.dll $(TARGET_OUTPUT_DIR) /D /Y" />
 		</ExtraCommands>
-		<Unit filename="main.cpp" />
+		<Unit filename="source/game.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/pp4m/pp4m.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/pp4m/pp4m.h" />
+		<Unit filename="source/pp4m/pp4m_draw.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/pp4m/pp4m_draw.h" />
+		<Unit filename="source/pp4m/pp4m_image.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/pp4m/pp4m_image.h" />
+		<Unit filename="source/pp4m/pp4m_io.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/pp4m/pp4m_io.h" />
+		<Unit filename="source/pp4m/pp4m_net.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/pp4m/pp4m_net.h" />
+		<Unit filename="source/pp4m/pp4m_ttf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/pp4m/pp4m_ttf.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
