@@ -22,9 +22,9 @@ SDL_Color PP4M_YELLOW = {255, 255, 0, 255};
 SDL_Color PP4M_PINK = {255, 0, 255, 255};
 SDL_Color PP4M_CYAN = {0, 255, 255, 255};
 
-SDL_Renderer *pp4m_Init(SDL_Window *window, char title[256], int width, int height) {
+SDL_Renderer *pp4m_Init(SDL_Window *window, char *title, int width, int height) {
 
-    SDL_Init(SDL_INIT_EVERYTHING);
+    SDL_Init(SDL_INIT_VIDEO);
     pp4m_IMG_Init();
     pp4m_TTF_Init();
 

@@ -8,13 +8,13 @@
 #include "main.h"
 #include "game.h"
 
-SDL_Window *global_window = NULL;
+SDL_Window *global_window;
 SDL_Renderer *global_renderer;
 
 int main (int argc, char *argv[]) {
 
-    global_renderer = pp4m_Init(global_window, "scacchi", 1280, 720);
-    
+    global_renderer = pp4m_Init(global_window, "scacchi", SCREEN_WIDTH, SCREEN_HEIGHT);
+
     PP4M_SDL background;
     background.texture = pp4m_DRAW_TextureRect(global_renderer, PP4M_GREY_DARK, &background.rect, 1280, 720, 1, 1);
 
@@ -22,8 +22,9 @@ int main (int argc, char *argv[]) {
     SDL_RenderCopy(global_renderer, background.texture, NULL, NULL);
     SDL_RenderPresent(global_renderer);
 
-    GAME_CreateChessboard_RightTiles();
-    GAME_CreateChessboard_LeftTiles();
+    GAME_CreateChessboard_Tiles();
+    //GAME_CreateChessboard_RightTiles();
+    //GAME_CreateChessboard_LeftTiles();
 
     PP4M_SDL BlackKing;
     BlackKing.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, "/home/waifro/Scrivania/projects/Scacchi-main/resources/bianco_re.png", &BlackKing.rect, 490, 160, 50, 50);

@@ -29,7 +29,7 @@ typedef struct {
     SDL_Texture *texture;
 } PP4M_SDL;
 
-SDL_Renderer *pp4m_Init(SDL_Window *window, char title[256], int width, int height);
+SDL_Renderer *pp4m_Init(SDL_Window *window, char *title, int width, int height);
 void pp4m_Quit(void);
 
 void pp4m_GetDateAndTime(char *dst);
