@@ -15,20 +15,19 @@ int main (int argc, char *argv[]) {
 
     global_renderer = pp4m_Init(global_window, "scacchi", 1270, 720);
 
-    SDL_Texture *background = pp4m_DRAW_TextureRect(global_renderer, PP4M_WHITE, NULL, 1280, 720, 1, 1);
+    PP4M_SDL background;
+    background.texture = pp4m_DRAW_TextureRect(global_renderer, PP4M_GREEN, &background.rect, 1280, 720, 1, 1);
 
     SDL_RenderClear(global_renderer);
-    SDL_RenderCopy(global_renderer, background, NULL, NULL);
+    SDL_RenderCopy(global_renderer, background.texture, NULL, NULL);
     SDL_RenderPresent(global_renderer);
 
-    SDL_Delay(5000);
-
-    /*
     GAME_CreateChessboard_RightTiles();
+    GAME_CreateChessboard_LeftTiles();
 
     SDL_Delay(5000);
-    */
-    
+
+    SDL_DestroyTexture(background.texture);
     SDL_DestroyRenderer(global_renderer);
     SDL_DestroyWindow(global_window);
     pp4m_Quit();

@@ -373,7 +373,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1623153470 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m.c
+1623205302 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m.c
 	<time.h>
 	<string.h>
 	<stdbool.h>
@@ -382,10 +382,10 @@
 	"pp4m_image.h"
 	"pp4m_ttf.h"
 
-1623054334 c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m.h
+1623205302 c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m.h
 	<SDL2/SDL.h>
 	<SDL2/SDL_image.h>
-	<SDl2/SDL_ttf.h>
+	<SDL2/SDL_ttf.h>
 
 1561870398 c:\users\michele.spaziotempo\desktop\codeblocks\mingw\include\sdl2\sdl_image.h
 	"SDL.h"
@@ -398,33 +398,33 @@
 	"begin_code.h"
 	"close_code.h"
 
-1623054334 c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m_image.h
+1623205302 c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m_image.h
 
-1623054334 c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m_ttf.h
+1623205302 c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m_ttf.h
 
-1623054334 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m_draw.c
+1623205302 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m_draw.c
 	<SDL2/SDL.h>
 	"pp4m_draw.h"
 
-1623054334 c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m_draw.h
+1623205302 c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m_draw.h
 	<SDL2/SDL.h>
 
-1623054334 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m_image.c
+1623205302 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m_image.c
 	<SDL2/SDL.h>
 	<SDL2/SDL_image.h>
 	"pp4m_io.h"
 	"pp4m_image.h"
 
-1623054334 c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m_io.h
+1623205302 c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m_io.h
 	<stdbool.h>
 
-1623054334 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m_io.c
+1623205302 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m_io.c
 	<stdio.h>
 	<string.h>
 	<stdbool.h>
 	"pp4m_io.h"
 
-1623054334 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m_net.c
+1623205302 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m_net.c
 	<winsock2.h>
 	<netinet/in.h>
 	<sys/socket.h>
@@ -433,18 +433,24 @@
 	<netdb.h>
 	<stdio.h>
 	<unistd.h>
+	<errno.h>
+	<string.h>
 	"pp4m_io.h"
 	"pp4m_net.h"
 
-1623054334 c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m_net.h
+1623205302 c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m_net.h
 
-1623054334 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m_ttf.c
+1623205302 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m\pp4m_ttf.c
 	<SDL2/SDL.h>
 	<SDL2/SDL_ttf.h>
 	"pp4m.h"
 	"pp4m_ttf.h"
 
-1623151647 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\game.c
+1623205979 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\game.c
+	"pp4m/pp4m.h"
+	"pp4m/pp4m_draw.h"
+	"main.h"
+	"game.h"
 
 1623151784 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\main.cpp
 	<stdio.h>
@@ -494,13 +500,14 @@
 	"pp4m.h"
 	"pp4m_ttf.h"
 
-1623153053 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\main.c
+1623206021 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\main.c
 	<stdio.h>
 	<stdlib.h>
-	<SDL2/SDL.h>
 	"pp4m/pp4m.h"
 	"pp4m/pp4m_image.h"
-	"pp4m/pp4m.h"
+	"pp4m/pp4m_draw.h"
+	"main.h"
+	"game.h"
 
 1623152306 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\pp4m.c
 	<time.h>
@@ -561,4 +568,8 @@
 	<SDL2/SDL_ttf.h>
 	"pp4m.h"
 	"pp4m_ttf.h"
+
+1623205300 c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\main.h
+
+1623205300 c:\users\michele.spaziotempo\desktop\programmi\progetti\scacchi\source\game.h
 
