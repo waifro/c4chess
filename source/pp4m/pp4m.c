@@ -10,6 +10,8 @@
 #include "pp4m_ttf.h"
 
 SDL_Color PP4M_BLACK = {0, 0, 0, 255};
+SDL_Color PP4M_GREY = {128, 128, 128, 255};
+SDL_Color PP4M_GREY_DARK = {51, 51, 51, 255};
 SDL_Color PP4M_WHITE = {255, 255, 255, 255};
 
 SDL_Color PP4M_RED = {255, 0, 0, 255};

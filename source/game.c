@@ -7,8 +7,8 @@
 void GAME_CreateChessboard_RightTiles(void) {
     // destra
 
-    int ChessTile_X = (1280 / 2) - 125;
-    int ChessTile_Y = (720 / 2) - 175;
+    int ChessTile_X = (1280 / 2) - 150;
+    int ChessTile_Y = (720 / 2) - 200;
 
     PP4M_SDL RightTile[32];
 
@@ -17,102 +17,100 @@ void GAME_CreateChessboard_RightTiles(void) {
 
       if (n == 4) {
           // B tile
-          ChessTile_X = (1280 / 2) - 175;
+          ChessTile_X = (1280 / 2) - 200;
           ChessTile_Y += 50;
 
         } else if (n == 8) {
           // C tile
-          ChessTile_X = (1280 / 2) - 125;
+          ChessTile_X = (1280 / 2) - 150;
           ChessTile_Y += 50;
 
         } else if (n == 12) {
           // D tile
-          ChessTile_X = (1280 / 2) - 175;
+          ChessTile_X = (1280 / 2) - 200;
           ChessTile_Y += 50;
 
         } else if (n == 16) {
           // E tile
-          ChessTile_X = (1280 / 2) - 125;
+          ChessTile_X = (1280 / 2) - 150;
           ChessTile_Y += 50;
 
         } else if (n == 20) {
           // F tile
-          ChessTile_X = (1280 / 2) - 175;
+          ChessTile_X = (1280 / 2) - 200;
           ChessTile_Y += 50;
 
         } else if (n == 24) {
           // G tile
-          ChessTile_X = (1280 / 2) - 125;
+          ChessTile_X = (1280 / 2) - 150;
           ChessTile_Y += 50;
 
         } else if (n == 28) {
           // H tile
-          ChessTile_X = (1280 / 2) - 175;
+          ChessTile_X = (1280 / 2) - 200;
           ChessTile_Y += 50;
 
         }
 
-      RightTile[n].texture = pp4m_DRAW_TextureRect(global_renderer, PP4M_BLACK, &RightTile->rect, ChessTile_X, ChessTile_Y, 50, 50);
+      RightTile[n].texture = pp4m_DRAW_TextureRect(global_renderer, PP4M_GREY, &RightTile->rect, ChessTile_X, ChessTile_Y, 50, 50);
       ChessTile_X += 100;
       SDL_RenderCopy(global_renderer, RightTile[n].texture, NULL, &RightTile->rect);
-      SDL_RenderPresent(global_renderer);
     }
 
     return;
 }
 
 void GAME_CreateChessboard_LeftTiles(void) {
-    // destra
+    // sinistra
 
-    int ChessTile_X = (1280 / 2) - 175;
-    int ChessTile_Y = (720 / 2) - 175;
+    int ChessTile_X = (1280 / 2) - 200;
+    int ChessTile_Y = (720 / 2) - 200;
 
-    PP4M_SDL RightTile[32];
+    PP4M_SDL LeftTile[32];
 
     for(int n=0; n < 32; n++) {
       // starts from A tile
 
       if (n == 4) {
           // B tile
-          ChessTile_X = (1280 / 2) - 125;
+          ChessTile_X = (1280 / 2) - 150;
           ChessTile_Y += 50;
 
         } else if (n == 8) {
           // C tile
-          ChessTile_X = (1280 / 2) - 175;
+          ChessTile_X = (1280 / 2) - 200;
           ChessTile_Y += 50;
 
         } else if (n == 12) {
           // D tile
-          ChessTile_X = (1280 / 2) - 125;
+          ChessTile_X = (1280 / 2) - 150;
           ChessTile_Y += 50;
 
         } else if (n == 16) {
           // E tile
-          ChessTile_X = (1280 / 2) - 175;
+          ChessTile_X = (1280 / 2) - 200;
           ChessTile_Y += 50;
 
         } else if (n == 20) {
           // F tile
-          ChessTile_X = (1280 / 2) - 125;
+          ChessTile_X = (1280 / 2) - 150;
           ChessTile_Y += 50;
 
         } else if (n == 24) {
           // G tile
-          ChessTile_X = (1280 / 2) - 175;
+          ChessTile_X = (1280 / 2) - 200;
           ChessTile_Y += 50;
 
         } else if (n == 28) {
           // H tile
-          ChessTile_X = (1280 / 2) - 125;
+          ChessTile_X = (1280 / 2) - 150;
           ChessTile_Y += 50;
 
         }
 
-      RightTile[n].texture = pp4m_DRAW_TextureRect(global_renderer, PP4M_WHITE, &RightTile->rect, ChessTile_X, ChessTile_Y, 50, 50);
+      LeftTile[n].texture = pp4m_DRAW_TextureRect(global_renderer, PP4M_WHITE, &LeftTile->rect, ChessTile_X, ChessTile_Y, 50, 50);
       ChessTile_X += 100;
-      SDL_RenderCopy(global_renderer, RightTile[n].texture, NULL, &RightTile->rect);
-      SDL_RenderPresent(global_renderer);
+      SDL_RenderCopy(global_renderer, LeftTile[n].texture, NULL, &LeftTile->rect);
     }
 
     return;

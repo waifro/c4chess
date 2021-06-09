@@ -5,8 +5,12 @@
 
 SDL_Texture *pp4m_DRAW_TextureRect(SDL_Renderer *renderer, SDL_Color color, SDL_Rect *rect, float x, float y, float w, float h) {
 
-    SDL_Surface surface;
+    SDL_Surface surface = {0};
     SDL_Texture *texture = NULL;
+
+    if (sizeof(surface) > 1) {
+        SDL_FreeSurface(&surface);
+    }
 
     memcpy(&surface, (void*)SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0), sizeof(surface));
 
