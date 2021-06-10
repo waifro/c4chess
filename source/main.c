@@ -22,17 +22,7 @@ int main (int argc, char *argv[]) {
     SDL_RenderCopy(global_renderer, background.texture, NULL, NULL);
     SDL_RenderPresent(global_renderer);
 
-    GAME_CreateChessboard_Tiles();
-    //GAME_CreateChessboard_RightTiles();
-    //GAME_CreateChessboard_LeftTiles();
-
-    PP4M_SDL BlackKing;
-    BlackKing.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, "/home/waifro/Scrivania/projects/Scacchi-main/resources/bianco_re.png", &BlackKing.rect, 490, 160, 50, 50);
-
-    SDL_RenderCopy(global_renderer, BlackKing.texture, NULL, &BlackKing.rect);
-    SDL_RenderPresent(global_renderer);
-
-    SDL_Delay(5000);
+    GAME_InitializeChessboard();
 
     SDL_DestroyTexture(background.texture);
     SDL_DestroyRenderer(global_renderer);
