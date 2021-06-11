@@ -8,7 +8,30 @@
 #include "game.h"
 #include "core.h"
 
-CORE_TILE[64];
+char *BLACK_PAWN = "resources/dpawn.png";
+char *BLACK_KNIGHT = "resources/dknight.png";
+char *BLACK_BISHOP = "resources/dbishop.png";
+char *BLACK_ROOK = "resources/drook.png";
+char *BLACK_QUEEN = "resources/dqueen.png";
+char *BLACK_KING = "resources/dking.png";
+
+char *WHITE_PAWN = "resources/wpawn.png";
+char *WHITE_KNIGHT = "resources/wknight.png";
+char *WHITE_BISHOP = "resources/wbishop.png";
+char *WHITE_ROOK = "resources/wrook.png";
+char *WHITE_QUEEN = "resources/wqueen.png";
+char *WHITE_KING = "resources/wking.png";
+
+CORE_TILE tile[64];
+
+GAME_PIECE BlackPawn_A = {NULL, 0, 0, 0, 7, 'A'};
+GAME_PIECE BlackPawn_B = { 0, 0, 0, 7, 'B'};
+GAME_PIECE BlackPawn_C = { 0, 0, 0, 7, 'C'};
+GAME_PIECE BlackPawn_D = { 0, 0, 0, 7, 'D'};
+GAME_PIECE BlackPawn_E = { 0, 0, 0, 7, 'E'};
+GAME_PIECE BlackPawn_F = { 0, 0, 0, 7, 'F'};
+GAME_PIECE BlackPawn_G = { 0, 0, 0, 7, 'G'};
+GAME_PIECE BlackPawn_H = { 0, 0, 0, 7, 'H'};
 
 void GAME_InitializeChessboard(void) {
 
@@ -23,90 +46,75 @@ void GAME_InitializeChessboard(void) {
   return;
 }
 
+
+void GAME_UpdatePositionPiece(GAME_PIECE *piece, int colomn, char row) {
+
+  int count = 0;
+  for (int n = 0; n < 64; n++) {
+
+    if (tile[n].colomn == piece->colomn) { piece->y = tile[n].pp4m.rect.y; count += 1; }
+    if (tile[n].row == piece->row) { piece->x = tile[n].pp4m.rect.x; count += 1; }
+
+  if (count >= 2) break;
+  }
+
+  return;
+}
 void GAME_InitializePieces(void) {
 
-  GAME_PIECE BlackPawn_A = { 0, 0, 7, 'A', BLACK_PAWN};
-  GAME_PIECE BlackPawn_B = { 0, 0, 7, 'B', BLACK_PAWN};
-  GAME_PIECE BlackPawn_C = { 0, 0, 7, 'C', BLACK_PAWN};
-  GAME_PIECE BlackPawn_D = { 0, 0, 7, 'D', BLACK_PAWN};
-  GAME_PIECE BlackPawn_E = { 0, 0, 7, 'E', BLACK_PAWN};
-  GAME_PIECE BlackPawn_F = { 0, 0, 7, 'F', BLACK_PAWN};
-  GAME_PIECE BlackPawn_G = { 0, 0, 7, 'G', BLACK_PAWN};
-  GAME_PIECE BlackPawn_H = { 0, 0, 7, 'H', BLACK_PAWN};
+  BlackPawn_A.pp4m.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_A.pp4m.rect, 0, 0, 50, 50);
+  BlackPawn_B.pp4m.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_B.pp4m.rect, 0, 0, 50, 50);
+  BlackPawn_C.pp4m.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_C.pp4m.rect, 0, 0, 50, 50);
+  BlackPawn_D.pp4m.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_D.pp4m.rect, 0, 0, 50, 50);
+  BlackPawn_E.pp4m.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_E.pp4m.rect, 0, 0, 50, 50);
+  BlackPawn_F.pp4m.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_F.pp4m.rect, 0, 0, 50, 50);
+  BlackPawn_G.pp4m.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_G.pp4m.rect, 0, 0, 50, 50);
+  BlackPawn_H.pp4m.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_H.pp4m.rect, 0, 0, 50, 50);
+
+  int count = 0;
+  for (int n = 0; n < 64; n++) {
+
+    if (count >= 16) break;
+
+    if (tile[n].colomn == BlackPawn_A.colomn) { BlackPawn_A.y = tile[n].pp4m.rect.y; count += 1; }
+    if (tile[n].row == BlackPawn_A.row) { BlackPawn_A.x = tile[n].pp4m.rect.x; count += 1; }
+
+    if (tile[n].colomn == BlackPawn_B.colomn) { BlackPawn_B.y = tile[n].pp4m.rect.y; count += 1; }
+    if (tile[n].row == BlackPawn_B.row) { BlackPawn_B.x = tile[n].pp4m.rect.x; count += 1; }
+
+    if (tile[n].colomn == BlackPawn_C.colomn) { BlackPawn_C.y = tile[n].pp4m.rect.y; count += 1; }
+    if (tile[n].row == BlackPawn_C.row) { BlackPawn_C.x = tile[n].pp4m.rect.x; count += 1; }
+
+    if (tile[n].colomn == BlackPawn_D.colomn) { BlackPawn_D.y = tile[n].pp4m.rect.y; count += 1; }
+    if (tile[n].row == BlackPawn_D.row) { BlackPawn_D.x = tile[n].pp4m.rect.x; count += 1; }
+
+    if (tile[n].colomn == BlackPawn_E.colomn) { BlackPawn_E.y = tile[n].pp4m.rect.y; count += 1; }
+    if (tile[n].row == BlackPawn_E.row) { BlackPawn_E.x = tile[n].pp4m.rect.x; count += 1; }
+
+    if (tile[n].colomn == BlackPawn_F.colomn) { BlackPawn_F.y = tile[n].pp4m.rect.y; count += 1; }
+    if (tile[n].row == BlackPawn_F.row) { BlackPawn_F.x = tile[n].pp4m.rect.x; count += 1; }
+
+    if (tile[n].colomn == BlackPawn_G.colomn) { BlackPawn_G.y = tile[n].pp4m.rect.y; count += 1; }
+    if (tile[n].row == BlackPawn_G.row) { BlackPawn_G.x = tile[n].pp4m.rect.x; count += 1; }
+
+    if (tile[n].colomn == BlackPawn_H.colomn) { BlackPawn_H.y = tile[n].pp4m.rect.y; count += 1; }
+    if (tile[n].row == BlackPawn_H.row) { BlackPawn_H.x = tile[n].pp4m.rect.x; count += 1; }
+
+  }
+
+  SDL_RenderCopy(global_renderer, BlackPawn_A.pp4m.texture, NULL, &BlackPawn_A.pp4m.rect);
+  SDL_RenderCopy(global_renderer, BlackPawn_B.pp4m.texture, NULL, &BlackPawn_B.pp4m.rect);
+  SDL_RenderCopy(global_renderer, BlackPawn_C.pp4m.texture, NULL, &BlackPawn_C.pp4m.rect);
+  SDL_RenderCopy(global_renderer, BlackPawn_D.pp4m.texture, NULL, &BlackPawn_D.pp4m.rect);
+  SDL_RenderCopy(global_renderer, BlackPawn_E.pp4m.texture, NULL, &BlackPawn_E.pp4m.rect);
+  SDL_RenderCopy(global_renderer, BlackPawn_F.pp4m.texture, NULL, &BlackPawn_F.pp4m.rect);
+  SDL_RenderCopy(global_renderer, BlackPawn_G.pp4m.texture, NULL, &BlackPawn_G.pp4m.rect);
+  SDL_RenderCopy(global_renderer, BlackPawn_H.pp4m.texture, NULL, &BlackPawn_H.pp4m.rect);
+
 
   // IT DOESNT EXTRACT X, Y BECAUSE IT GOES TROW ONLY 8 TILES
   // from the tagged tiles, it extracts the x, y values
-  for (int n = 0; n < 8; n++) {
 
-    if (sizeof(BlackPawn_A.colomn) > 0 && sizeof(BlackPawn_A.row) > 0) break;
-
-    if (BlackPawn_A.colomn == tile[n].colomn) BlackPawn_A.y = tile[n].pp4m.rect.y;
-    for (int i = 0; i < 8; i++) if (BlackPawn_A.row == tile[n].row) BlackPawn_A.x = tile[n].pp4m.rect.x;
-
-  }
-
-  for (int n = 0; n < 8; n++) {
-
-    if (sizeof(BlackPawn_B.colomn) > 0 && sizeof(BlackPawn_B.row) > 0) break;
-
-    if (BlackPawn_B.colomn == tile[n].colomn) BlackPawn_B.y = tile[n].pp4m.rect.y;
-    for (int i = 0; i < 8; i++) if (BlackPawn_B.row == tile[n].row) BlackPawn_B.x = tile[n].pp4m.rect.x;
-
-  }
-
-  for (int n = 0; n < 8; n++) {
-
-    if (sizeof(BlackPawn_C.colomn) > 0 && sizeof(BlackPawn_C.row) > 0) break;
-
-    if (BlackPawn_C.colomn == tile[n].colomn) BlackPawn_C.y = tile[n].pp4m.rect.y;
-    for (int i = 0; i < 8; i++) if (BlackPawn_C.row == tile[n].row) BlackPawn_C.x = tile[n].pp4m.rect.x;
-
-  }
-
-  for (int n = 0; n < 8; n++) {
-
-    if (sizeof(BlackPawn_D.colomn) > 0 && sizeof(BlackPawn_D.row) > 0) break;
-
-    if (BlackPawn_D.colomn == tile[n].colomn) BlackPawn_D.y = tile[n].pp4m.rect.y;
-    for (int i = 0; i < 8; i++) if (BlackPawn_D.row == tile[n].row) BlackPawn_D.x = tile[n].pp4m.rect.x;
-
-  }
-
-  for (int n = 0; n < 8; n++) {
-
-    if (sizeof(BlackPawn_E.colomn) > 0 && sizeof(BlackPawn_E.row) > 0) break;
-
-    if (BlackPawn_E.colomn == tile[n].colomn) BlackPawn_E.y = tile[n].pp4m.rect.y;
-    for (int i = 0; i < 8; i++) if (BlackPawn_E.row == tile[n].row) BlackPawn_E.x = tile[n].pp4m.rect.x;
-
-  }
-
-  for (int n = 0; n < 8; n++) {
-
-    if (sizeof(BlackPawn_F.colomn) > 0 && sizeof(BlackPawn_F.row) > 0) break;
-
-    if (BlackPawn_F.colomn == tile[n].colomn) BlackPawn_F.y = tile[n].pp4m.rect.y;
-    for (int i = 0; i < 8; i++) if (BlackPawn_F.row == tile[n].row) BlackPawn_F.x = tile[n].pp4m.rect.x;
-
-  }
-
-  for (int n = 0; n < 8; n++) {
-
-    if (sizeof(BlackPawn_G.colomn) > 0 && sizeof(BlackPawn_G.row) > 0) break;
-
-    if (BlackPawn_G.colomn == tile[n].colomn) BlackPawn_G.y = tile[n].pp4m.rect.y;
-    for (int i = 0; i < 8; i++) if (BlackPawn_G.row == tile[n].row) BlackPawn_G.x = tile[n].pp4m.rect.x;
-
-  }
-
-  for (int n = 0; n < 8; n++) {
-
-    if (sizeof(BlackPawn_H.colomn) > 0 && sizeof(BlackPawn_H.row) > 0) break;
-
-    if (BlackPawn_H.colomn == tile[n].colomn) BlackPawn_H.y = tile[n].pp4m.rect.y;
-    for (int i = 0; i < 8; i++) if (BlackPawn_H.row == tile[n].row) BlackPawn_H.x = tile[n].pp4m.rect.x;
-
-  }
 
   //WhitePawn_A = { 0, 0, 2, 'A', WHITE_PAWN};
   //WhitePawn_B = { 0, 0, 2, 'B', WHITE_PAWN};
