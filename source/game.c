@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "pp4m/pp4m.h"
+#include "pp4m/pp4m_io.h"
 #include "pp4m/pp4m_draw.h"
+#include "pp4m/pp4m_image.h"
 
 #include "main.h"
 #include "game.h"
@@ -24,20 +27,45 @@ char *WHITE_KING = "resources/wking.png";
 
 CORE_TILE tile[64];
 
-GAME_PIECE BlackPawn_A = {NULL, 0, 0, 0, 7, 'A'};
-GAME_PIECE BlackPawn_B = { 0, 0, 0, 7, 'B'};
-GAME_PIECE BlackPawn_C = { 0, 0, 0, 7, 'C'};
-GAME_PIECE BlackPawn_D = { 0, 0, 0, 7, 'D'};
-GAME_PIECE BlackPawn_E = { 0, 0, 0, 7, 'E'};
-GAME_PIECE BlackPawn_F = { 0, 0, 0, 7, 'F'};
-GAME_PIECE BlackPawn_G = { 0, 0, 0, 7, 'G'};
-GAME_PIECE BlackPawn_H = { 0, 0, 0, 7, 'H'};
+GAME_PIECE BlackPawn_A;
+GAME_PIECE BlackPawn_B;
+GAME_PIECE BlackPawn_C;
+GAME_PIECE BlackPawn_D;
+GAME_PIECE BlackPawn_E;
+GAME_PIECE BlackPawn_F;
+GAME_PIECE BlackPawn_G;
+GAME_PIECE BlackPawn_H;
+
+GAME_PIECE WhitePawn_A;
+GAME_PIECE WhitePawn_B;
+GAME_PIECE WhitePawn_C;
+GAME_PIECE WhitePawn_D;
+GAME_PIECE WhitePawn_E;
+GAME_PIECE WhitePawn_F;
+GAME_PIECE WhitePawn_G;
+GAME_PIECE WhitePawn_H;
 
 void GAME_InitializeChessboard(void) {
 
   GAME_CreateChessboard_Tiles();
 
-  GAME_InitializePieces();
+  SDL_RenderCopy(global_renderer, BlackPawn_A.texture, NULL, &BlackPawn_A.rect);
+  SDL_RenderCopy(global_renderer, BlackPawn_B.texture, NULL, &BlackPawn_B.rect);
+  SDL_RenderCopy(global_renderer, BlackPawn_C.texture, NULL, &BlackPawn_C.rect);
+  SDL_RenderCopy(global_renderer, BlackPawn_D.texture, NULL, &BlackPawn_D.rect);
+  SDL_RenderCopy(global_renderer, BlackPawn_E.texture, NULL, &BlackPawn_E.rect);
+  SDL_RenderCopy(global_renderer, BlackPawn_F.texture, NULL, &BlackPawn_F.rect);
+  SDL_RenderCopy(global_renderer, BlackPawn_G.texture, NULL, &BlackPawn_G.rect);
+  SDL_RenderCopy(global_renderer, BlackPawn_H.texture, NULL, &BlackPawn_H.rect);
+
+  SDL_RenderCopy(global_renderer, WhitePawn_A.texture, NULL, &WhitePawn_A.rect);
+  SDL_RenderCopy(global_renderer, WhitePawn_B.texture, NULL, &WhitePawn_B.rect);
+  SDL_RenderCopy(global_renderer, WhitePawn_C.texture, NULL, &WhitePawn_C.rect);
+  SDL_RenderCopy(global_renderer, WhitePawn_D.texture, NULL, &WhitePawn_D.rect);
+  SDL_RenderCopy(global_renderer, WhitePawn_E.texture, NULL, &WhitePawn_E.rect);
+  SDL_RenderCopy(global_renderer, WhitePawn_F.texture, NULL, &WhitePawn_F.rect);
+  SDL_RenderCopy(global_renderer, WhitePawn_G.texture, NULL, &WhitePawn_G.rect);
+  SDL_RenderCopy(global_renderer, WhitePawn_H.texture, NULL, &WhitePawn_H.rect);
 
   SDL_RenderPresent(global_renderer);
 
@@ -52,78 +80,61 @@ void GAME_UpdatePositionPiece(GAME_PIECE *piece, int colomn, char row) {
   int count = 0;
   for (int n = 0; n < 64; n++) {
 
-    if (tile[n].colomn == piece->colomn) { piece->y = tile[n].pp4m.rect.y; count += 1; }
-    if (tile[n].row == piece->row) { piece->x = tile[n].pp4m.rect.x; count += 1; }
+    if (count >= 2) break;
 
-  if (count >= 2) break;
+    if (row == tile[n].row) {
+      piece->rect.x = tile[n].pp4m.rect.x;
+      count += 1;
+    }
+
+    if (colomn == tile[n].colomn) {
+      piece->rect.y = tile[n].pp4m.rect.y;
+      count += 1;
+    }
+
   }
 
   return;
 }
+
 void GAME_InitializePieces(void) {
 
-  BlackPawn_A.pp4m.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_A.pp4m.rect, 0, 0, 50, 50);
-  BlackPawn_B.pp4m.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_B.pp4m.rect, 0, 0, 50, 50);
-  BlackPawn_C.pp4m.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_C.pp4m.rect, 0, 0, 50, 50);
-  BlackPawn_D.pp4m.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_D.pp4m.rect, 0, 0, 50, 50);
-  BlackPawn_E.pp4m.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_E.pp4m.rect, 0, 0, 50, 50);
-  BlackPawn_F.pp4m.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_F.pp4m.rect, 0, 0, 50, 50);
-  BlackPawn_G.pp4m.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_G.pp4m.rect, 0, 0, 50, 50);
-  BlackPawn_H.pp4m.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_H.pp4m.rect, 0, 0, 50, 50);
+  BlackPawn_A.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_A.rect, 0, 0, 50, 50);
+  BlackPawn_B.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_B.rect, 0, 0, 50, 50);
+  BlackPawn_C.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_C.rect, 0, 0, 50, 50);
+  BlackPawn_D.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_D.rect, 0, 0, 50, 50);
+  BlackPawn_E.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_E.rect, 0, 0, 50, 50);
+  BlackPawn_F.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_F.rect, 0, 0, 50, 50);
+  BlackPawn_G.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_G.rect, 0, 0, 50, 50);
+  BlackPawn_H.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_H.rect, 0, 0, 50, 50);
 
-  int count = 0;
-  for (int n = 0; n < 64; n++) {
+  WhitePawn_A.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_PAWN, &WhitePawn_A.rect, 0, 0, 50, 50);
+  WhitePawn_B.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_PAWN, &WhitePawn_B.rect, 0, 0, 50, 50);
+  WhitePawn_C.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_PAWN, &WhitePawn_C.rect, 0, 0, 50, 50);
+  WhitePawn_D.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_PAWN, &WhitePawn_D.rect, 0, 0, 50, 50);
+  WhitePawn_E.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_PAWN, &WhitePawn_E.rect, 0, 0, 50, 50);
+  WhitePawn_F.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_PAWN, &WhitePawn_F.rect, 0, 0, 50, 50);
+  WhitePawn_G.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_PAWN, &WhitePawn_G.rect, 0, 0, 50, 50);
+  WhitePawn_H.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_PAWN, &WhitePawn_H.rect, 0, 0, 50, 50);
 
-    if (count >= 16) break;
-
-    if (tile[n].colomn == BlackPawn_A.colomn) { BlackPawn_A.y = tile[n].pp4m.rect.y; count += 1; }
-    if (tile[n].row == BlackPawn_A.row) { BlackPawn_A.x = tile[n].pp4m.rect.x; count += 1; }
-
-    if (tile[n].colomn == BlackPawn_B.colomn) { BlackPawn_B.y = tile[n].pp4m.rect.y; count += 1; }
-    if (tile[n].row == BlackPawn_B.row) { BlackPawn_B.x = tile[n].pp4m.rect.x; count += 1; }
-
-    if (tile[n].colomn == BlackPawn_C.colomn) { BlackPawn_C.y = tile[n].pp4m.rect.y; count += 1; }
-    if (tile[n].row == BlackPawn_C.row) { BlackPawn_C.x = tile[n].pp4m.rect.x; count += 1; }
-
-    if (tile[n].colomn == BlackPawn_D.colomn) { BlackPawn_D.y = tile[n].pp4m.rect.y; count += 1; }
-    if (tile[n].row == BlackPawn_D.row) { BlackPawn_D.x = tile[n].pp4m.rect.x; count += 1; }
-
-    if (tile[n].colomn == BlackPawn_E.colomn) { BlackPawn_E.y = tile[n].pp4m.rect.y; count += 1; }
-    if (tile[n].row == BlackPawn_E.row) { BlackPawn_E.x = tile[n].pp4m.rect.x; count += 1; }
-
-    if (tile[n].colomn == BlackPawn_F.colomn) { BlackPawn_F.y = tile[n].pp4m.rect.y; count += 1; }
-    if (tile[n].row == BlackPawn_F.row) { BlackPawn_F.x = tile[n].pp4m.rect.x; count += 1; }
-
-    if (tile[n].colomn == BlackPawn_G.colomn) { BlackPawn_G.y = tile[n].pp4m.rect.y; count += 1; }
-    if (tile[n].row == BlackPawn_G.row) { BlackPawn_G.x = tile[n].pp4m.rect.x; count += 1; }
-
-    if (tile[n].colomn == BlackPawn_H.colomn) { BlackPawn_H.y = tile[n].pp4m.rect.y; count += 1; }
-    if (tile[n].row == BlackPawn_H.row) { BlackPawn_H.x = tile[n].pp4m.rect.x; count += 1; }
-
-  }
-
-  SDL_RenderCopy(global_renderer, BlackPawn_A.pp4m.texture, NULL, &BlackPawn_A.pp4m.rect);
-  SDL_RenderCopy(global_renderer, BlackPawn_B.pp4m.texture, NULL, &BlackPawn_B.pp4m.rect);
-  SDL_RenderCopy(global_renderer, BlackPawn_C.pp4m.texture, NULL, &BlackPawn_C.pp4m.rect);
-  SDL_RenderCopy(global_renderer, BlackPawn_D.pp4m.texture, NULL, &BlackPawn_D.pp4m.rect);
-  SDL_RenderCopy(global_renderer, BlackPawn_E.pp4m.texture, NULL, &BlackPawn_E.pp4m.rect);
-  SDL_RenderCopy(global_renderer, BlackPawn_F.pp4m.texture, NULL, &BlackPawn_F.pp4m.rect);
-  SDL_RenderCopy(global_renderer, BlackPawn_G.pp4m.texture, NULL, &BlackPawn_G.pp4m.rect);
-  SDL_RenderCopy(global_renderer, BlackPawn_H.pp4m.texture, NULL, &BlackPawn_H.pp4m.rect);
-
-
-  // IT DOESNT EXTRACT X, Y BECAUSE IT GOES TROW ONLY 8 TILES
   // from the tagged tiles, it extracts the x, y values
+  GAME_UpdatePositionPiece(&BlackPawn_A, 7, 'A');
+  GAME_UpdatePositionPiece(&BlackPawn_B, 7, 'B');
+  GAME_UpdatePositionPiece(&BlackPawn_C, 7, 'C');
+  GAME_UpdatePositionPiece(&BlackPawn_D, 7, 'D');
+  GAME_UpdatePositionPiece(&BlackPawn_E, 7, 'E');
+  GAME_UpdatePositionPiece(&BlackPawn_F, 7, 'F');
+  GAME_UpdatePositionPiece(&BlackPawn_G, 7, 'G');
+  GAME_UpdatePositionPiece(&BlackPawn_H, 7, 'H');
 
-
-  //WhitePawn_A = { 0, 0, 2, 'A', WHITE_PAWN};
-  //WhitePawn_B = { 0, 0, 2, 'B', WHITE_PAWN};
-  //WhitePawn_C = { 0, 0, 2, 'C', WHITE_PAWN};
-  //WhitePawn_D = { 0, 0, 2, 'D', WHITE_PAWN};
-  //WhitePawn_E = { 0, 0, 2, 'E', WHITE_PAWN};
-  //WhitePawn_F = { 0, 0, 2, 'F', WHITE_PAWN};
-  //WhitePawn_G = { 0, 0, 2, 'G', WHITE_PAWN};
-  //WhitePawn_H = { 0, 0, 2, 'H', WHITE_PAWN};
+  GAME_UpdatePositionPiece(&WhitePawn_A, 6, 'A');
+  GAME_UpdatePositionPiece(&WhitePawn_B, 6, 'B');
+  GAME_UpdatePositionPiece(&WhitePawn_C, 5, 'C');
+  GAME_UpdatePositionPiece(&WhitePawn_D, 2, 'D');
+  GAME_UpdatePositionPiece(&WhitePawn_E, 2, 'E');
+  GAME_UpdatePositionPiece(&WhitePawn_F, 2, 'F');
+  GAME_UpdatePositionPiece(&WhitePawn_G, 2, 'G');
+  GAME_UpdatePositionPiece(&WhitePawn_H, 2, 'H');
 
   return;
 }
@@ -151,7 +162,9 @@ void GAME_CreateChessboard_Tiles(void) {
 
       change_color ^= 1;
 
-      colomn -= 1;
+      if (colomn <= 1) colomn = 1;
+      else colomn -= 1;
+
       row_position = 0;
     }
 
@@ -169,6 +182,7 @@ void GAME_CreateChessboard_Tiles(void) {
 
       SDL_RenderCopy(global_renderer, tile[n].pp4m.texture, NULL, &tile[n].pp4m.rect);
 
+      SDL_Delay(100);
     }
 
     else if (change_color == 1) {
@@ -192,118 +206,4 @@ void GAME_CreateChessboard_Tiles(void) {
   SDL_RenderPresent(global_renderer);
 
   return;
-}
-
-// deprecated.
-void GAME_CreateChessboard_RightTiles(void) {
-    // destra
-
-    int ChessTile_X = (1280 / 2) - 150;
-    int ChessTile_Y = (720 / 2) - 200;
-
-    PP4M_SDL RightTile[32];
-
-    for(int n=0; n < 32; n++) {
-      // starts from A tile
-
-      if (n == 4) {
-          // B tile
-          ChessTile_X = (1280 / 2) - 200;
-          ChessTile_Y += 50;
-
-        } else if (n == 8) {
-          // C tile
-          ChessTile_X = (1280 / 2) - 150;
-          ChessTile_Y += 50;
-
-        } else if (n == 12) {
-          // D tile
-          ChessTile_X = (1280 / 2) - 200;
-          ChessTile_Y += 50;
-
-        } else if (n == 16) {
-          // E tile
-          ChessTile_X = (1280 / 2) - 150;
-          ChessTile_Y += 50;
-
-        } else if (n == 20) {
-          // F tile
-          ChessTile_X = (1280 / 2) - 200;
-          ChessTile_Y += 50;
-
-        } else if (n == 24) {
-          // G tile
-          ChessTile_X = (1280 / 2) - 150;
-          ChessTile_Y += 50;
-
-        } else if (n == 28) {
-          // H tile
-          ChessTile_X = (1280 / 2) - 200;
-          ChessTile_Y += 50;
-
-        }
-
-      RightTile[n].texture = pp4m_DRAW_TextureRect(global_renderer, PP4M_GREY, &RightTile->rect, ChessTile_X, ChessTile_Y, 50, 50);
-      ChessTile_X += 100;
-      SDL_RenderCopy(global_renderer, RightTile[n].texture, NULL, &RightTile->rect);
-    }
-
-    return;
-}
-
-// deprecated.
-void GAME_CreateChessboard_LeftTiles(void) {
-    // sinistra
-
-    int ChessTile_X = (1280 / 2) - 200;
-    int ChessTile_Y = (720 / 2) - 200;
-
-    PP4M_SDL LeftTile[32];
-
-    for(int n=0; n < 32; n++) {
-      // starts from A tile
-
-      if (n == 4) {
-          // B tile
-          ChessTile_X = (1280 / 2) - 150;
-          ChessTile_Y += 50;
-
-        } else if (n == 8) {
-          // C tile
-          ChessTile_X = (1280 / 2) - 200;
-          ChessTile_Y += 50;
-
-        } else if (n == 12) {
-          // D tile
-          ChessTile_X = (1280 / 2) - 150;
-          ChessTile_Y += 50;
-
-        } else if (n == 16) {
-          // E tile
-          ChessTile_X = (1280 / 2) - 200;
-          ChessTile_Y += 50;
-
-        } else if (n == 20) {
-          // F tile
-          ChessTile_X = (1280 / 2) - 150;
-          ChessTile_Y += 50;
-
-        } else if (n == 24) {
-          // G tile
-          ChessTile_X = (1280 / 2) - 200;
-          ChessTile_Y += 50;
-
-        } else if (n == 28) {
-          // H tile
-          ChessTile_X = (1280 / 2) - 150;
-          ChessTile_Y += 50;
-
-        }
-
-      LeftTile[n].texture = pp4m_DRAW_TextureRect(global_renderer, PP4M_WHITE, &LeftTile->rect, ChessTile_X, ChessTile_Y, 50, 50);
-      ChessTile_X += 100;
-      SDL_RenderCopy(global_renderer, LeftTile[n].texture, NULL, &LeftTile->rect);
-    }
-
-    return;
 }

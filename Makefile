@@ -7,7 +7,7 @@ OUTPUT := $(notdir $(CURDIR))
 LIBS := -lSDL2 -lSDL2_ttf -lSDL2_image
 
 all : $(OBJS)
-	gcc $(OBJS) $(sdl2-config --cflags) -Wall $(LIBS) -o $(OUTPUT)
+	gcc $(OBJS) $(sdl2-config --cflags) -Wall -Wextra $(LIBS) -o $(OUTPUT)
 
 clean :
 	rm *.o $(OUTPUT)

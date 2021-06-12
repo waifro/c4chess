@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include "pp4m_io.h"
 
-bool pp4m_IO_CheckFile(char filename[256]) {
+bool pp4m_IO_CheckFile(char *filename) {
 
     static bool check = false;
 
@@ -18,12 +18,13 @@ bool pp4m_IO_CheckFile(char filename[256]) {
     return check;
 }
 
-void pp4m_IO_Feedback(char filename[256], const char text[1024]) {
+void pp4m_IO_Feedback(char *filename, const char *text) {
 
-    if (pp4m_IO_CheckFile(filename) == true) remove(filename);
+    //static int check;
+    //if (pp4m_IO_CheckFile(filename) == true || check == 0) { remove(filename); check = 1; }
 
     FILE *td = NULL;
-    td = fopen(filename, "wa");
+    td = fopen(filename, "a");
 
     fprintf(td, "%s", text);
 

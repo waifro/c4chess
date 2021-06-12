@@ -5,8 +5,8 @@
 
 #include <stdbool.h>
 
-bool pp4m_IO_CheckFile(char filename[256]);
-void pp4m_IO_Feedback(char filename[256], const char text[1024]);
+bool pp4m_IO_CheckFile(char *filename);
+void pp4m_IO_Feedback(char *filename, const char *text);
 
 #endif // _PP4M_IO_H
 
