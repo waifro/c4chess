@@ -36,6 +36,15 @@ GAME_PIECE BlackPawn_F;
 GAME_PIECE BlackPawn_G;
 GAME_PIECE BlackPawn_H;
 
+GAME_PIECE BlackKnight_1;
+GAME_PIECE BlackKnight_2;
+GAME_PIECE BlackBishop_1;
+GAME_PIECE BlackBishop_2;
+GAME_PIECE BlackRook_1;
+GAME_PIECE BlackRook_2;
+GAME_PIECE BlackKing;
+GAME_PIECE BlackQueen;
+
 GAME_PIECE WhitePawn_A;
 GAME_PIECE WhitePawn_B;
 GAME_PIECE WhitePawn_C;
@@ -45,9 +54,20 @@ GAME_PIECE WhitePawn_F;
 GAME_PIECE WhitePawn_G;
 GAME_PIECE WhitePawn_H;
 
+GAME_PIECE WhiteKnight_1;
+GAME_PIECE WhiteKnight_2;
+GAME_PIECE WhiteBishop_1;
+GAME_PIECE WhiteBishop_2;
+GAME_PIECE WhiteRook_1;
+GAME_PIECE WhiteRook_2;
+GAME_PIECE WhiteKing;
+GAME_PIECE WhiteQueen;
+
 void GAME_InitializeChessboard(void) {
 
   GAME_CreateChessboard_Tiles();
+
+  GAME_InitializePieces();
 
   SDL_RenderCopy(global_renderer, BlackPawn_A.texture, NULL, &BlackPawn_A.rect);
   SDL_RenderCopy(global_renderer, BlackPawn_B.texture, NULL, &BlackPawn_B.rect);
@@ -67,6 +87,24 @@ void GAME_InitializeChessboard(void) {
   SDL_RenderCopy(global_renderer, WhitePawn_G.texture, NULL, &WhitePawn_G.rect);
   SDL_RenderCopy(global_renderer, WhitePawn_H.texture, NULL, &WhitePawn_H.rect);
 
+  SDL_RenderCopy(global_renderer, BlackKnight_1.texture, NULL, &BlackKnight_1.rect);
+  SDL_RenderCopy(global_renderer, BlackKnight_2.texture, NULL, &BlackKnight_2.rect);
+  SDL_RenderCopy(global_renderer, BlackBishop_1.texture, NULL, &BlackBishop_1.rect);
+  SDL_RenderCopy(global_renderer, BlackBishop_2.texture, NULL, &BlackBishop_2.rect);
+  SDL_RenderCopy(global_renderer, BlackRook_1.texture, NULL, &BlackRook_1.rect);
+  SDL_RenderCopy(global_renderer, BlackRook_2.texture, NULL, &BlackRook_2.rect);
+  SDL_RenderCopy(global_renderer, BlackKing.texture, NULL, &BlackKing.rect);
+  SDL_RenderCopy(global_renderer, BlackQueen.texture, NULL, &BlackQueen.rect);
+
+  SDL_RenderCopy(global_renderer, WhiteKnight_1.texture, NULL, &WhiteKnight_1.rect);
+  SDL_RenderCopy(global_renderer, WhiteKnight_2.texture, NULL, &WhiteKnight_2.rect);
+  SDL_RenderCopy(global_renderer, WhiteBishop_1.texture, NULL, &WhiteBishop_1.rect);
+  SDL_RenderCopy(global_renderer, WhiteBishop_2.texture, NULL, &WhiteBishop_2.rect);
+  SDL_RenderCopy(global_renderer, WhiteRook_1.texture, NULL, &WhiteRook_1.rect);
+  SDL_RenderCopy(global_renderer, WhiteRook_2.texture, NULL, &WhiteRook_2.rect);
+  SDL_RenderCopy(global_renderer, WhiteKing.texture, NULL, &WhiteKing.rect);
+  SDL_RenderCopy(global_renderer, WhiteQueen.texture, NULL, &WhiteQueen.rect);
+
   SDL_RenderPresent(global_renderer);
 
   SDL_Delay(5000);
@@ -77,19 +115,18 @@ void GAME_InitializeChessboard(void) {
 
 void GAME_UpdatePositionPiece(GAME_PIECE *piece, int colomn, char row) {
 
-  int count = 0;
   for (int n = 0; n < 64; n++) {
-
-    if (count >= 2) break;
 
     if (row == tile[n].row) {
       piece->rect.x = tile[n].pp4m.rect.x;
-      count += 1;
     }
+
+  }
+
+  for (int n = 0; n < 64; n++) {
 
     if (colomn == tile[n].colomn) {
       piece->rect.y = tile[n].pp4m.rect.y;
-      count += 1;
     }
 
   }
@@ -108,6 +145,16 @@ void GAME_InitializePieces(void) {
   BlackPawn_G.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_G.rect, 0, 0, 50, 50);
   BlackPawn_H.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_PAWN, &BlackPawn_H.rect, 0, 0, 50, 50);
 
+  BlackRook_1.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_ROOK, &BlackRook_1.rect, 0, 0, 50, 50);
+  BlackRook_2.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_ROOK, &BlackRook_2.rect, 0, 0, 50, 50);
+  BlackKnight_1.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_KNIGHT, &BlackKnight_1.rect, 0, 0, 50, 50);
+  BlackKnight_2.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_KNIGHT, &BlackKnight_2.rect, 0, 0, 50, 50);
+  BlackBishop_1.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_BISHOP, &BlackBishop_1.rect, 0, 0, 50, 50);
+  BlackBishop_2.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_BISHOP, &BlackBishop_2.rect, 0, 0, 50, 50);
+  BlackKing.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_KING, &BlackKing.rect, 0, 0, 50, 50);
+  BlackQueen.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, BLACK_QUEEN, &BlackQueen.rect, 0, 0, 50, 50);
+
+  // white pieces
   WhitePawn_A.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_PAWN, &WhitePawn_A.rect, 0, 0, 50, 50);
   WhitePawn_B.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_PAWN, &WhitePawn_B.rect, 0, 0, 50, 50);
   WhitePawn_C.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_PAWN, &WhitePawn_C.rect, 0, 0, 50, 50);
@@ -116,6 +163,15 @@ void GAME_InitializePieces(void) {
   WhitePawn_F.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_PAWN, &WhitePawn_F.rect, 0, 0, 50, 50);
   WhitePawn_G.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_PAWN, &WhitePawn_G.rect, 0, 0, 50, 50);
   WhitePawn_H.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_PAWN, &WhitePawn_H.rect, 0, 0, 50, 50);
+
+  WhiteRook_1.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_ROOK, &WhiteRook_1.rect, 0, 0, 50, 50);
+  WhiteRook_2.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_ROOK, &WhiteRook_2.rect, 0, 0, 50, 50);
+  WhiteKnight_1.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_KNIGHT, &WhiteKnight_1.rect, 0, 0, 50, 50);
+  WhiteKnight_2.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_KNIGHT, &WhiteKnight_2.rect, 0, 0, 50, 50);
+  WhiteBishop_1.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_BISHOP, &WhiteBishop_1.rect, 0, 0, 50, 50);
+  WhiteBishop_2.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_BISHOP, &WhiteBishop_2.rect, 0, 0, 50, 50);
+  WhiteKing.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_KING, &WhiteKing.rect, 0, 0, 50, 50);
+  WhiteQueen.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_QUEEN, &WhiteQueen.rect, 0, 0, 50, 50);
 
   // from the tagged tiles, it extracts the x, y values
   GAME_UpdatePositionPiece(&BlackPawn_A, 7, 'A');
@@ -127,14 +183,34 @@ void GAME_InitializePieces(void) {
   GAME_UpdatePositionPiece(&BlackPawn_G, 7, 'G');
   GAME_UpdatePositionPiece(&BlackPawn_H, 7, 'H');
 
-  GAME_UpdatePositionPiece(&WhitePawn_A, 6, 'A');
-  GAME_UpdatePositionPiece(&WhitePawn_B, 6, 'B');
-  GAME_UpdatePositionPiece(&WhitePawn_C, 5, 'C');
+  GAME_UpdatePositionPiece(&BlackRook_1, 8, 'A');
+  GAME_UpdatePositionPiece(&BlackKnight_1, 8, 'B');
+  GAME_UpdatePositionPiece(&BlackBishop_1, 8, 'C');
+  GAME_UpdatePositionPiece(&BlackKing, 8, 'D');
+  GAME_UpdatePositionPiece(&BlackQueen, 8, 'E');
+  GAME_UpdatePositionPiece(&BlackBishop_2, 8, 'F');
+  GAME_UpdatePositionPiece(&BlackKnight_2, 8, 'G');
+  GAME_UpdatePositionPiece(&BlackRook_2, 8, 'H');
+
+  // white pieces
+  GAME_UpdatePositionPiece(&WhitePawn_A, 2, 'A');
+  GAME_UpdatePositionPiece(&WhitePawn_B, 2, 'B');
+  GAME_UpdatePositionPiece(&WhitePawn_C, 2, 'C');
   GAME_UpdatePositionPiece(&WhitePawn_D, 2, 'D');
   GAME_UpdatePositionPiece(&WhitePawn_E, 2, 'E');
   GAME_UpdatePositionPiece(&WhitePawn_F, 2, 'F');
   GAME_UpdatePositionPiece(&WhitePawn_G, 2, 'G');
   GAME_UpdatePositionPiece(&WhitePawn_H, 2, 'H');
+
+  GAME_UpdatePositionPiece(&WhiteRook_1, 1, 'A');
+  GAME_UpdatePositionPiece(&WhiteKnight_1, 1, 'B');
+  GAME_UpdatePositionPiece(&WhiteBishop_1, 1, 'C');
+  GAME_UpdatePositionPiece(&WhiteKing, 1, 'D');
+  GAME_UpdatePositionPiece(&WhiteQueen, 1, 'E');
+  GAME_UpdatePositionPiece(&WhiteBishop_2, 1, 'F');
+  GAME_UpdatePositionPiece(&WhiteKnight_2, 1, 'G');
+  GAME_UpdatePositionPiece(&WhiteRook_2, 1, 'H');
+
 
   return;
 }
