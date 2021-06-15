@@ -3,6 +3,8 @@
 
 #include "pp4m/pp4m.h"
 
+#include "game.h"
+
 typedef struct {
 
   PP4M_SDL pp4m;
@@ -21,7 +23,7 @@ typedef enum {
   RIGHT = 3,
   RIGHT_DOWN = 4,
 
-  DOWN = 5
+  DOWN = 5,
   DOWN_LEFT = 6,
 
   LEFT = 7,
@@ -29,8 +31,15 @@ typedef enum {
 
 } CORE_MOVEMENT;
 
+typedef struct {
+
+  int colomn;
+  char row;
+
+} CORE_POSITION;
+
 int CORE_CheckMovementKPawn(GAME_PIECE *piece, CORE_MOVEMENT movement, int space);
-int CORE_CheckMovementDarkPawn(GAME_PIECE *piece, CORE_MOVEMENT movement, int space)
-int CORE_CheckMovementKnight(GAME_PIECE *piece, CORE_MOVEMENT movement, int space)
+int CORE_CheckMovementDarkPawn(GAME_PIECE *piece, CORE_MOVEMENT movement, int space);
+int CORE_CheckMovementKnight(GAME_PIECE *piece, CORE_MOVEMENT movement, int space);
 
 #endif

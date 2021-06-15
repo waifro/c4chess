@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "pp4m/pp4m.h"
 #include "pp4m/pp4m_io.h"
@@ -10,6 +11,7 @@
 #include "main.h"
 #include "game.h"
 #include "core.h"
+#include "input.h"
 
 char *BLACK_PAWN = "resources/dpawn.png";
 char *BLACK_KNIGHT = "resources/dknight.png";
@@ -65,49 +67,67 @@ GAME_PIECE WhiteQueen;
 
 void GAME_InitializeChessboard(void) {
 
+  PP4M_SDL background;
+  background.texture = pp4m_DRAW_TextureRect(global_renderer, PP4M_GREY_DARK, &background.rect, 1280, 720, 1, 1);
+
   GAME_CreateChessboard_Tiles();
 
   GAME_InitializePieces();
 
-  SDL_RenderCopy(global_renderer, BlackPawn_A.texture, NULL, &BlackPawn_A.rect);
-  SDL_RenderCopy(global_renderer, BlackPawn_B.texture, NULL, &BlackPawn_B.rect);
-  SDL_RenderCopy(global_renderer, BlackPawn_C.texture, NULL, &BlackPawn_C.rect);
-  SDL_RenderCopy(global_renderer, BlackPawn_D.texture, NULL, &BlackPawn_D.rect);
-  SDL_RenderCopy(global_renderer, BlackPawn_E.texture, NULL, &BlackPawn_E.rect);
-  SDL_RenderCopy(global_renderer, BlackPawn_F.texture, NULL, &BlackPawn_F.rect);
-  SDL_RenderCopy(global_renderer, BlackPawn_G.texture, NULL, &BlackPawn_G.rect);
-  SDL_RenderCopy(global_renderer, BlackPawn_H.texture, NULL, &BlackPawn_H.rect);
+  SDL_Event event;
 
-  SDL_RenderCopy(global_renderer, WhitePawn_A.texture, NULL, &WhitePawn_A.rect);
-  SDL_RenderCopy(global_renderer, WhitePawn_B.texture, NULL, &WhitePawn_B.rect);
-  SDL_RenderCopy(global_renderer, WhitePawn_C.texture, NULL, &WhitePawn_C.rect);
-  SDL_RenderCopy(global_renderer, WhitePawn_D.texture, NULL, &WhitePawn_D.rect);
-  SDL_RenderCopy(global_renderer, WhitePawn_E.texture, NULL, &WhitePawn_E.rect);
-  SDL_RenderCopy(global_renderer, WhitePawn_F.texture, NULL, &WhitePawn_F.rect);
-  SDL_RenderCopy(global_renderer, WhitePawn_G.texture, NULL, &WhitePawn_G.rect);
-  SDL_RenderCopy(global_renderer, WhitePawn_H.texture, NULL, &WhitePawn_H.rect);
+  while (SDL_PollEvent(&event)) {
 
-  SDL_RenderCopy(global_renderer, BlackKnight_1.texture, NULL, &BlackKnight_1.rect);
-  SDL_RenderCopy(global_renderer, BlackKnight_2.texture, NULL, &BlackKnight_2.rect);
-  SDL_RenderCopy(global_renderer, BlackBishop_1.texture, NULL, &BlackBishop_1.rect);
-  SDL_RenderCopy(global_renderer, BlackBishop_2.texture, NULL, &BlackBishop_2.rect);
-  SDL_RenderCopy(global_renderer, BlackRook_1.texture, NULL, &BlackRook_1.rect);
-  SDL_RenderCopy(global_renderer, BlackRook_2.texture, NULL, &BlackRook_2.rect);
-  SDL_RenderCopy(global_renderer, BlackKing.texture, NULL, &BlackKing.rect);
-  SDL_RenderCopy(global_renderer, BlackQueen.texture, NULL, &BlackQueen.rect);
+    SDL_RenderClear(global_renderer);
+    SDL_RenderCopy(global_renderer, background.texture, NULL, NULL);
 
-  SDL_RenderCopy(global_renderer, WhiteKnight_1.texture, NULL, &WhiteKnight_1.rect);
-  SDL_RenderCopy(global_renderer, WhiteKnight_2.texture, NULL, &WhiteKnight_2.rect);
-  SDL_RenderCopy(global_renderer, WhiteBishop_1.texture, NULL, &WhiteBishop_1.rect);
-  SDL_RenderCopy(global_renderer, WhiteBishop_2.texture, NULL, &WhiteBishop_2.rect);
-  SDL_RenderCopy(global_renderer, WhiteRook_1.texture, NULL, &WhiteRook_1.rect);
-  SDL_RenderCopy(global_renderer, WhiteRook_2.texture, NULL, &WhiteRook_2.rect);
-  SDL_RenderCopy(global_renderer, WhiteKing.texture, NULL, &WhiteKing.rect);
-  SDL_RenderCopy(global_renderer, WhiteQueen.texture, NULL, &WhiteQueen.rect);
+    for (int n = 0; n < 64; n++) {
 
-  SDL_RenderPresent(global_renderer);
+      SDL_RenderCopy(global_renderer, tile[n].pp4m.texture, NULL, &tile[n].pp4m.rect);
 
-  SDL_Delay(5000);
+    }
+
+    SDL_RenderCopy(global_renderer, BlackPawn_A.texture, NULL, &BlackPawn_A.rect);
+    SDL_RenderCopy(global_renderer, BlackPawn_B.texture, NULL, &BlackPawn_B.rect);
+    SDL_RenderCopy(global_renderer, BlackPawn_C.texture, NULL, &BlackPawn_C.rect);
+    SDL_RenderCopy(global_renderer, BlackPawn_D.texture, NULL, &BlackPawn_D.rect);
+    SDL_RenderCopy(global_renderer, BlackPawn_E.texture, NULL, &BlackPawn_E.rect);
+    SDL_RenderCopy(global_renderer, BlackPawn_F.texture, NULL, &BlackPawn_F.rect);
+    SDL_RenderCopy(global_renderer, BlackPawn_G.texture, NULL, &BlackPawn_G.rect);
+    SDL_RenderCopy(global_renderer, BlackPawn_H.texture, NULL, &BlackPawn_H.rect);
+
+    SDL_RenderCopy(global_renderer, WhitePawn_A.texture, NULL, &WhitePawn_A.rect);
+    SDL_RenderCopy(global_renderer, WhitePawn_B.texture, NULL, &WhitePawn_B.rect);
+    SDL_RenderCopy(global_renderer, WhitePawn_C.texture, NULL, &WhitePawn_C.rect);
+    SDL_RenderCopy(global_renderer, WhitePawn_D.texture, NULL, &WhitePawn_D.rect);
+    SDL_RenderCopy(global_renderer, WhitePawn_E.texture, NULL, &WhitePawn_E.rect);
+    SDL_RenderCopy(global_renderer, WhitePawn_F.texture, NULL, &WhitePawn_F.rect);
+    SDL_RenderCopy(global_renderer, WhitePawn_G.texture, NULL, &WhitePawn_G.rect);
+    SDL_RenderCopy(global_renderer, WhitePawn_H.texture, NULL, &WhitePawn_H.rect);
+
+    SDL_RenderCopy(global_renderer, BlackKnight_1.texture, NULL, &BlackKnight_1.rect);
+    SDL_RenderCopy(global_renderer, BlackKnight_2.texture, NULL, &BlackKnight_2.rect);
+    SDL_RenderCopy(global_renderer, BlackBishop_1.texture, NULL, &BlackBishop_1.rect);
+    SDL_RenderCopy(global_renderer, BlackBishop_2.texture, NULL, &BlackBishop_2.rect);
+    SDL_RenderCopy(global_renderer, BlackRook_1.texture, NULL, &BlackRook_1.rect);
+    SDL_RenderCopy(global_renderer, BlackRook_2.texture, NULL, &BlackRook_2.rect);
+    SDL_RenderCopy(global_renderer, BlackKing.texture, NULL, &BlackKing.rect);
+    SDL_RenderCopy(global_renderer, BlackQueen.texture, NULL, &BlackQueen.rect);
+
+    SDL_RenderCopy(global_renderer, WhiteKnight_1.texture, NULL, &WhiteKnight_1.rect);
+    SDL_RenderCopy(global_renderer, WhiteKnight_2.texture, NULL, &WhiteKnight_2.rect);
+    SDL_RenderCopy(global_renderer, WhiteBishop_1.texture, NULL, &WhiteBishop_1.rect);
+    SDL_RenderCopy(global_renderer, WhiteBishop_2.texture, NULL, &WhiteBishop_2.rect);
+    SDL_RenderCopy(global_renderer, WhiteRook_1.texture, NULL, &WhiteRook_1.rect);
+    SDL_RenderCopy(global_renderer, WhiteRook_2.texture, NULL, &WhiteRook_2.rect);
+    SDL_RenderCopy(global_renderer, WhiteKing.texture, NULL, &WhiteKing.rect);
+    SDL_RenderCopy(global_renderer, WhiteQueen.texture, NULL, &WhiteQueen.rect);
+
+    SDL_RenderPresent(global_renderer);
+
+    if (INPUT_Exit(&event) == true) break;
+
+  }
 
   return;
 }

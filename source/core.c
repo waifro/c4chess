@@ -14,7 +14,7 @@ int CORE_CheckMovementPawn(GAME_PIECE *piece, CORE_MOVEMENT movement, int space)
   else if (addon > 8) return -2;
 
   // else, update position
-  else GAME_UpdatePositionPiece(piece, addon, row);
+  GAME_UpdatePositionPiece(piece, addon, piece->row);
   return 0;
 }
 
@@ -31,7 +31,7 @@ int CORE_CheckMovementDarkPawn(GAME_PIECE *piece, CORE_MOVEMENT movement, int sp
   else if (addon < 1) return -2;
 
   // else, update position
-  else GAME_UpdatePositionPiece(piece, addon, row);
+  else GAME_UpdatePositionPiece(piece, addon, piece->row);
   return 0;
 }
 
@@ -49,31 +49,34 @@ int CORE_CheckMovementKnight(GAME_PIECE *piece, CORE_MOVEMENT movement, int spac
   else if (addon > 8) return -2;
 
   // else, update position
-  else GAME_UpdatePositionPiece(piece, addon, row);
+  else GAME_UpdatePositionPiece(piece, addon, piece->row);
   return 0;
 }
 
+
+/*
 int CORE_CheckMovementDarkPawn(GAME_PIECE *piece, CORE_MOVEMENT movement) {
   if (movement != DOWN) return -1;
   else GAME_UpdatePositionPiece(piece, (piece->colomn++), row);
   return 0;
 }
 
+
 int CORE_MovementPiece(GAME_PIECE *piece, CORE_MOVEMENT movement) {
 
-  ciao
+  //ciao
 
   return 0;
 }
 
 int CORE_MovementPawn(GAME_PIECE *piece, CORE_MOVEMENT movement) {
 
-  ciao
+  //ciao
 
   return 0;
 }
 
-
+*/
 
 
 /* obsolete
