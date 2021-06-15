@@ -118,6 +118,7 @@ void GAME_UpdatePositionPiece(GAME_PIECE *piece, int colomn, char row) {
   for (int n = 0; n < 64; n++) {
 
     if (row == tile[n].row) {
+      piece->row = tile[n].row;
       piece->rect.x = tile[n].pp4m.rect.x;
     }
 
@@ -126,6 +127,7 @@ void GAME_UpdatePositionPiece(GAME_PIECE *piece, int colomn, char row) {
   for (int n = 0; n < 64; n++) {
 
     if (colomn == tile[n].colomn) {
+      piece->colomn = tile[n].colomn;
       piece->rect.y = tile[n].pp4m.rect.y;
     }
 

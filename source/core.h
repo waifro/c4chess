@@ -13,4 +13,24 @@ typedef struct {
 
 } CORE_TILE;
 
+typedef enum {
+
+  UP = 1,
+  UP_RIGHT = 2,
+
+  RIGHT = 3,
+  RIGHT_DOWN = 4,
+
+  DOWN = 5
+  DOWN_LEFT = 6,
+
+  LEFT = 7,
+  LEFT_UP = 8
+
+} CORE_MOVEMENT;
+
+int CORE_CheckMovementKPawn(GAME_PIECE *piece, CORE_MOVEMENT movement, int space);
+int CORE_CheckMovementDarkPawn(GAME_PIECE *piece, CORE_MOVEMENT movement, int space)
+int CORE_CheckMovementKnight(GAME_PIECE *piece, CORE_MOVEMENT movement, int space)
+
 #endif

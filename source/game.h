@@ -7,6 +7,7 @@ typedef struct {
     SDL_Rect rect;
     int colomn;
     char row;
+    int alive;
 
 } GAME_PIECE;
 
