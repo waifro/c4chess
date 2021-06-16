@@ -2,10 +2,16 @@
 #define _INPUT_H
 
 #include <stdbool.h>
+#include <SDL2/SDL.h>
+
+#include "core.h"
 
 bool INPUT_Exit(SDL_Event *event);
-void TOUCH_ConvertInputToPosition(CORE_POSITION *position);
+
+int INPUT_ConvertTouchToPosition(void);
+int INPUT_ConvertMouseToPosition(void);
+
 void INPUT_TouchInteractPiece(SDL_Event *event);
-void INPUT_MouseInteractPiece(SDL_Event *event);
+int INPUT_MouseInteractPiece(SDL_Event *event);
 
 #endif

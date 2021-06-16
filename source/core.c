@@ -1,6 +1,27 @@
 #include "core.h"
 #include "game.h"
 
+CORE_TILE tile[64];
+
+int CORE_ReturnTilePosition(int colomn, char row) {
+
+    int z = 0;
+    for (int n = 0; n < 8; n++) {
+
+        if (colomn == tile[z].colomn)
+        for (int i = 0; i < 8; i++) {
+
+            if (row == tile[z].row) {
+                return z;
+            }
+            z += 1;
+        }
+        z += 8;
+    }
+
+    return -1;
+}
+
 int CORE_CheckMovementPawn(GAME_PIECE *piece, CORE_MOVEMENT movement, int space) {
   // "int space" is for how many tiles to move from point A to B
 
@@ -14,7 +35,7 @@ int CORE_CheckMovementPawn(GAME_PIECE *piece, CORE_MOVEMENT movement, int space)
   else if (addon > 8) return -2;
 
   // else, update position
-  GAME_UpdatePositionPiece(piece, addon, piece->row);
+  GAME_UpdatePositionPiece(piece, PAWN, addon, piece->row);
   return 0;
 }
 
@@ -31,7 +52,7 @@ int CORE_CheckMovementDarkPawn(GAME_PIECE *piece, CORE_MOVEMENT movement, int sp
   else if (addon < 1) return -2;
 
   // else, update position
-  else GAME_UpdatePositionPiece(piece, addon, piece->row);
+  else GAME_UpdatePositionPiece(piece, DPAWN, addon, piece->row);
   return 0;
 }
 
@@ -49,7 +70,7 @@ int CORE_CheckMovementKnight(GAME_PIECE *piece, CORE_MOVEMENT movement, int spac
   else if (addon > 8) return -2;
 
   // else, update position
-  else GAME_UpdatePositionPiece(piece, addon, piece->row);
+  else GAME_UpdatePositionPiece(piece, KNIGHT, addon, piece->row);
   return 0;
 }
 

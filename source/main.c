@@ -11,7 +11,7 @@
 SDL_Window *global_window;
 SDL_Renderer *global_renderer;
 
-int main (void) {
+int main (int argc, char **argv) {
 
     global_renderer = pp4m_Init(global_window, "scacchi", SCREEN_WIDTH, SCREEN_HEIGHT);
 

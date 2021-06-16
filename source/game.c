@@ -27,8 +27,6 @@ char *WHITE_ROOK = "resources/wrook.png";
 char *WHITE_QUEEN = "resources/wqueen.png";
 char *WHITE_KING = "resources/wking.png";
 
-CORE_TILE tile[64];
-
 GAME_PIECE BlackPawn_A;
 GAME_PIECE BlackPawn_B;
 GAME_PIECE BlackPawn_C;
@@ -74,58 +72,28 @@ void GAME_InitializeChessboard(void) {
 
   GAME_InitializePieces();
 
+  int foo;
   SDL_Event event;
 
-  while (SDL_PollEvent(&event)) {
+  while (SDL_PollEvent(&event) >= 0) {
+
+    if (INPUT_Exit(&event) == true) break;
+
+    foo = INPUT_MouseInteractPiece(&event);
+    if (foo != -1) {
+            tile[foo].color = PP4M_BLUE;
+            tile[foo].pp4m.texture = pp4m_DRAW_TextureRect(global_renderer, tile[foo].color, &tile[foo].pp4m.rect, tile[foo].pp4m.rect.x, tile[foo].pp4m.rect.y, 50, 50);
+    }
 
     SDL_RenderClear(global_renderer);
     SDL_RenderCopy(global_renderer, background.texture, NULL, NULL);
 
     for (int n = 0; n < 64; n++) {
-
-      SDL_RenderCopy(global_renderer, tile[n].pp4m.texture, NULL, &tile[n].pp4m.rect);
-
+        SDL_RenderCopy(global_renderer, tile[n].pp4m.texture, NULL, &tile[n].pp4m.rect);
+        if (tile[n].piece != NULL) SDL_RenderCopy(global_renderer, tile[n].piece->texture, NULL, &tile[n].piece->rect);
     }
 
-    SDL_RenderCopy(global_renderer, BlackPawn_A.texture, NULL, &BlackPawn_A.rect);
-    SDL_RenderCopy(global_renderer, BlackPawn_B.texture, NULL, &BlackPawn_B.rect);
-    SDL_RenderCopy(global_renderer, BlackPawn_C.texture, NULL, &BlackPawn_C.rect);
-    SDL_RenderCopy(global_renderer, BlackPawn_D.texture, NULL, &BlackPawn_D.rect);
-    SDL_RenderCopy(global_renderer, BlackPawn_E.texture, NULL, &BlackPawn_E.rect);
-    SDL_RenderCopy(global_renderer, BlackPawn_F.texture, NULL, &BlackPawn_F.rect);
-    SDL_RenderCopy(global_renderer, BlackPawn_G.texture, NULL, &BlackPawn_G.rect);
-    SDL_RenderCopy(global_renderer, BlackPawn_H.texture, NULL, &BlackPawn_H.rect);
-
-    SDL_RenderCopy(global_renderer, WhitePawn_A.texture, NULL, &WhitePawn_A.rect);
-    SDL_RenderCopy(global_renderer, WhitePawn_B.texture, NULL, &WhitePawn_B.rect);
-    SDL_RenderCopy(global_renderer, WhitePawn_C.texture, NULL, &WhitePawn_C.rect);
-    SDL_RenderCopy(global_renderer, WhitePawn_D.texture, NULL, &WhitePawn_D.rect);
-    SDL_RenderCopy(global_renderer, WhitePawn_E.texture, NULL, &WhitePawn_E.rect);
-    SDL_RenderCopy(global_renderer, WhitePawn_F.texture, NULL, &WhitePawn_F.rect);
-    SDL_RenderCopy(global_renderer, WhitePawn_G.texture, NULL, &WhitePawn_G.rect);
-    SDL_RenderCopy(global_renderer, WhitePawn_H.texture, NULL, &WhitePawn_H.rect);
-
-    SDL_RenderCopy(global_renderer, BlackKnight_1.texture, NULL, &BlackKnight_1.rect);
-    SDL_RenderCopy(global_renderer, BlackKnight_2.texture, NULL, &BlackKnight_2.rect);
-    SDL_RenderCopy(global_renderer, BlackBishop_1.texture, NULL, &BlackBishop_1.rect);
-    SDL_RenderCopy(global_renderer, BlackBishop_2.texture, NULL, &BlackBishop_2.rect);
-    SDL_RenderCopy(global_renderer, BlackRook_1.texture, NULL, &BlackRook_1.rect);
-    SDL_RenderCopy(global_renderer, BlackRook_2.texture, NULL, &BlackRook_2.rect);
-    SDL_RenderCopy(global_renderer, BlackKing.texture, NULL, &BlackKing.rect);
-    SDL_RenderCopy(global_renderer, BlackQueen.texture, NULL, &BlackQueen.rect);
-
-    SDL_RenderCopy(global_renderer, WhiteKnight_1.texture, NULL, &WhiteKnight_1.rect);
-    SDL_RenderCopy(global_renderer, WhiteKnight_2.texture, NULL, &WhiteKnight_2.rect);
-    SDL_RenderCopy(global_renderer, WhiteBishop_1.texture, NULL, &WhiteBishop_1.rect);
-    SDL_RenderCopy(global_renderer, WhiteBishop_2.texture, NULL, &WhiteBishop_2.rect);
-    SDL_RenderCopy(global_renderer, WhiteRook_1.texture, NULL, &WhiteRook_1.rect);
-    SDL_RenderCopy(global_renderer, WhiteRook_2.texture, NULL, &WhiteRook_2.rect);
-    SDL_RenderCopy(global_renderer, WhiteKing.texture, NULL, &WhiteKing.rect);
-    SDL_RenderCopy(global_renderer, WhiteQueen.texture, NULL, &WhiteQueen.rect);
-
     SDL_RenderPresent(global_renderer);
-
-    if (INPUT_Exit(&event) == true) break;
 
   }
 
@@ -133,25 +101,26 @@ void GAME_InitializeChessboard(void) {
 }
 
 
-void GAME_UpdatePositionPiece(GAME_PIECE *piece, int colomn, char row) {
+void GAME_UpdatePositionPiece(GAME_PIECE *piece, GAME_IDENTIFIER identifier, int colomn, char row) {
 
-  for (int n = 0; n < 64; n++) {
+  int foo;
+  foo = CORE_ReturnTilePosition(colomn, row);
 
-    if (row == tile[n].row) {
-      piece->row = tile[n].row;
-      piece->rect.x = tile[n].pp4m.rect.x;
-    }
-
+  // reset pointer of piece from tile
+  int bar;
+  bar = CORE_ReturnTilePosition(piece->colomn, piece->row);
+  if (bar != -1) {
+        tile[bar].piece = NULL;
+        piece->identifier = identifier;
   }
+  // now lets copy everything
+  piece->colomn = tile[foo].colomn;
+  piece->row = tile[foo].row;
+  piece->rect.x = tile[foo].pp4m.rect.x;
+  piece->rect.y = tile[foo].pp4m.rect.y;
 
-  for (int n = 0; n < 64; n++) {
-
-    if (colomn == tile[n].colomn) {
-      piece->colomn = tile[n].colomn;
-      piece->rect.y = tile[n].pp4m.rect.y;
-    }
-
-  }
+  // lets copy even the pointer of the piece inside the tile
+  tile[foo].piece = piece;
 
   return;
 }
@@ -196,42 +165,42 @@ void GAME_InitializePieces(void) {
   WhiteQueen.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_QUEEN, &WhiteQueen.rect, 0, 0, 50, 50);
 
   // from the tagged tiles, it extracts the x, y values
-  GAME_UpdatePositionPiece(&BlackPawn_A, 7, 'A');
-  GAME_UpdatePositionPiece(&BlackPawn_B, 7, 'B');
-  GAME_UpdatePositionPiece(&BlackPawn_C, 7, 'C');
-  GAME_UpdatePositionPiece(&BlackPawn_D, 7, 'D');
-  GAME_UpdatePositionPiece(&BlackPawn_E, 7, 'E');
-  GAME_UpdatePositionPiece(&BlackPawn_F, 7, 'F');
-  GAME_UpdatePositionPiece(&BlackPawn_G, 7, 'G');
-  GAME_UpdatePositionPiece(&BlackPawn_H, 7, 'H');
+  GAME_UpdatePositionPiece(&BlackPawn_A, DPAWN, 7, 'A');
+  GAME_UpdatePositionPiece(&BlackPawn_B, DPAWN, 7, 'B');
+  GAME_UpdatePositionPiece(&BlackPawn_C, DPAWN, 7, 'C');
+  GAME_UpdatePositionPiece(&BlackPawn_D, DPAWN, 7, 'D');
+  GAME_UpdatePositionPiece(&BlackPawn_E, DPAWN, 7, 'E');
+  GAME_UpdatePositionPiece(&BlackPawn_F, DPAWN, 7, 'F');
+  GAME_UpdatePositionPiece(&BlackPawn_G, DPAWN, 7, 'G');
+  GAME_UpdatePositionPiece(&BlackPawn_H, DPAWN, 7, 'H');
 
-  GAME_UpdatePositionPiece(&BlackRook_1, 8, 'A');
-  GAME_UpdatePositionPiece(&BlackKnight_1, 8, 'B');
-  GAME_UpdatePositionPiece(&BlackBishop_1, 8, 'C');
-  GAME_UpdatePositionPiece(&BlackKing, 8, 'D');
-  GAME_UpdatePositionPiece(&BlackQueen, 8, 'E');
-  GAME_UpdatePositionPiece(&BlackBishop_2, 8, 'F');
-  GAME_UpdatePositionPiece(&BlackKnight_2, 8, 'G');
-  GAME_UpdatePositionPiece(&BlackRook_2, 8, 'H');
+  GAME_UpdatePositionPiece(&BlackRook_1, ROOK, 8, 'A');
+  GAME_UpdatePositionPiece(&BlackKnight_1, KNIGHT, 8, 'B');
+  GAME_UpdatePositionPiece(&BlackBishop_1, BISHOP, 8, 'C');
+  GAME_UpdatePositionPiece(&BlackKing, KING, 8, 'D');
+  GAME_UpdatePositionPiece(&BlackQueen, QUEEN, 8, 'E');
+  GAME_UpdatePositionPiece(&BlackBishop_2, BISHOP, 8, 'F');
+  GAME_UpdatePositionPiece(&BlackKnight_2, KNIGHT, 8, 'G');
+  GAME_UpdatePositionPiece(&BlackRook_2, ROOK, 8, 'H');
 
   // white pieces
-  GAME_UpdatePositionPiece(&WhitePawn_A, 2, 'A');
-  GAME_UpdatePositionPiece(&WhitePawn_B, 2, 'B');
-  GAME_UpdatePositionPiece(&WhitePawn_C, 2, 'C');
-  GAME_UpdatePositionPiece(&WhitePawn_D, 2, 'D');
-  GAME_UpdatePositionPiece(&WhitePawn_E, 2, 'E');
-  GAME_UpdatePositionPiece(&WhitePawn_F, 2, 'F');
-  GAME_UpdatePositionPiece(&WhitePawn_G, 2, 'G');
-  GAME_UpdatePositionPiece(&WhitePawn_H, 2, 'H');
+  GAME_UpdatePositionPiece(&WhitePawn_A, PAWN, 2, 'A');
+  GAME_UpdatePositionPiece(&WhitePawn_B, PAWN, 2, 'B');
+  GAME_UpdatePositionPiece(&WhitePawn_C, PAWN, 2, 'C');
+  GAME_UpdatePositionPiece(&WhitePawn_D, PAWN, 2, 'D');
+  GAME_UpdatePositionPiece(&WhitePawn_E, PAWN, 2, 'E');
+  GAME_UpdatePositionPiece(&WhitePawn_F, PAWN, 2, 'F');
+  GAME_UpdatePositionPiece(&WhitePawn_G, PAWN, 2, 'G');
+  GAME_UpdatePositionPiece(&WhitePawn_H, PAWN, 2, 'H');
 
-  GAME_UpdatePositionPiece(&WhiteRook_1, 1, 'A');
-  GAME_UpdatePositionPiece(&WhiteKnight_1, 1, 'B');
-  GAME_UpdatePositionPiece(&WhiteBishop_1, 1, 'C');
-  GAME_UpdatePositionPiece(&WhiteKing, 1, 'D');
-  GAME_UpdatePositionPiece(&WhiteQueen, 1, 'E');
-  GAME_UpdatePositionPiece(&WhiteBishop_2, 1, 'F');
-  GAME_UpdatePositionPiece(&WhiteKnight_2, 1, 'G');
-  GAME_UpdatePositionPiece(&WhiteRook_2, 1, 'H');
+  GAME_UpdatePositionPiece(&WhiteRook_1, ROOK, 1, 'A');
+  GAME_UpdatePositionPiece(&WhiteKnight_1, KNIGHT, 1, 'B');
+  GAME_UpdatePositionPiece(&WhiteBishop_1, BISHOP, 1, 'C');
+  GAME_UpdatePositionPiece(&WhiteKing, KING, 1, 'D');
+  GAME_UpdatePositionPiece(&WhiteQueen, QUEEN, 1, 'E');
+  GAME_UpdatePositionPiece(&WhiteBishop_2, BISHOP, 1, 'F');
+  GAME_UpdatePositionPiece(&WhiteKnight_2, KNIGHT, 1, 'G');
+  GAME_UpdatePositionPiece(&WhiteRook_2, ROOK, 1, 'H');
 
 
   return;
