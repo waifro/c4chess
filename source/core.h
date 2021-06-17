@@ -7,16 +7,20 @@
 
 #include "game.h"
 
+/****************************************/
+
 typedef struct {
 
   PP4M_SDL pp4m; // pp4m texture, rect, etc..
   bool toggle; // when INPUT_.. is detected it switches this toggle for next interaction
   int colomn;
   char row;
-  SDL_Color color;
+  SDL_Color color[2];
   GAME_PIECE *piece;
 
 } CORE_TILE;
+
+/****************************************/
 
 typedef enum {
 
@@ -34,6 +38,8 @@ typedef enum {
 
 } CORE_MOVEMENT;
 
+/****************************************/
+
 /*
 typedef struct {
 
@@ -42,9 +48,11 @@ typedef struct {
 
 } CORE_POSITION;
 */
+
 extern CORE_TILE tile[64];
 
 int CORE_ReturnTilePosition(int colomn, char row);
+int CORE_PieceIdentification(int pos);
 int CORE_CheckMovementKPawn(GAME_PIECE *piece, CORE_MOVEMENT movement, int space);
 int CORE_CheckMovementDarkPawn(GAME_PIECE *piece, CORE_MOVEMENT movement, int space);
 int CORE_CheckMovementKnight(GAME_PIECE *piece, CORE_MOVEMENT movement, int space);

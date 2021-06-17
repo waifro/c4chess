@@ -1,7 +1,23 @@
 #include "core.h"
 #include "game.h"
 
+// initialization of global (external) variable
 CORE_TILE tile[64];
+
+// initialization of points which goes ontop of tiles for creating patterns (a single automated switchable on/off toggle)
+PP4M_SDL point[64];
+point.rect = {0, 0, 25, 25};
+point.color = {0, 0, 0, 100};
+
+void CORE_InitializationPoint(void) {
+
+  for (int n = 0; n < 64; n++) {
+
+    
+
+  }
+
+}
 
 int CORE_ReturnTilePosition(int colomn, char row) {
 
@@ -20,6 +36,56 @@ int CORE_ReturnTilePosition(int colomn, char row) {
     }
 
     return -1;
+}
+
+int CORE_PieceIdentification(int pos) {
+
+  switch (tile[pos].piece->identifier) {
+
+    case (DPAWN):
+    CORE_CheckMovementDarkPawn(tile[pos].piece, );
+    break;
+
+    case (PAWN):
+    CORE_CheckMovementPawn(tile[pos].piece);
+    break;
+
+    case (KNIGHT):
+    CORE_CheckMovementKnight(tile[pos].piece);
+    break;
+
+    case (BISHOP):
+    CORE_CheckMovementBishop(tile[pos].piece);
+    break;
+
+    case (ROOK):
+    CORE_CheckMovementRook(tile[pos].piece);
+    break;
+
+    case (QUEEN):
+    CORE_CheckMovementQueen(tile[pos].piece);
+    break;
+
+    case (KING):
+    CORE_CheckMovementKing(tile[pos].piece);
+    break;
+
+  }
+
+}
+
+pp4m_DRAW_TextureRect(global_renderer, tile[foo].color[1], &tile[foo].pp4m.rect, tile[foo].pp4m.rect.x, tile[foo].pp4m.rect.y, 50, 50);
+
+int CORE_CreatePatternDarkPawn(int pos) {
+
+  if (tile[pos].colomn == 7) {
+
+    pp4m_DRAW_TextureRect(global_renderer, )
+  }
+
+  tile[pos].piece
+
+  return 0;
 }
 
 int CORE_CheckMovementPawn(GAME_PIECE *piece, CORE_MOVEMENT movement, int space) {
@@ -73,55 +139,3 @@ int CORE_CheckMovementKnight(GAME_PIECE *piece, CORE_MOVEMENT movement, int spac
   else GAME_UpdatePositionPiece(piece, KNIGHT, addon, piece->row);
   return 0;
 }
-
-
-/*
-int CORE_CheckMovementDarkPawn(GAME_PIECE *piece, CORE_MOVEMENT movement) {
-  if (movement != DOWN) return -1;
-  else GAME_UpdatePositionPiece(piece, (piece->colomn++), row);
-  return 0;
-}
-
-
-int CORE_MovementPiece(GAME_PIECE *piece, CORE_MOVEMENT movement) {
-
-  //ciao
-
-  return 0;
-}
-
-int CORE_MovementPawn(GAME_PIECE *piece, CORE_MOVEMENT movement) {
-
-  //ciao
-
-  return 0;
-}
-
-*/
-
-
-/* obsolete
-int CORE_MovementPawn(GAME_PIECE *piece) {
-
-    // up
-    if ((piece->colomn + 1) > 8) return -1;
-    else return 0;
-
-}
-
-int CORE_MovementDarkPawn(GAME_PIECE *piece) {
-
-    // down
-    if ((piece->colomn - 1) < 1) return -1;
-    else return 0;
-
-}
-
-int CORE_MovementRook(GAME_PIECE *piece) {
-
-    // up
-    if ((piece->colomn + 1) > 8) return -1;
-    else return 0;
-
-}
-*/
