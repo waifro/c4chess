@@ -1,5 +1,6 @@
-#include <SDL2/SDL.h>
+#include <stdio.h>
 #include <stdbool.h>
+#include <SDL2/SDL.h>
 
 #include "input.h"
 #include "core.h"
@@ -14,47 +15,19 @@ bool INPUT_Exit(SDL_Event *event) {
   return false;
 }
 
-int INPUT_ConvertTouchToPosition(void) {
+int INPUT_ConvertPositionToTile(int x, int y) {
 
-  int z;
+  int z = 0;
   for (int n = 0; n < 8; n++) {
 
-    if (touch.y >= tile[n].pp4m.rect.y && touch.y <= (tile[n].pp4m.rect.y+50)) {
+    if (y >= tile[z].pp4m.rect.y && y < (tile[z].pp4m.rect.y)+50)
+    for (int i = 0; i < 8; i++) {
 
-      for (int i = 0; i < 8; i++) {
+        if (x >= tile[z].pp4m.rect.x && x < (tile[z].pp4m.rect.x)+50) return z;
 
-        if (touch.x >= tile[n].pp4m.rect.x && touch.x <= (tile[n].pp4m.rect.x+50)) return z;
         z += 1;
-
       }
-
-    }
-
     z += 8;
-
-  }
-
-  return -1;
-}
-
-int INPUT_ConvertMouseToPosition(int x, int y) {
-
-  int z;
-  for (int n = 0; n < 8; n++) {
-
-    if (y >= tile[n].pp4m.rect.y && y <= (tile[n].pp4m.rect.y+50)) {
-
-      for (int i = 0; i < 8; i++) {
-
-        if (x >= tile[n].pp4m.rect.x && x <= (tile[n].pp4m.rect.x+50)) return z;
-        z += 1;
-
-      }
-
-    }
-
-    z += 8;
-
   }
 
   return -1;
@@ -63,10 +36,12 @@ int INPUT_ConvertMouseToPosition(int x, int y) {
 int INPUT_TouchInteractPiece(SDL_Event *event) {
 
     int foo = -1;
-
     if (event->type == SDL_FINGERDOWN) {
 
-          foo = INPUT_ConvertTouchToPosition();
+          int touch_x, touch_y;
+          SDL_GetMouseState(&touch_x, &touch_y);
+
+          foo = INPUT_ConvertPositionToTile(touch_x, touch_y);
 
           if (foo == -1) return foo;
 
@@ -81,16 +56,13 @@ int INPUT_TouchInteractPiece(SDL_Event *event) {
 
 int INPUT_MouseInteractPiece(SDL_Event *event) {
 
-  int foo = -1; bool door = false;
-  if (event->type == SDL_MOUSEBUTTONDOWN && door == false) {
-
-    door = true;
-    printf("test\n");
+  int foo = -1;
+  if (event->type == SDL_MOUSEBUTTONDOWN) {
 
     int mouse_x, mouse_y;
     SDL_GetMouseState(&mouse_x, &mouse_y);
 
-    foo = INPUT_ConvertMouseToPosition(mouse_x, mouse_y);
+    foo = INPUT_ConvertPositionToTile(mouse_x, mouse_y);
 
     if (foo == -1) return foo;
 
