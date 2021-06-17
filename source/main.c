@@ -7,6 +7,7 @@
 
 #include "main.h"
 #include "game.h"
+#include "input.h"
 
 SDL_Window *global_window;
 SDL_Renderer *global_renderer;

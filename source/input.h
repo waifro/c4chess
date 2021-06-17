@@ -9,9 +9,9 @@
 bool INPUT_Exit(SDL_Event *event);
 
 int INPUT_ConvertTouchToPosition(void);
-int INPUT_ConvertMouseToPosition(void);
+int INPUT_ConvertMouseToPosition(int x, int y);
 
-void INPUT_TouchInteractPiece(SDL_Event *event);
+int INPUT_TouchInteractPiece(SDL_Event *event);
 int INPUT_MouseInteractPiece(SDL_Event *event);
 
 #endif

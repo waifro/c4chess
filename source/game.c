@@ -72,16 +72,15 @@ void GAME_InitializeChessboard(void) {
 
   GAME_InitializePieces();
 
-  int foo;
+  int foo = 0;
   SDL_Event event;
 
   while (SDL_PollEvent(&event) >= 0) {
 
-    if (INPUT_Exit(&event) == true) break;
-
     foo = INPUT_MouseInteractPiece(&event);
     if (foo != -1) {
             tile[foo].color = PP4M_BLUE;
+            SDL_DestroyTexture(tile[foo].pp4m.texture);
             tile[foo].pp4m.texture = pp4m_DRAW_TextureRect(global_renderer, tile[foo].color, &tile[foo].pp4m.rect, tile[foo].pp4m.rect.x, tile[foo].pp4m.rect.y, 50, 50);
     }
 
@@ -95,6 +94,7 @@ void GAME_InitializeChessboard(void) {
 
     SDL_RenderPresent(global_renderer);
 
+    if (INPUT_Exit(&event) == true) break;
   }
 
   return;
