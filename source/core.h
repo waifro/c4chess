@@ -15,7 +15,7 @@ typedef struct {
   bool toggle; // when INPUT_.. is detected it switches this toggle for next interaction
   int colomn;
   char row;
-  SDL_Color color[2];
+  SDL_Color color;
   GAME_PIECE *piece;
 
 } CORE_TILE;
@@ -40,21 +40,20 @@ typedef enum {
 
 /****************************************/
 
-/*
-typedef struct {
-
-  int colomn;
-  char row;
-
-} CORE_POSITION;
-*/
-
 extern CORE_TILE tile[64];
+extern CORE_TILE point[64];
 
 int CORE_ReturnTilePosition(int colomn, char row);
 int CORE_PieceIdentification(int pos);
-int CORE_CheckMovementKPawn(GAME_PIECE *piece, CORE_MOVEMENT movement, int space);
-int CORE_CheckMovementDarkPawn(GAME_PIECE *piece, CORE_MOVEMENT movement, int space);
-int CORE_CheckMovementKnight(GAME_PIECE *piece, CORE_MOVEMENT movement, int space);
+
+int CORE_CheckMovementPawn(GAME_PIECE *piece);
+int CORE_CheckMovementDarkPawn(GAME_PIECE *piece);
+int CORE_CheckMovementKnight(GAME_PIECE *piece);
+int CORE_CheckMovementBishop(GAME_PIECE *piece);
+int CORE_CheckMovementRook(GAME_PIECE *piece);
+int CORE_CheckMovementQueen(GAME_PIECE *piece);
+int CORE_CheckMovementKing(GAME_PIECE *piece);
+
+void CORE_InitializationPoint(void);
 
 #endif

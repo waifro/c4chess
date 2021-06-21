@@ -3,7 +3,7 @@
 
 typedef enum {
 
-    DPAWN,
+    DPAWN = 0,
     PAWN,
     KNIGHT,
     BISHOP,

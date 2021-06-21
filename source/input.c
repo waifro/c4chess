@@ -5,9 +5,6 @@
 #include "input.h"
 #include "core.h"
 
-SDL_TouchFingerEvent touch;
-SDL_MouseButtonEvent mouse;
-
 bool INPUT_Exit(SDL_Event *event) {
 
   if (event->type == SDL_QUIT) return true;
@@ -43,12 +40,6 @@ int INPUT_TouchInteractPiece(SDL_Event *event) {
 
           foo = INPUT_ConvertPositionToTile(touch_x, touch_y);
 
-          if (foo == -1) return foo;
-
-          if (tile[foo].piece == NULL) return -1;
-          else tile[foo].toggle = true;
-
-          //CORE_CheckMovementPawn()
         }
 
   return foo;
@@ -56,21 +47,15 @@ int INPUT_TouchInteractPiece(SDL_Event *event) {
 
 int INPUT_MouseInteractPiece(SDL_Event *event) {
 
-  int foo = -1;
-  if (event->type == SDL_MOUSEBUTTONDOWN) {
+    int foo = -1;
+    if (event->type == SDL_MOUSEBUTTONDOWN) {
 
-    int mouse_x, mouse_y;
-    SDL_GetMouseState(&mouse_x, &mouse_y);
+          int touch_x, touch_y;
+          SDL_GetMouseState(&touch_x, &touch_y);
 
-    foo = INPUT_ConvertPositionToTile(mouse_x, mouse_y);
+          foo = INPUT_ConvertPositionToTile(touch_x, touch_y);
 
-    if (foo == -1) return foo;
-
-    if (tile[foo].piece == NULL) return -1;
-    else tile[foo].toggle = true;
-
-    //CORE_CheckMovementPawn()
-  }
+        }
 
   return foo;
 }

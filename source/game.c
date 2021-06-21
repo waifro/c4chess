@@ -70,40 +70,47 @@ void GAME_InitializeChessboard(void) {
   background.texture = pp4m_DRAW_TextureRect(global_renderer, PP4M_GREY_DARK, &background.rect, 1280, 720, 1, 1);
 
   GAME_CreateChessboard_Tiles();
+  CORE_InitializationPoint();
 
   GAME_InitializePieces();
 
-  int foo = 0; int bar = 0;
+  int foo = -1; int keep = -1;
   SDL_Event event;
+
 
   while (SDL_PollEvent(&event) >= 0) {
 
-    foo = INPUT_MouseInteractPiece(&event);
-    if (foo != -1) {
+    foo = INPUT_MouseInteractPiece(&event); // if mouse touches a tile, returns != -1
 
-            // if new position and "bar" is already unused, change tile color, and print possible pattern
-            if (bar == 0) {
+    if (foo != -1 && tile[foo].piece != NULL) {
 
-              if (tile[foo].color[1] == NULL) tile[foo].color[1] = PP4M_BLUE;
-              tile[foo].pp4m.texture = pp4m_DRAW_TextureRect(global_renderer, tile[foo].color[1], &tile[foo].pp4m.rect, tile[foo].pp4m.rect.x, tile[foo].pp4m.rect.y, 50, 50);
+            // if new position and "keep" is unused, change tile color, and print possible pattern
+            if (foo != keep && keep == -1) {
 
-              // CORE_PieceIdentification() -> CORE_CheckMovementPawn() -> create pattern of valid moves
-
-              // CORE_CheckMovementPawn()
-              bar = foo;
+                SDL_DestroyTexture(tile[foo].pp4m.texture);
+                tile[foo].pp4m.texture = pp4m_DRAW_TextureRect(global_renderer, PP4M_BLUE, &tile[foo].pp4m.rect, tile[foo].pp4m.rect.x, tile[foo].pp4m.rect.y, 50, 50);
+                keep = foo;
+                point[foo].toggle = true;
+                // CORE_PieceIdentification() -> CORE_CheckMovementPawn() -> create pattern of valid moves
 
             }
 
+            else if (foo != keep && keep != -1) {
 
+                // if deselected, or valid move is choosen, lets reset the toggles and color
+                // look if is touching a valid position for the selected piece to move
+                point[keep].toggle = false;
+                SDL_DestroyTexture(tile[keep].pp4m.texture);
+                tile[keep].pp4m.texture = pp4m_DRAW_TextureRect(global_renderer, tile[keep].color, &tile[keep].pp4m.rect, tile[keep].pp4m.rect.x, tile[keep].pp4m.rect.y, 50, 50);
+                keep = -1;
 
-            // look if is touching a valid position for the selected piece to move
-            // otherwise look if is touching another tile in case of a new selection
-            // otherwise deselect the piece if invalid position
-            // deselecting piece means switching toggle variable to default
+            }
 
-    } else if (foo == keep) {
+    } else if (foo != -1 && tile[foo].piece == NULL) {
 
-      // if touching the same piece, deselect it.
+        point[keep].toggle = false;
+        SDL_DestroyTexture(tile[keep].pp4m.texture);
+        tile[keep].pp4m.texture = pp4m_DRAW_TextureRect(global_renderer, tile[keep].color, &tile[keep].pp4m.rect, tile[keep].pp4m.rect.x, tile[keep].pp4m.rect.y, 50, 50);
 
     }
 
@@ -111,9 +118,15 @@ void GAME_InitializeChessboard(void) {
     SDL_RenderCopy(global_renderer, background.texture, NULL, NULL);
 
     for (int n = 0; n < 64; n++) {
+
+        // this renders the tiles.
         SDL_RenderCopy(global_renderer, tile[n].pp4m.texture, NULL, &tile[n].pp4m.rect);
+
+        // this renders the pieces on board.
         if (tile[n].piece != NULL) SDL_RenderCopy(global_renderer, tile[n].piece->texture, NULL, &tile[n].piece->rect);
-        // if point[n].toggle on -> rendercopy point[n]
+
+        // this renders the points if toggled true
+        if (point[n].toggle == true) SDL_RenderCopy(global_renderer, point[n].pp4m.texture, NULL, &point[n].pp4m.rect);
     }
 
     SDL_RenderPresent(global_renderer);
@@ -137,7 +150,7 @@ void GAME_UpdatePositionPiece(GAME_PIECE *piece, GAME_IDENTIFIER identifier, int
   if (bar != -1) tile[bar].piece = NULL;
 
   // if the new piece has just been initialized, lets give him an identifier
-  if (piece->identifier == NULL) piece->identifier = identifier;
+  if (sizeof(piece->identifier) == 0) piece->identifier = identifier;
 
   // now lets copy the new information obtained from foo
   piece->colomn = tile[foo].colomn;
@@ -269,7 +282,7 @@ void GAME_CreateChessboard_Tiles(void) {
       // tagging alphanumeric for each tile
       tile[n].colomn = colomn;
       tile[n].row = text_row[row_position];
-      tile[n].color[0] = PP4M_WHITE;
+      tile[n].color = PP4M_WHITE;
 
       ChessTile_X += 50;
       row_position += 1;
@@ -277,7 +290,6 @@ void GAME_CreateChessboard_Tiles(void) {
 
       SDL_RenderCopy(global_renderer, tile[n].pp4m.texture, NULL, &tile[n].pp4m.rect);
 
-      //SDL_Delay(100);
     }
 
     else if (change_color == 1) {
@@ -287,7 +299,7 @@ void GAME_CreateChessboard_Tiles(void) {
       // tagging alphanumeric for each tile
       tile[n].colomn = colomn;
       tile[n].row = text_row[row_position];
-      tile[n].color[0] = PP4M_GREY;
+      tile[n].color = PP4M_GREY;
 
       ChessTile_X += 50;
       row_position += 1;

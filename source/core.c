@@ -1,23 +1,12 @@
+#include "pp4m/pp4m_draw.h"
+
+#include "main.h"
 #include "core.h"
 #include "game.h"
 
 // initialization of global (external) variable
 CORE_TILE tile[64];
-
-// initialization of points which goes ontop of tiles for creating patterns (a single automated switchable on/off toggle)
-PP4M_SDL point[64];
-point.rect = {0, 0, 25, 25};
-point.color = {0, 0, 0, 100};
-
-void CORE_InitializationPoint(void) {
-
-  for (int n = 0; n < 64; n++) {
-
-    
-
-  }
-
-}
+CORE_TILE point[64];
 
 int CORE_ReturnTilePosition(int colomn, char row) {
 
@@ -43,7 +32,7 @@ int CORE_PieceIdentification(int pos) {
   switch (tile[pos].piece->identifier) {
 
     case (DPAWN):
-    CORE_CheckMovementDarkPawn(tile[pos].piece, );
+    CORE_CheckMovementDarkPawn(tile[pos].piece);
     break;
 
     case (PAWN):
@@ -72,70 +61,105 @@ int CORE_PieceIdentification(int pos) {
 
   }
 
+  return 0;
 }
-
-pp4m_DRAW_TextureRect(global_renderer, tile[foo].color[1], &tile[foo].pp4m.rect, tile[foo].pp4m.rect.x, tile[foo].pp4m.rect.y, 50, 50);
 
 int CORE_CreatePatternDarkPawn(int pos) {
 
   if (tile[pos].colomn == 7) {
 
-    pp4m_DRAW_TextureRect(global_renderer, )
+    //pp4m_DRAW_TextureRect(global_renderer, )
   }
 
-  tile[pos].piece
+  //tile[pos].piece
 
   return 0;
 }
 
-int CORE_CheckMovementPawn(GAME_PIECE *piece, CORE_MOVEMENT movement, int space) {
+int CORE_CheckMovementPawn(GAME_PIECE *piece) {
   // "int space" is for how many tiles to move from point A to B
 
   // if addon is more then z tile, exit
-  int addon = piece->colomn + space;
+  //int addon = piece->colomn + space;
 
   // if movement not correct, exit
-  if (movement != UP) return -1;
+  //if (movement != UP) return -1;
 
   // if movement goes out of scope, exit
-  else if (addon > 8) return -2;
+  //else if (addon > 8) return -2;
 
   // else, update position
-  GAME_UpdatePositionPiece(piece, PAWN, addon, piece->row);
+  //GAME_UpdatePositionPiece(piece, PAWN, addon, piece->row);
   return 0;
 }
 
-int CORE_CheckMovementDarkPawn(GAME_PIECE *piece, CORE_MOVEMENT movement, int space) {
+int CORE_CheckMovementDarkPawn(GAME_PIECE *piece) {
   // "int space" is for how many tiles to move from point A to B
 
   // if addon is more then z tile, exit
-  int addon = piece->colomn - space;
+  //int addon = piece->colomn - space;
 
   // if movement not correct, exit
-  if (movement != DOWN) return -1;
+  //if (movement != DOWN) return -1;
 
   // if movement goes out of scope, exit
-  else if (addon < 1) return -2;
+  //else if (addon < 1) return -2;
 
   // else, update position
-  else GAME_UpdatePositionPiece(piece, DPAWN, addon, piece->row);
+  //else GAME_UpdatePositionPiece(piece, DPAWN, addon, piece->row);
   return 0;
 }
 
-int CORE_CheckMovementKnight(GAME_PIECE *piece, CORE_MOVEMENT movement, int space) {
+int CORE_CheckMovementKnight(GAME_PIECE *piece) {
   // "int space" is for how many tiles to move from point A to B
   // needs to be finished
 
   // if addon is more then z tile, exit
-  int addon = piece->colomn + space;
+  //int addon = piece->colomn + space;
 
   // if movement not correct, exit
-  if (movement != UP) return -1;
+  //if (movement != UP) return -1;
 
   // if movement goes out of scope, exit
-  else if (addon > 8) return -2;
+  //else if (addon > 8) return -2;
 
   // else, update position
-  else GAME_UpdatePositionPiece(piece, KNIGHT, addon, piece->row);
+  //else GAME_UpdatePositionPiece(piece, KNIGHT, addon, piece->row);
   return 0;
+}
+
+int CORE_CheckMovementBishop(GAME_PIECE *piece){return 0;}
+int CORE_CheckMovementRook(GAME_PIECE *piece){return 0;}
+int CORE_CheckMovementQueen(GAME_PIECE *piece){return 0;}
+int CORE_CheckMovementKing(GAME_PIECE *piece){return 0;}
+
+void CORE_InitializationPoint(void) {
+
+  // initialization of points which goes ontop of tiles for creating patterns (a single automated switchable on/off toggle)
+
+  int PointTile_X = (1280 / 2) - 190;
+  int PointTile_Y = (720 / 2) - 190;
+
+  int row_position = 0;
+
+  SDL_Color fade_black = {0, 0, 0, 255};
+
+  for (int n = 0; n < 64; n++) {
+
+    // on every 8 rows, the colomn goes down
+    if (row_position > 7) {
+      PointTile_X = (SCREEN_WIDTH / 2) - 190;
+      PointTile_Y += 50;
+      row_position = 0;
+    }
+
+    point[n].pp4m.texture = pp4m_DRAW_TextureRect(global_renderer, fade_black, &point[n].pp4m.rect, PointTile_X, PointTile_Y, 30, 30);
+    SDL_SetTextureBlendMode(point[n].pp4m.texture, SDL_BLENDMODE_BLEND);
+    SDL_SetTextureAlphaMod(point[n].pp4m.texture, 100);
+
+    PointTile_X += 50;
+    row_position += 1;
+  }
+
+  return;
 }
