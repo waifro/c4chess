@@ -27,36 +27,36 @@ int CORE_ReturnTilePosition(int colomn, char row) {
     return -1;
 }
 
-int CORE_PieceIdentification(int pos) {
+int CORE_CheckPieceMovement(int pos) {
 
   switch (tile[pos].piece->identifier) {
 
     case (DPAWN):
-    CORE_CheckMovementDarkPawn(tile[pos].piece);
+    CORE_CreatePatternDarkPawn(pos);
     break;
 
     case (PAWN):
-    CORE_CheckMovementPawn(tile[pos].piece);
+    CORE_CheckMovementPawn(pos);
     break;
 
     case (KNIGHT):
-    CORE_CheckMovementKnight(tile[pos].piece);
+    CORE_CheckMovementKnight(pos);
     break;
 
     case (BISHOP):
-    CORE_CheckMovementBishop(tile[pos].piece);
+    CORE_CheckMovementBishop(pos);
     break;
 
     case (ROOK):
-    CORE_CheckMovementRook(tile[pos].piece);
+    CORE_CheckMovementRook(pos);
     break;
 
     case (QUEEN):
-    CORE_CheckMovementQueen(tile[pos].piece);
+    CORE_CheckMovementQueen(pos);
     break;
 
     case (KING):
-    CORE_CheckMovementKing(tile[pos].piece);
+    CORE_CheckMovementKing(pos);
     break;
 
   }
@@ -66,12 +66,31 @@ int CORE_PieceIdentification(int pos) {
 
 int CORE_CreatePatternDarkPawn(int pos) {
 
-  if (tile[pos].colomn == 7) {
+  if (tile[pos].piece->player == BLACK && tile[pos].piece->identifier == DPAWN) {
 
-    //pp4m_DRAW_TextureRect(global_renderer, )
+    if (tile[pos].colomn == 7) {
+
+      point[pos+8].toggle = true;
+      point[pos+16].toggle = true;
+
+    } else if (tile[pos].colomn != 7) point[pos+8].toggle = true;
+
   }
 
-  //tile[pos].piece
+  return 0;
+}
+
+int CORE_UpdateMovementPieceFromPoint(int pos) {
+
+  // bar = tile selected with old position of piece
+  int bar = -1;
+  for (int n = 0; n < 64; ++n) if (tile[n].toggle == true) { bar = n; break; }
+  if (bar == -1) return -1;
+
+  tile[bar].toggle = false;
+
+  // it dosent turn off the toggles behind, cousing to move to a different position prevoiusly selected pieces
+  GAME_UpdatePositionPiece(tile[bar].piece->player, tile[bar].piece, tile[bar].piece->identifier, tile[pos].colomn, tile[pos].row);
 
   return 0;
 }
@@ -90,23 +109,6 @@ int CORE_CheckMovementPawn(GAME_PIECE *piece) {
 
   // else, update position
   //GAME_UpdatePositionPiece(piece, PAWN, addon, piece->row);
-  return 0;
-}
-
-int CORE_CheckMovementDarkPawn(GAME_PIECE *piece) {
-  // "int space" is for how many tiles to move from point A to B
-
-  // if addon is more then z tile, exit
-  //int addon = piece->colomn - space;
-
-  // if movement not correct, exit
-  //if (movement != DOWN) return -1;
-
-  // if movement goes out of scope, exit
-  //else if (addon < 1) return -2;
-
-  // else, update position
-  //else GAME_UpdatePositionPiece(piece, DPAWN, addon, piece->row);
   return 0;
 }
 

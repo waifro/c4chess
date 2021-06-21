@@ -3,15 +3,22 @@
 
 typedef enum {
 
-    DPAWN = 0,
-    PAWN,
-    KNIGHT,
-    BISHOP,
-    ROOK,
-    QUEEN,
-    KING
+    DPAWN = 1,
+    PAWN = 2,
+    KNIGHT = 3,
+    BISHOP = 4,
+    ROOK = 5,
+    QUEEN = 6,
+    KING = 7
 
 } GAME_IDENTIFIER;
+
+typedef enum {
+
+  WHITE = 1,
+  BLACK = 2
+
+} GAME_PLAYER;
 
 typedef struct {
 
@@ -19,6 +26,7 @@ typedef struct {
     SDL_Rect rect;
     int alive;
     GAME_IDENTIFIER identifier;
+    GAME_PLAYER player;
 
     // deprecated
     int colomn;
@@ -27,7 +35,7 @@ typedef struct {
 } GAME_PIECE;
 
 void GAME_InitializeChessboard(void);
-void GAME_UpdatePositionPiece(GAME_PIECE *piece, GAME_IDENTIFIER identifier, int colomn, char row);
+void GAME_UpdatePositionPiece(GAME_PLAYER player, GAME_PIECE *piece, GAME_IDENTIFIER identifier, int colomn, char row);
 void GAME_InitializePieces(void);
 void GAME_CreateChessboard_Tiles(void);
 

@@ -44,10 +44,13 @@ extern CORE_TILE tile[64];
 extern CORE_TILE point[64];
 
 int CORE_ReturnTilePosition(int colomn, char row);
-int CORE_PieceIdentification(int pos);
+int CORE_CheckPieceMovement(int pos);
+int CORE_UpdateMovementPieceFromPoint(int pos);
 
+int CORE_CreatePatternDarkPawn(int pos);
+
+// old names
 int CORE_CheckMovementPawn(GAME_PIECE *piece);
-int CORE_CheckMovementDarkPawn(GAME_PIECE *piece);
 int CORE_CheckMovementKnight(GAME_PIECE *piece);
 int CORE_CheckMovementBishop(GAME_PIECE *piece);
 int CORE_CheckMovementRook(GAME_PIECE *piece);
