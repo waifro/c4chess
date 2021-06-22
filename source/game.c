@@ -108,7 +108,7 @@ void GAME_InitializeChessboard(void) {
                 tile[keep].pp4m.texture = pp4m_DRAW_TextureRect(global_renderer, tile[keep].color, &tile[keep].pp4m.rect, tile[keep].pp4m.rect.x, tile[keep].pp4m.rect.y, 50, 50);
 
                 // If touch is in a valid position, move piece ( also, tile[foo].toggle = false)
-                //if (point[foo].toggle == true) CORE_UpdateMovementPieceFromPoint(foo);
+                if (point[foo].toggle == true) CORE_UpdateMovementPieceFromPoint(foo);
                 reset = true;
                 keep = -1;
 
@@ -137,6 +137,7 @@ void GAME_InitializeChessboard(void) {
         // this renders the points if toggled true
         if (reset == true) {
 
+          tile[n].toggle = false;
           point[n].toggle = false;
           if (n >= 63) reset = false;
 
