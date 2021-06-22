@@ -36,7 +36,7 @@ int CORE_CheckPieceMovement(int pos) {
     break;
 
     case (PAWN):
-    CORE_CheckMovementPawn(pos);
+    CORE_CreatePatternPawn(pos);
     break;
 
     case (KNIGHT):
@@ -64,22 +64,6 @@ int CORE_CheckPieceMovement(int pos) {
   return 0;
 }
 
-int CORE_CreatePatternDarkPawn(int pos) {
-
-  if (tile[pos].piece->player == BLACK && tile[pos].piece->identifier == DPAWN) {
-
-    if (tile[pos].colomn == 7) {
-
-      point[pos+8].toggle = true;
-      point[pos+16].toggle = true;
-
-    } else if (tile[pos].colomn != 7) point[pos+8].toggle = true;
-
-  }
-
-  return 0;
-}
-
 int CORE_UpdateMovementPieceFromPoint(int pos) {
 
   // bar = tile selected with old position of piece
@@ -95,45 +79,80 @@ int CORE_UpdateMovementPieceFromPoint(int pos) {
   return 0;
 }
 
-int CORE_CheckMovementPawn(GAME_PIECE *piece) {
-  // "int space" is for how many tiles to move from point A to B
+int CORE_SwitchPlayerTurn(int player) {
 
-  // if addon is more then z tile, exit
-  //int addon = piece->colomn + space;
+    // white
+    if (player == 2) player = 1;
+    else if (player == 1) player = 2;
 
-  // if movement not correct, exit
-  //if (movement != UP) return -1;
+    return player;
+}
 
-  // if movement goes out of scope, exit
-  //else if (addon > 8) return -2;
+int CORE_CheckCapturePiece_DarkPawn(int pos) {
 
-  // else, update position
-  //GAME_UpdatePositionPiece(piece, PAWN, addon, piece->row);
+    if (tile[pos+7].piece != NULL && tile[pos+7].piece->player == WHITE) point[pos+7].toggle = true;
+    if (tile[pos+9].piece != NULL && tile[pos+9].piece->player == WHITE) point[pos+9].toggle = true;
+
+    return 0;
+}
+
+int CORE_CheckCapturePiece_Pawn(int pos) {
+
+    if (tile[pos-9].piece != NULL && tile[pos-9].piece->player == BLACK) point[pos-9].toggle = true;
+    if (tile[pos-7].piece != NULL && tile[pos-7].piece->player == BLACK) point[pos-7].toggle = true;
+
+    return 0;
+}
+
+int CORE_CreatePatternDarkPawn(int pos) {
+
+  // better ro use colomns and rows for creation of valid moves (using CORE_ReturnTilePosition())
+  // it needs to check if the "valid" position is outside of reach (ex. pawn on H3 -> not valid A1 || or pawn on A1 -> not valid H8)
+  if (tile[pos].piece->player == BLACK && tile[pos].piece->identifier == DPAWN) {
+
+    if (tile[pos].colomn == 7) {
+
+      if (tile[pos+8].piece == NULL) point[pos+8].toggle = true;
+      if (tile[pos+16].piece == NULL) point[pos+16].toggle = true;
+
+    } else if (tile[pos].colomn != 7) if (tile[pos+8].piece == NULL) point[pos+8].toggle = true;
+
+    CORE_CheckCapturePiece_DarkPawn(pos);
+  }
+
   return 0;
 }
 
-int CORE_CheckMovementKnight(GAME_PIECE *piece) {
-  // "int space" is for how many tiles to move from point A to B
-  // needs to be finished
+int CORE_CreatePatternPawn(int pos) {
 
-  // if addon is more then z tile, exit
-  //int addon = piece->colomn + space;
+  // better ro use colomns and rows for creation of valid moves (using CORE_ReturnTilePosition())
+  // it needs to check if the "valid" position is outside of reach (ex. pawn on H3 -> not valid A1 || or pawn on A1 -> not valid H8)
+  if (tile[pos].piece->player == WHITE && tile[pos].piece->identifier == PAWN) {
 
-  // if movement not correct, exit
-  //if (movement != UP) return -1;
+    if (tile[pos].colomn == 2) {
 
-  // if movement goes out of scope, exit
-  //else if (addon > 8) return -2;
+      if (tile[pos-8].piece == NULL) point[pos-8].toggle = true;
+      if (tile[pos-16].piece == NULL) point[pos-16].toggle = true;
 
-  // else, update position
-  //else GAME_UpdatePositionPiece(piece, KNIGHT, addon, piece->row);
+    } else if (tile[pos].colomn != 2) if (tile[pos-8].piece == NULL) point[pos-8].toggle = true;
+
+    CORE_CheckCapturePiece_Pawn(pos);
+  }
+
   return 0;
 }
 
-int CORE_CheckMovementBishop(GAME_PIECE *piece){return 0;}
-int CORE_CheckMovementRook(GAME_PIECE *piece){return 0;}
-int CORE_CheckMovementQueen(GAME_PIECE *piece){return 0;}
-int CORE_CheckMovementKing(GAME_PIECE *piece){return 0;}
+int CORE_CheckMovementKnight(int pos) {
+
+
+
+  return 0;
+}
+
+int CORE_CheckMovementBishop(int pos){return 0;}
+int CORE_CheckMovementRook(int pos){return 0;}
+int CORE_CheckMovementQueen(int pos){return 0;}
+int CORE_CheckMovementKing(int pos){return 0;}
 
 void CORE_InitializationPoint(void) {
 

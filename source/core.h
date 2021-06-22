@@ -46,16 +46,17 @@ extern CORE_TILE point[64];
 int CORE_ReturnTilePosition(int colomn, char row);
 int CORE_CheckPieceMovement(int pos);
 int CORE_UpdateMovementPieceFromPoint(int pos);
+int CORE_SwitchPlayerTurn(int player);
 
 int CORE_CreatePatternDarkPawn(int pos);
+int CORE_CreatePatternPawn(int pos);
 
 // old names
-int CORE_CheckMovementPawn(GAME_PIECE *piece);
-int CORE_CheckMovementKnight(GAME_PIECE *piece);
-int CORE_CheckMovementBishop(GAME_PIECE *piece);
-int CORE_CheckMovementRook(GAME_PIECE *piece);
-int CORE_CheckMovementQueen(GAME_PIECE *piece);
-int CORE_CheckMovementKing(GAME_PIECE *piece);
+int CORE_CheckMovementKnight(int pos);
+int CORE_CheckMovementBishop(int pos);
+int CORE_CheckMovementRook(int pos);
+int CORE_CheckMovementQueen(int pos);
+int CORE_CheckMovementKing(int pos);
 
 void CORE_InitializationPoint(void);
 

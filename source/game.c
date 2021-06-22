@@ -5,6 +5,7 @@
 
 #include "pp4m/pp4m.h"
 #include "pp4m/pp4m_io.h"
+#include "pp4m/pp4m_ttf.h"
 #include "pp4m/pp4m_draw.h"
 #include "pp4m/pp4m_image.h"
 
@@ -12,6 +13,7 @@
 #include "game.h"
 #include "core.h"
 #include "input.h"
+#include "debug.h"
 
 char *BLACK_PAWN = "resources/dpawn.png";
 char *BLACK_KNIGHT = "resources/dknight.png";
@@ -63,6 +65,7 @@ GAME_PIECE WhiteRook_2;
 GAME_PIECE WhiteKing;
 GAME_PIECE WhiteQueen;
 
+//char *FONT = "resources/OpenSans-Regular.ttf";
 
 void GAME_InitializeChessboard(void) {
 
@@ -76,9 +79,18 @@ void GAME_InitializeChessboard(void) {
 
   int foo = -1; int keep = -1;
   int reset = 0;
+  GAME_PLAYER player = WHITE;
 
   SDL_Event event;
 
+  sprintf(DebugInfo[0].text, "Player: %d", player);
+  DEBUG_WriteTextureFont(DebugInfo[0].text, 0);
+
+  sprintf(DebugInfo[1].text, "foo: %d", foo);
+  DEBUG_WriteTextureFont(DebugInfo[1].text, 1);
+
+  sprintf(DebugInfo[2].text, "keep: %d", keep);
+  DEBUG_WriteTextureFont(DebugInfo[2].text, 2);
 
   while (SDL_PollEvent(&event) >= 0) {
 
@@ -87,7 +99,7 @@ void GAME_InitializeChessboard(void) {
     if (foo != -1 && tile[foo].piece != NULL) {
 
             // if new position and "keep" is unused, change tile color, and print possible pattern
-            if (foo != keep && keep == -1) {
+            if (foo != keep && keep == -1 && tile[foo].piece->player == player) {
 
                 keep = foo;
 
@@ -108,20 +120,36 @@ void GAME_InitializeChessboard(void) {
                 tile[keep].pp4m.texture = pp4m_DRAW_TextureRect(global_renderer, tile[keep].color, &tile[keep].pp4m.rect, tile[keep].pp4m.rect.x, tile[keep].pp4m.rect.y, 50, 50);
 
                 // If touch is in a valid position, move piece ( also, tile[foo].toggle = false)
-                if (point[foo].toggle == true) CORE_UpdateMovementPieceFromPoint(foo);
+                if (point[foo].toggle == true) {
+                        player = CORE_SwitchPlayerTurn(player);
+                        CORE_UpdateMovementPieceFromPoint(foo);
+                }
+
                 reset = true;
                 keep = -1;
-
             }
 
+    // checks only if a possible valid move, otherwise it resets everything on empty tile
     } else if (foo != -1 && tile[foo].piece == NULL) {
 
         reset = true;
-        if (point[foo].toggle == true) CORE_UpdateMovementPieceFromPoint(foo);
+        if (point[foo].toggle == true) {
+                player = CORE_SwitchPlayerTurn(player);
+                CORE_UpdateMovementPieceFromPoint(foo);
+        }
+
         SDL_DestroyTexture(tile[keep].pp4m.texture);
         tile[keep].pp4m.texture = pp4m_DRAW_TextureRect(global_renderer, tile[keep].color, &tile[keep].pp4m.rect, tile[keep].pp4m.rect.x, tile[keep].pp4m.rect.y, 50, 50);
-
     }
+
+    sprintf(DebugInfo[0].text, "Player: %d", player);
+    DEBUG_WriteTextureFont(DebugInfo[0].text, 0);
+
+    sprintf(DebugInfo[1].text, "foo: %d", foo);
+    DEBUG_WriteTextureFont(DebugInfo[1].text, 1);
+
+    //sprintf(DebugInfo[2].text, "keep: %d", keep);
+    //DEBUG_WriteTextureFont(DebugInfo[2].text, 2);
 
     SDL_RenderClear(global_renderer);
     SDL_RenderCopy(global_renderer, background.texture, NULL, NULL);
@@ -134,7 +162,7 @@ void GAME_InitializeChessboard(void) {
         // this renders the pieces on board.
         if (tile[n].piece != NULL) SDL_RenderCopy(global_renderer, tile[n].piece->texture, NULL, &tile[n].piece->rect);
 
-        // this renders the points if toggled true
+        // this resets everything gameplay-releated
         if (reset == true) {
 
           tile[n].toggle = false;
@@ -142,12 +170,16 @@ void GAME_InitializeChessboard(void) {
           if (n >= 63) reset = false;
 
         } else if (reset == false) {
-
+          // this renders the points if toggled true
           if (point[n].toggle == true) SDL_RenderCopy(global_renderer, point[n].pp4m.texture, NULL, &point[n].pp4m.rect);
 
         }
 
     }
+
+    DEBUG_Print(0);
+    DEBUG_Print(1);
+    //DEBUG_Print(2);
 
     SDL_RenderPresent(global_renderer);
 

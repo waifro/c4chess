@@ -15,8 +15,8 @@ typedef enum {
 
 typedef enum {
 
-  WHITE = 1,
-  BLACK = 2
+  WHITE = 2,
+  BLACK = 1
 
 } GAME_PLAYER;
 
