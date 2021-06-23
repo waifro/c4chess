@@ -65,7 +65,7 @@ GAME_PIECE WhiteRook_2;
 GAME_PIECE WhiteKing;
 GAME_PIECE WhiteQueen;
 
-//char *FONT = "resources/OpenSans-Regular.ttf";
+GAME_PLAYER global_player;
 
 void GAME_InitializeChessboard(void) {
 
@@ -79,18 +79,11 @@ void GAME_InitializeChessboard(void) {
 
   int foo = -1; int keep = -1;
   int reset = 0;
-  GAME_PLAYER player = WHITE;
+
+  // starts white
+  global_player = WHITE;
 
   SDL_Event event;
-
-  sprintf(DebugInfo[0].text, "Player: %d", player);
-  DEBUG_WriteTextureFont(DebugInfo[0].text, 0);
-
-  sprintf(DebugInfo[1].text, "foo: %d", foo);
-  DEBUG_WriteTextureFont(DebugInfo[1].text, 1);
-
-  sprintf(DebugInfo[2].text, "keep: %d", keep);
-  DEBUG_WriteTextureFont(DebugInfo[2].text, 2);
 
   while (SDL_PollEvent(&event) >= 0) {
 
@@ -99,7 +92,7 @@ void GAME_InitializeChessboard(void) {
     if (foo != -1 && tile[foo].piece != NULL) {
 
             // if new position and "keep" is unused, change tile color, and print possible pattern
-            if (foo != keep && keep == -1 && tile[foo].piece->player == player) {
+            if (foo != keep && keep == -1 && tile[foo].piece->player == global_player) {
 
                 keep = foo;
 
@@ -121,7 +114,7 @@ void GAME_InitializeChessboard(void) {
 
                 // If touch is in a valid position, move piece ( also, tile[foo].toggle = false)
                 if (point[foo].toggle == true) {
-                        player = CORE_SwitchPlayerTurn(player);
+                        global_player = CORE_SwitchPlayerTurn(global_player);
                         CORE_UpdateMovementPieceFromPoint(foo);
                 }
 
@@ -134,7 +127,7 @@ void GAME_InitializeChessboard(void) {
 
         reset = true;
         if (point[foo].toggle == true) {
-                player = CORE_SwitchPlayerTurn(player);
+                global_player = CORE_SwitchPlayerTurn(global_player);
                 CORE_UpdateMovementPieceFromPoint(foo);
         }
 
@@ -142,14 +135,15 @@ void GAME_InitializeChessboard(void) {
         tile[keep].pp4m.texture = pp4m_DRAW_TextureRect(global_renderer, tile[keep].color, &tile[keep].pp4m.rect, tile[keep].pp4m.rect.x, tile[keep].pp4m.rect.y, 50, 50);
     }
 
-    sprintf(DebugInfo[0].text, "Player: %d", player);
+    // ternary operator
+    sprintf(DebugInfo[0].text, "global_player: %s", (global_player==1?"black":"white"));
     DEBUG_WriteTextureFont(DebugInfo[0].text, 0);
 
-    sprintf(DebugInfo[1].text, "foo: %d", foo);
+    sprintf(DebugInfo[1].text, "foo: %c%d, tile[%d]", tile[foo].row, tile[foo].colomn, foo);
     DEBUG_WriteTextureFont(DebugInfo[1].text, 1);
 
-    //sprintf(DebugInfo[2].text, "keep: %d", keep);
-    //DEBUG_WriteTextureFont(DebugInfo[2].text, 2);
+    sprintf(DebugInfo[2].text, "keep: %c%d, tile[%d]", tile[keep].row, tile[keep].colomn, keep);
+    DEBUG_WriteTextureFont(DebugInfo[2].text, 2);
 
     SDL_RenderClear(global_renderer);
     SDL_RenderCopy(global_renderer, background.texture, NULL, NULL);
@@ -179,7 +173,9 @@ void GAME_InitializeChessboard(void) {
 
     DEBUG_Print(0);
     DEBUG_Print(1);
-    //DEBUG_Print(2);
+    DEBUG_Print(2);
+    DEBUG_Print(3);
+    DEBUG_Print(4);
 
     SDL_RenderPresent(global_renderer);
 
@@ -189,34 +185,23 @@ void GAME_InitializeChessboard(void) {
   return;
 }
 
+void GAME_UpdatePositionPiece(int pos, GAME_PIECE *piece, GAME_PLAYER player, GAME_IDENTIFIER identifier, int colomn, char row) {
 
-void GAME_UpdatePositionPiece(GAME_PLAYER player, GAME_PIECE *piece, GAME_IDENTIFIER identifier, int colomn, char row) {
+    // new information trusted gets the array position of tile[]
+    int foo;
+    foo = CORE_ReturnTilePosition(colomn, row);
 
-  // new information trusted gets the array position of tile[]
-  int foo;
-  foo = CORE_ReturnTilePosition(colomn, row);
+    // resets the pointer of previous tile
+    if (pos != -1) tile[pos].piece = NULL;
 
-  // checking if piece is leaving from tile; reset pointer of piece from tile
-  int bar = -1;
-  bar = CORE_ReturnTilePosition(piece->colomn, piece->row);
-  if (bar != -1) tile[bar].piece = NULL;
+    tile[foo].piece = piece;
+    tile[foo].piece->rect.x = tile[foo].pp4m.rect.x;
+    tile[foo].piece->rect.y = tile[foo].pp4m.rect.y;
+    if (tile[foo].piece->identifier == 0) piece->identifier = identifier;
+    if (tile[foo].piece->player == 0) piece->player = player;
 
-  // if the new piece has just been initialized, lets give him an identifier
-  if (piece->identifier == 0) piece->identifier = identifier;
-  if (piece->player == 0) piece->player = player;
-
-  // now lets copy the new information obtained from foo
-  piece->colomn = tile[foo].colomn;
-  piece->row = tile[foo].row;
-  piece->rect.x = tile[foo].pp4m.rect.x;
-  piece->rect.y = tile[foo].pp4m.rect.y;
-
-  // lets copy even the pointer of the piece inside the tile
-  tile[foo].piece = piece;
-
-  return;
+    return;
 }
-
 
 void GAME_InitializePieces(void) {
 
@@ -258,42 +243,42 @@ void GAME_InitializePieces(void) {
   WhiteQueen.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_QUEEN, &WhiteQueen.rect, 0, 0, 50, 50);
 
   // from the tagged tiles, it extracts the x, y values
-  GAME_UpdatePositionPiece(BLACK, &BlackPawn_A, DPAWN, 7, 'A');
-  GAME_UpdatePositionPiece(BLACK, &BlackPawn_B, DPAWN, 7, 'B');
-  GAME_UpdatePositionPiece(BLACK, &BlackPawn_C, DPAWN, 7, 'C');
-  GAME_UpdatePositionPiece(BLACK, &BlackPawn_D, DPAWN, 7, 'D');
-  GAME_UpdatePositionPiece(BLACK, &BlackPawn_E, DPAWN, 7, 'E');
-  GAME_UpdatePositionPiece(BLACK, &BlackPawn_F, DPAWN, 7, 'F');
-  GAME_UpdatePositionPiece(BLACK, &BlackPawn_G, DPAWN, 7, 'G');
-  GAME_UpdatePositionPiece(BLACK, &BlackPawn_H, DPAWN, 7, 'H');
+  GAME_UpdatePositionPiece(-1, &BlackPawn_A, BLACK, DPAWN, 7, 'A');
+  GAME_UpdatePositionPiece(-1, &BlackPawn_B, BLACK, DPAWN, 7, 'B');
+  GAME_UpdatePositionPiece(-1, &BlackPawn_C, BLACK, DPAWN, 7, 'C');
+  GAME_UpdatePositionPiece(-1, &BlackPawn_D, BLACK, DPAWN, 7, 'D');
+  GAME_UpdatePositionPiece(-1, &BlackPawn_E, BLACK, DPAWN, 7, 'E');
+  GAME_UpdatePositionPiece(-1, &BlackPawn_F, BLACK, DPAWN, 7, 'F');
+  GAME_UpdatePositionPiece(-1, &BlackPawn_G, BLACK, DPAWN, 7, 'G');
+  GAME_UpdatePositionPiece(-1, &BlackPawn_H, BLACK, DPAWN, 7, 'H');
 
-  GAME_UpdatePositionPiece(BLACK, &BlackRook_1, ROOK, 8, 'A');
-  GAME_UpdatePositionPiece(BLACK, &BlackKnight_1, KNIGHT, 8, 'B');
-  GAME_UpdatePositionPiece(BLACK, &BlackBishop_1, BISHOP, 8, 'C');
-  GAME_UpdatePositionPiece(BLACK, &BlackKing, KING, 8, 'D');
-  GAME_UpdatePositionPiece(BLACK, &BlackQueen, QUEEN, 8, 'E');
-  GAME_UpdatePositionPiece(BLACK, &BlackBishop_2, BISHOP, 8, 'F');
-  GAME_UpdatePositionPiece(BLACK, &BlackKnight_2, KNIGHT, 8, 'G');
-  GAME_UpdatePositionPiece(BLACK, &BlackRook_2, ROOK, 8, 'H');
+  GAME_UpdatePositionPiece(-1, &BlackRook_1, BLACK, ROOK, 8, 'A');
+  GAME_UpdatePositionPiece(-1, &BlackKnight_1, BLACK, KNIGHT, 8, 'B');
+  GAME_UpdatePositionPiece(-1, &BlackBishop_1, BLACK, BISHOP, 8, 'C');
+  GAME_UpdatePositionPiece(-1, &BlackQueen, BLACK, QUEEN, 8, 'D');
+  GAME_UpdatePositionPiece(-1, &BlackKing, BLACK, KING, 8, 'E');
+  GAME_UpdatePositionPiece(-1, &BlackBishop_2, BLACK, BISHOP, 8, 'F');
+  GAME_UpdatePositionPiece(-1, &BlackKnight_2, BLACK, KNIGHT, 8, 'G');
+  GAME_UpdatePositionPiece(-1, &BlackRook_2, BLACK, ROOK, 8, 'H');
 
   // white pieces
-  GAME_UpdatePositionPiece(WHITE, &WhitePawn_A, PAWN, 2, 'A');
-  GAME_UpdatePositionPiece(WHITE, &WhitePawn_B, PAWN, 2, 'B');
-  GAME_UpdatePositionPiece(WHITE, &WhitePawn_C, PAWN, 2, 'C');
-  GAME_UpdatePositionPiece(WHITE, &WhitePawn_D, PAWN, 2, 'D');
-  GAME_UpdatePositionPiece(WHITE, &WhitePawn_E, PAWN, 2, 'E');
-  GAME_UpdatePositionPiece(WHITE, &WhitePawn_F, PAWN, 2, 'F');
-  GAME_UpdatePositionPiece(WHITE, &WhitePawn_G, PAWN, 2, 'G');
-  GAME_UpdatePositionPiece(WHITE, &WhitePawn_H, PAWN, 2, 'H');
+  GAME_UpdatePositionPiece(-1, &WhitePawn_A, WHITE, PAWN, 2, 'A');
+  GAME_UpdatePositionPiece(-1, &WhitePawn_B, WHITE, PAWN, 2, 'B');
+  GAME_UpdatePositionPiece(-1, &WhitePawn_C, WHITE, PAWN, 2, 'C');
+  GAME_UpdatePositionPiece(-1, &WhitePawn_D, WHITE, PAWN, 2, 'D');
+  GAME_UpdatePositionPiece(-1, &WhitePawn_E, WHITE, PAWN, 2, 'E');
+  GAME_UpdatePositionPiece(-1, &WhitePawn_F, WHITE, PAWN, 2, 'F');
+  GAME_UpdatePositionPiece(-1, &WhitePawn_G, WHITE, PAWN, 2, 'G');
+  GAME_UpdatePositionPiece(-1, &WhitePawn_H, WHITE, PAWN, 2, 'H');
 
-  GAME_UpdatePositionPiece(WHITE, &WhiteRook_1, ROOK, 1, 'A');
-  GAME_UpdatePositionPiece(WHITE, &WhiteKnight_1, KNIGHT, 1, 'B');
-  GAME_UpdatePositionPiece(WHITE, &WhiteBishop_1, BISHOP, 1, 'C');
-  GAME_UpdatePositionPiece(WHITE, &WhiteKing, KING, 1, 'D');
-  GAME_UpdatePositionPiece(WHITE, &WhiteQueen, QUEEN, 1, 'E');
-  GAME_UpdatePositionPiece(WHITE, &WhiteBishop_2, BISHOP, 1, 'F');
-  GAME_UpdatePositionPiece(WHITE, &WhiteKnight_2, KNIGHT, 1, 'G');
-  GAME_UpdatePositionPiece(WHITE, &WhiteRook_2, ROOK, 1, 'H');
+  GAME_UpdatePositionPiece(-1, &WhiteRook_1, WHITE, ROOK, 1, 'A');
+  GAME_UpdatePositionPiece(-1, &WhiteKnight_1, WHITE, KNIGHT, 1, 'B');
+  GAME_UpdatePositionPiece(-1, &WhiteBishop_1, WHITE, BISHOP, 1, 'C');
+  GAME_UpdatePositionPiece(-1, &WhiteQueen, WHITE, QUEEN, 1, 'D');
+  GAME_UpdatePositionPiece(-1, &WhiteKing, WHITE, KING, 1, 'E');
+  GAME_UpdatePositionPiece(-1, &WhiteBishop_2, WHITE, BISHOP, 1, 'F');
+  GAME_UpdatePositionPiece(-1, &WhiteKnight_2, WHITE, KNIGHT, 1, 'G');
+  GAME_UpdatePositionPiece(-1, &WhiteRook_2, WHITE, ROOK, 1, 'H');
 
 
   return;

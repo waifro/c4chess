@@ -1,8 +1,11 @@
+#include <stdio.h>
+
 #include "pp4m/pp4m_draw.h"
 
 #include "main.h"
 #include "core.h"
 #include "game.h"
+#include "debug.h"
 
 // initialization of global (external) variable
 CORE_TILE tile[64];
@@ -27,6 +30,31 @@ int CORE_ReturnTilePosition(int colomn, char row) {
     return -1;
 }
 
+int CORE_ReturnValidTilePosition(int colomn, char row) {
+
+    int foo = -1;
+    foo = CORE_ReturnTilePosition(colomn, row);
+
+    // non esiste un pezzo all'interno della casella, dunque movimento valido
+    if (tile[foo].piece == NULL) return foo;
+    // altrimenti movimento non valido
+    else return -1;
+}
+
+int CORE_ReturnRowPosition(char row) {
+    int foo = -1;
+
+    char alpha[] = "ABCDEFGH";
+
+    for (int n = 0; n < 8; n++) {
+
+        if (alpha[n] == row) { foo = n; break; }
+
+    }
+
+    return foo;
+}
+
 int CORE_CheckPieceMovement(int pos) {
 
   switch (tile[pos].piece->identifier) {
@@ -40,7 +68,7 @@ int CORE_CheckPieceMovement(int pos) {
     break;
 
     case (KNIGHT):
-    CORE_CheckMovementKnight(pos);
+    CORE_CreatePatternKnight(pos);
     break;
 
     case (BISHOP):
@@ -68,13 +96,13 @@ int CORE_UpdateMovementPieceFromPoint(int pos) {
 
   // bar = tile selected with old position of piece
   int bar = -1;
-  for (int n = 0; n < 64; ++n) if (tile[n].toggle == true) { bar = n; break; }
+  for (int n = 0; n < 64; n++) if (tile[n].toggle == true) { bar = n; break; }
   if (bar == -1) return -1;
 
   tile[bar].toggle = false;
 
   // it dosent turn off the toggles behind, cousing to move to a different position prevoiusly selected pieces
-  GAME_UpdatePositionPiece(tile[bar].piece->player, tile[bar].piece, tile[bar].piece->identifier, tile[pos].colomn, tile[pos].row);
+  GAME_UpdatePositionPiece(bar, tile[bar].piece, tile[bar].piece->player, tile[bar].piece->identifier, tile[pos].colomn, tile[pos].row);
 
   return 0;
 }
@@ -90,61 +118,150 @@ int CORE_SwitchPlayerTurn(int player) {
 
 int CORE_CheckCapturePiece_DarkPawn(int pos) {
 
-    if (tile[pos+7].piece != NULL && tile[pos+7].piece->player == WHITE) point[pos+7].toggle = true;
-    if (tile[pos+9].piece != NULL && tile[pos+9].piece->player == WHITE) point[pos+9].toggle = true;
+    int colomn = (tile[pos].colomn) - 1;
+    char row = tile[pos].row;
 
+    int row_pos = (CORE_ReturnRowPosition(row)) - 1;
+    char alpha[] = "ABCDEFGH";
+
+    int foo;
+    static int debug = 3;
+
+    for (int n = 0; n < 3; n++) {
+
+        if (colomn < 1 || row_pos > 7) break;
+        if (n == 1) { row_pos += 1; continue; }
+
+        foo = CORE_ReturnTilePosition(colomn, alpha[row_pos]);
+
+        if (tile[foo].piece != NULL && tile[foo].piece->player == WHITE) {
+
+            sprintf(DebugInfo[debug].text, "tile[%d].piece: 0x%x", foo, &tile[foo].piece);
+            DEBUG_WriteTextureFont(DebugInfo[debug].text, debug);
+
+            point[foo].toggle = true;
+            debug += 1;
+        }
+
+        row_pos += 1;
+
+    }
+
+    debug = 3;
     return 0;
 }
 
 int CORE_CheckCapturePiece_Pawn(int pos) {
 
-    if (tile[pos-9].piece != NULL && tile[pos-9].piece->player == BLACK) point[pos-9].toggle = true;
-    if (tile[pos-7].piece != NULL && tile[pos-7].piece->player == BLACK) point[pos-7].toggle = true;
+    int colomn = (tile[pos].colomn) + 1;
+    char row = tile[pos].row;
+
+    int row_pos = (CORE_ReturnRowPosition(row)) - 1;
+    char alpha[] = "ABCDEFGH";
+
+    int foo;
+
+    for (int n = 0; n < 3; n++) {
+
+        if (colomn > 8 || row_pos > 7) break;
+        if (n == 1) { row_pos += 1; continue; }
+
+        foo = CORE_ReturnTilePosition(colomn, alpha[row_pos]);
+
+        if (tile[foo].piece != NULL && tile[foo].piece->player == BLACK) point[foo].toggle = true;
+
+        row_pos += 1;
+
+    }
 
     return 0;
 }
 
+// activates point[n].toggle for the patterns
 int CORE_CreatePatternDarkPawn(int pos) {
 
-  // better ro use colomns and rows for creation of valid moves (using CORE_ReturnTilePosition())
-  // it needs to check if the "valid" position is outside of reach (ex. pawn on H3 -> not valid A1 || or pawn on A1 -> not valid H8)
-  if (tile[pos].piece->player == BLACK && tile[pos].piece->identifier == DPAWN) {
+    if (tile[pos].piece->player == BLACK && tile[pos].piece->identifier == DPAWN) {
 
-    if (tile[pos].colomn == 7) {
+        int foo = -1;
+        int colomn = (tile[pos].colomn) - 1;
+        char row = tile[pos].row;
 
-      if (tile[pos+8].piece == NULL) point[pos+8].toggle = true;
-      if (tile[pos+16].piece == NULL) point[pos+16].toggle = true;
+            if (tile[pos].colomn == 7) {
 
-    } else if (tile[pos].colomn != 7) if (tile[pos+8].piece == NULL) point[pos+8].toggle = true;
+                for (int n = 0; n < 2; n++) {
 
-    CORE_CheckCapturePiece_DarkPawn(pos);
-  }
+                    foo = CORE_ReturnValidTilePosition(colomn, row);
+                    if (foo == -1) return foo;
 
-  return 0;
+                    point[foo].toggle = true;
+
+                    colomn -= 1;
+                    if (colomn == 0) return -1;
+                }
+
+            } else if (tile[pos].colomn != 7) {
+
+                foo = CORE_ReturnValidTilePosition(colomn, row);
+                if (foo == -1) return foo;
+
+                point[foo].toggle = true;
+
+            }
+
+            CORE_CheckCapturePiece_DarkPawn(pos);
+
+    }
+
+    return 0;
 }
 
 int CORE_CreatePatternPawn(int pos) {
 
-  // better ro use colomns and rows for creation of valid moves (using CORE_ReturnTilePosition())
-  // it needs to check if the "valid" position is outside of reach (ex. pawn on H3 -> not valid A1 || or pawn on A1 -> not valid H8)
-  if (tile[pos].piece->player == WHITE && tile[pos].piece->identifier == PAWN) {
+    if (tile[pos].piece->player == WHITE && tile[pos].piece->identifier == PAWN) {
 
-    if (tile[pos].colomn == 2) {
+        int foo = -1;
+        int colomn = (tile[pos].colomn) + 1;
+        char row = tile[pos].row;
 
-      if (tile[pos-8].piece == NULL) point[pos-8].toggle = true;
-      if (tile[pos-16].piece == NULL) point[pos-16].toggle = true;
+            if (tile[pos].colomn == 2) {
 
-    } else if (tile[pos].colomn != 2) if (tile[pos-8].piece == NULL) point[pos-8].toggle = true;
+                for (int n = 0; n < 2; n++) {
 
-    CORE_CheckCapturePiece_Pawn(pos);
-  }
+                    foo = CORE_ReturnValidTilePosition(colomn, row);
+                    if (foo == -1) return foo;
 
-  return 0;
+                    point[foo].toggle = true;
+
+                    colomn += 1;
+                    if (colomn == 0) return -1;
+                }
+
+            } else if (tile[pos].colomn != 2) {
+
+                foo = CORE_ReturnValidTilePosition(colomn, row);
+                if (foo == -1) return foo;
+
+                point[foo].toggle = true;
+
+            }
+
+            CORE_CheckCapturePiece_Pawn(pos);
+
+    }
+
+    return 0;
 }
 
-int CORE_CheckMovementKnight(int pos) {
 
 
+
+int CORE_CreatePatternKnight(int pos) {
+
+    if (tile[pos].piece->identifier == KNIGHT) {
+
+        point[pos-16+1].toggle = true;
+
+    }
 
   return 0;
 }

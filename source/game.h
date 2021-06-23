@@ -28,14 +28,12 @@ typedef struct {
     GAME_IDENTIFIER identifier;
     GAME_PLAYER player;
 
-    // deprecated
-    int colomn;
-    char row;
-
 } GAME_PIECE;
 
+extern GAME_PLAYER global_player;
+
 void GAME_InitializeChessboard(void);
-void GAME_UpdatePositionPiece(GAME_PLAYER player, GAME_PIECE *piece, GAME_IDENTIFIER identifier, int colomn, char row);
+void GAME_UpdatePositionPiece(int pos, GAME_PIECE *piece, GAME_PLAYER player, GAME_IDENTIFIER identifier, int colomn, char row);
 void GAME_InitializePieces(void);
 void GAME_CreateChessboard_Tiles(void);
 

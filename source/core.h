@@ -44,12 +44,17 @@ extern CORE_TILE tile[64];
 extern CORE_TILE point[64];
 
 int CORE_ReturnTilePosition(int colomn, char row);
+int CORE_ReturnRowPosition(char row);
+
 int CORE_CheckPieceMovement(int pos);
 int CORE_UpdateMovementPieceFromPoint(int pos);
 int CORE_SwitchPlayerTurn(int player);
 
+int CORE_ReturnValidTilePosition(int colomn, char row);
+
 int CORE_CreatePatternDarkPawn(int pos);
 int CORE_CreatePatternPawn(int pos);
+int CORE_CreatePatternKnight(int pos);
 
 // old names
 int CORE_CheckMovementKnight(int pos);
