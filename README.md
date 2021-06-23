@@ -1,3 +1,2 @@
 # c4chess
-
-## C four opening, C four Chess
+## C four opening, C for Chess
