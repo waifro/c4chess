@@ -125,7 +125,6 @@ int CORE_CheckCapturePiece_DarkPawn(int pos) {
     char alpha[] = "ABCDEFGH";
 
     int foo;
-    static int debug = 3;
 
     for (int n = 0; n < 3; n++) {
 
@@ -134,20 +133,12 @@ int CORE_CheckCapturePiece_DarkPawn(int pos) {
 
         foo = CORE_ReturnTilePosition(colomn, alpha[row_pos]);
 
-        if (tile[foo].piece != NULL && tile[foo].piece->player == WHITE) {
-
-            sprintf(DebugInfo[debug].text, "tile[%d].piece: 0x%x", foo, &tile[foo].piece);
-            DEBUG_WriteTextureFont(DebugInfo[debug].text, debug);
-
-            point[foo].toggle = true;
-            debug += 1;
-        }
+        if (tile[foo].piece != NULL && tile[foo].piece->player == WHITE) point[foo].toggle = true;
 
         row_pos += 1;
 
     }
 
-    debug = 3;
     return 0;
 }
 
@@ -191,20 +182,18 @@ int CORE_CreatePatternDarkPawn(int pos) {
                 for (int n = 0; n < 2; n++) {
 
                     foo = CORE_ReturnValidTilePosition(colomn, row);
-                    if (foo == -1) return foo;
+                    if (foo == -1) break;
 
                     point[foo].toggle = true;
 
                     colomn -= 1;
-                    if (colomn == 0) return -1;
+                    if (colomn == 0) break;
                 }
 
             } else if (tile[pos].colomn != 7) {
 
                 foo = CORE_ReturnValidTilePosition(colomn, row);
-                if (foo == -1) return foo;
-
-                point[foo].toggle = true;
+                if (foo != -1) point[foo].toggle = true;
 
             }
 
@@ -228,20 +217,18 @@ int CORE_CreatePatternPawn(int pos) {
                 for (int n = 0; n < 2; n++) {
 
                     foo = CORE_ReturnValidTilePosition(colomn, row);
-                    if (foo == -1) return foo;
+                    if (foo == -1) break;
 
                     point[foo].toggle = true;
 
                     colomn += 1;
-                    if (colomn == 0) return -1;
+                    if (colomn == 9) break;
                 }
 
             } else if (tile[pos].colomn != 2) {
 
                 foo = CORE_ReturnValidTilePosition(colomn, row);
-                if (foo == -1) return foo;
-
-                point[foo].toggle = true;
+                if (foo != -1) point[foo].toggle = true;
 
             }
 
@@ -252,24 +239,65 @@ int CORE_CreatePatternPawn(int pos) {
     return 0;
 }
 
-
-
-
 int CORE_CreatePatternKnight(int pos) {
 
-    if (tile[pos].piece->identifier == KNIGHT) {
+    if (tile[pos].piece->player == global_player && tile[pos].piece->identifier == KNIGHT) {
 
-        point[pos-16+1].toggle = true;
+        int colomn = tile[pos].colomn;
+
+        int row_pos = CORE_ReturnRowPosition(tile[pos].row);
+        char alpha[] = "ABCDEFGH";
+
+        int foo;
+
+        for (int n = 0; n < 4; n++) {
+
+            if (n == 0) row_pos -= 2;
+            if (n == 1) row_pos += 1;
+            if (n == 2) row_pos += 2;
+            if (n == 3) row_pos += 1;
+
+            if (n == 0) colomn -= 1;
+            // 2
+            if (n == 1) colomn -= 3;
+            // 4
+            if (n == 2) colomn -= 4;
+            // 6
+            if (n == 3) colomn -= 3;
+
+            for (int i = 0; i < 2; i++) {
+
+                // 1
+                if (n == 0 && i == 1) colomn += 2;
+                // 3
+                if (n == 1 && i == 1) colomn += 4;
+                // 5
+                if (n == 2 && i == 1) colomn += 4;
+                // 7
+                if (n == 3 && i == 1) colomn += 2;
+
+                if (colomn < 1 || colomn > 8) continue;
+                if (row_pos < 0 || row_pos > 7) continue;
+
+                foo = CORE_ReturnValidTilePosition(colomn, alpha[row_pos]);
+
+                // it needs to be added a CORE_CheckCapturePiece_Knight as all pieces needs the same
+
+                if (foo != -1) point[foo].toggle = true;
+
+            }
+
+        }
 
     }
 
-  return 0;
+    return 0;
 }
 
-int CORE_CheckMovementBishop(int pos){return 0;}
-int CORE_CheckMovementRook(int pos){return 0;}
-int CORE_CheckMovementQueen(int pos){return 0;}
-int CORE_CheckMovementKing(int pos){return 0;}
+int CORE_CheckMovementBishop(int pos) {return 0; }
+int CORE_CheckMovementRook(int pos) {return 0; }
+int CORE_CheckMovementQueen(int pos) {return 0; }
+int CORE_CheckMovementKing(int pos) {return 0; }
 
 void CORE_InitializationPoint(void) {
 
