@@ -1,2 +1,3 @@
-# c4chess
-### **C four opening, C for Chess**
+# *c4 opening, C for Chess*
+
+A C project with online multiplayer using SDL2.0, oriented for multiple devices (including homebrew projects)
