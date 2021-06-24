@@ -51,15 +51,18 @@ int CORE_CheckPieceMovement(int pos);
 int CORE_UpdateMovementPieceFromPoint(int pos);
 int CORE_SwitchPlayerTurn(int player);
 
+int CORE_CheckCapturePiece_DarkPawn(int pos);
+int CORE_CheckCapturePiece_Pawn(int pos);
+int CORE_CheckCapturePiece(int colomn, char row);
+
 int CORE_CreatePatternDarkPawn(int pos);
 int CORE_CreatePatternPawn(int pos);
 int CORE_CreatePatternKnight(int pos);
+int CORE_CreatePatternBishop(int pos);
+int CORE_CreatePatternRook(int pos);
+int CORE_CreatePatternQueen(int pos);
 
 // old names
-int CORE_CheckMovementKnight(int pos);
-int CORE_CheckMovementBishop(int pos);
-int CORE_CheckMovementRook(int pos);
-int CORE_CheckMovementQueen(int pos);
 int CORE_CheckMovementKing(int pos);
 
 void CORE_InitializationPoint(void);
