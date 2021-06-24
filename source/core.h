@@ -61,9 +61,7 @@ int CORE_CreatePatternKnight(int pos);
 int CORE_CreatePatternBishop(int pos);
 int CORE_CreatePatternRook(int pos);
 int CORE_CreatePatternQueen(int pos);
-
-// old names
-int CORE_CheckMovementKing(int pos);
+int CORE_CreatePatternKing(int pos);
 
 void CORE_InitializationPoint(void);
 

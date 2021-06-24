@@ -87,7 +87,7 @@ int CORE_CheckPieceMovement(int pos) {
     break;
 
     case (KING):
-    CORE_CheckMovementKing(pos);
+    CORE_CreatePatternKing(pos);
     break;
 
   }
@@ -488,12 +488,64 @@ int CORE_CreatePatternQueen(int pos) {
 
 int CORE_CreatePatternKing(int pos) {
 
+    if (tile[pos].piece->player == global_player && tile[pos].piece->identifier == KING) {
 
+        int colomn = tile[pos].colomn;
+
+        int row_pos = CORE_ReturnRowPosition(tile[pos].row);
+        char row[] = "ABCDEFGH";
+
+        int foo;
+        for (int n = 0; n < 8; n++) {
+
+            if (n == 0) {
+                colomn += 1;
+                row_pos -= 1;
+            }
+
+            if (n == 1) {
+                row_pos += 1;
+
+            }
+
+            if (n == 2) {
+                row_pos += 1;
+            }
+
+            if (n == 3) {
+                colomn -= 1;
+            }
+
+            if (n == 4) {
+                colomn -= 1;
+            }
+
+            if (n == 5) {
+                row_pos -= 1;
+            }
+
+            if (n == 6) {
+                row_pos -= 1;
+            }
+
+            if (n == 7) {
+                colomn += 1;
+            }
+
+            if (row_pos < 1 || row_pos > 8) continue;
+            if (colomn < 1 || colomn > 8) continue;
+
+            foo = CORE_ReturnValidTilePosition(colomn, row[row_pos]);
+            if (foo != -1) point[foo].toggle = true;
+            else if (foo == -1) {
+                CORE_CheckCapturePiece(colomn, row[row_pos]);
+                continue;
+            }
+        }
+    }
 
     return 0;
 }
-
-int CORE_CheckMovementKing(int pos) {return 0; }
 
 void CORE_InitializationPoint(void) {
 
