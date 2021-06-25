@@ -11,6 +11,9 @@
 CORE_TILE tile[64];
 CORE_TILE point[64];
 
+CORE_CASTLING global_whitecastling;
+CORE_CASTLING global_blackcastling;
+
 int CORE_ReturnTilePosition(int colomn, char row) {
 
     if (colomn < 1 || colomn > 8) return -1;
@@ -60,37 +63,37 @@ int CORE_ReturnRowPosition(char row) {
 
 int CORE_CheckPieceMovement(int pos) {
 
-  switch (tile[pos].piece->identifier) {
+    switch (tile[pos].piece->identifier) {
 
-    case (DPAWN):
-    CORE_CreatePatternDarkPawn(pos);
-    break;
+        case (DPAWN):
+        CORE_CreatePatternDarkPawn(pos);
+        break;
 
-    case (PAWN):
-    CORE_CreatePatternPawn(pos);
-    break;
+        case (PAWN):
+        CORE_CreatePatternPawn(pos);
+        break;
 
-    case (KNIGHT):
-    CORE_CreatePatternKnight(pos);
-    break;
+        case (KNIGHT):
+        CORE_CreatePatternKnight(pos);
+        break;
 
-    case (BISHOP):
-    CORE_CreatePatternBishop(pos);
-    break;
+        case (BISHOP):
+        CORE_CreatePatternBishop(pos);
+        break;
 
-    case (ROOK):
-    CORE_CreatePatternRook(pos);
-    break;
+        case (ROOK):
+        CORE_CreatePatternRook(pos);
+        break;
 
-    case (QUEEN):
-    CORE_CreatePatternQueen(pos);
-    break;
+        case (QUEEN):
+        CORE_CreatePatternQueen(pos);
+        break;
 
-    case (KING):
-    CORE_CreatePatternKing(pos);
-    break;
+        case (KING):
+        CORE_CreatePatternKing(pos);
+        break;
 
-  }
+    }
 
   return 0;
 }
@@ -181,6 +184,80 @@ int CORE_CheckCapturePiece(int colomn, char row) {
     return 0;
 }
 
+int CORE_CheckKingCastling(CORE_CASTLING *castle, int pos) {
+
+    sprintf(DebugInfo[3].text, "castling: %d", castle);
+    DEBUG_WriteTextureFont(DebugInfo[3].text, 3);
+
+    if (castle == DISABLE) return -1;
+
+    int colomn = tile[pos].colomn;
+    char row[] = "ABCDEFGH";
+
+    if (castle == BOTH) {
+
+        int foo;
+        for (int n = 1; n < 4; n++) {
+
+            foo = CORE_ReturnValidTilePosition(colomn, row[n]);
+            if (foo == -1) break;
+
+            // castling long is available
+            if (n == 3) {
+                    int bar = CORE_ReturnTilePosition(colomn, row[2]);
+                    point[bar].toggle = true;
+            }
+
+        }
+
+        for (int n = 5; n < 7; n++) {
+
+            foo = CORE_ReturnValidTilePosition(colomn, row[n]);
+            if (foo == -1) break;
+
+            // castling short is available
+            if (n == 6) {
+                    int bar = CORE_ReturnTilePosition(colomn, row[6]);
+                    point[bar].toggle = true;
+            }
+        }
+    }
+
+    else if (castle == LONG) {
+
+        int foo;
+        for (int n = 1; n < 4; n++) {
+
+            foo = CORE_ReturnValidTilePosition(colomn, row[n]);
+            if (foo == -1) break;
+
+            // castling long is available
+            if (n == 3) {
+                    int bar = CORE_ReturnTilePosition(colomn, row[2]);
+                    point[bar].toggle = true;
+            }
+        }
+    }
+
+    else if (castle == SHORT) {
+
+        int foo;
+        for (int n = 5; n < 7; n++) {
+
+            foo = CORE_ReturnValidTilePosition(colomn, row[n]);
+            if (foo == -1) break;
+
+            // castling short is available
+            if (n == 6) {
+                    int bar = CORE_ReturnTilePosition(colomn, row[6]);
+                    point[bar].toggle = true;
+            }
+        }
+    }
+
+    return 0;
+}
+
 // activates point[n].toggle for the patterns
 int CORE_CreatePatternDarkPawn(int pos) {
 
@@ -200,7 +277,7 @@ int CORE_CreatePatternDarkPawn(int pos) {
                     point[foo].toggle = true;
 
                     colomn -= 1;
-                    if (colomn == 0) break;
+                    if (colomn < 1) break;
                 }
 
             } else if (tile[pos].colomn != 7) {
@@ -488,7 +565,7 @@ int CORE_CreatePatternQueen(int pos) {
 
 int CORE_CreatePatternKing(int pos) {
 
-    if (tile[pos].piece->player == global_player && tile[pos].piece->identifier == KING) {
+    if (tile[pos].piece->player == global_player) {
 
         int colomn = tile[pos].colomn;
 
@@ -505,7 +582,6 @@ int CORE_CreatePatternKing(int pos) {
 
             if (n == 1) {
                 row_pos += 1;
-
             }
 
             if (n == 2) {
@@ -542,6 +618,9 @@ int CORE_CreatePatternKing(int pos) {
                 continue;
             }
         }
+
+        if (tile[pos].piece->player == WHITE) CORE_CheckKingCastling(&global_whitecastling, pos);
+        else if (tile[pos].piece->player == BLACK) CORE_CheckKingCastling(&global_blackcastling, pos);
     }
 
     return 0;

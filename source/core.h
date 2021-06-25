@@ -40,8 +40,24 @@ typedef enum {
 
 /****************************************/
 
+typedef enum {
+
+    NONE = 1,
+
+    LONG,
+    SHORT,
+    BOTH,
+
+    DISABLE
+
+} CORE_CASTLING;
+
+/****************************************/
+
 extern CORE_TILE tile[64];
 extern CORE_TILE point[64];
+extern CORE_CASTLING global_whitecastling;
+extern CORE_CASTLING global_blackcastling;
 
 int CORE_ReturnTilePosition(int colomn, char row);
 int CORE_ReturnValidTilePosition(int colomn, char row);
@@ -54,6 +70,8 @@ int CORE_SwitchPlayerTurn(int player);
 int CORE_CheckCapturePiece_DarkPawn(int pos);
 int CORE_CheckCapturePiece_Pawn(int pos);
 int CORE_CheckCapturePiece(int colomn, char row);
+
+int CORE_CheckKingCastling(CORE_CASTLING *castle, int pos);
 
 int CORE_CreatePatternDarkPawn(int pos);
 int CORE_CreatePatternPawn(int pos);

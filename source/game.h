@@ -24,7 +24,6 @@ typedef struct {
 
     SDL_Texture *texture;
     SDL_Rect rect;
-    int alive;
     GAME_IDENTIFIER identifier;
     GAME_PLAYER player;
 

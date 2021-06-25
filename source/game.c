@@ -192,7 +192,67 @@ void GAME_UpdatePositionPiece(int pos, GAME_PIECE *piece, GAME_PLAYER player, GA
     foo = CORE_ReturnTilePosition(colomn, row);
 
     // resets the pointer of previous tile
-    if (pos != -1) tile[pos].piece = NULL;
+    if (pos != -1) {
+
+        // checking if king is moving, if: disable castling
+        if (tile[pos].piece->identifier == KING) {
+            if (global_player == WHITE) global_whitecastling = DISABLE;
+            else if (global_player == BLACK) global_blackcastling = DISABLE;
+        }
+
+        // checking if rook is moving, if: disable castling
+        if (tile[pos].piece->identifier == ROOK) {
+
+            if (tile[pos].row == 'A') {
+
+                if (global_player == WHITE) {
+
+                    // if rook H already moved, disable castling
+                    if (global_whitecastling == LONG) global_whitecastling = DISABLE;
+                    // if none rooks has been moved, just short castling
+                    else if (global_whitecastling == NONE || global_whitecastling == BOTH) global_whitecastling = SHORT;
+
+                } if (global_player == BLACK) {
+
+                    // if rook H already moved, disable castling
+                    if (global_blackcastling == LONG) global_blackcastling = DISABLE;
+                    // if none rooks has been moved, just short castling
+                    else if (global_blackcastling == NONE || global_blackcastling == BOTH) global_blackcastling = SHORT;
+
+                }
+            }
+
+            if (tile[pos].row == 'H') {
+
+                if (global_player == WHITE) {
+
+                    // if rook A already moved, disable castling
+                    if (global_whitecastling == SHORT) global_whitecastling = DISABLE;
+                    // if none rooks has been moved, just short castling
+                    else if (global_whitecastling == NONE || global_whitecastling == BOTH) global_whitecastling = LONG;
+
+                } if (global_player == BLACK) {
+
+                    // if rook A already moved, disable castling
+                    if (global_blackcastling == SHORT) global_blackcastling = DISABLE;
+                    // if none rooks has been moved, just short castling
+                    else if (global_blackcastling == NONE || global_blackcastling == BOTH) global_blackcastling = LONG;
+
+                }
+
+            }
+
+        } else if (pos == -1 && identifier == KING) {
+
+            // if just initialized the pieces, give both castling enabled
+            if (global_player == WHITE) global_whitecastling = BOTH;
+            else if (global_player == BLACK) global_blackcastling = BOTH;
+
+        }
+
+        tile[pos].piece = NULL;
+
+    }
 
     tile[foo].piece = piece;
     tile[foo].piece->rect.x = tile[foo].pp4m.rect.x;
