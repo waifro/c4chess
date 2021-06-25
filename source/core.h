@@ -44,11 +44,11 @@ typedef enum {
 
     NONE = 1,
 
-    LONG,
-    SHORT,
-    BOTH,
+    LONG = 2,
+    SHORT = 3,
+    BOTH = 4,
 
-    DISABLE
+    DISABLE = 5
 
 } CORE_CASTLING;
 
@@ -71,7 +71,8 @@ int CORE_CheckCapturePiece_DarkPawn(int pos);
 int CORE_CheckCapturePiece_Pawn(int pos);
 int CORE_CheckCapturePiece(int colomn, char row);
 
-int CORE_CheckKingCastling(CORE_CASTLING *castle, int pos);
+int CORE_UpdateValidCastling(int pos, GAME_PIECE *piece);
+int CORE_CheckKingCastling(CORE_CASTLING castle, int pos);
 
 int CORE_CreatePatternDarkPawn(int pos);
 int CORE_CreatePatternPawn(int pos);

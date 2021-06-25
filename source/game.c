@@ -80,9 +80,6 @@ void GAME_InitializeChessboard(void) {
   int foo = -1; int keep = -1;
   int reset = 0;
 
-  // starts white
-  global_player = WHITE;
-
   SDL_Event event;
 
   while (SDL_PollEvent(&event) >= 0) {
@@ -114,8 +111,8 @@ void GAME_InitializeChessboard(void) {
 
                 // If touch is in a valid position, move piece ( also, tile[foo].toggle = false)
                 if (point[foo].toggle == true) {
-                        global_player = CORE_SwitchPlayerTurn(global_player);
                         CORE_UpdateMovementPieceFromPoint(foo);
+                        global_player = CORE_SwitchPlayerTurn(global_player);
                 }
 
                 reset = true;
@@ -127,8 +124,8 @@ void GAME_InitializeChessboard(void) {
 
         reset = true;
         if (point[foo].toggle == true) {
-                global_player = CORE_SwitchPlayerTurn(global_player);
                 CORE_UpdateMovementPieceFromPoint(foo);
+                global_player = CORE_SwitchPlayerTurn(global_player);
         }
 
         SDL_DestroyTexture(tile[keep].pp4m.texture);
@@ -144,6 +141,12 @@ void GAME_InitializeChessboard(void) {
 
     sprintf(DebugInfo[2].text, "keep: %c%d, tile[%d]", tile[keep].row, tile[keep].colomn, keep);
     DEBUG_WriteTextureFont(DebugInfo[2].text, 2);
+
+    sprintf(DebugInfo[3].text, "castling_w: %d", global_whitecastling);
+    DEBUG_WriteTextureFont(DebugInfo[3].text, 3);
+
+    sprintf(DebugInfo[4].text, "castling_b: %d", global_blackcastling);
+    DEBUG_WriteTextureFont(DebugInfo[4].text, 4);
 
     SDL_RenderClear(global_renderer);
     SDL_RenderCopy(global_renderer, background.texture, NULL, NULL);
@@ -191,74 +194,17 @@ void GAME_UpdatePositionPiece(int pos, GAME_PIECE *piece, GAME_PLAYER player, GA
     int foo;
     foo = CORE_ReturnTilePosition(colomn, row);
 
-    // resets the pointer of previous tile
-    if (pos != -1) {
-
-        // checking if king is moving, if: disable castling
-        if (tile[pos].piece->identifier == KING) {
-            if (global_player == WHITE) global_whitecastling = DISABLE;
-            else if (global_player == BLACK) global_blackcastling = DISABLE;
-        }
-
-        // checking if rook is moving, if: disable castling
-        if (tile[pos].piece->identifier == ROOK) {
-
-            if (tile[pos].row == 'A') {
-
-                if (global_player == WHITE) {
-
-                    // if rook H already moved, disable castling
-                    if (global_whitecastling == LONG) global_whitecastling = DISABLE;
-                    // if none rooks has been moved, just short castling
-                    else if (global_whitecastling == NONE || global_whitecastling == BOTH) global_whitecastling = SHORT;
-
-                } if (global_player == BLACK) {
-
-                    // if rook H already moved, disable castling
-                    if (global_blackcastling == LONG) global_blackcastling = DISABLE;
-                    // if none rooks has been moved, just short castling
-                    else if (global_blackcastling == NONE || global_blackcastling == BOTH) global_blackcastling = SHORT;
-
-                }
-            }
-
-            if (tile[pos].row == 'H') {
-
-                if (global_player == WHITE) {
-
-                    // if rook A already moved, disable castling
-                    if (global_whitecastling == SHORT) global_whitecastling = DISABLE;
-                    // if none rooks has been moved, just short castling
-                    else if (global_whitecastling == NONE || global_whitecastling == BOTH) global_whitecastling = LONG;
-
-                } if (global_player == BLACK) {
-
-                    // if rook A already moved, disable castling
-                    if (global_blackcastling == SHORT) global_blackcastling = DISABLE;
-                    // if none rooks has been moved, just short castling
-                    else if (global_blackcastling == NONE || global_blackcastling == BOTH) global_blackcastling = LONG;
-
-                }
-
-            }
-
-        } else if (pos == -1 && identifier == KING) {
-
-            // if just initialized the pieces, give both castling enabled
-            if (global_player == WHITE) global_whitecastling = BOTH;
-            else if (global_player == BLACK) global_blackcastling = BOTH;
-
-        }
-
-        tile[pos].piece = NULL;
-
-    }
-
     tile[foo].piece = piece;
     tile[foo].piece->rect.x = tile[foo].pp4m.rect.x;
     tile[foo].piece->rect.y = tile[foo].pp4m.rect.y;
     if (tile[foo].piece->identifier == 0) piece->identifier = identifier;
     if (tile[foo].piece->player == 0) piece->player = player;
+
+    // somehow, the program crashes (seg fault) after some gameplay
+    CORE_UpdateValidCastling(pos, piece);
+
+    // resets the pointer of previous tile
+    if (pos != -1) tile[pos].piece = NULL;
 
     return;
 }
@@ -303,6 +249,7 @@ void GAME_InitializePieces(void) {
   WhiteQueen.texture = pp4m_IMG_ImageToRenderer(global_renderer, NULL, WHITE_QUEEN, &WhiteQueen.rect, 0, 0, 50, 50);
 
   // from the tagged tiles, it extracts the x, y values
+  global_player = BLACK;
   GAME_UpdatePositionPiece(-1, &BlackPawn_A, BLACK, DPAWN, 7, 'A');
   GAME_UpdatePositionPiece(-1, &BlackPawn_B, BLACK, DPAWN, 7, 'B');
   GAME_UpdatePositionPiece(-1, &BlackPawn_C, BLACK, DPAWN, 7, 'C');
@@ -322,6 +269,7 @@ void GAME_InitializePieces(void) {
   GAME_UpdatePositionPiece(-1, &BlackRook_2, BLACK, ROOK, 8, 'H');
 
   // white pieces
+  global_player = WHITE;
   GAME_UpdatePositionPiece(-1, &WhitePawn_A, WHITE, PAWN, 2, 'A');
   GAME_UpdatePositionPiece(-1, &WhitePawn_B, WHITE, PAWN, 2, 'B');
   GAME_UpdatePositionPiece(-1, &WhitePawn_C, WHITE, PAWN, 2, 'C');
@@ -339,7 +287,6 @@ void GAME_InitializePieces(void) {
   GAME_UpdatePositionPiece(-1, &WhiteBishop_2, WHITE, BISHOP, 1, 'F');
   GAME_UpdatePositionPiece(-1, &WhiteKnight_2, WHITE, KNIGHT, 1, 'G');
   GAME_UpdatePositionPiece(-1, &WhiteRook_2, WHITE, ROOK, 1, 'H');
-
 
   return;
 }

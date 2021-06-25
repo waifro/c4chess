@@ -184,10 +184,69 @@ int CORE_CheckCapturePiece(int colomn, char row) {
     return 0;
 }
 
-int CORE_CheckKingCastling(CORE_CASTLING *castle, int pos) {
+int CORE_UpdateValidCastling(int pos, GAME_PIECE *piece) {
 
-    sprintf(DebugInfo[3].text, "castling: %d", castle);
-    DEBUG_WriteTextureFont(DebugInfo[3].text, 3);
+    if (piece->identifier == KING) {
+
+      if (global_player == WHITE) {
+
+        if (pos == -1)  global_whitecastling = BOTH;
+        else if (pos != -1) global_whitecastling = DISABLE;
+
+      } else if (global_player == BLACK) {
+
+        if (pos == -1)  global_blackcastling = BOTH;
+        else if (pos != -1) global_blackcastling = DISABLE;
+
+      }
+
+    } else if (piece->identifier == ROOK) {
+
+        if (tile[pos].row == 'A') {
+
+          if (global_player == WHITE && global_whitecastling != DISABLE) {
+
+            // if rook H already moved, disable castling
+            if (global_whitecastling == LONG) global_whitecastling = DISABLE;
+            // if none rooks has been moved, just short castling
+            else if (global_whitecastling == NONE || global_whitecastling == BOTH) global_whitecastling = SHORT;
+
+          } else if (global_player == BLACK && global_blackcastling != DISABLE) {
+
+            // if rook H already moved, disable castling
+            if (global_blackcastling == LONG) global_blackcastling = DISABLE;
+            // if none rooks has been moved, just short castling
+            else if (global_blackcastling == NONE || global_blackcastling == BOTH) global_blackcastling = SHORT;
+
+          }
+        }
+
+        else if (tile[pos].row == 'H') {
+
+          if (global_player == WHITE && global_whitecastling != DISABLE) {
+
+            // if rook A already moved, disable castling
+            if (global_whitecastling == SHORT) global_whitecastling = DISABLE;
+            // if none rooks has been moved, just short castling
+            else if (global_whitecastling == NONE || global_whitecastling == BOTH) global_whitecastling = LONG;
+
+          } else if (global_player == BLACK && global_blackcastling != DISABLE) {
+
+            // if rook A already moved, disable castling
+            if (global_blackcastling == SHORT) global_blackcastling = DISABLE;
+            // if none rooks has been moved, just short castling
+            else if (global_blackcastling == NONE || global_blackcastling == BOTH) global_blackcastling = LONG;
+
+          }
+
+        }
+
+      }
+
+    return 0;
+}
+
+int CORE_CheckKingCastling(CORE_CASTLING castle, int pos) {
 
     if (castle == DISABLE) return -1;
 
@@ -619,8 +678,8 @@ int CORE_CreatePatternKing(int pos) {
             }
         }
 
-        if (tile[pos].piece->player == WHITE) CORE_CheckKingCastling(&global_whitecastling, pos);
-        else if (tile[pos].piece->player == BLACK) CORE_CheckKingCastling(&global_blackcastling, pos);
+        if (global_player == WHITE) CORE_CheckKingCastling(global_whitecastling, pos);
+        else if (global_player == BLACK) CORE_CheckKingCastling(global_blackcastling, pos);
     }
 
     return 0;
