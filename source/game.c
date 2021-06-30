@@ -200,11 +200,12 @@ void GAME_UpdatePositionPiece(int pos, GAME_PIECE *piece, GAME_PLAYER player, GA
     if (tile[foo].piece->identifier == 0) piece->identifier = identifier;
     if (tile[foo].piece->player == 0) piece->player = player;
 
-    // somehow, the program crashes (seg fault) after some gameplay
-    CORE_UpdateValidCastling(pos, piece);
+    if (tile[foo].piece->identifier == KING || tile[foo].piece->identifier == ROOK) CORE_UpdateValidCastling(foo, pos);
 
     // resets the pointer of previous tile
-    if (pos != -1) tile[pos].piece = NULL;
+    if (pos != -1) {
+      tile[pos].piece = NULL;
+    }
 
     return;
 }

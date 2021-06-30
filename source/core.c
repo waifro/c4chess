@@ -184,25 +184,76 @@ int CORE_CheckCapturePiece(int colomn, char row) {
     return 0;
 }
 
-int CORE_UpdateValidCastling(int pos, GAME_PIECE *piece) {
+int GAME_UpdateRookCastling(int pos) {
 
-    if (piece->identifier == KING) {
+    // new information trusted gets the array position of tile[]
+    int foo;
+    int bar;
+
+    if (tile[pos].colomn == 1 || tile[pos].colomn == 8) {
+
+      if (tile[pos].row == 'C') {
+        foo = CORE_ReturnTilePosition(tile[pos].colomn, 'D');
+        bar = CORE_ReturnTilePosition(tile[pos].colomn, 'A');
+
+        tile[foo].piece = tile[bar].piece;
+        tile[foo].piece->rect.x = tile[foo].pp4m.rect.x;
+        tile[foo].piece->rect.y = tile[foo].pp4m.rect.y;
+
+        // resets the pointer of previous tile
+        tile[bar].piece = NULL;
+      }
+
+      else if (tile[pos].row == 'G') {
+        foo = CORE_ReturnTilePosition(tile[pos].colomn, 'F');
+        bar = CORE_ReturnTilePosition(tile[pos].colomn, 'H');
+
+        tile[foo].piece = tile[bar].piece;
+        tile[foo].piece->rect.x = tile[foo].pp4m.rect.x;
+        tile[foo].piece->rect.y = tile[foo].pp4m.rect.y;
+
+        // resets the pointer of previous tile
+        tile[bar].piece = NULL;
+      }
+    }
+
+    return 0;
+}
+
+int CORE_UpdateValidCastling(int new, int old) {
+
+    if (old == -1) {
+      global_whitecastling = BOTH;
+      global_blackcastling = BOTH;
+    }
+
+    printf("Hello\n");
+
+    if (old != -1) switch (tile[new].piece->identifier) {
+
+      case (KING):
 
       if (global_player == WHITE) {
 
-        if (pos == -1)  global_whitecastling = BOTH;
-        else if (pos != -1) global_whitecastling = DISABLE;
+        if (new == -1) global_whitecastling = BOTH;
+        else if (new != -1) {
+          global_whitecastling = DISABLE;
+          GAME_UpdateRookCastling(new);
+        }
 
       } else if (global_player == BLACK) {
 
-        if (pos == -1)  global_blackcastling = BOTH;
-        else if (pos != -1) global_blackcastling = DISABLE;
-
+        if (new == -1) global_blackcastling = BOTH;
+        else if (new != -1) {
+          global_blackcastling = DISABLE;
+          GAME_UpdateRookCastling(new);
+        }
       }
 
-    } else if (piece->identifier == ROOK) {
+      break;
+    case (ROOK):
 
-        if (tile[pos].row == 'A') {
+        if (tile[new].row == 'A') {
 
           if (global_player == WHITE && global_whitecastling != DISABLE) {
 
@@ -221,7 +272,7 @@ int CORE_UpdateValidCastling(int pos, GAME_PIECE *piece) {
           }
         }
 
-        else if (tile[pos].row == 'H') {
+        else if (tile[new].row == 'H') {
 
           if (global_player == WHITE && global_whitecastling != DISABLE) {
 
@@ -240,7 +291,8 @@ int CORE_UpdateValidCastling(int pos, GAME_PIECE *piece) {
           }
 
         }
-
+        break;
+        default: break;
       }
 
     return 0;

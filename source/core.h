@@ -71,7 +71,8 @@ int CORE_CheckCapturePiece_DarkPawn(int pos);
 int CORE_CheckCapturePiece_Pawn(int pos);
 int CORE_CheckCapturePiece(int colomn, char row);
 
-int CORE_UpdateValidCastling(int pos, GAME_PIECE *piece);
+int GAME_UpdateRookCastling(int pos);
+int CORE_UpdateValidCastling(int new, int old);
 int CORE_CheckKingCastling(CORE_CASTLING castle, int pos);
 
 int CORE_CreatePatternDarkPawn(int pos);
