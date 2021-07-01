@@ -227,8 +227,6 @@ int CORE_UpdateValidCastling(int new, int old) {
       global_blackcastling = BOTH;
     }
 
-    printf("Hello\n");
-
     if (old != -1) switch (tile[new].piece->identifier) {
 
       case (KING):

@@ -14,6 +14,7 @@
 #include "core.h"
 #include "input.h"
 #include "debug.h"
+#include "logic.h"
 
 char *BLACK_PAWN = "resources/dpawn.png";
 char *BLACK_KNIGHT = "resources/dknight.png";
@@ -77,75 +78,28 @@ void GAME_InitializeChessboard(void) {
 
   GAME_InitializePieces();
 
-  int foo = -1; int keep = -1;
-  int reset = 0;
+  int touch = -1;
+  bool reset;
 
   SDL_Event event;
 
   while (SDL_PollEvent(&event) >= 0) {
 
-    foo = INPUT_MouseInteractPiece(&event); // if mouse touches a tile, returns != -1
+    touch = INPUT_MouseInteractPiece(&event); // if mouse touches a tile, returns != -1
 
-    if (foo != -1 && tile[foo].piece != NULL) {
-
-            // if new position and "keep" is unused, change tile color, and print possible pattern
-            if (foo != keep && keep == -1 && tile[foo].piece->player == global_player) {
-
-                keep = foo;
-
-                // Selecting the piece from tile.toggle
-                tile[foo].toggle = true;
-
-                SDL_DestroyTexture(tile[foo].pp4m.texture);
-                tile[foo].pp4m.texture = pp4m_DRAW_TextureRect(global_renderer, PP4M_BLUE, &tile[foo].pp4m.rect, tile[foo].pp4m.rect.x, tile[foo].pp4m.rect.y, 50, 50);
-
-                CORE_CheckPieceMovement(foo);
-            }
-
-            else if (foo != keep && keep != -1) {
-
-                // if deselected, or valid move is choosen, lets reset the toggles and color
-                // look if is touching a valid position for the selected piece to move
-                SDL_DestroyTexture(tile[keep].pp4m.texture);
-                tile[keep].pp4m.texture = pp4m_DRAW_TextureRect(global_renderer, tile[keep].color, &tile[keep].pp4m.rect, tile[keep].pp4m.rect.x, tile[keep].pp4m.rect.y, 50, 50);
-
-                // If touch is in a valid position, move piece ( also, tile[foo].toggle = false)
-                if (point[foo].toggle == true) {
-                        CORE_UpdateMovementPieceFromPoint(foo);
-                        global_player = CORE_SwitchPlayerTurn(global_player);
-                }
-
-                reset = true;
-                keep = -1;
-            }
-
-    // checks only if a possible valid move, otherwise it resets everything on empty tile
-    } else if (foo != -1 && tile[foo].piece == NULL) {
-
-        reset = true;
-        if (point[foo].toggle == true) {
-                CORE_UpdateMovementPieceFromPoint(foo);
-                global_player = CORE_SwitchPlayerTurn(global_player);
-        }
-
-        SDL_DestroyTexture(tile[keep].pp4m.texture);
-        tile[keep].pp4m.texture = pp4m_DRAW_TextureRect(global_renderer, tile[keep].color, &tile[keep].pp4m.rect, tile[keep].pp4m.rect.x, tile[keep].pp4m.rect.y, 50, 50);
-    }
+    reset = LOGIC_ControlGameplayChessboard(touch);
 
     // ternary operator
-    sprintf(DebugInfo[0].text, "global_player: %s", (global_player==1?"black":"white"));
+    sprintf(DebugInfo[0].text, "turn: %s", (global_player==1?"white":"black"));
     DEBUG_WriteTextureFont(DebugInfo[0].text, 0);
 
-    sprintf(DebugInfo[1].text, "foo: %c%d, tile[%d]", tile[foo].row, tile[foo].colomn, foo);
+    sprintf(DebugInfo[1].text, "touch: %c%d, tile[%d]", tile[touch].row, tile[touch].colomn, touch);
     DEBUG_WriteTextureFont(DebugInfo[1].text, 1);
 
-    sprintf(DebugInfo[2].text, "keep: %c%d, tile[%d]", tile[keep].row, tile[keep].colomn, keep);
-    DEBUG_WriteTextureFont(DebugInfo[2].text, 2);
-
-    sprintf(DebugInfo[3].text, "castling_w: %d", global_whitecastling);
+    sprintf(DebugInfo[3].text, "w_castle_enum: %d", global_whitecastling);
     DEBUG_WriteTextureFont(DebugInfo[3].text, 3);
 
-    sprintf(DebugInfo[4].text, "castling_b: %d", global_blackcastling);
+    sprintf(DebugInfo[4].text, "b_castle_enum: %d", global_blackcastling);
     DEBUG_WriteTextureFont(DebugInfo[4].text, 4);
 
     SDL_RenderClear(global_renderer);
@@ -179,6 +133,10 @@ void GAME_InitializeChessboard(void) {
     DEBUG_Print(2);
     DEBUG_Print(3);
     DEBUG_Print(4);
+    DEBUG_Print(5);
+    DEBUG_Print(6);
+    DEBUG_Print(7);
+    DEBUG_Print(8);
 
     SDL_RenderPresent(global_renderer);
 
