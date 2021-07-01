@@ -108,6 +108,8 @@ int CORE_UpdateMovementPieceFromPoint(int pos) {
   tile[bar].toggle = false;
 
   // it dosent turn off the toggles behind, cousing to move to a different position prevoiusly selected pieces
+  FS_RecordPieceMovement(bar, pos);
+
   GAME_UpdatePositionPiece(bar, tile[bar].piece, tile[bar].piece->player, tile[bar].piece->identifier, tile[pos].colomn, tile[pos].row);
 
   return 0;
@@ -124,6 +126,7 @@ int CORE_SwitchPlayerTurn(int player) {
 
 int CORE_CheckCapturePiece_DarkPawn(int pos) {
 
+    // needs to be added en passant after recording the moves
     int colomn = (tile[pos].colomn) - 1;
     char row = tile[pos].row;
 
