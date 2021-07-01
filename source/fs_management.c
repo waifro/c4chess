@@ -17,9 +17,9 @@ int FS_RecordPieceMovement(int old, int foo) {
     char alpha[] = "abcdefgh";
 
     char conv[3];
-    sprintf(conv, "%c", alpha[tile[foo].colomn]);
+    sprintf(conv, "%d ", tile[foo].colomn);
 
-    char result[51];
+    char result[51] = {0};
 
     switch (tile[old].piece->identifier) {
 
@@ -54,23 +54,31 @@ int FS_RecordPieceMovement(int old, int foo) {
         break;
     }
 
-    row_pos = CORE_ReturnRowPosition(tile[old].row);
+    if (global_whitecastling == LONG) {
+
+      sprintf(result, "0-0-0");
+
+    }
 
     // if are not pawns, write the inital
     if (init_pos != -1) sprintf(result, "%c", initial[init_pos]);
 
     // check if takes another piece
-    else if (init_pos == -1 && tile[foo].piece != NULL) sprintf(result, "%c", alpha[old]);
+    else if (init_pos == -1 && tile[foo].piece != NULL) {
+      row_pos = CORE_ReturnRowPosition(tile[old].row);
+      sprintf(result, "%c", alpha[row_pos]);
+    }
 
     // x = takes
     if (tile[foo].piece != NULL) strcat(result, "x");
 
-    strcat(result, (char*)&tile[foo].row);
+    row_pos = CORE_ReturnRowPosition(tile[foo].row);
 
-    sprintf(DebugInfo[7].text, "%s", result);
-    DEBUG_WriteTextureFont(DebugInfo[7].text, 7);
-
+    strncat(result, &alpha[row_pos], sizeof(char));
     strcat(result, conv);
+
+    sprintf(DebugInfo[7].text, "move: %s", result);
+    DEBUG_WriteTextureFont(DebugInfo[7].text, 7);
 
     pp4m_IO_Feedback("test.txt", result);
 

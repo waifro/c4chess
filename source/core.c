@@ -6,6 +6,7 @@
 #include "core.h"
 #include "game.h"
 #include "debug.h"
+#include "fs_management.h"
 
 // initialization of global (external) variable
 CORE_TILE tile[64];

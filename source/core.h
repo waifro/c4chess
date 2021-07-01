@@ -59,6 +59,8 @@ extern CORE_TILE point[64];
 extern CORE_CASTLING global_whitecastling;
 extern CORE_CASTLING global_blackcastling;
 
+extern int castleing:::::::::::
+
 int CORE_ReturnTilePosition(int colomn, char row);
 int CORE_ReturnValidTilePosition(int colomn, char row);
 int CORE_ReturnRowPosition(char row);
