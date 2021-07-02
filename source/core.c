@@ -15,6 +15,8 @@ CORE_TILE point[64];
 CORE_CASTLING global_whitecastling;
 CORE_CASTLING global_blackcastling;
 
+int global_castling;
+
 int CORE_ReturnTilePosition(int colomn, char row) {
 
     if (colomn < 1 || colomn > 8) return -1;
@@ -206,6 +208,10 @@ int GAME_UpdateRookCastling(int pos) {
 
         // resets the pointer of previous tile
         tile[bar].piece = NULL;
+
+        // passing instruction for FS_RecordPieceMovement to castle (LONG)
+        global_castling = 1;
+        FS_RecordPieceMovement(0, 0);
       }
 
       else if (tile[pos].row == 'G') {
@@ -218,6 +224,10 @@ int GAME_UpdateRookCastling(int pos) {
 
         // resets the pointer of previous tile
         tile[bar].piece = NULL;
+
+        // passing instruction for FS_RecordPieceMovement to castle (SHORT)
+        global_castling = 2;
+        FS_RecordPieceMovement(0, 0);
       }
     }
 

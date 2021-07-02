@@ -10,6 +10,30 @@
 
 int FS_RecordPieceMovement(int old, int foo) {
 
+    char result[51] = {0};
+
+    // if global_castling == LONG
+    if (global_castling == 1) {
+
+      sprintf(result, "0-0-0");
+      global_castling = 0;
+
+      sprintf(DebugInfo[7].text, "move: %s", result);
+      DEBUG_WriteTextureFont(DebugInfo[7].text, 7);
+      return 0;
+    }
+
+    // if global_castling == SHORT
+    else if (global_castling == 2) {
+
+      sprintf(result, "0-0");
+      global_castling = 0;
+
+      sprintf(DebugInfo[7].text, "move: %s", result);
+      DEBUG_WriteTextureFont(DebugInfo[7].text, 7);
+      return 0;
+    }
+
     int init_pos;
     char initial[] = "rnbqk";
 
@@ -18,8 +42,6 @@ int FS_RecordPieceMovement(int old, int foo) {
 
     char conv[3];
     sprintf(conv, "%d ", tile[foo].colomn);
-
-    char result[51] = {0};
 
     switch (tile[old].piece->identifier) {
 
@@ -52,12 +74,6 @@ int FS_RecordPieceMovement(int old, int foo) {
 
         init_pos = -1;
         break;
-    }
-
-    if (global_whitecastling == LONG) {
-
-      sprintf(result, "0-0-0");
-
     }
 
     // if are not pawns, write the inital
