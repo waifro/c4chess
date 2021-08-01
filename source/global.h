@@ -5,7 +5,10 @@
 #include <SDL2/SDL.h>
 
 // declared extern variables
-extern SDL_Window *gl_windw;
-extern SDL_Renderer *gl_renderw;
+extern SDL_Window *glo_window;
+extern SDL_Renderer *glo_renderw;
+
+extern int glo_screen_w;
+extern int glo_screen_h;
 
 #endif

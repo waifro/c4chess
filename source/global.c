@@ -6,5 +6,8 @@
 #include "pp4m/pp4m.h"
 
 // declared global variables
-SDL_Window      *glo_windw;
-SDL_Renderer    *glo_renderw;
+SDL_Window *glo_window = NULL;
+SDL_Renderer *glo_renderw = NULL;
+
+int glo_screen_w = 1280;
+int glo_screen_h = 720;
