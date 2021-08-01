@@ -1,6 +1,6 @@
 # Makefile
 
-SOURCE_MAIN := 		source/main.c
+SOURCE_MAIN := 		source/main.c source/global.c
 SOURCE_ANIMATION := source/animation/animation.c
 SOURCE_CHESS := 	source/chess/core.c
 SOUCE_DASHBOARD := 	source/dashboard/menu.c
