@@ -3,7 +3,7 @@
 SOURCE_MAIN := 		source/main.c source/global.c
 SOURCE_ANIMATION := source/animation/animation.c
 SOURCE_CHESS := 	source/chess/core.c
-SOUCE_DASHBOARD := 	source/dashboard/menu.c
+SOUCE_DASHBOARD := 	source/dashboard/gui.c
 
 SOURCE_PROJECT := $(SOURCE_MAIN) $(SOURCE_ANIMATION) $(SOURCE_CHESS) $(SOUCE_DASHBOARD)
 
