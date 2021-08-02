@@ -6,7 +6,10 @@
 
 int GUI_PopupWindow(int x, int y, int w, int h, char *text) {
 
+    printf("Hello");
+
     // background blended
+    // create an external function
     SDL_Texture *texture_background = NULL;
     SDL_Rect rect_background;
     texture_background = pp4m_DRAW_TextureRect(glo_renderw, PP4M_GREY, &rect_background, 0, 0, glo_screen_w, glo_screen_h);
@@ -14,14 +17,16 @@ int GUI_PopupWindow(int x, int y, int w, int h, char *text) {
     SDL_SetTextureAlphaMod(texture_background, 100);
 
     // popup window
+    // create an external function
     SDL_Texture *texture_window = NULL;
     SDL_Rect rect_window;
     texture_window = pp4m_DRAW_TextureRect(glo_renderw, PP4M_WHITE, &rect_window, x, y, w, h);
 
     // exit button
+    // create an external function
     SDL_Texture *texture_button_exit = NULL;
     SDL_Rect rect_button_exit;
-    texture_button_exit = pp4m_DRAW_TextureRect(glo_renderw, PP4M_RED, &rect_button_exit, (rect_window.x-25), (rect_window.y-25), 50, 50);
+    texture_button_exit = pp4m_DRAW_TextureRect(glo_renderw, PP4M_RED, &rect_button_exit, (rect_window.x+rect_window.w-75), (rect_window.y+rect_window.h-75), 50, 50);
 
     while(1) {
         if (1==0) break;
@@ -32,5 +37,20 @@ int GUI_PopupWindow(int x, int y, int w, int h, char *text) {
         SDL_RenderPresent(glo_renderw);
     }
 
+    // missing exiting animation
+
+    SDL_DestroyTexture(texture_background);
+    SDL_DestroyTexture(texture_window);
+    SDL_DestroyTexture(texture_button_exit);
+
     return 0;
+}
+
+SDL_Texture *GUI_PopupWindow_Title(char title[256], SDL_Rect window_size) {
+    if (sizeof(title) > 255) return;
+
+    SDL_Texture *texture_title = NULL;
+    // missing ttf font
+
+    return texture_title;
 }
