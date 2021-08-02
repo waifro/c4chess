@@ -22,7 +22,7 @@ SDL_Color PP4M_YELLOW = {255, 255, 0, 255};
 SDL_Color PP4M_PINK = {255, 0, 255, 255};
 SDL_Color PP4M_CYAN = {0, 255, 255, 255};
 
-SDL_Renderer *pp4m_Init(SDL_Window *window, char *title, int width, int height) {
+SDL_Renderer *pp4m_Init(SDL_Window *window, char *title, int width, int height, PP4M_WINDOW_SIZE size) {
 
     SDL_Init(SDL_INIT_VIDEO);
     pp4m_IMG_Init();
@@ -30,7 +30,9 @@ SDL_Renderer *pp4m_Init(SDL_Window *window, char *title, int width, int height) 
 
     SDL_Renderer *renderer = NULL;
 
-    window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_RESIZABLE);
+    if (size == WINDOW) window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
+    else if (size == WINDOW_FULLSCREEN) window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_FULLSCREEN_DESKTOP);
+    else if (size == WINDOW_RESIZABLE) window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_RESIZABLE);
     renderer = SDL_CreateRenderer(window, 0, SDL_RENDERER_ACCELERATED);
 
     return renderer;

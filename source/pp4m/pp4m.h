@@ -29,7 +29,15 @@ typedef struct {
     SDL_Texture *texture;
 } PP4M_SDL;
 
-SDL_Renderer *pp4m_Init(SDL_Window *window, char *title, int width, int height);
+typedef enum {
+
+    WINDOW,
+    WINDOW_FULLSCREEN,
+    WINDOW_RESIZABLE
+
+} PP4M_WINDOW_SIZE;
+
+SDL_Renderer *pp4m_Init(SDL_Window *window, char *title, int width, int height, PP4M_WINDOW_SIZE size);
 void pp4m_Quit(void);
 
 void pp4m_GetDateAndTime(char *dst);
