@@ -8,7 +8,8 @@ int GUI_PopupWindow(int x, int y, int w, int h, char *text) {
 
     // background blended
     SDL_Texture *texture_background = NULL;
-    texture_background = pp4m_DRAW_TextureRect(glo_renderw, PP4M_GREY, NULL, 0, 0, glo_screen_w, glo_screen_h);
+    SDL_Rect rect_background;
+    texture_background = pp4m_DRAW_TextureRect(glo_renderw, PP4M_GREY, &rect_background, 0, 0, glo_screen_w, glo_screen_h);
     SDL_SetTextureBlendMode(texture_background, SDL_BLENDMODE_BLEND);
     SDL_SetTextureAlphaMod(texture_background, 100);
 
@@ -25,7 +26,7 @@ int GUI_PopupWindow(int x, int y, int w, int h, char *text) {
     while(1) {
         if (1==0) break;
         SDL_RenderClear(glo_renderw);
-        SDL_RenderCopy(glo_renderw, texture_background, NULL, NULL);
+        SDL_RenderCopy(glo_renderw, texture_background, NULL, &rect_background);
         SDL_RenderCopy(glo_renderw, texture_window, NULL, &rect_window);
         SDL_RenderCopy(glo_renderw, texture_button_exit, NULL, &rect_button_exit);
         SDL_RenderPresent(glo_renderw);
