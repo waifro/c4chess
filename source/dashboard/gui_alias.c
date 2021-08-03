@@ -6,13 +6,16 @@
 void GUI_TextureAlias_InitRect(GUI_TextureAlias *source, int x, int y, int w, int h, GUI_TextureFlagAlias flag) {
 
     memcpy(&source->rect_als.x, &x, sizeof(x));
-    memcpy(&source->rect_als.y, &x, sizeof(y));
-    memcpy(&source->rect_als.w, &x, sizeof(w));
-    memcpy(&source->rect_als.h, &x, sizeof(h));
+    memcpy(&source->rect_als.y, &y, sizeof(y));
+    memcpy(&source->rect_als.w, &w, sizeof(w));
+    memcpy(&source->rect_als.h, &h, sizeof(h));
 
     if (flag != EMPTY) {
-        source->rect_als.z = x + w;
-        source->rect_als.j = y + h;
+        int z = x + w;
+        int j = y + j;
+
+        memcpy(&source->rect_als.z, &z, sizeof(z));
+        memcpy(&source->rect_als.j, &j, sizeof(j));
     }
 
     source->rect.x = source->rect_als.x;

@@ -35,20 +35,44 @@ GUI_TextureAlias GUI_CreateTexture_ButtonExit(int x, int y) {
 
     // initializing variables
     GUI_TextureAlias button_exit;
-    GUI_TextureAlias_InitRect(&button_exit, 0, 0, 50, 50, FULL);
+    GUI_TextureAlias_InitRect(&button_exit, x, y, 50, 50, FULL);
 
     // accessing the texture modulation
-    button_exit.texture = SDL_CreateTexture(glo_renderw, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, button_exit.rect.w, button_exit.rect.h);
+    button_exit.texture = SDL_CreateTexture(glo_renderw, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, button_exit.rect_als.w, button_exit.rect_als.h);
+
+    //SDL_F
+
+    //button_exit.texture = pp4m_DRAW_TextureRect(glo_renderw, PP4M_RED, &button_exit.rect, button_exit.rect_als.x, button_exit.rect_als.y, button_exit.rect_als.w, button_exit.rect_als.h);
 
     // targeting texture for drawing
     SDL_SetRenderTarget(glo_renderw, button_exit.texture);
 
+    //SDL_SetRenderDrawColor(glo_renderw, 255, 0, 0, 255);
+    SDL_RenderFillRect(glo_renderw, &button_exit.rect);
+
     // drawing lines
-    SDL_RenderDrawLine(glo_renderw, (button_exit.rect_als.x-5), (button_exit.rect_als.y-5), (button_exit.rect_als.z-5), (button_exit.rect_als.j-5));
-    SDL_RenderDrawLine(glo_renderw, (button_exit.rect_als.z-5), (button_exit.rect_als.y-5), (button_exit.rect_als.x-5), (button_exit.rect_als.j-5));
+    SDL_RenderDrawLine(glo_renderw, (button_exit.rect_als.y)+5, (button_exit.rect_als.x)+5, (button_exit.rect_als.z)-5, (button_exit.rect_als.j)-5);
+    SDL_RenderDrawLine(glo_renderw, (button_exit.rect_als.z)+5, (button_exit.rect_als.y)+5, (button_exit.rect_als.x)-5, (button_exit.rect_als.j)-5);
 
     // reset targeting to render
     SDL_SetRenderTarget(glo_renderw, NULL);
+
+
+    // testng
+    printf ("hello");
+
+    SDL_Event event;
+
+    SDL_RenderClear(glo_renderw);
+    SDL_RenderCopy(glo_renderw, button_exit.texture, NULL, &button_exit.rect);
+    SDL_RenderPresent(glo_renderw);
+
+    while(event.type != SDL_QUIT) {
+
+        SDL_PollEvent(&event);
+
+    }
+
 
     memcpy(&button_exit.rect_als.x, &x, sizeof(x));
     memcpy(&button_exit.rect_als.y, &y, sizeof(y));
@@ -69,7 +93,10 @@ int GUI_PopupWindow_Core(int x, int y, int w, int h, char *text) {
 
     // button exit
     GUI_TextureAlias ButtonExit;
-    ButtonExit = GUI_CreateTexture_ButtonExit((PopupWindow.rect_als.z-10), (PopupWindow.rect_als.j-10));
+    int foo = PopupWindow.rect_als.z - 60;
+    int bar = PopupWindow.rect_als.j - 60;
+
+    ButtonExit = GUI_CreateTexture_ButtonExit(foo, bar);
 
     SDL_Event event;
 
