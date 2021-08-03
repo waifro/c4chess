@@ -14,10 +14,7 @@ int main (int argc, char *argv[]) {
     glo_renderw = pp4m_Init(glo_window, "c4chess alpha-rewritten-testing", glo_screen_w, glo_screen_h, WINDOW);
     pp4m_TTF_Init();
 
-    while(1) {
-        if (1 == 0) break;
-        GUI_PopupWindow(300, 300, 275, 275, "hello");
-    }
+    GUI_PopupWindow_Core(300, 300, 275, 275, "hello");
 
     pp4m_TTF_Quit();
     pp4m_Quit();
