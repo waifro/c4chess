@@ -5,22 +5,20 @@
 
 #include <SDL2/SDL.h>
 
+typedef struct {
+
+    int x;
+    int y;
+    int x2;
+    int y2;
+
+} PP4M_PointToPoint;
+
+SDL_Texture *pp4m_DRAW_CreateTexture(SDL_Renderer *renderer, int width, int height);
+void pp4m_DRAW_TextureDrawLine(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Color color, PP4M_PointToPoint *ptp, int x, int y, int x2, int y2);
+void pp4m_DRAW_TextureDrawPoint(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Color color, int x, int y, int radius);
 SDL_Texture *pp4m_DRAW_TextureRect(SDL_Renderer *renderer, SDL_Color color, SDL_Rect *rect, float x, float y, float w, float h);
 
 #endif // _PP4M_DRAW_H
 
-/*                                         Copyright (c) 2021 @richardwaifro //
-#                                                                                                                                                    #
-# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), #
-# to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, #
-# and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:         #
-# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.                     #
-#                                                                                                                                                    #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,                                                                                    #
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,                                                                #
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.                                                                                              #
-# IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,                                                                        #
-# DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,                                                     #
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                                                            #
-#                                                                                                                                                    #
-/#                                         Copyright (c) 2021 @richardwaifro */
+/* 2021 @richardwaifro */
