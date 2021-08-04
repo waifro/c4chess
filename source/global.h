@@ -6,7 +6,7 @@
 
 // declared extern variables
 extern SDL_Window *glo_window;
-extern SDL_Renderer *glo_renderw;
+extern SDL_Renderer *glo_render;
 
 extern int glo_screen_w;
 extern int glo_screen_h;

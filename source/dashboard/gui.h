@@ -3,9 +3,14 @@
 
 #include "gui_alias.h"
 
+#define OPENSANS_REGULAR "./resources/OpenSans-Regular.ttf"
+
 /* prototypes */
-int GUI_PopupWindow_Core(int x, int y, int w, int h, char *text);
+
+SDL_Texture *GUI_PopupWindow_Title(char title[256], SDL_Rect *rect, SDL_Rect window_pos);
+GUI_TextureAlias GUI_CreateTexture_BackgroundPolarize(void);
 GUI_TextureAlias GUI_CreateTexture_ButtonExit(int x, int y);
-//SDL_Texture *GUI_PopupWindow_Title(char title[256], SDL_Rect window_size);
+
+int GUI_PopupWindow_Core(int x, int y, int w, int h, char *text);
 
 #endif

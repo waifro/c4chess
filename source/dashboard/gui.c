@@ -1,32 +1,33 @@
+#include <string.h>
 #include <SDL2/SDL.h>
 
 #include "../pp4m/pp4m.h"
+#include "../pp4m/pp4m_ttf.h"
 #include "../pp4m/pp4m_draw.h"
 
 #include "../global.h"
 #include "gui.h"
 
-/*
-SDL_Texture *GUI_PopupWindow_Title(char title[256], SDL_Rect window_size) {
-    if (sizeof(title) > 255) return;
+SDL_Texture *GUI_PopupWindow_Title(char title[256], SDL_Rect *rect, SDL_Rect window_pos) {
+    if (strlen(title) > 255) return (NULL);
 
-    SDL_Texture *texture_title = NULL;
-    // missing ttf font
+    SDL_Texture *texture_title = {0};
 
-    return texture_title;
+    texture_title = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_BLACK, 24, rect, window_pos.x, window_pos.y, title);
+
+    return (texture_title);
 }
-*/
 
 GUI_TextureAlias GUI_CreateTexture_BackgroundPolarize(void) {
 
     // initializing variables
     GUI_TextureAlias background;
-    GUI_TextureAlias_InitRect(&background, 0, 0, 1280, 720, EMPTY);
-    background.texture = pp4m_DRAW_TextureRect(glo_renderw, PP4M_GREY, &background.rect, 0, 0, glo_screen_w, glo_screen_h);
+    GUI_TextureAlias_InitRect(&background, 0, 0, 1280, 720, FULL);
+    background.texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY, &background.rect, 0, 0, glo_screen_w, glo_screen_h);
 
     // blending the texture for trasparent filter
-    SDL_SetTextureBlendMode(background.texture, SDL_BLENDMODE_BLEND);
-    SDL_SetTextureAlphaMod(background.texture, 100);
+    //SDL_SetTextureBlendMode(background.texture, SDL_BLENDMODE_BLEND);
+    //SDL_SetTextureAlphaMod(background.texture, 100);
 
     return (background);
 }
@@ -35,52 +36,28 @@ GUI_TextureAlias GUI_CreateTexture_ButtonExit(int x, int y) {
 
     // initializing variables
     GUI_TextureAlias button_exit;
+    PP4M_PointToPoint ptp1 = {5, 5, 45, 45};
+    PP4M_PointToPoint ptp2 = {45, 5, 5, 45};
+
     GUI_TextureAlias_InitRect(&button_exit, x, y, 50, 50, FULL);
 
-    // accessing the texture modulation
-    button_exit.texture = SDL_CreateTexture(glo_renderw, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, button_exit.rect_als.w, button_exit.rect_als.h);
+    button_exit.texture = pp4m_DRAW_CreateTexture(glo_render, button_exit.rect.w, button_exit.rect.h);
 
-    //SDL_F
+    SDL_SetRenderTarget(glo_render, button_exit.texture);
 
-    //button_exit.texture = pp4m_DRAW_TextureRect(glo_renderw, PP4M_RED, &button_exit.rect, button_exit.rect_als.x, button_exit.rect_als.y, button_exit.rect_als.w, button_exit.rect_als.h);
+    pp4m_DRAW_SetRenderColor(glo_render, PP4M_RED);
+    SDL_RenderFillRect(glo_render, NULL);
 
-    // targeting texture for drawing
-    SDL_SetRenderTarget(glo_renderw, button_exit.texture);
+    SDL_SetRenderTarget(glo_render, NULL);
 
-    //SDL_SetRenderDrawColor(glo_renderw, 255, 0, 0, 255);
-    SDL_RenderFillRect(glo_renderw, &button_exit.rect);
-
-    // drawing lines
-    SDL_RenderDrawLine(glo_renderw, (button_exit.rect_als.y)+5, (button_exit.rect_als.x)+5, (button_exit.rect_als.z)-5, (button_exit.rect_als.j)-5);
-    SDL_RenderDrawLine(glo_renderw, (button_exit.rect_als.z)+5, (button_exit.rect_als.y)+5, (button_exit.rect_als.x)-5, (button_exit.rect_als.j)-5);
-
-    // reset targeting to render
-    SDL_SetRenderTarget(glo_renderw, NULL);
-
-
-    // testng
-    printf ("hello");
-
-    SDL_Event event;
-
-    SDL_RenderClear(glo_renderw);
-    SDL_RenderCopy(glo_renderw, button_exit.texture, NULL, &button_exit.rect);
-    SDL_RenderPresent(glo_renderw);
-
-    while(event.type != SDL_QUIT) {
-
-        SDL_PollEvent(&event);
-
-    }
-
-
-    memcpy(&button_exit.rect_als.x, &x, sizeof(x));
-    memcpy(&button_exit.rect_als.y, &y, sizeof(y));
+    pp4m_DRAW_TextureDrawLine(glo_render, button_exit.texture, PP4M_WHITE, &ptp1, 0, 0, 0, 0);
+    pp4m_DRAW_TextureDrawLine(glo_render, button_exit.texture, PP4M_WHITE, &ptp2, 0, 0, 0, 0);
 
     return (button_exit);
 }
 
-int GUI_PopupWindow_Core(int x, int y, int w, int h, char *text) {
+int GUI_PopupWindow_Core(int x, int y, int w, int h, char *title) {
+    SDL_Event event;
 
     // background cloudy/blurred/polarized
     GUI_TextureAlias BackgroundPolar;
@@ -89,7 +66,11 @@ int GUI_PopupWindow_Core(int x, int y, int w, int h, char *text) {
     // popup window
     GUI_TextureAlias PopupWindow;
     GUI_TextureAlias_InitRect(&PopupWindow, x, y, w, h, FULL);
-    PopupWindow.texture = pp4m_DRAW_TextureRect(glo_renderw, PP4M_WHITE, &PopupWindow.rect, x, y, w, h);
+    PopupWindow.texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_WHITE, &PopupWindow.rect, x, y, w, h);
+
+    GUI_TextureAlias TextureTitle;
+    TextureTitle.texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_RED, 24, &TextureTitle.rect, PopupWindow.rect.x, PopupWindow.rect.y, title);
+    //TextureTitle.texture = GUI_PopupWindow_Title(title, &TextureTitle.rect, PopupWindow.rect);
 
     // button exit
     GUI_TextureAlias ButtonExit;
@@ -98,17 +79,16 @@ int GUI_PopupWindow_Core(int x, int y, int w, int h, char *text) {
 
     ButtonExit = GUI_CreateTexture_ButtonExit(foo, bar);
 
-    SDL_Event event;
-
     while(event.type != SDL_QUIT) {
 
         SDL_PollEvent(&event);
 
-        SDL_RenderClear(glo_renderw);
-        SDL_RenderCopy(glo_renderw, BackgroundPolar.texture, NULL, &BackgroundPolar.rect);
-        SDL_RenderCopy(glo_renderw, PopupWindow.texture, NULL, &PopupWindow.rect);
-        SDL_RenderCopy(glo_renderw, ButtonExit.texture, NULL, &ButtonExit.rect);
-        SDL_RenderPresent(glo_renderw);
+        SDL_RenderClear(glo_render);
+        SDL_RenderCopy(glo_render, BackgroundPolar.texture, NULL, &BackgroundPolar.rect);
+        SDL_RenderCopy(glo_render, PopupWindow.texture, NULL, &PopupWindow.rect);
+        SDL_RenderCopy(glo_render, TextureTitle.texture, NULL, &TextureTitle.rect);
+        SDL_RenderCopy(glo_render, ButtonExit.texture, NULL, &ButtonExit.rect);
+        SDL_RenderPresent(glo_render);
 
     }
 
@@ -116,6 +96,7 @@ int GUI_PopupWindow_Core(int x, int y, int w, int h, char *text) {
 
     SDL_DestroyTexture(BackgroundPolar.texture);
     SDL_DestroyTexture(PopupWindow.texture);
+    SDL_DestroyTexture(TextureTitle.texture);
     SDL_DestroyTexture(ButtonExit.texture);
 
     return 0;

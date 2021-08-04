@@ -7,7 +7,7 @@
 
 // declared global variables
 SDL_Window *glo_window = NULL;
-SDL_Renderer *glo_renderw = NULL;
+SDL_Renderer *glo_render = NULL;
 
 int glo_screen_w = 1280;
 int glo_screen_h = 720;

@@ -22,6 +22,5 @@ typedef enum {
 
 /* prototypes */
 void GUI_TextureAlias_InitRect(GUI_TextureAlias *source, int x, int y, int w, int h, GUI_TextureFlagAlias flag);
-//SDL_Rect *GUI_txrAlias_Cnv(GUI_RectAlias *source);
 
 #endif

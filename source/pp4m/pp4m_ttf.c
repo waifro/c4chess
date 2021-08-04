@@ -41,29 +41,29 @@ void pp4m_TTF_MEM_TextureFont(SDL_Renderer *renderer, PP4M_SDL *st, const char *
 	return;
 }
 
-SDL_Texture *pp4m_TTF_TextureFont(SDL_Renderer *renderer, SDL_Texture *texture, char filename[256], SDL_Color color, int point, SDL_Rect *dst, float x, float y, char text[1024]) {
+SDL_Texture *pp4m_TTF_TextureFont(SDL_Renderer *renderer, char filename[256], SDL_Color color, int point, SDL_Rect *dst, float x, float y, char text[1024]) {
 
-    if (texture != NULL) {
-        SDL_DestroyTexture(texture);
-        texture = NULL;
-    }
-
-    TTF_Font *font = NULL;
+    SDL_Texture *texture = NULL;
+    TTF_Font *font;
 
     font = TTF_OpenFont(filename, point);
 
-    SDL_Surface *surface = TTF_RenderText_Blended(font, text, color);
+    SDL_Surface *surface;
+    surface = TTF_RenderText_Blended(font, text, color);
 
     texture = SDL_CreateTextureFromSurface(renderer, surface);
 
     SDL_FreeSurface(surface);
     TTF_CloseFont(font);
 
-    dst->x = x;
-    dst->y = y;
+    if (dst == NULL) {
+        dst->x = x;
+        dst->y = y;
+    }
+
     SDL_QueryTexture(texture, NULL, NULL, &dst->w, &dst->h);
 
-    return texture;
+    return (texture);
 
 }
 
