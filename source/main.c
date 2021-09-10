@@ -1,6 +1,8 @@
 // standard libraries
 #include <stdio.h>
 
+#define SDL_MAIN_HANDLED 
+
 // local libraries
 #include "global.h"
 #include "pp4m/pp4m.h"

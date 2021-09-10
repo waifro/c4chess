@@ -13,7 +13,7 @@ DEP_PP4M := source/pp4m/pp4m.c source/pp4m/pp4m_io.c source/pp4m/pp4m_draw.c sou
 LIBS := -lSDL2 -lSDL2_ttf -lSDL2_image
 
 all : $(SOURCE_PROJECT) $(DEP_PP4M)
-	gcc $(SOURCE_PROJECT) $(DEP_PP4M) $(sdl2-config --cflags) -Wall -Wextra $(LIBS) -o $(OUTPUT)
+	gcc $(SOURCE_PROJECT) $(DEP_PP4M) $(sdl2-config --cflags) -lws2_32 -Wall -Wextra $(LIBS) -o $(OUTPUT)
 
 clean :
 	rm *.o $(OUTPUT)

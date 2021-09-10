@@ -2,6 +2,7 @@
 
 #ifdef _WIN32
 #include <winsock2.h> //ws2_32
+#include <windows.h>
 #else // _UNIX
 #include <netinet/in.h>
 #include <sys/socket.h>
@@ -27,14 +28,14 @@ int pp4m_NET_Init(PP4M_NET_IPPROTO protocol) {
     int result = 0;
 
     #ifdef _WIN32
-    // initializing windows socket
-    WSADATA WsaData;
-    result = WSAStartup(MAKEWORD(2,2), &WsaData);
-    if (result == -1) {
-        int error = errno;
-        pp4m_IO_Feedback("feedback.txt", strerror(error));
-        return result;
-    }
+        // initializing windows socket
+        WSADATA WsaData;
+        result = WSAStartup(MAKEWORD(2,2), &WsaData);
+        if (result == -1) {
+            int error = errno;
+            pp4m_IO_Feedback("feedback.txt", strerror(error));
+            return result;
+        }
     #endif // _WIN32
 
     switch(protocol) {
