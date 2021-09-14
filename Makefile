@@ -1,11 +1,13 @@
 # Makefile
 
-SOURCE_MAIN := 		source/main.c source/global.c
-SOURCE_ANIMATION := source/animation/animation.c
-SOURCE_CHESS := 	source/chess/core.c
-SOUCE_DASHBOARD := 	source/dashboard/gui.c source/dashboard/gui_alias.c
+SOURCE_MAIN := 			source/main.c source/global.c
+SOURCE_ANIMATION := 	source/animation/animation.c
+SOURCE_CHESS := 		source/chess/core.c source/chess/middle.c source/chess/touch.c
+SOURCE_DASHBOARD := 	source/dashboard/gui.c source/dashboard/gui_alias.c
+SOURCE_NETWORK	:=		source/network/net.c source/network/send.c source/network/recv.c
+SOURCE_SECURITY	:=		source/security/sec.c source/security/debug.c
 
-SOURCE_PROJECT := $(SOURCE_MAIN) $(SOURCE_ANIMATION) $(SOURCE_CHESS) $(SOUCE_DASHBOARD)
+SOURCE_PROJECT := $(SOURCE_MAIN) $(SOURCE_ANIMATION) $(SOURCE_CHESS) $(SOURCE_DASHBOARD) $(SOURCE_NETWORK) $(SOURCE_SECURITY)
 
 OUTPUT := $(notdir $(CURDIR))
 
