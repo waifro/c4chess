@@ -250,43 +250,6 @@ void CORE_GlobalClearChessTile(void) {
     return;
 }
 
-int CORE_CheckPieceMovement(int pos) {
-
-    switch (tile[pos].piece->identifier) {
-
-        case (DPAWN):
-        CORE_CreatePatternDarkPawn(pos);
-        break;
-
-        case (PAWN):
-        CORE_CreatePatternPawn(pos);
-        break;
-
-        case (KNIGHT):
-        CORE_CreatePatternKnight(pos);
-        break;
-
-        case (BISHOP):
-        CORE_CreatePatternBishop(pos);
-        break;
-
-        case (ROOK):
-        CORE_CreatePatternRook(pos);
-        break;
-
-        case (QUEEN):
-        CORE_CreatePatternQueen(pos);
-        break;
-
-        case (KING):
-        CORE_CreatePatternKing(pos);
-        break;
-
-    }
-
-  return 0;
-}
-
 void CORE_Testing(CHESS_CORE_PLAYER player) {
 
     CORE_ChessCreateBoard();
