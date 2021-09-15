@@ -13,4 +13,6 @@ GUI_TextureAlias GUI_CreateTexture_ButtonExit(int x, int y);
 
 int GUI_PopupWindow_Core(int x, int y, int w, int h, char *text);
 
+void GUI_Testing(void);
+
 #endif

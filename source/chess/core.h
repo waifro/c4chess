@@ -6,8 +6,8 @@
 
 /* structs & enums */
 typedef enum {
-    WHITE_PLAYER,
-    BLACK_PLAYER
+    WHITE_PLAYER = 0,
+    BLACK_PLAYER = 1
 } CHESS_CORE_PLAYER;
 
 typedef enum {
@@ -35,13 +35,20 @@ typedef struct {
 } CHESS_CORE_TILE;
 
 extern CHESS_CORE_TILE glo_chess_core_tile[64];
+extern CHESS_CORE_TILE glo_chess_core_point[64];
+extern CHESS_CORE_PIECE glo_chess_core_piece[32];
 
 /* prototypes */
 void CORE_InitPiecePlayer(CHESS_CORE_PLAYER player);
+void CORE_DestroyPiece(CHESS_CORE_PIECE *piece);
 void CORE_InitPiece(CHESS_CORE_PLAYER player);
 void CORE_ChessCreateBoard(void);
 void CORE_ChessInitTag(CHESS_CORE_PLAYER player);
 void CORE_ChessInitPlacePiece(void);
+
+void CORE_GlobalDestroyPiece(CHESS_CORE_PIECE *piece);
+void CORE_GlobalClearCorePiece(void);
+void CORE_GlobalClearChessTile(void);
 
 void CORE_Testing(CHESS_CORE_PLAYER player);
 

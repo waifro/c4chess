@@ -12,8 +12,9 @@
 #include "middle.h"
 #include "core.h"
 
-CHESS_CORE_PIECE glo_chess_core_piece[32];
 CHESS_CORE_TILE glo_chess_core_tile[64];
+CHESS_CORE_TILE glo_chess_core_point[64];
+CHESS_CORE_PIECE glo_chess_core_piece[32];
 
 #define TEX_WKING "resources/wking.png"
 #define TEX_WPAWN "resources/wpawn.png"
@@ -38,11 +39,12 @@ void CORE_InitPiecePlayer(CHESS_CORE_PLAYER player) {
                                 1, 1, 1, 1, 1, 1, 1, 1,
                                 5, 3, 4, 6, 0, 4, 3, 5 };
 
-        for (int n = 0; n > 32; n++) {
+        for (int n = 0; n < 32; n++) {
             glo_chess_core_piece[n].enum_piece = place_piece[n];
 
-            if (n < 16) glo_chess_core_piece[n].player = WHITE_PLAYER;
-            else glo_chess_core_piece[n].player = BLACK_PLAYER;
+            if (n < 16) glo_chess_core_piece[n].player = BLACK_PLAYER;
+            else glo_chess_core_piece[n].player = WHITE_PLAYER;
+            printf("CORE_InitPiecePlayer:\n  name = %d -> %d player = %d\n", place_piece[n], glo_chess_core_piece[n].enum_piece, glo_chess_core_piece[n].player);
         }
 
     }
@@ -54,11 +56,12 @@ void CORE_InitPiecePlayer(CHESS_CORE_PLAYER player) {
                                 1, 1, 1, 1, 1, 1, 1, 1,
                                 5, 3, 4, 0, 6, 4, 3, 5 };
 
-        for (int n = 0; n > 32; n++) {
+        for (int n = 0; n < 32; n++) {
             glo_chess_core_piece[n].enum_piece = place_piece[n];
 
             if (n < 16) glo_chess_core_piece[n].player = WHITE_PLAYER;
             else glo_chess_core_piece[n].player = BLACK_PLAYER;
+            printf("CORE_InitPiecePlayer:\n  name = %d -> %d player = %d\n", place_piece[n], glo_chess_core_piece[n].enum_piece, glo_chess_core_piece[n].player);
         }
 
     }
@@ -222,6 +225,68 @@ void CORE_ChessInitPlacePiece(void) {
     return;
 }
 
+void CORE_GlobalDestroyPiece(CHESS_CORE_PIECE *piece) {
+
+    if (piece != NULL) {
+        printf("CORE_GlobalDestroyPiece:\n  destroy piece = %p\n", piece);
+        SDL_DestroyTexture(piece->texture);
+    }
+
+    return;
+}
+
+void CORE_GlobalClearCorePiece(void) {
+    for (int n = 0; n < 32; n++) if (sizeof(glo_chess_core_piece[n]) != 0) CORE_GlobalDestroyPiece(&glo_chess_core_piece[n]);
+    return;
+}
+
+void CORE_GlobalClearChessTile(void) {
+
+    for (int n = 0; n < 64; n++) {
+        if (sizeof(glo_chess_core_tile[n].piece) != sizeof(CHESS_CORE_PIECE*)) CORE_GlobalDestroyPiece(glo_chess_core_tile[n].piece);
+        SDL_DestroyTexture(glo_chess_core_tile[n].texture);
+    }
+
+    return;
+}
+
+int CORE_CheckPieceMovement(int pos) {
+
+    switch (tile[pos].piece->identifier) {
+
+        case (DPAWN):
+        CORE_CreatePatternDarkPawn(pos);
+        break;
+
+        case (PAWN):
+        CORE_CreatePatternPawn(pos);
+        break;
+
+        case (KNIGHT):
+        CORE_CreatePatternKnight(pos);
+        break;
+
+        case (BISHOP):
+        CORE_CreatePatternBishop(pos);
+        break;
+
+        case (ROOK):
+        CORE_CreatePatternRook(pos);
+        break;
+
+        case (QUEEN):
+        CORE_CreatePatternQueen(pos);
+        break;
+
+        case (KING):
+        CORE_CreatePatternKing(pos);
+        break;
+
+    }
+
+  return 0;
+}
+
 void CORE_Testing(CHESS_CORE_PLAYER player) {
 
     CORE_ChessCreateBoard();
@@ -231,26 +296,12 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     CORE_InitPiecePlayer(player);
     CORE_ChessInitPlacePiece();
 
-    TOUCH_POS touch_pos;
     SDL_Event event;
-
-    int position_new = -1;
-    int position_old = -1;
 
     while(1) {
         SDL_PollEvent(&event);
 
-        touch_pos = TOUCH_MouseState(&event);
-
-        if (touch_pos.iner != -1 && position_old == -1) {
-            position_old = MIDDLE_TouchToTile(touch_pos);
-        }
-
-        else if (touch_pos.iner != -1 && position_old != -1) {
-            position_new = MIDDLE_TouchToTile(touch_pos);
-            MIDDLE_UpdatePositionPiece(position_old, position_new);
-            position_new = -1; position_old = -1;
-        }
+        if (MIDDLE_UpdateChangeState(&event, &player) == 0) { player ^= 1; printf("CORE_Testing:\n  player turn = %d\n", player); }
 
         SDL_RenderClear(glo_render);
         for (int n = 0; n < 64; n++) {

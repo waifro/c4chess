@@ -138,6 +138,7 @@ void pp4m_DRAW_TextureDrawCircle_Filled(SDL_Renderer *renderer, SDL_Texture *tex
     }
 
     SDL_SetRenderTarget(renderer, NULL);
+    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
 
     return;
 }

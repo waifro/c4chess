@@ -101,3 +101,28 @@ int GUI_PopupWindow_Core(int x, int y, int w, int h, char *title) {
 
     return 0;
 }
+
+void GUI_Testing(void) {
+
+    SDL_Texture *texture = SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 100, 100);
+    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+    SDL_SetTextureAlphaMod(texture, 25);
+
+    SDL_Rect rect = { (glo_screen_w/2-50), (glo_screen_h/2-50), 100, 100};
+
+    //pp4m_DRAW_TextureDrawCircle_Filled(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Color color, int circle_center_x, int circle_center_y, int radius)
+    pp4m_DRAW_TextureDrawCircle_Filled(glo_render, texture, PP4M_RED, (rect.w / 2), (rect.h / 2), 50);
+
+    SDL_Event event;
+    while(1) {
+        SDL_PollEvent(&event);
+        if (event.type == SDL_QUIT) break;
+
+        SDL_RenderClear(glo_render);
+        SDL_RenderCopy(glo_render, texture, NULL, &rect);
+        SDL_RenderPresent(glo_render);
+
+    }
+
+    return;
+}
