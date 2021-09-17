@@ -2,6 +2,7 @@
 #define CORE_H
 
 /* libraries */
+#include <stdbool.h>
 #include <SDL2/SDL.h>
 
 /* structs & enums */
@@ -10,6 +11,11 @@ typedef enum {
     BLACK_PLAYER = 1
 } CHESS_CORE_PLAYER;
 
+typedef struct {
+    char col;
+    int row;
+}   CHESS_CORE_TILE_TAG;
+
 typedef enum {
     KING,
     PAWN,
@@ -17,7 +23,7 @@ typedef enum {
     KNIGHT,
     BISHOP,
     ROOK,
-    QWEEN
+    QUEEN
 } CHESS_CORE_ENUM_PIECE;
 
 typedef struct {
@@ -29,13 +35,12 @@ typedef struct {
 
 typedef struct {
     CHESS_CORE_PIECE *piece;
-    char tag[2];
+    CHESS_CORE_TILE_TAG tag;
     SDL_Texture *texture;
     SDL_Rect rect;
 } CHESS_CORE_TILE;
 
 extern CHESS_CORE_TILE glo_chess_core_tile[64];
-extern CHESS_CORE_TILE glo_chess_core_point[64];
 extern CHESS_CORE_PIECE glo_chess_core_piece[32];
 
 /* prototypes */

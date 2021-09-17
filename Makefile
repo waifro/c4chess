@@ -2,7 +2,7 @@
 
 SOURCE_MAIN := 			source/main.c source/global.c
 SOURCE_ANIMATION := 	source/animation/animation.c
-SOURCE_CHESS := 		source/chess/core.c source/chess/middle.c source/chess/touch.c
+SOURCE_CHESS := 		source/chess/core.c source/chess/middle.c source/chess/touch.c source/chess/chess.c source/chess/dot.c
 SOURCE_DASHBOARD := 	source/dashboard/gui.c source/dashboard/gui_alias.c
 SOURCE_NETWORK	:=		source/network/net.c source/network/send.c source/network/recv.c
 SOURCE_SECURITY	:=		source/security/sec.c source/security/debug.c

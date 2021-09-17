@@ -8,12 +8,13 @@
 #include "../pp4m/pp4m_image.h"
 
 #include "../global.h"
+#include "chess.h"
+#include "dot.h"
 #include "touch.h"
 #include "middle.h"
 #include "core.h"
 
 CHESS_CORE_TILE glo_chess_core_tile[64];
-CHESS_CORE_TILE glo_chess_core_point[64];
 CHESS_CORE_PIECE glo_chess_core_piece[32];
 
 #define TEX_WKING "resources/wking.png"
@@ -181,11 +182,11 @@ void CORE_ChessInitTag(CHESS_CORE_PLAYER player) {
 
         for (int n = 0; n < 64; n++) {
 
-            sprintf(glo_chess_core_tile[n].tag, "%c%d", colomn[colomn_pos], row);
+            glo_chess_core_tile[n].tag.col = colomn[colomn_pos];
+            glo_chess_core_tile[n].tag.row = row;
 
             colomn_pos++;
             if (colomn_pos > 7) { colomn_pos = 0; row--; }
-            //if (row < 1) row = 8;
 
         }
 
@@ -198,11 +199,11 @@ void CORE_ChessInitTag(CHESS_CORE_PLAYER player) {
 
         for (int n = 0; n < 64; n++) {
 
-            sprintf(glo_chess_core_tile[n].tag, "%c%d", colomn[colomn_pos], row);
+            glo_chess_core_tile[n].tag.col = colomn[colomn_pos];
+            glo_chess_core_tile[n].tag.row = row;
 
             colomn_pos--;
             if (colomn_pos < 0) { colomn_pos = 7; row++; }
-            //if (row > 8) row = 1;
 
         }
 
@@ -255,6 +256,8 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     CORE_ChessCreateBoard();
     CORE_ChessInitTag(player);
 
+    DOT_InitGlobalDot();
+
     CORE_InitPiece(player);
     CORE_InitPiecePlayer(player);
     CORE_ChessInitPlacePiece();
@@ -270,6 +273,8 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
         for (int n = 0; n < 64; n++) {
             SDL_RenderCopy(glo_render, glo_chess_core_tile[n].texture, NULL, &glo_chess_core_tile[n].rect);
             if (glo_chess_core_tile[n].piece != NULL) SDL_RenderCopy(glo_render, glo_chess_core_tile[n].piece->texture, NULL, &glo_chess_core_tile[n].rect);
+
+            DOT_StateGlobalDot(n);
         }
         SDL_RenderPresent(glo_render);
 
