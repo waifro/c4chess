@@ -10,14 +10,14 @@
 #include "touch.h"
 #include "middle.h"
 
-int MIDDLE_TouchToTile(CHESS_CORE_PLAYER player, TOUCH_POS foo) {
+int MIDDLE_TouchToTile(TOUCH_POS touch_pos) {
 
     int result = -1;
 
     for (int n = 0; n < 64; n++) {
 
-        if (foo.x >= glo_chess_core_tile[n].rect.x && foo.x <= (glo_chess_core_tile[n].rect.x + glo_chess_core_tile[n].rect.w)
-        && foo.y >= glo_chess_core_tile[n].rect.y && foo.y <= (glo_chess_core_tile[n].rect.y + glo_chess_core_tile[n].rect.h)) {
+        if (touch_pos.x >= glo_chess_core_tile[n].rect.x && touch_pos.x <= (glo_chess_core_tile[n].rect.x + glo_chess_core_tile[n].rect.w)
+        && touch_pos.y >= glo_chess_core_tile[n].rect.y && touch_pos.y <= (glo_chess_core_tile[n].rect.y + glo_chess_core_tile[n].rect.h)) {
 
             printf("MIDDLE_TouchToTile:\n  piece = %p\n  tile[%d] tag[%c%d]", glo_chess_core_tile[n].piece, n, glo_chess_core_tile[n].tag.col, glo_chess_core_tile[n].tag.row);
             if (glo_chess_core_tile[n].piece != NULL) printf(" name[%d] player[%d]\n", glo_chess_core_tile[n].piece->enum_piece, glo_chess_core_tile[n].piece->player);
@@ -65,7 +65,7 @@ int MIDDLE_ReturnColTile(int tile) {
     return (col_pos);
 }
 
-void MIDDLE_UpdatePositionPiece(CHESS_CORE_PLAYER player, int old, int new) {
+void MIDDLE_UpdatePositionPiece(int old, int new) {
 
     if (old == new) return;
     if ((old < 0 || old > 63) || (new < 0 || old > 63)) return;
@@ -92,7 +92,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player) {
     touch_pos = TOUCH_MouseState(event);
 
     if (touch_pos.iner != -1 && position_old == -1) {
-        result = MIDDLE_TouchToTile((*player), touch_pos);
+        result = MIDDLE_TouchToTile(touch_pos);
         if (result != -1 && glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player == (*player)) {
 
             position_old = result;
@@ -102,7 +102,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player) {
     }
 
     else if (touch_pos.iner != -1 && position_old != -1) {
-        result = MIDDLE_TouchToTile((*player), touch_pos);
+        result = MIDDLE_TouchToTile(touch_pos);
 
         if (result != -1) {
 
@@ -110,7 +110,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player) {
 
                 // if is a valid move, start changing piece state
                 position_new = result;
-                MIDDLE_UpdatePositionPiece((*player), position_old, position_new);
+                MIDDLE_UpdatePositionPiece(position_old, position_new);
                 DOT_StateGlobalDotReset();
 
                 position_new = -1; position_old = -1; result = 0;
@@ -129,17 +129,6 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player) {
 
             }
 
-            /*
-             else if (glo_chess_core_tile[result].piece != NULL &&) {
-
-                position_new = result;
-                MIDDLE_UpdatePositionPiece((*player), position_old, position_new);
-                DOT_StateGlobalDotReset();
-
-                position_new = -1; position_old = -1; result = 0;
-
-            }
-            */
         }
     }
 

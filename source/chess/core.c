@@ -14,6 +14,7 @@
 #include "middle.h"
 #include "core.h"
 
+CHESS_CORE_PLAYER glo_chess_core_player;
 CHESS_CORE_TILE glo_chess_core_tile[64];
 CHESS_CORE_PIECE glo_chess_core_piece[32];
 
@@ -263,11 +264,13 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     CORE_ChessInitPlacePiece();
 
     SDL_Event event;
+    glo_chess_core_player = player;
+    player = WHITE_PLAYER;
 
     while(1) {
         SDL_PollEvent(&event);
 
-        if (MIDDLE_UpdateChangeState(&event, &player) == 0) { player ^= 1; printf("CORE_Testing:\n  player turn = %d\n", player); }
+        if (MIDDLE_UpdateChangeState(&event, &player) == 0) { player ^= 1; printf("CORE_Testing:\n  player_turn = %d\n", player); }
 
         SDL_RenderClear(glo_render);
         for (int n = 0; n < 64; n++) {
