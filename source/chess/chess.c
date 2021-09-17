@@ -89,17 +89,33 @@ void CHESS_PiecePatternBPawnAttack(int tile, CHESS_CORE_PLAYER player) {
 
 void CHESS_PiecePatternPawn(int tile, CHESS_CORE_PLAYER player) {
 
-    if (glo_chess_core_tile[tile].tag.row == 8) return;
+    CHESS_CORE_TILE_TAG tag = glo_chess_core_tile[tile].tag;
+    int buffer;
 
-    if (glo_chess_core_tile[tile].tag.row == 2) {
+    if (tag.row == 8) return;
 
-        if (glo_chess_core_tile[tile-8].piece == NULL) glo_chess_dot[tile-8].state = true;
-        if (glo_chess_core_tile[tile-16].piece == NULL) glo_chess_dot[tile-16].state = true;
+    if (tag.row == 2) {
 
-    }
+        tag.row += 1;
+        if (tag.row == 8) return;
+        buffer = MIDDLE_TagToTile(tag);
 
-    else {
-        if (glo_chess_core_tile[tile-8].piece == NULL) glo_chess_dot[tile-8].state = true;
+        if (glo_chess_core_tile[buffer].piece == NULL) glo_chess_dot[buffer].state = true;
+
+        tag.row += 1;
+        if (tag.row == 8) return;
+        buffer = MIDDLE_TagToTile(tag);
+
+        if (glo_chess_core_tile[buffer].piece == NULL) glo_chess_dot[buffer].state = true;
+
+    } else {
+
+        tag.row += 1;
+        if (tag.row == 8) return;
+        buffer = MIDDLE_TagToTile(tag);
+
+        if (glo_chess_core_tile[buffer].piece == NULL) glo_chess_dot[buffer].state = true;
+
     }
 
     CHESS_PiecePatternPawnAttack(tile, player);
@@ -109,17 +125,33 @@ void CHESS_PiecePatternPawn(int tile, CHESS_CORE_PLAYER player) {
 
 void CHESS_PiecePatternBPawn(int tile, CHESS_CORE_PLAYER player) {
 
-    if (glo_chess_core_tile[tile].tag.row == 1) return;
+    CHESS_CORE_TILE_TAG tag = glo_chess_core_tile[tile].tag;
+    int buffer;
 
-    if (glo_chess_core_tile[tile].tag.row == 7) {
+    if (tag.row == 1) return;
 
-        if (glo_chess_core_tile[tile+8].piece == NULL) glo_chess_dot[tile+8].state = true;
-        if (glo_chess_core_tile[tile+16].piece == NULL) glo_chess_dot[tile+16].state = true;
+    if (tag.row == 7) {
 
-    }
+        tag.row -= 1;
+        if (tag.row == 1) return;
+        buffer = MIDDLE_TagToTile(tag);
 
-    else {
-        if (glo_chess_core_tile[tile+8].piece == NULL) glo_chess_dot[tile+8].state = true;
+        if (glo_chess_core_tile[buffer].piece == NULL) glo_chess_dot[buffer].state = true;
+
+        tag.row -= 1;
+        if (tag.row == 1) return;
+        buffer = MIDDLE_TagToTile(tag);
+
+        if (glo_chess_core_tile[buffer].piece == NULL) glo_chess_dot[buffer].state = true;
+
+    } else {
+
+        tag.row -= 1;
+        if (tag.row == 1) return;
+        buffer = MIDDLE_TagToTile(tag);
+
+        if (glo_chess_core_tile[buffer].piece == NULL) glo_chess_dot[buffer].state = true;
+
     }
 
     CHESS_PiecePatternBPawnAttack(tile, player);
