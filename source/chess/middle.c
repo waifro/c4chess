@@ -36,7 +36,7 @@ int MIDDLE_TouchToTile(TOUCH_POS touch_pos) {
 int MIDDLE_TagToTile(CHESS_CORE_TILE_TAG tag) {
     int tile = -1;
     for (int n = 0; n < 64; n++) {
-        if (memcmp(&tag, &glo_chess_core_tile[n].tag, sizeof(tag)) == 0) { tile = n; break; }
+        if (tag.col == glo_chess_core_tile[n].tag.col && tag.row == glo_chess_core_tile[n].tag.row) { tile = n; break; }
     }
 
     return (tile);
