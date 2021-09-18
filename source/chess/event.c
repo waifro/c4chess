@@ -1,31 +1,64 @@
+#include <stdio.h>
+
 #include "event.h"
 #include "core.h"
+#include "chess.h"
 
-/*
-void EVENT_CheckPieceAttack(CHESS_CORE_PLAYER player) {
-    // this function is used to check every piece to see if the king is under attack
-    if (player == WHITE_PLAYER) {
+bool glo_chess_event_layer[64];
 
-        for (int n = 0; n < 16; n++) {
+void EVENT_BlankLayer(void) {
+    for (int n = 0; n < 64; n++) {
+        glo_chess_event_layer[n] = false;
+    }
+    return;
+}
 
-            if ()
-            glo_chess_core_piece[n]
-
+void EVENT_BlankPieceLayer(void) {
+    for (int n = 0; n < 32; n++) {
+        for (int i = 0; i < 64; i++) {
+            glo_chess_core_piece[n].range[i] = false;
         }
-
     }
 
-    else if (player == BLACK_PLAYER) {
+    return;
+}
 
-        for (int n = 16; n < 32; n++) {
+void EVENT_KingCheckState(CHESS_CORE_PLAYER player) {
 
-            if ()
-            glo_chess_core_piece[n]
+    for (int n = 0; n < 64; n++) {
 
+        if (glo_chess_core_tile[n].piece != NULL && glo_chess_core_tile[n].piece->player == player && glo_chess_core_tile[n].piece->enum_piece == KING) {
+            if (glo_chess_event_layer[n] == true) printf("\n\nKING UNDER ATTACK\n\n\n"); //check enabled, a func;
+            break;
         }
 
     }
 
     return;
 }
-*/
+
+void EVENT_CheckPieceLayer(CHESS_CORE_PLAYER player) {
+
+    static CHESS_CORE_PLAYER pl_bak;
+    if (pl_bak != player) {
+
+        EVENT_BlankLayer();
+        EVENT_BlankPieceLayer();
+
+        for (int n = 0; n < 64; n++) {
+            // piece range copy
+            if (glo_chess_core_tile[n].piece != NULL && glo_chess_core_tile[n].piece->player != player) {
+                CHESS_RedirectPiecePattern(n, pl_bak, true);
+                for (int i = 0; i < 64; i++) {
+                    if (glo_chess_core_tile[n].piece->range[i] == true) { glo_chess_event_layer[i] = true; }
+                    //printf("EVENT_CheckPieceLayer: piece[%c%d] range[%c%d] = piece[%d] layer[%d]\n", glo_chess_core_tile[n].tag.col, glo_chess_core_tile[n].tag.row, glo_chess_core_tile[i].tag.col, glo_chess_core_tile[i].tag.row, glo_chess_core_tile[n].piece->range[i], glo_chess_event_layer[i]);
+                }
+            }
+        }
+
+        pl_bak = player;
+        EVENT_KingCheckState(player);
+    }
+
+    return;
+}

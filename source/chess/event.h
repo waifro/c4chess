@@ -1,6 +1,15 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-//void EVENT_CheckPieceAttack(CHESS_CORE_PLAYER player);
+#include <stdbool.h>
+#include "core.h"
+
+extern bool glo_chess_event_layer[64];
+
+void EVENT_BlankLayer(void);
+void EVENT_BlankPieceLayer(void);
+
+void EVENT_KingCheckState(CHESS_CORE_PLAYER player);
+void EVENT_CheckPieceLayer(CHESS_CORE_PLAYER player);
 
 #endif

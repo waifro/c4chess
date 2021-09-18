@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 
 #include "../global.h"
+#include "event.h"
 #include "chess.h"
 #include "dot.h"
 #include "core.h"
@@ -83,7 +84,7 @@ void MIDDLE_UpdatePositionPiece(int old, int new) {
     return;
 }
 
-int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player) {
+int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player) {
 
     int result = -1;
     static int position_old = -1;
@@ -94,10 +95,10 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player) {
 
     if (touch_pos.iner != -1 && position_old == -1) {
         result = MIDDLE_TouchToTile(touch_pos);
-        if (result != -1 && glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player == (*player)) {
+        if (result != -1 && glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player == player) {
 
             position_old = result;
-            CHESS_RedirectPiecePattern(result, (*player));
+            CHESS_RedirectPiecePattern(result, player, false);
 
         }
     }
@@ -111,9 +112,9 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player) {
 
                 // if is a valid move, start changing piece state
                 position_new = result;
+
                 MIDDLE_UpdatePositionPiece(position_old, position_new);
                 DOT_StateGlobalDotReset();
-
                 position_new = -1; position_old = -1; result = 0;
 
 
@@ -121,7 +122,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player) {
 
                 DOT_StateGlobalDotReset();
                 position_old = result;
-                CHESS_RedirectPiecePattern(result, (*player));
+                CHESS_RedirectPiecePattern(result, player, false);
 
             } else if ((glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[position_old].piece->player != glo_chess_core_tile[result].piece->player) || glo_chess_core_tile[result].piece == NULL) {
 

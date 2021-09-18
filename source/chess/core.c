@@ -8,6 +8,7 @@
 #include "../pp4m/pp4m_image.h"
 
 #include "../global.h"
+#include "event.h"
 #include "chess.h"
 #include "dot.h"
 #include "touch.h"
@@ -270,7 +271,9 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     while(1) {
         SDL_PollEvent(&event);
 
-        if (MIDDLE_UpdateChangeState(&event, &player) == 0) { player ^= 1; printf("CORE_Testing:\n  player_turn = %d\n", player); }
+        EVENT_CheckPieceLayer(player);
+
+        if (MIDDLE_UpdateChangeState(&event, player) == 0) { player ^= 1; printf("CORE_Testing:\n  player_turn = %d\n", player); }
 
         SDL_RenderClear(glo_render);
         for (int n = 0; n < 64; n++) {
