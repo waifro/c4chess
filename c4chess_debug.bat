@@ -1,3 +1,3 @@
 @echo off
-c4chess
+cd output && c4chess.exe
 pause

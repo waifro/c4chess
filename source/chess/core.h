@@ -27,10 +27,12 @@ typedef enum {
 } CHESS_CORE_ENUM_PIECE;
 
 typedef struct {
-    CHESS_CORE_PLAYER player;
-    int enum_piece;
-    SDL_Texture *texture;
-    SDL_Rect rect;
+    CHESS_CORE_PLAYER player; // which piece is of player
+    int enum_piece; // piece identificitaion
+    SDL_Texture *texture; // texture piece
+    SDL_Rect rect; // rect pos of texture
+    bool lock; // is used to lock a piece if encounters an attack directly behind the king
+    bool range[64]; // layer of the range attack each piece have
 } CHESS_CORE_PIECE;
 
 typedef struct {

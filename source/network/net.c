@@ -3,6 +3,7 @@
 #include "../pp4m/pp4m_net.h"
 #include "net.h"
 
+/*
 int NET_CreateBroadcastServer(void) {
 
     int result = 0;
@@ -33,3 +34,4 @@ void NET_CloseConnection(void) {
 
     return;
 }
+*/

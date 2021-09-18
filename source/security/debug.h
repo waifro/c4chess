@@ -2,6 +2,6 @@
 #define DEBUG_H
 
 // implement a printf type func
-void DEBUG_Print(char *data);
+//void DEBUG_Print(char *data);
 
 #endif

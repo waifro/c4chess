@@ -1,3 +1,5 @@
+#include <stdbool.h>
+
 #include "chess.h"
 #include "middle.h"
 #include "core.h"
@@ -9,38 +11,38 @@ void CHESS_RedirectPiecePattern(int tile, CHESS_CORE_PLAYER player) {
 
     if (glo_chess_core_player == WHITE_PLAYER) {
         switch(glo_chess_core_tile[tile].piece->enum_piece) {
-            case KING: //CHESS_PiecePatternKing(tile, player);
+            case KING: //CHESS_PiecePatternKing(tile, player, check);
             break;
             case PAWN: CHESS_PiecePatternPawn(tile, player);
             break;
             case BPAWN: CHESS_PiecePatternBPawn(tile, player);
             break;
-            case KNIGHT: //CHESS_PiecePatternKnight(tile, player);
+            case KNIGHT: //CHESS_PiecePatternKnight(tile, player, check);
             break;
-            case BISHOP: //CHESS_PiecePatternBishop(tile, player);
+            case BISHOP: //CHESS_PiecePatternBishop(tile, player, check);
             break;
-            case ROOK: //CHESS_PiecePatternRook(tile, player);
+            case ROOK: //CHESS_PiecePatternRook(tile, player, check);
             break;
-            case QUEEN: //CHESS_PiecePatternQueen(tile, player);
+            case QUEEN: //CHESS_PiecePatternQueen(tile, player, check);
             break;
         }
     }
 
     else if (glo_chess_core_player == BLACK_PLAYER){
         switch(glo_chess_core_tile[tile].piece->enum_piece) {
-            case KING: //CHESS_PiecePatternKing(tile, player);
+            case KING: //CHESS_PiecePatternKing(tile, player, check);
             break;
             case PAWN: CHESS_PiecePatternBPawn(tile, player);
             break;
             case BPAWN: CHESS_PiecePatternPawn(tile, player);
             break;
-            case KNIGHT: //CHESS_PiecePatternKnight(tile, player);
+            case KNIGHT: //CHESS_PiecePatternKnight(tile, player, check);
             break;
-            case BISHOP: //CHESS_PiecePatternBishop(tile, player);
+            case BISHOP: //CHESS_PiecePatternBishop(tile, player, check);
             break;
-            case ROOK: //CHESS_PiecePatternRook(tile, player);
+            case ROOK: //CHESS_PiecePatternRook(tile, player, check);
             break;
-            case QUEEN: //CHESS_PiecePatternQueen(tile, player);
+            case QUEEN: //CHESS_PiecePatternQueen(tile, player, check);
             break;
         }
     }

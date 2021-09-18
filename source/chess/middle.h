@@ -2,6 +2,7 @@
 #define MIDDLE_H
 
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "core.h"
 #include "touch.h"
