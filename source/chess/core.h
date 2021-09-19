@@ -17,6 +17,7 @@ typedef struct {
 }   CHESS_CORE_TILE_TAG;
 
 typedef enum {
+    NONE,
     KING,
     PAWN,
     BPAWN,

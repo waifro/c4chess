@@ -33,7 +33,6 @@ CHESS_CORE_PIECE glo_chess_core_piece[32];
 #define TEX_BROOK "resources/brook.png"
 #define TEX_BQUEEN "resources/bqueen.png"
 
-//char chess_initpiece[64] = "RNBQKBNRPPPPPPPP                pppppppprnbqkbnr";
 char chess_initpiece[8][8] = {
  "        ",
  "      P ",
@@ -42,51 +41,99 @@ char chess_initpiece[8][8] = {
  "        ",
  "   k    ",
  "      p ",
- "        " };
+ "        "
+};
 
 void CORE_InitPiece(CHESS_CORE_PIECE *piece, int tile, CHESS_CORE_ENUM_PIECE name, CHESS_CORE_PLAYER player) {
 
-    if (player == WHITE_PLAYER) {
-        switch (name) {
-            case KING: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WKING, &piece->rect, 0, 0, 50, 50);
-            break;
-            case PAWN: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WPAWN, &piece->rect, 0, 0, 50, 50);
-            break;
-            case KNIGHT: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WKNIGHT, &piece->rect, 0, 0, 50, 50);
-            break;
-            case BISHOP: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WBISHOP, &piece->rect, 0, 0, 50, 50);
-            break;
-            case ROOK: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WROOK, &piece->rect, 0, 0, 50, 50);
-            break;
-            case QUEEN: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WQUEEN, &piece->rect, 0, 0, 50, 50);
-            break;
-            case BPAWN:
-            break;
+    if (glo_chess_core_player == WHITE_PLAYER) {
+
+        if (player == WHITE_PLAYER) {
+            switch (name) {
+                case KING: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WKING, &piece->rect, 0, 0, 50, 50);
+                break;
+                case PAWN: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WPAWN, &piece->rect, 0, 0, 50, 50);
+                break;
+                case KNIGHT: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WKNIGHT, &piece->rect, 0, 0, 50, 50);
+                break;
+                case BISHOP: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WBISHOP, &piece->rect, 0, 0, 50, 50);
+                break;
+                case ROOK: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WROOK, &piece->rect, 0, 0, 50, 50);
+                break;
+                case QUEEN: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WQUEEN, &piece->rect, 0, 0, 50, 50);
+                break;
+                case BPAWN:
+                break;
+            }
         }
+
+        else if (player == BLACK_PLAYER) {
+            switch (name) {
+                case KING: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKING, &piece->rect, 0, 0, 50, 50);
+                break;
+                case BPAWN: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BPAWN, &piece->rect, 0, 0, 50, 50);
+                break;
+                case KNIGHT: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKNIGHT, &piece->rect, 0, 0, 50, 50);
+                break;
+                case BISHOP: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BBISHOP, &piece->rect, 0, 0, 50, 50);
+                break;
+                case ROOK: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BROOK, &piece->rect, 0, 0, 50, 50);
+                break;
+                case QUEEN: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BQUEEN, &piece->rect, 0, 0, 50, 50);
+                break;
+                case PAWN:
+                break;
+            }
+        }
+
     }
 
-    else if (player == BLACK_PLAYER) {
-        switch (name) {
-            case KING: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKING, &piece->rect, 0, 0, 50, 50);
-            break;
-            case BPAWN: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BPAWN, &piece->rect, 0, 0, 50, 50);
-            break;
-            case KNIGHT: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKNIGHT, &piece->rect, 0, 0, 50, 50);
-            break;
-            case BISHOP: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BBISHOP, &piece->rect, 0, 0, 50, 50);
-            break;
-            case ROOK: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BROOK, &piece->rect, 0, 0, 50, 50);
-            break;
-            case QUEEN: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BQUEEN, &piece->rect, 0, 0, 50, 50);
-            break;
-            case PAWN:
-            break;
+    else if (glo_chess_core_player == BLACK_PLAYER) {
+
+        if (player == WHITE_PLAYER) {
+            switch (name) {
+                case KING: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WKING, &piece->rect, 0, 0, 50, 50);
+                break;
+                case BPAWN: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WPAWN, &piece->rect, 0, 0, 50, 50);
+                break;
+                case KNIGHT: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WKNIGHT, &piece->rect, 0, 0, 50, 50);
+                break;
+                case BISHOP: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WBISHOP, &piece->rect, 0, 0, 50, 50);
+                break;
+                case ROOK: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WROOK, &piece->rect, 0, 0, 50, 50);
+                break;
+                case QUEEN: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WQUEEN, &piece->rect, 0, 0, 50, 50);
+                break;
+                case PAWN:
+                break;
+            }
         }
+
+        else if (player == BLACK_PLAYER) {
+            switch (name) {
+                case KING: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKING, &piece->rect, 0, 0, 50, 50);
+                break;
+                case PAWN: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BPAWN, &piece->rect, 0, 0, 50, 50);
+                break;
+                case KNIGHT: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKNIGHT, &piece->rect, 0, 0, 50, 50);
+                break;
+                case BISHOP: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BBISHOP, &piece->rect, 0, 0, 50, 50);
+                break;
+                case ROOK: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BROOK, &piece->rect, 0, 0, 50, 50);
+                break;
+                case QUEEN: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BQUEEN, &piece->rect, 0, 0, 50, 50);
+                break;
+                case BPAWN:
+                break;
+            }
+        }
+
     }
 
     glo_chess_core_tile[tile].piece = piece;
     glo_chess_core_tile[tile].piece->player = player;
     glo_chess_core_tile[tile].piece->enum_piece = name;
+
     return;
 }
 
@@ -174,10 +221,10 @@ void CORE_ReadArrayInitPiece(char array[8][8], CHESS_CORE_PLAYER player) {
 
     else if (pl_bak == BLACK_PLAYER) {
 
-        int j = -1;
+        int j = 63;
 
-        for (int n = 8; n > 0; n++) {
-            for (int i = 8; i > 0; i++) {
+        for (int n = 0; n < 8; n++) {
+            for (int i = 0; i < 8; i++) {
 
                 if (array[n][i] != ' ') {
                     switch(array[n][i]) {
@@ -243,120 +290,13 @@ void CORE_ReadArrayInitPiece(char array[8][8], CHESS_CORE_PLAYER player) {
                         break;
                     }
                 }
-                j += 1;
+                j -= 1;
             }
         }
     }
 
     return;
 }
-
-/*
-void CORE_InitPiecePlayer(CHESS_CORE_PLAYER player) {
-
-    if (player == WHITE_PLAYER) {
-
-        int place_piece[32] = { 5, 3, 4, 6, 0, 4, 3, 5,
-                                2, 2, 2, 2, 2, 2, 2, 2,
-                                1, 1, 1, 1, 1, 1, 1, 1,
-                                5, 3, 4, 6, 0, 4, 3, 5 };
-
-        for (int n = 0; n < 32; n++) {
-            glo_chess_core_piece[n].enum_piece = place_piece[n];
-
-            if (n < 16) glo_chess_core_piece[n].player = BLACK_PLAYER;
-            else glo_chess_core_piece[n].player = WHITE_PLAYER;
-            printf("CORE_InitPiecePlayer:\n  name = %d -> %d player = %d\n", place_piece[n], glo_chess_core_piece[n].enum_piece, glo_chess_core_piece[n].player);
-        }
-
-    }
-
-    else if (player == BLACK_PLAYER) {
-
-        int place_piece[32] = { 5, 3, 4, 0, 6, 4, 3, 5,
-                                2, 2, 2, 2, 2, 2, 2, 2,
-                                1, 1, 1, 1, 1, 1, 1, 1,
-                                5, 3, 4, 0, 6, 4, 3, 5 };
-
-        for (int n = 0; n < 32; n++) {
-            glo_chess_core_piece[n].enum_piece = place_piece[n];
-
-            if (n < 16) glo_chess_core_piece[n].player = WHITE_PLAYER;
-            else glo_chess_core_piece[n].player = BLACK_PLAYER;
-            printf("CORE_InitPiecePlayer:\n  name = %d -> %d player = %d\n", place_piece[n], glo_chess_core_piece[n].enum_piece, glo_chess_core_piece[n].player);
-        }
-
-    }
-
-    return;
-}
-
-void CORE_InitPiece(CHESS_CORE_PLAYER player) {
-
-    if (player == WHITE_PLAYER) {
-
-        glo_chess_core_piece[0].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BROOK, &glo_chess_core_piece[0].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[1].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKNIGHT, &glo_chess_core_piece[1].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[2].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BBISHOP, &glo_chess_core_piece[2].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[3].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BQUEEN, &glo_chess_core_piece[3].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[4].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKING, &glo_chess_core_piece[4].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[5].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BBISHOP, &glo_chess_core_piece[5].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[6].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKNIGHT, &glo_chess_core_piece[6].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[7].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BROOK, &glo_chess_core_piece[7].rect, 0, 0, 50, 50);
-
-        glo_chess_core_piece[24+0].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WROOK, &glo_chess_core_piece[24+0].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[24+1].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WKNIGHT, &glo_chess_core_piece[24+1].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[24+2].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WBISHOP, &glo_chess_core_piece[24+2].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[24+3].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WQUEEN, &glo_chess_core_piece[24+3].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[24+4].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WKING, &glo_chess_core_piece[24+4].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[24+5].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WBISHOP, &glo_chess_core_piece[24+5].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[24+6].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WKNIGHT, &glo_chess_core_piece[24+6].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[24+7].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WROOK, &glo_chess_core_piece[24+7].rect, 0, 0, 50, 50);
-
-        bool toggle = false;
-        for (int n = 0; n < 16; n++) {
-            if (n == 8) toggle = true;
-
-            if (toggle == true) glo_chess_core_piece[8+n].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WPAWN, &glo_chess_core_piece[8+n].rect, 0, 0, 50, 50);
-            else glo_chess_core_piece[8+n].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BPAWN, &glo_chess_core_piece[8+n].rect, 0, 0, 50, 50);
-
-        }
-
-    }
-
-    else if (player == BLACK_PLAYER) {
-
-        glo_chess_core_piece[0].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WROOK, &glo_chess_core_piece[0].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[1].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WKNIGHT, &glo_chess_core_piece[1].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[2].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WBISHOP, &glo_chess_core_piece[2].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[3].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WKING, &glo_chess_core_piece[3].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[4].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WQUEEN, &glo_chess_core_piece[4].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[5].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WBISHOP, &glo_chess_core_piece[5].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[6].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WKNIGHT, &glo_chess_core_piece[6].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[7].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WROOK, &glo_chess_core_piece[7].rect, 0, 0, 50, 50);
-
-        glo_chess_core_piece[24+0].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BROOK, &glo_chess_core_piece[24+0].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[24+1].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKNIGHT, &glo_chess_core_piece[24+1].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[24+2].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BBISHOP, &glo_chess_core_piece[24+2].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[24+3].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKING, &glo_chess_core_piece[24+3].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[24+4].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BQUEEN, &glo_chess_core_piece[24+4].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[24+5].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BBISHOP, &glo_chess_core_piece[24+5].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[24+6].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKNIGHT, &glo_chess_core_piece[24+6].rect, 0, 0, 50, 50);
-        glo_chess_core_piece[24+7].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BROOK, &glo_chess_core_piece[24+7].rect, 0, 0, 50, 50);
-
-        bool toggle = false;
-        for (int n = 0; n < 16; n++) {
-            if (n == 8) toggle = true;
-
-            if (toggle == true) glo_chess_core_piece[8+n].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BPAWN, &glo_chess_core_piece[8+n].rect, 0, 0, 50, 50);
-            else glo_chess_core_piece[8+n].texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WPAWN, &glo_chess_core_piece[8+n].rect, 0, 0, 50, 50);
-
-        }
-    }
-
-    return;
-}
-*/
 
 void CORE_ChessCreateBoard(void) {
 
@@ -408,7 +348,7 @@ void CORE_ChessInitTag(CHESS_CORE_PLAYER player) {
             glo_chess_core_tile[n].tag.row = row;
 
             colomn_pos++;
-            if (colomn_pos > 7) { colomn_pos = 0; row--; }
+            if (colomn_pos > 7) { colomn_pos = 0; if (row != 1) row--; }
 
         }
 
@@ -425,7 +365,7 @@ void CORE_ChessInitTag(CHESS_CORE_PLAYER player) {
             glo_chess_core_tile[n].tag.row = row;
 
             colomn_pos--;
-            if (colomn_pos < 0) { colomn_pos = 7; row++; }
+            if (colomn_pos < 0) { colomn_pos = 7; if (row != 8) row++; }
 
         }
 
@@ -455,6 +395,7 @@ void CORE_GlobalDestroyPiece(CHESS_CORE_PIECE *piece) {
     if (piece != NULL) {
         printf("CORE_GlobalDestroyPiece:\n  destroy piece = %p\n", piece);
         SDL_DestroyTexture(piece->texture);
+        piece->enum_piece = NONE;
     }
 
     return;
@@ -477,6 +418,8 @@ void CORE_GlobalClearChessTile(void) {
 
 void CORE_Testing(CHESS_CORE_PLAYER player) {
 
+    glo_chess_core_player = player;
+
     CORE_ChessCreateBoard();
     CORE_ChessInitTag(player);
 
@@ -485,7 +428,6 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     CORE_ReadArrayInitPiece(chess_initpiece, player);
 
     SDL_Event event;
-    glo_chess_core_player = player;
     player = WHITE_PLAYER;
 
     while(1) {

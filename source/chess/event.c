@@ -14,16 +14,25 @@ void EVENT_BlankLayer(void) {
 }
 
 void EVENT_BlankPieceLayer(void) {
-    for (int n = 0; n < 32; n++) {
-        for (int i = 0; i < 64; i++) {
-            glo_chess_core_piece[n].range[i] = false;
+    for (int n = 0; n < 64; n++) {
+        if (glo_chess_core_tile[n].piece != NULL) for (int i = 0; i < 64; i++) {
+            glo_chess_core_tile[n].piece->range[i] = false;
         }
     }
 
     return;
 }
 
-void EVENT_KingCheckState(CHESS_CORE_PLAYER player) {
+void EVENT_CheckDrawState(void) {
+
+    for (int n = 0; n < 32; n++) {
+        if (glo_chess_core_piece[n].texture != 0 && glo_chess_core_piece[n].enum_piece == NONE) { printf("dead mouse = %d\n\n", n); }
+    }
+
+    return;
+}
+
+void EVENT_CheckKingState(CHESS_CORE_PLAYER player) {
 
     for (int n = 0; n < 64; n++) {
 
@@ -57,7 +66,8 @@ void EVENT_CheckPieceLayer(CHESS_CORE_PLAYER player) {
         }
 
         pl_bak = player;
-        EVENT_KingCheckState(player);
+        EVENT_CheckDrawState();
+        EVENT_CheckKingState(player);
     }
 
     return;
