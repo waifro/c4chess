@@ -22,7 +22,7 @@ Anyway, if you like my game, or the idea behind, and you want to contribute, her
 - Server management
 - Designer
 - Mechanics management
-- A team :)
+- ~~A team~~ :)
 
-if you want to know more information, or you want to contact me, feel free to send me a message at Discord to @richardwaifro, i will try to reply as soon as possible
+if you want to know more information, or you want to contact me, feel free to send me a message at Discord at Waifro#4890, i will try to reply as soon as possible
 Thanks for listening 👋
