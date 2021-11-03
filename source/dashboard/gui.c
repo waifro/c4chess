@@ -11,7 +11,7 @@
 SDL_Texture *GUI_PopupWindow_Title(char title[256], SDL_Rect *rect, SDL_Rect window_pos) {
     if (strlen(title) > 255) return (NULL);
 
-    SDL_Texture *texture_title = {0};
+    SDL_Texture *texture_title = NULL;
 
     texture_title = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_BLACK, 24, rect, window_pos.x, window_pos.y, title);
 
