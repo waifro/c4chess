@@ -1,1 +1,0 @@
-Couldn't open resources/bpawn.pngSDL_CreateTextureFromSurface() passed NULL surface
