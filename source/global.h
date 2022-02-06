@@ -8,6 +8,8 @@
 extern SDL_Window *glo_window;
 extern SDL_Renderer *glo_render;
 
+extern char glo_current_dir[256];
+
 extern int glo_screen_w;
 extern int glo_screen_h;
 

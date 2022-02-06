@@ -1,5 +1,6 @@
 // standard libraries
 #include <stdio.h>
+#include <unistd.h>
 
 #define SDL_MAIN_HANDLED
 
@@ -13,6 +14,9 @@
 
 int main (int argc, char *argv[]) {
     (void)argc; (void)argv;
+
+    getcwd(glo_current_dir, 255);
+    // printf("\ncwd: %s\n", glo_current_dir);
 
     glo_render = pp4m_Init(glo_window, "c4chess alpha-rewritten-testing", glo_screen_w, glo_screen_h, WINDOW);
     pp4m_TTF_Init();

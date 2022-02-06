@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include <SDL2/SDL.h>
@@ -27,7 +28,7 @@ CHESS_CORE_PIECE glo_chess_core_piece[32];
 #define TEX_WQUEEN "resources/wqueen.png"
 
 #define TEX_BKING "resources/bking.png"
-#define TEX_BPAWN "resources/bpawn.png"
+#define TEX_BPAWN "/resources/bpawn.png"
 #define TEX_BKNIGHT "resources/bknight.png"
 #define TEX_BBISHOP "resources/bbishop.png"
 #define TEX_BROOK "resources/brook.png"
@@ -39,12 +40,17 @@ char chess_initpiece[8][8] = {
  "   K    ",
  "        ",
  "        ",
- "   k    ",
- "      p ",
+ "    pp  ",
+ " k      ",
  "        "
 };
 
-void CORE_InitPiece(CHESS_CORE_PIECE *piece, int tile, CHESS_CORE_ENUM_PIECE name, CHESS_CORE_PLAYER player) {
+int CORE_InitPiece(CHESS_CORE_PIECE *piece, int tile, CHESS_CORE_ENUM_PIECE name, CHESS_CORE_PLAYER player) {
+
+    char pathfile[256];
+    strcpy(pathfile, glo_current_dir);
+
+    printf("player = %p\n", &player);
 
     if (glo_chess_core_player == WHITE_PLAYER) {
 
@@ -63,11 +69,8 @@ void CORE_InitPiece(CHESS_CORE_PIECE *piece, int tile, CHESS_CORE_ENUM_PIECE nam
                 case QUEEN: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WQUEEN, &piece->rect, 0, 0, 50, 50);
                 break;
                 case BPAWN:
-                printf("hello\n");
                 break;
-
-                default:
-                printf("hello\n");
+                case NONE:
                 break;
             }
         }
@@ -76,7 +79,9 @@ void CORE_InitPiece(CHESS_CORE_PIECE *piece, int tile, CHESS_CORE_ENUM_PIECE nam
             switch (name) {
                 case KING: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKING, &piece->rect, 0, 0, 50, 50);
                 break;
-                case BPAWN: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BPAWN, &piece->rect, 0, 0, 50, 50);
+                case BPAWN: 
+                    strcat(pathfile, TEX_BPAWN);
+                    piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, pathfile, &piece->rect, 0, 0, 50, 50);
                 break;
                 case KNIGHT: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKNIGHT, &piece->rect, 0, 0, 50, 50);
                 break;
@@ -141,14 +146,22 @@ void CORE_InitPiece(CHESS_CORE_PIECE *piece, int tile, CHESS_CORE_ENUM_PIECE nam
 
     }
 
+    if (piece->texture != NULL) printf("piece->texture = %p\n", &piece->texture);
+    else {
+        printf("piece->texture not initialized\n");
+        return (EXIT_FAILURE);
+    }
+
     glo_chess_core_tile[tile].piece = piece;
     glo_chess_core_tile[tile].piece->player = player;
     glo_chess_core_tile[tile].piece->enum_piece = name;
 
-    return;
+    return (EXIT_SUCCESS);
 }
 
-void CORE_ReadArrayInitPiece(char array[8][8], CHESS_CORE_PLAYER player) {
+int CORE_ReadArrayInitPiece(char array[8][8], CHESS_CORE_PLAYER player) {
+
+    int result = -1;
 
     CHESS_CORE_PLAYER pl_bak = player;
     int count_core_piece;
@@ -165,65 +178,68 @@ void CORE_ReadArrayInitPiece(char array[8][8], CHESS_CORE_PLAYER player) {
                     switch(array[n][i]) {
                         case 'K':
                         player = BLACK_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, KING, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, KING, player);
                         count_core_piece++;
                         break;
                         case 'k':
                         player = WHITE_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, KING, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, KING, player);
                         count_core_piece++;
                         break;
                         case 'P':
                         player = BLACK_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, BPAWN, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, BPAWN, player);
                         count_core_piece++;
                         break;
                         case 'p':
                         player = WHITE_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, PAWN, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, PAWN, player);
                         count_core_piece++;
                         break;
                         case 'N':
                         player = BLACK_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, KNIGHT, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, KNIGHT, player);
                         count_core_piece++;
                         break;
                         case 'n':
                         player = WHITE_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, KNIGHT, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, KNIGHT, player);
                         count_core_piece++;
                         break;
                         case 'B':
                         player = BLACK_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, BISHOP, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, BISHOP, player);
                         count_core_piece++;
                         break;
                         case 'b':
                         player = WHITE_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, BISHOP, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, BISHOP, player);
                         count_core_piece++;
                         break;
                         case 'R':
                         player = BLACK_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, ROOK, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, ROOK, player);
                         count_core_piece++;
                         break;
                         case 'r':
                         player = WHITE_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, ROOK, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, ROOK, player);
                         count_core_piece++;
                         break;
                         case 'Q':
                         player = BLACK_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, QUEEN, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, QUEEN, player);
                         count_core_piece++;
                         break;
                         case 'q':
                         player = WHITE_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, QUEEN, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, QUEEN, player);
                         count_core_piece++;
                         break;
                     }
+
+                    printf("fuck white %p\n", &player);
+                    if (result != EXIT_SUCCESS) return (EXIT_FAILURE);
                 }
                 j += 1;
             }
@@ -241,72 +257,75 @@ void CORE_ReadArrayInitPiece(char array[8][8], CHESS_CORE_PLAYER player) {
                     switch(array[n][i]) {
                         case 'K':
                         player = BLACK_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, KING, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, KING, player);
                         count_core_piece++;
                         break;
                         case 'k':
                         player = WHITE_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, KING, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, KING, player);
                         count_core_piece++;
                         break;
                         case 'P':
                         player = BLACK_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, PAWN, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, PAWN, player);
                         count_core_piece++;
                         break;
                         case 'p':
                         player = WHITE_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, BPAWN, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, BPAWN, player);
                         count_core_piece++;
                         break;
                         case 'N':
                         player = BLACK_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, KNIGHT, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, KNIGHT, player);
                         count_core_piece++;
                         break;
                         case 'n':
                         player = WHITE_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, KNIGHT, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, KNIGHT, player);
                         count_core_piece++;
                         break;
                         case 'B':
                         player = BLACK_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, BISHOP, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, BISHOP, player);
                         count_core_piece++;
                         break;
                         case 'b':
                         player = WHITE_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, BISHOP, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, BISHOP, player);
                         count_core_piece++;
                         break;
                         case 'R':
                         player = BLACK_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, ROOK, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, ROOK, player);
                         count_core_piece++;
                         break;
                         case 'r':
                         player = WHITE_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, ROOK, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, ROOK, player);
                         count_core_piece++;
                         break;
                         case 'Q':
                         player = BLACK_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, QUEEN, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, QUEEN, player);
                         count_core_piece++;
                         break;
                         case 'q':
                         player = WHITE_PLAYER;
-                        CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, QUEEN, player);
+                        result = CORE_InitPiece(&glo_chess_core_piece[count_core_piece], j, QUEEN, player);
                         count_core_piece++;
                         break;
                     }
+
+                    printf("fuck black %p\n", &player);
+                    if (result != EXIT_SUCCESS) return (EXIT_FAILURE);
                 }
                 j -= 1;
             }
         }
     }
 
-    return;
+    return (EXIT_SUCCESS);
 }
 
 void CORE_ChessCreateBoard(void) {
@@ -427,7 +446,27 @@ void CORE_GlobalClearChessTile(void) {
     return;
 }
 
-void CORE_Testing(CHESS_CORE_PLAYER player) {
+void CORE_InitGlobalChessPiece(void) {
+
+    for (int n = 0; n < 32; n++) {
+
+        glo_chess_core_piece[n].player =        -1;
+        glo_chess_core_piece[n].enum_piece =    NONE;
+        glo_chess_core_piece[n].texture =       NULL;
+
+        glo_chess_core_piece[n].rect.x =        0;
+        glo_chess_core_piece[n].rect.y =        0;
+        glo_chess_core_piece[n].rect.w =        0;
+        glo_chess_core_piece[n].rect.h =        0;
+
+        glo_chess_core_piece[n].lock =          -1;
+
+    }
+
+    return;
+}
+
+void CORE_Testing(CHESS_CORE_PLAYER player) {    
 
     glo_chess_core_player = player;
 
@@ -436,7 +475,10 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
     DOT_InitGlobalDot();
 
-    CORE_ReadArrayInitPiece(chess_initpiece, player);
+    // set glo_chess_core_piece to initial state
+    CORE_InitGlobalChessPiece();
+
+    if (CORE_ReadArrayInitPiece(chess_initpiece, player) != EXIT_SUCCESS) return;
 
     SDL_Event event;
     player = WHITE_PLAYER;
