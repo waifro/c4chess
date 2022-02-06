@@ -20,7 +20,7 @@ extern SDL_Color PP4M_YELLOW;
 extern SDL_Color PP4M_PINK;
 extern SDL_Color PP4M_CYAN;
 
-#define PP4M_DEBUG_VERBOSE 1
+#define PP4M_DEBUG_VERBOSE 0
 
 typedef struct {
     char text[1024];

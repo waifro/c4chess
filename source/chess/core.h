@@ -54,7 +54,7 @@ extern CHESS_CORE_PIECE glo_chess_core_piece[32];
 
 /* prototypes */
 int CORE_InitPiece(CHESS_CORE_PIECE *piece, int tile, CHESS_CORE_ENUM_PIECE name, CHESS_CORE_PLAYER player);
-int CORE_ReadArrayInitPiece(char array[8][8], CHESS_CORE_PLAYER player);
+int CORE_ReadArrayInitPiece(char *array[], CHESS_CORE_PLAYER player);
 
 void CORE_DestroyPiece(CHESS_CORE_PIECE *piece);
 void CORE_ChessCreateBoard(void);

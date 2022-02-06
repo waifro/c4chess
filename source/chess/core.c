@@ -28,13 +28,13 @@ CHESS_CORE_PIECE glo_chess_core_piece[32];
 #define TEX_WQUEEN "resources/wqueen.png"
 
 #define TEX_BKING "resources/bking.png"
-#define TEX_BPAWN "/resources/bpawn.png"
+#define TEX_BPAWN "resources/bpawn.png"
 #define TEX_BKNIGHT "resources/bknight.png"
 #define TEX_BBISHOP "resources/bbishop.png"
 #define TEX_BROOK "resources/brook.png"
 #define TEX_BQUEEN "resources/bqueen.png"
 
-char chess_initpiece[8][8] = {
+char *chess_initpiece[8] = {
  "        ",
  "      P ",
  "   K    ",
@@ -50,7 +50,7 @@ int CORE_InitPiece(CHESS_CORE_PIECE *piece, int tile, CHESS_CORE_ENUM_PIECE name
     char pathfile[256];
     strcpy(pathfile, glo_current_dir);
 
-    printf("player = %p\n", &player);
+    printf("CORE_InitPiece:\n  player = %p\n", &player);
 
     if (glo_chess_core_player == WHITE_PLAYER) {
 
@@ -81,7 +81,7 @@ int CORE_InitPiece(CHESS_CORE_PIECE *piece, int tile, CHESS_CORE_ENUM_PIECE name
                 break;
                 case BPAWN: 
                     strcat(pathfile, TEX_BPAWN);
-                    piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, pathfile, &piece->rect, 0, 0, 50, 50);
+                    piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BPAWN, &piece->rect, 0, 0, 50, 50);
                 break;
                 case KNIGHT: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKNIGHT, &piece->rect, 0, 0, 50, 50);
                 break;
@@ -146,9 +146,9 @@ int CORE_InitPiece(CHESS_CORE_PIECE *piece, int tile, CHESS_CORE_ENUM_PIECE name
 
     }
 
-    if (piece->texture != NULL) printf("piece->texture = %p\n", &piece->texture);
+    if (piece->texture != NULL) printf("CORE_InitPiece:\n  piece->texture = %p\n", &piece->texture);
     else {
-        printf("piece->texture not initialized\n");
+        printf("CORE_InitPiece:\n  piece->texture not initialized\n");
         return (EXIT_FAILURE);
     }
 
@@ -159,7 +159,7 @@ int CORE_InitPiece(CHESS_CORE_PIECE *piece, int tile, CHESS_CORE_ENUM_PIECE name
     return (EXIT_SUCCESS);
 }
 
-int CORE_ReadArrayInitPiece(char array[8][8], CHESS_CORE_PLAYER player) {
+int CORE_ReadArrayInitPiece(char *array[], CHESS_CORE_PLAYER player) {
 
     int result = -1;
 
@@ -238,7 +238,6 @@ int CORE_ReadArrayInitPiece(char array[8][8], CHESS_CORE_PLAYER player) {
                         break;
                     }
 
-                    printf("fuck white %p\n", &player);
                     if (result != EXIT_SUCCESS) return (EXIT_FAILURE);
                 }
                 j += 1;
@@ -317,7 +316,6 @@ int CORE_ReadArrayInitPiece(char array[8][8], CHESS_CORE_PLAYER player) {
                         break;
                     }
 
-                    printf("fuck black %p\n", &player);
                     if (result != EXIT_SUCCESS) return (EXIT_FAILURE);
                 }
                 j -= 1;
@@ -403,22 +401,6 @@ void CORE_ChessInitTag(CHESS_CORE_PLAYER player) {
 
     return;
 }
-
-/*
-void CORE_ChessInitPlacePiece(void) {
-
-    int i = 0;
-    for (int n = 0; n < 32; n++) {
-
-        if (i == 16) i += 32;
-        glo_chess_core_tile[i].piece = &glo_chess_core_piece[n];
-        i++;
-
-    }
-
-    return;
-}
-*/
 
 void CORE_GlobalDestroyPiece(CHESS_CORE_PIECE *piece) {
 

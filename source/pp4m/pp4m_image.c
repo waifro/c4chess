@@ -43,12 +43,12 @@ SDL_Texture *pp4m_IMG_ImageToTexture(SDL_Renderer *renderer, SDL_Texture *textur
     
     if (PP4M_DEBUG_VERBOSE > 1)
     {
-        pp4m_IO_Feedback("feedback.txt", SDL_GetError());
         printf("pp4m_IMG_ImageToTexture(): surface = %p\n", surface);
     }
 
     if (surface == NULL)
     {
+        printf("SDL_GetError(): %s\n", SDL_GetError());
         pp4m_IO_Feedback("feedback.txt", SDL_GetError());
         return NULL;
     }
@@ -80,18 +80,11 @@ SDL_Texture *pp4m_IMG_ImageToTexture(SDL_Renderer *renderer, SDL_Texture *textur
 
     if (PP4M_DEBUG_VERBOSE > 0)
     {
-        printf("pp4m_IMG_ImageToTexture(): query texture attributes ...\n");
+        printf("pp4m_IMG_ImageToTexture(): query attributes ...\n");
+        //printf("rect: %p, %p, %p, %p\n", &rect->x, &rect->y, &rect->w, &rect->h);
     }
 
-
-    // testing new approach
-    if (x != 0) rect->x = (int)x;
-    if (y != 0) rect->y = (int)y;
-    if (w != 0) rect->w = (int)w;
-    if (h != 0) rect->h = (int)h;
-    
-    /*
-    if (x > 0 || y > 0 || w > 0 || h > 0) {
+    if (x != 0 || y != 0 || w != 0 || h != 0) {
 
         rect->x = (int)x;
         rect->y = (int)y;
@@ -102,12 +95,6 @@ SDL_Texture *pp4m_IMG_ImageToTexture(SDL_Renderer *renderer, SDL_Texture *textur
             rect->h = (int)h;
         }
 
-    }
-    */
-
-    if (PP4M_DEBUG_VERBOSE > 0)
-    {
-        printf("pp4m_IMG_ImageToTexture(): query texture = OK\n");
     }
 
     if (PP4M_DEBUG_VERBOSE > 1)
