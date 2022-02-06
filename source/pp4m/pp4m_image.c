@@ -2,6 +2,8 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+
+// local headers
 #include "pp4m_io.h"
 #include "pp4m_image.h"
 

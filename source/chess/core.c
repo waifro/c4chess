@@ -63,8 +63,11 @@ void CORE_InitPiece(CHESS_CORE_PIECE *piece, int tile, CHESS_CORE_ENUM_PIECE nam
                 case QUEEN: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WQUEEN, &piece->rect, 0, 0, 50, 50);
                 break;
                 case BPAWN:
+                printf("hello\n");
                 break;
-                case NONE:
+
+                default:
+                printf("hello\n");
                 break;
             }
         }
