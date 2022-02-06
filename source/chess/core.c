@@ -47,9 +47,6 @@ char *chess_initpiece[8] = {
 
 int CORE_InitPiece(CHESS_CORE_PIECE *piece, int tile, CHESS_CORE_ENUM_PIECE name, CHESS_CORE_PLAYER player) {
 
-    char pathfile[256];
-    strcpy(pathfile, glo_current_dir);
-
     printf("CORE_InitPiece:\n  player = %p\n", &player);
 
     if (glo_chess_core_player == WHITE_PLAYER) {
@@ -80,8 +77,7 @@ int CORE_InitPiece(CHESS_CORE_PIECE *piece, int tile, CHESS_CORE_ENUM_PIECE name
                 case KING: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKING, &piece->rect, 0, 0, 50, 50);
                 break;
                 case BPAWN: 
-                    strcat(pathfile, TEX_BPAWN);
-                    piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BPAWN, &piece->rect, 0, 0, 50, 50);
+                piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BPAWN, &piece->rect, 0, 0, 50, 50);
                 break;
                 case KNIGHT: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKNIGHT, &piece->rect, 0, 0, 50, 50);
                 break;

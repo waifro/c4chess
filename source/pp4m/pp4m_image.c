@@ -81,7 +81,6 @@ SDL_Texture *pp4m_IMG_ImageToTexture(SDL_Renderer *renderer, SDL_Texture *textur
     if (PP4M_DEBUG_VERBOSE > 0)
     {
         printf("pp4m_IMG_ImageToTexture(): query attributes ...\n");
-        //printf("rect: %p, %p, %p, %p\n", &rect->x, &rect->y, &rect->w, &rect->h);
     }
 
     if (x != 0 || y != 0 || w != 0 || h != 0) {
