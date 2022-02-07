@@ -160,7 +160,7 @@ int CORE_ReadArrayInitPiece(char *array[], CHESS_CORE_PLAYER player) {
     int result = -1;
 
     CHESS_CORE_PLAYER pl_bak = player;
-    int count_core_piece;
+    volatile int count_core_piece;
 
     if (pl_bak == WHITE_PLAYER) {
 
