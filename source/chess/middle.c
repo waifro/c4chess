@@ -55,7 +55,7 @@ int MIDDLE_ReturnRowTile(int tile) {
 
 int MIDDLE_ReturnColTile(int tile) {
 
-    int col_pos;
+    int col_pos = 0;
     char alpha[] = "abcdefgh";
 
     //result = glo_chess_core_tile[tile].tag.col;
