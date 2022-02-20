@@ -1,4 +1,5 @@
 /* Private Project Four Me */
+#include <stdio.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -36,6 +37,7 @@ SDL_Texture *pp4m_IMG_ImageToTexture(SDL_Renderer *renderer, SDL_Texture *textur
     if (surface == NULL)
     {
         pp4m_IO_Feedback("feedback.txt", SDL_GetError());
+        printf("pp4m_IMG_ImageToTexture:\n  error: %s\n", SDL_GetError());
         return NULL;
     }
 
@@ -44,6 +46,7 @@ SDL_Texture *pp4m_IMG_ImageToTexture(SDL_Renderer *renderer, SDL_Texture *textur
     if (texture == NULL)
     {
         pp4m_IO_Feedback("feedback.txt", SDL_GetError());
+        printf("pp4m_IMG_ImageToTexture:\n  error: %s\n", SDL_GetError());
         return NULL;
     }
 
@@ -54,7 +57,7 @@ SDL_Texture *pp4m_IMG_ImageToTexture(SDL_Renderer *renderer, SDL_Texture *textur
         rect->x = (int)x;
         rect->y = (int)y;
 
-        if (w == 0 || h == 0) SDL_QueryTexture(texture, NULL, NULL, &rect->w, &rect->h);
+        if (w == 0 && h == 0) SDL_QueryTexture(texture, NULL, NULL, &rect->w, &rect->h);
         else {
             rect->w = (int)w;
             rect->h = (int)h;

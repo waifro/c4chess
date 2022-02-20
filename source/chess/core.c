@@ -76,8 +76,7 @@ int CORE_InitPiece(CHESS_CORE_PIECE *piece, int tile, CHESS_CORE_ENUM_PIECE name
             switch (name) {
                 case KING: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKING, &piece->rect, 0, 0, 50, 50);
                 break;
-                case BPAWN: 
-                piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BPAWN, &piece->rect, 0, 0, 50, 50);
+                case BPAWN: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BPAWN, &piece->rect, 0, 0, 50, 50);
                 break;
                 case KNIGHT: piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKNIGHT, &piece->rect, 0, 0, 50, 50);
                 break;
@@ -142,11 +141,13 @@ int CORE_InitPiece(CHESS_CORE_PIECE *piece, int tile, CHESS_CORE_ENUM_PIECE name
 
     }
 
-    if (piece->texture != NULL) printf("CORE_InitPiece:\n  piece->texture = %p\n", &piece->texture);
-    else {
+    if (piece->texture == NULL)
+    {  
         printf("CORE_InitPiece:\n  piece->texture not initialized\n");
         return (EXIT_FAILURE);
     }
+
+    printf("CORE_InitPiece:\n  piece->texture = %p\n", &piece->texture);
 
     glo_chess_core_tile[tile].piece = piece;
     glo_chess_core_tile[tile].piece->player = player;
@@ -428,16 +429,16 @@ void CORE_InitGlobalChessPiece(void) {
 
     for (int n = 0; n < 32; n++) {
 
-        glo_chess_core_piece[n].player =        -1;
-        glo_chess_core_piece[n].enum_piece =    NONE;
-        glo_chess_core_piece[n].texture =       NULL;
+        glo_chess_core_piece[n].player = -1;
+        glo_chess_core_piece[n].enum_piece = NONE;
+        glo_chess_core_piece[n].texture = NULL;
 
-        glo_chess_core_piece[n].rect.x =        0;
-        glo_chess_core_piece[n].rect.y =        0;
-        glo_chess_core_piece[n].rect.w =        0;
-        glo_chess_core_piece[n].rect.h =        0;
+        glo_chess_core_piece[n].rect.x = 0;
+        glo_chess_core_piece[n].rect.y = 0;
+        glo_chess_core_piece[n].rect.w = 0;
+        glo_chess_core_piece[n].rect.h = 0;
 
-        glo_chess_core_piece[n].lock =          -1;
+        glo_chess_core_piece[n].lock = -1;
 
     }
 
@@ -456,7 +457,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     // set glo_chess_core_piece to initial state
     CORE_InitGlobalChessPiece();
 
-    if (CORE_ReadArrayInitPiece(chess_initpiece, player) != EXIT_SUCCESS) return;
+    // if (CORE_ReadArrayInitPiece(chess_initpiece, player) != EXIT_SUCCESS) return;
 
     SDL_Event event;
     player = WHITE_PLAYER;
@@ -466,6 +467,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
         EVENT_CheckPieceLayer(player);
 
+        // TODO: fix bug where touching first tile, triggers this function
         if (MIDDLE_UpdateChangeState(&event, player) == 0) { player ^= 1; printf("CORE_Testing:\n  player_turn = %d\n", player); }
 
         SDL_RenderClear(glo_render);
@@ -477,7 +479,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
         }
         SDL_RenderPresent(glo_render);
 
-        if (event.type == SDL_QUIT) { break; }
+        if (event.type == SDL_QUIT) break;
     }
 
     return;
