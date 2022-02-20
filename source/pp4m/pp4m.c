@@ -40,10 +40,14 @@ SDL_Renderer *pp4m_Init(SDL_Window *window, char *title, int width, int height, 
 }
 
 
-void pp4m_Quit(void) {
+void pp4m_Quit(SDL_Window *window, SDL_Renderer *renderer) {
 
     pp4m_TTF_Quit();
     pp4m_IMG_Quit();
+
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+
     SDL_Quit();
 
     return;
@@ -100,3 +104,5 @@ int pp4m_Framerate(void) {
 
     return result;
 }
+
+/* 2022 @waifro */

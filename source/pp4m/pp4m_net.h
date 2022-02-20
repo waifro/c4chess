@@ -30,4 +30,4 @@ void pp4m_NET_ServerClose(void);
 
 #endif // _PP4M_NET_H
 
-/* 2021 @richardwaifro */
+/* 2022 @waifro */

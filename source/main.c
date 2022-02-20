@@ -24,7 +24,7 @@ int main (int argc, char *argv[]) {
     //GUI_Testing();
 
     pp4m_TTF_Quit();
-    pp4m_Quit();
+    pp4m_Quit(glo_window, glo_render);
 
     return 0;
 }

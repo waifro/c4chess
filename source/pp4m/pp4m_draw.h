@@ -26,4 +26,4 @@ SDL_Texture *pp4m_DRAW_TextureInitColor(SDL_Renderer *renderer, SDL_Color color,
 
 #endif // _PP4M_DRAW_H
 
-/* 2021 @richardwaifro */
+/* 2022 @waifro */
