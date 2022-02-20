@@ -37,7 +37,20 @@ CHESS_CORE_PIECE glo_chess_core_piece[32];
 // TODO: init chess pieces using Forsyth-Edwards Notation
 // > https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation
 
+/*
 
+Forsyth-Edwards Notation (FEN): rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2
+
+board: [rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R]
+player: [b]
+castling: [KQkq]
+passant: [-]
+moveWhite: [1]
+moveBlack: [2]
+
+( ͡° ͜ʖ ͡°)
+
+*/
 void CORE_ChessCreateBoard(void) {
 
     int size_tile = 50;
