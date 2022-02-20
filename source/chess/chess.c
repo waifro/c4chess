@@ -264,6 +264,9 @@ void CHESS_PiecePatternBPawn(int tile, CHESS_CORE_PLAYER player, bool check) {
 
 void CHESS_PiecePatternKnight(int tile, CHESS_CORE_PLAYER player, bool check) {
 
+    // temporary fix to warning
+    (void)player; (void)check;
+
     char alpha[] = "abcdefgh";
     CHESS_CORE_TILE_TAG tag;
 
