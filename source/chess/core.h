@@ -6,20 +6,17 @@
 #include <SDL2/SDL.h>
 
 /* structs & enums */
-typedef enum 
-{
+typedef enum {
     WHITE_PLAYER = 0,
     BLACK_PLAYER = 1
 } CHESS_CORE_PLAYER;
 
-typedef struct
-{
+typedef struct {
     char col;
     int row;
 } CHESS_CORE_TILE_TAG;
 
-typedef enum
-{
+typedef enum {
     NONE = 0,
     KING = 1,
     PAWN = 2,
@@ -30,8 +27,7 @@ typedef enum
     QUEEN = 7
 } CHESS_CORE_ENUM_PIECE;
 
-typedef struct
-{
+typedef struct {
     CHESS_CORE_PLAYER player;   // which piece is of player
     int enum_piece;             // piece identificitaion
     SDL_Texture *texture;       // texture piece
@@ -40,8 +36,7 @@ typedef struct
     bool range[64];             // layer of the range attack each piece have
 } CHESS_CORE_PIECE;
 
-typedef struct
-{
+typedef struct {
     CHESS_CORE_PIECE *piece;
     CHESS_CORE_TILE_TAG tag;
     SDL_Texture *texture;

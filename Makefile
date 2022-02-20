@@ -1,7 +1,10 @@
 # Makefile
 
 # uncomment this line if your on windows
-# LIBMMAN := "-L. -lmman"
+LIBMMAN := "-L. -lmman" -lws2_32
+
+# uncomment this line if you want to sanitize
+# SANITIZE := -fsanitize=address -static-libasan -Og -ggdb3
 
 SOURCE_MAIN := 			source/main.c source/global.c
 SOURCE_ANIMATION := 	source/animation/animation.c
@@ -20,7 +23,7 @@ DEP_PP4M := source/pp4m/pp4m.c source/pp4m/pp4m_io.c source/pp4m/pp4m_draw.c sou
 LIBS := -lSDL2 -lSDL2_ttf -lSDL2_image
 
 all : $(SOURCE_PROJECT) $(DEP_PP4M)
-	gcc $(SOURCE_PROJECT) $(DEP_PP4M) $(sdl2-config --cflags) $(LIBMMAN) -Wall -Wextra -fsanitize=address -static-libasan -Og -ggdb3 $(LIBS) -o $(OUTPUT)
+	gcc $(SOURCE_PROJECT) $(DEP_PP4M) $(sdl2-config --cflags) $(LIBMMAN) -Wall -Wextra $(SANITIZE) $(LIBS) -o $(OUTPUT)
 
 clean :
 	rm *.o $(OUTPUT)

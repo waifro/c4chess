@@ -4,7 +4,8 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 
-typedef struct {
+typedef struct
+{
     SDL_Texture *texture;
     SDL_Rect rect;
     bool state;

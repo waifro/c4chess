@@ -261,3 +261,37 @@ void CHESS_PiecePatternBPawn(int tile, CHESS_CORE_PLAYER player, bool check) {
 
     return;
 }
+
+void CHESS_PiecePatternKnight(int tile, CHESS_CORE_PLAYER player, bool check) {
+
+    char alpha[] = "abcdefgh";
+    CHESS_CORE_TILE_TAG tag;
+
+    int col_pos = MIDDLE_ReturnColTile(tile) - 2;
+    tag.row = MIDDLE_ReturnRowTile(tile);
+    tag.col = alpha[col_pos];
+
+    int result;
+    for (int n = 0; n < 5; n++) {
+
+        result = MIDDLE_TagToTile(tag);
+        if (result == -1) {continue;}
+
+        if (n == 2) { continue; }
+
+        for (int i = 0; i < 2; i++) {
+
+            if (n == 1 || n == 3) {
+
+                col_pos += 1;
+                tag.col = alpha[col_pos];
+
+                result = MIDDLE_TagToTile(tag);
+                if (result == -1) {continue;}
+            }
+
+        }
+    }
+
+    return;
+}
