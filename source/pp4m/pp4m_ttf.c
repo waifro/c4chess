@@ -41,7 +41,7 @@ void pp4m_TTF_MEM_TextureFont(SDL_Renderer *renderer, PP4M_SDL *st, const char *
 	return;
 }
 
-SDL_Texture *pp4m_TTF_TextureFont(SDL_Renderer *renderer, char filename[256], SDL_Color color, int point, SDL_Rect *dst, float x, float y, char text[1024]) {
+SDL_Texture *pp4m_TTF_TextureFont(SDL_Renderer *renderer, char *filename, SDL_Color color, int point, SDL_Rect *dst, float x, float y, char text[1024]) {
 
     SDL_Texture *texture = NULL;
     TTF_Font *font;
