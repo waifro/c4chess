@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
@@ -37,20 +38,127 @@ CHESS_CORE_PIECE glo_chess_core_piece[32];
 // TODO: init chess pieces using Forsyth-Edwards Notation
 // > https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation
 
+// legend for piece FEN:
+// uppercase is White player
+// lowercase is Black player
+
 /*
 
-Forsyth-Edwards Notation (FEN): rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2
+Forsyth-Edwards Notation (FEN): "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
 
-board: [rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R]
-player: [b]
-castling: [KQkq]
-passant: [-]
-moveWhite: [1]
-moveBlack: [2]
+board:      [rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R]
+player:     [b]
+castling:   [KQkq]
+passant:    [-]
+moveWhite:  [1]
+moveBlack:  [2]
 
 ( ͡° ͜ʖ ͡°)
 
 */
+
+int CORE_FenNotation_InitPieceCase(CHESS_CORE_PLAYER player, CHESS_CORE_PIECE *piece, CHESS_CORE_ENUM_PIECE name) {
+
+    /*
+    NONE = 0,
+    KING = 1,
+    PAWN = 2,
+    BPAWN = 3,
+    KNIGHT = 4,
+    BISHOP = 5,
+    ROOK = 6,
+    QUEEN = 7
+    */
+
+    if (player == WHITE_PLAYER)
+    {
+        switch(name)
+        {
+            case KING:
+                piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WKING, &piece->rect, 0, 0, 50, 50);
+            break;
+            case PAWN:
+                piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WPAWN, &piece->rect, 0, 0, 50, 50);
+            break;
+            case BPAWN:
+                piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BPAWN, &piece->rect, 0, 0, 50, 50);
+            break;
+            default: 
+            break;
+        }
+    }
+
+    else if (player == BLACK_PLAYER)
+    {
+        switch(name)
+        {
+            case KING:
+                piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKING, &piece->rect, 0, 0, 50, 50);
+            break;
+            case PAWN:
+                piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKING, &piece->rect, 0, 0, 50, 50);
+            break;
+            case BPAWN:
+                piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WKING, &piece->rect, 0, 0, 50, 50);
+            break;
+            default: 
+            break;
+        }
+    }
+
+    return EXIT_SUCCESS;
+}
+
+int CORE_FenNotation_InitPiece(CHESS_CORE_PLAYER player, CHESS_CORE_PIECE *piece, char *fen_board) {
+
+    // switch from one player to another
+    CHESS_CORE_PLAYER init_player;
+
+    if (player == BLACK_PLAYER) {
+        init_player = WHITE_PLAYER;
+    } else init_player = player;
+
+    // grab length of ptr (the length could varie)
+    short int ptr_length = strlen(ptr);
+
+    short int character = 0;
+    volatile short int result = -1;
+    volatile short int tile = 0;
+
+    for (int n = 0; n <= ptr_length; n++) {
+        
+        character = ptr[n];
+
+        if (isalpha(character) != 0)
+        {
+            // when '/' is used to skip ranks
+            if (character == '/' || character == '\\') continue;
+
+            // white pieces
+            if (isupper(character) != 0)
+            {
+                //CORE_FenNotation_InitPiece(init_player, &piece);
+            }
+
+            // black pieces
+            else if (islower(character) != 0)
+            {
+                //CORE_FenNotation_InitPiece();
+            }
+        }
+
+        else if (isdigit(character) != 0)
+        {
+            // increase number of tiles from character
+        }
+
+        // if (result != EXIT_SUCCESS) return (EXIT_FAILURE);
+        tile += 1;
+    }
+
+    return EXIT_SUCCESS;
+}
+
 void CORE_ChessCreateBoard(void) {
 
     int size_tile = 50;

@@ -43,6 +43,7 @@ typedef struct {
     SDL_Rect rect;
 } CHESS_CORE_TILE;
 
+// TODO: save space from global variables and structs
 extern CHESS_CORE_PLAYER glo_chess_core_player;
 extern CHESS_CORE_TILE glo_chess_core_tile[64];
 extern CHESS_CORE_PIECE glo_chess_core_piece[32];
