@@ -18,13 +18,18 @@ typedef struct {
 
 typedef enum {
     NONE = 0,
-    KING = 1,
-    PAWN = 2,
-    BPAWN = 3,
-    KNIGHT = 4,
-    BISHOP = 5,
-    ROOK = 6,
-    QUEEN = 7
+    KING,
+    BKING,
+    PAWN,
+    BPAWN,
+    KNIGHT,
+    BKNIGHT,
+    BISHOP,
+    BBISHOP,
+    ROOK,
+    BROOK,
+    QUEEN,
+    BQUEEN
 } CHESS_CORE_ENUM_PIECE;
 
 typedef struct {
@@ -61,6 +66,7 @@ void CORE_ChessInitTag(CHESS_CORE_PLAYER player);
 void CORE_GlobalDestroyPiece(CHESS_CORE_PIECE *piece);
 void CORE_GlobalClearCorePiece(void);
 void CORE_GlobalClearChessTile(void);
+void CORE_ResetGlobal_CorePiece(void);
 
 void CORE_Testing(CHESS_CORE_PLAYER player);
 

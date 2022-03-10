@@ -18,9 +18,10 @@ int main (int argc, char *argv[]) {
     glo_render = pp4m_Init(glo_window, "c4chess alpha-rewritten-testing", glo_screen_w, glo_screen_h, WINDOW);
     pp4m_TTF_Init();
 
+    // main player (meaning choosen player) 
     CORE_Testing(WHITE_PLAYER);
-    //GUI_PopupWindow_Core(300, 300, 275, 275, "hello");
 
+    //GUI_PopupWindow_Core(300, 300, 275, 275, "hello");
     //GUI_Testing();
 
     pp4m_TTF_Quit();

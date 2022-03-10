@@ -35,40 +35,32 @@ CHESS_CORE_PIECE glo_chess_core_piece[32];
 #define TEX_BROOK "resources/brook.png"
 #define TEX_BQUEEN "resources/bqueen.png"
 
-// TODO: init chess pieces using Forsyth-Edwards Notation
-// > https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation
-
-// legend for piece FEN:
-// uppercase is White player
-// lowercase is Black player
-
-/*
-
-Forsyth-Edwards Notation (FEN): "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
-
-board:      [rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R]
-player:     [b]
-castling:   [KQkq]
-passant:    [-]
-moveWhite:  [1]
-moveBlack:  [2]
-
-( ͡° ͜ʖ ͡°)
-
-*/
-
 int CORE_FenNotation_InitPieceCase(CHESS_CORE_PLAYER player, CHESS_CORE_PIECE *piece, CHESS_CORE_ENUM_PIECE name) {
 
     /*
     NONE = 0,
-    KING = 1,
-    PAWN = 2,
-    BPAWN = 3,
-    KNIGHT = 4,
-    BISHOP = 5,
-    ROOK = 6,
-    QUEEN = 7
+    KING,
+    BKING,
+    PAWN,
+    BPAWN,
+    KNIGHT,
+    BKNIGHT,
+    BISHOP,
+    BBISHOP,
+    ROOK,
+    BROOK,
+    QUEEN,
+    BQUEEN
     */
+
+    // promemoria
+    // invertire i movimenti quando sei nero
+    // processo per inizializzare i pezzi:
+
+    // 1 - inizializza scacchiera con i pezzi pronti
+    // 2 - invertire scacchiera se sei nero (equivale a reverse list)
+    // 3 - teoricamente non devo invertire i movimenti se sono nero perche
+    //      praticamente se inverto la scacchiera, i pezzi sono gia allocati e pronti per la pos. dei tile
 
     if (player == WHITE_PLAYER)
     {
@@ -106,234 +98,23 @@ int CORE_FenNotation_InitPieceCase(CHESS_CORE_PLAYER player, CHESS_CORE_PIECE *p
         }
     }
 
-    return EXIT_SUCCESS;
-}
-
-int CORE_FenNotation_InitPiece(CHESS_CORE_PLAYER player, CHESS_CORE_PIECE *piece, char *fen_board) {
-
-    // switch from one player to another
-    CHESS_CORE_PLAYER init_player;
-
-    if (player == BLACK_PLAYER) {
-        init_player = WHITE_PLAYER;
-    } else init_player = player;
-
-    // grab length of ptr (the length could varie)
-    short int ptr_length = strlen(ptr);
-
-    short int character = 0;
-    volatile short int result = -1;
-    volatile short int tile = 0;
-
-    for (int n = 0; n <= ptr_length; n++) {
-        
-        character = ptr[n];
-
-        if (isalpha(character) != 0)
-        {
-            // when '/' is used to skip ranks
-            if (character == '/' || character == '\\') continue;
-
-            // white pieces
-            if (isupper(character) != 0)
-            {
-                //CORE_FenNotation_InitPiece(init_player, &piece);
-            }
-
-            // black pieces
-            else if (islower(character) != 0)
-            {
-                //CORE_FenNotation_InitPiece();
-            }
-        }
-
-        else if (isdigit(character) != 0)
-        {
-            // increase number of tiles from character
-        }
-
-        // if (result != EXIT_SUCCESS) return (EXIT_FAILURE);
-        tile += 1;
+    if (piece->texture == NULL)
+    {  
+        printf("CORE_InitPiece:\n  piece->texture not initialized\n");
+        return (EXIT_FAILURE);
     }
+
+    printf("CORE_InitPiece:\n  piece->texture = %p\n", &piece->texture);
+
+    glo_chess_core_tile[tile].piece = piece;
+    glo_chess_core_tile[tile].piece->player = player;
+    glo_chess_core_tile[tile].piece->enum_piece = name;
+
 
     return EXIT_SUCCESS;
 }
 
-void CORE_ChessCreateBoard(void) {
 
-    int size_tile = 50;
-    int x_b = glo_screen_w / 2 - (size_tile * 4);
-    int y_b = glo_screen_h / 2 - (size_tile * 4);
-
-    int colomn = 1;
-
-    bool toggle = false;
-
-    for(int n = 0; n < 64; n++) {
-
-        if (colomn > 8) {
-            y_b += size_tile;
-            x_b = glo_screen_w / 2 - (size_tile * 4);
-            toggle ^= 1;
-            colomn = 1;
-        }
-
-        if (toggle == false) {
-            toggle = true;
-            glo_chess_core_tile[n].texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_WHITE, &glo_chess_core_tile[n].rect, x_b, y_b, size_tile, size_tile);
-        }
-
-        else if (toggle == true) {
-            toggle = false;
-            glo_chess_core_tile[n].texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_RED, &glo_chess_core_tile[n].rect, x_b, y_b, size_tile, size_tile);
-        }
-
-        x_b += size_tile; colomn += 1;
-    }
-
-    return;
-}
-
-void CORE_ChessInitTag(CHESS_CORE_PLAYER player) {
-
-    char colomn[] = "abcdefgh";
-
-    if (player == WHITE_PLAYER) {
-
-        int colomn_pos = 0;
-        int row = 8;
-
-        for (int n = 0; n < 64; n++) {
-
-            glo_chess_core_tile[n].tag.col = colomn[colomn_pos];
-            glo_chess_core_tile[n].tag.row = row;
-
-            colomn_pos++;
-            if (colomn_pos > 7) { colomn_pos = 0; if (row != 1) row--; }
-
-        }
-
-    }
-
-    else if (player == BLACK_PLAYER) {
-
-        int colomn_pos = 7;
-        int row = 1;
-
-        for (int n = 0; n < 64; n++) {
-
-            glo_chess_core_tile[n].tag.col = colomn[colomn_pos];
-            glo_chess_core_tile[n].tag.row = row;
-
-            colomn_pos--;
-            if (colomn_pos < 0) { colomn_pos = 7; if (row != 8) row++; }
-
-        }
-
-    }
-
-    return;
-}
-
-void CORE_GlobalDestroyPiece(CHESS_CORE_PIECE *piece) {
-
-    if (piece != NULL) {
-        printf("CORE_GlobalDestroyPiece:\n  destroy piece = %p\n", piece);
-        SDL_DestroyTexture(piece->texture);
-        piece->enum_piece = NONE;
-    }
-
-    return;
-}
-
-void CORE_GlobalClearCorePiece(void) {
-    for (int n = 0; n < 32; n++) if (sizeof(glo_chess_core_piece[n]) != 0) CORE_GlobalDestroyPiece(&glo_chess_core_piece[n]);
-    return;
-}
-
-void CORE_GlobalClearChessTile(void) {
-
-    for (int n = 0; n < 64; n++) {
-        if (sizeof(glo_chess_core_tile[n].piece) != sizeof(CHESS_CORE_PIECE*)) CORE_GlobalDestroyPiece(glo_chess_core_tile[n].piece);
-        SDL_DestroyTexture(glo_chess_core_tile[n].texture);
-    }
-
-    return;
-}
-
-void CORE_InitGlobalChessPiece(void) {
-
-    for (int n = 0; n < 32; n++) {
-
-        glo_chess_core_piece[n].player = -1;
-        glo_chess_core_piece[n].enum_piece = NONE;
-        glo_chess_core_piece[n].texture = NULL;
-
-        glo_chess_core_piece[n].rect.x = 0;
-        glo_chess_core_piece[n].rect.y = 0;
-        glo_chess_core_piece[n].rect.w = 0;
-        glo_chess_core_piece[n].rect.h = 0;
-
-        glo_chess_core_piece[n].lock = -1;
-
-    }
-
-    return;
-}
-
-void CORE_Testing(CHESS_CORE_PLAYER player) {    
-
-    glo_chess_core_player = player;
-
-    CORE_ChessCreateBoard();
-    CORE_ChessInitTag(player);
-
-    DOT_InitGlobalDot();
-
-    // set glo_chess_core_piece to initial state
-    CORE_InitGlobalChessPiece();
-
-    // if (CORE_ReadArrayInitPiece(chess_initpiece, player) != EXIT_SUCCESS) return;
-
-    SDL_Event event;
-    player = WHITE_PLAYER;
-
-    while(1) {
-        SDL_PollEvent(&event);
-
-        EVENT_CheckPieceLayer(player);
-
-        // TODO: fix bug where touching first tile, triggers this function
-        if (MIDDLE_UpdateChangeState(&event, player) == 0) { player ^= 1; printf("CORE_Testing:\n  player_turn = %d\n", player); }
-
-        SDL_RenderClear(glo_render);
-        for (int n = 0; n < 64; n++) {
-            SDL_RenderCopy(glo_render, glo_chess_core_tile[n].texture, NULL, &glo_chess_core_tile[n].rect);
-            if (glo_chess_core_tile[n].piece != NULL) SDL_RenderCopy(glo_render, glo_chess_core_tile[n].piece->texture, NULL, &glo_chess_core_tile[n].rect);
-
-            DOT_StateGlobalDot(n);
-        }
-        SDL_RenderPresent(glo_render);
-
-        if (event.type == SDL_QUIT) break;
-    }
-
-    return;
-}
-
-// obsolete
-/*
-char *chess_initpiece[8] = {
- "        ",
- "      P ",
- "   K    ",
- "        ",
- "        ",
- "    pp  ",
- " k      ",
- "        "
-};
-*/
 /*
 int CORE_InitPiece(CHESS_CORE_PIECE *piece, int tile, CHESS_CORE_ENUM_PIECE name, CHESS_CORE_PLAYER player) {
 
@@ -445,6 +226,316 @@ int CORE_InitPiece(CHESS_CORE_PIECE *piece, int tile, CHESS_CORE_ENUM_PIECE name
 
     return (EXIT_SUCCESS);
 }
+/*
+
+
+
+
+// TODO: init chess pieces using Forsyth-Edwards Notation
+// > https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation
+
+// legend for piece FEN:
+// uppercase is White player
+// lowercase is Black player
+
+/*
+
+Forsyth-Edwards Notation (FEN): "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+
+board:      [rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R]
+player:     [b]
+castling:   [KQkq]
+passant:    [-]
+moveWhite:  [1]
+moveBlack:  [2]
+
+( ͡° ͜ʖ ͡°)
+
+*/
+
+int CORE_FenNotation_Init(CHESS_CORE_PLAYER player, char *fen_board) {
+
+    // switch from one player to another
+    CHESS_CORE_PLAYER init_player = WHITE_PLAYER;
+    if (player == WHITE_PLAYER) init_player = BLACK_PLAYER;
+
+    // grab length of ptr (the length could varie)
+    short int fen_length = strlen(fen_board);
+
+    volatile char character = 0;
+    volatile short int result = -1;
+    volatile short int tile = 0;
+
+    for (int n = 0; n <= fen_length; n++) {
+        
+        character = fen_board[n];
+
+        if (isalpha(character) != 0)
+        {
+            // when '/' is used to skip ranks
+            if (character == '/' || character == '\\') continue;
+
+            // white pieces
+            if (isupper(character) != 0)
+            {
+                //CORE_CaseEnumPiece()
+                //CORE_FenNotation_InitPiece(init_player, &piece);
+            }
+
+            // black pieces
+            else if (islower(character) != 0)
+            {
+                //CORE_FenNotation_InitPiece();
+            }
+        }
+
+        else if (isdigit(character) != 0)
+        {
+            volatile int foo = -1;
+            // increase number of tiles from character
+            sscanf(&character, "%d", &foo);
+
+            tile += foo;
+            continue;
+        }
+
+        // if (result != EXIT_SUCCESS) return (EXIT_FAILURE);
+        tile += 1;
+    }
+
+    return 0;
+}
+
+/*
+int CORE_FenNotation_InitPiece(CHESS_CORE_PLAYER player, CHESS_CORE_PIECE *piece, char *fen_board) {
+
+    // switch from one player to another
+    CHESS_CORE_PLAYER init_player;
+
+    if (player == BLACK_PLAYER) {
+        init_player = WHITE_PLAYER;
+    } else init_player = player;
+
+    // grab length of ptr (the length could varie)
+    short int ptr_length = strlen(ptr);
+
+    short int character = 0;
+    volatile short int result = -1;
+    volatile short int tile = 0;
+
+    for (int n = 0; n <= ptr_length; n++) {
+        
+        character = ptr[n];
+
+        if (isalpha(character) != 0)
+        {
+            // when '/' is used to skip ranks
+            if (character == '/' || character == '\\') continue;
+
+            // white pieces
+            if (isupper(character) != 0)
+            {
+                //CORE_FenNotation_InitPiece(init_player, &piece);
+            }
+
+            // black pieces
+            else if (islower(character) != 0)
+            {
+                //CORE_FenNotation_InitPiece();
+            }
+        }
+
+        else if (isdigit(character) != 0)
+        {
+            // increase number of tiles from character
+        }
+
+        // if (result != EXIT_SUCCESS) return (EXIT_FAILURE);
+        tile += 1;
+    }
+
+    return EXIT_SUCCESS;
+}
+*/
+
+void CORE_ChessCreateBoard(void) {
+
+    int size_tile = 50;
+    int x_b = glo_screen_w / 2 - (size_tile * 4);
+    int y_b = glo_screen_h / 2 - (size_tile * 4);
+
+    int colomn = 1;
+
+    bool toggle = false;
+
+    for(int n = 0; n < 64; n++) {
+
+        if (colomn > 8) {
+            y_b += size_tile;
+            x_b = glo_screen_w / 2 - (size_tile * 4);
+            toggle ^= 1;
+            colomn = 1;
+        }
+
+        if (toggle == false) {
+            toggle = true;
+            glo_chess_core_tile[n].texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_WHITE, &glo_chess_core_tile[n].rect, x_b, y_b, size_tile, size_tile);
+        }
+
+        else if (toggle == true) {
+            toggle = false;
+            glo_chess_core_tile[n].texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_RED, &glo_chess_core_tile[n].rect, x_b, y_b, size_tile, size_tile);
+        }
+
+        x_b += size_tile; colomn += 1;
+    }
+
+    return;
+}
+
+void CORE_ChessInitTag(CHESS_CORE_PLAYER player) {
+
+    char colomn[] = "abcdefgh";
+
+    if (player == WHITE_PLAYER) {
+
+        int colomn_pos = 0;
+        int row = 8;
+
+        for (int n = 0; n < 64; n++) {
+
+            glo_chess_core_tile[n].tag.col = colomn[colomn_pos];
+            glo_chess_core_tile[n].tag.row = row;
+
+            colomn_pos++;
+            if (colomn_pos > 7) { colomn_pos = 0; if (row != 1) row--; }
+
+        }
+
+    }
+
+    else if (player == BLACK_PLAYER) {
+
+        int colomn_pos = 7;
+        int row = 1;
+
+        for (int n = 0; n < 64; n++) {
+
+            glo_chess_core_tile[n].tag.col = colomn[colomn_pos];
+            glo_chess_core_tile[n].tag.row = row;
+
+            colomn_pos--;
+            if (colomn_pos < 0) { colomn_pos = 7; if (row != 8) row++; }
+
+        }
+
+    }
+
+    return;
+}
+
+void CORE_GlobalDestroyPiece(CHESS_CORE_PIECE *piece) {
+
+    if (piece != NULL) {
+        printf("CORE_GlobalDestroyPiece:\n  destroy piece = %p\n", piece);
+        SDL_DestroyTexture(piece->texture);
+        piece->enum_piece = NONE;
+    }
+
+    return;
+}
+
+void CORE_GlobalClearCorePiece(void) {
+    for (int n = 0; n < 32; n++) if (sizeof(glo_chess_core_piece[n]) != 0) CORE_GlobalDestroyPiece(&glo_chess_core_piece[n]);
+    return;
+}
+
+void CORE_GlobalClearChessTile(void) {
+
+    for (int n = 0; n < 64; n++) {
+        if (sizeof(glo_chess_core_tile[n].piece) != sizeof(CHESS_CORE_PIECE*)) CORE_GlobalDestroyPiece(glo_chess_core_tile[n].piece);
+        SDL_DestroyTexture(glo_chess_core_tile[n].texture);
+    }
+
+    return;
+}
+
+void CORE_ResetGlobal_CorePiece(void) {
+
+    for (int n = 0; n < 32; n++) {
+
+        glo_chess_core_piece[n].player = -1;
+        glo_chess_core_piece[n].enum_piece = NONE;
+        glo_chess_core_piece[n].texture = NULL;
+
+        glo_chess_core_piece[n].rect.x = 0;
+        glo_chess_core_piece[n].rect.y = 0;
+        glo_chess_core_piece[n].rect.w = 0;
+        glo_chess_core_piece[n].rect.h = 0;
+
+        glo_chess_core_piece[n].lock = -1;
+
+    }
+
+    return;
+}
+
+void CORE_Testing(CHESS_CORE_PLAYER player) {    
+
+    glo_chess_core_player = player;
+
+    CORE_ChessCreateBoard();
+    CORE_ChessInitTag(player);
+
+    DOT_InitGlobalDot();
+
+    // set glo_chess_core_piece to initial state
+    CORE_ResetGlobal_CorePiece();
+
+    // init pieces for main player
+    CORE_FenNotation_InitPiece(glo_chess_core_player);
+
+    SDL_Event event;
+    player = WHITE_PLAYER;
+
+    while(1) {
+        SDL_PollEvent(&event);
+
+        EVENT_CheckPieceLayer(player);
+
+        // TODO: fix bug where touching first tile, triggers this function
+        if (MIDDLE_UpdateChangeState(&event, player) == 0) { player ^= 1; printf("CORE_Testing:\n  player_turn = %d\n", player); }
+
+        SDL_RenderClear(glo_render);
+        for (int n = 0; n < 64; n++) {
+            SDL_RenderCopy(glo_render, glo_chess_core_tile[n].texture, NULL, &glo_chess_core_tile[n].rect);
+            if (glo_chess_core_tile[n].piece != NULL) SDL_RenderCopy(glo_render, glo_chess_core_tile[n].piece->texture, NULL, &glo_chess_core_tile[n].rect);
+
+            DOT_StateGlobalDot(n);
+        }
+        SDL_RenderPresent(glo_render);
+
+        if (event.type == SDL_QUIT) break;
+    }
+
+    return;
+}
+
+// obsolete
+/*
+char *chess_initpiece[8] = {
+ "        ",
+ "      P ",
+ "   K    ",
+ "        ",
+ "        ",
+ "    pp  ",
+ " k      ",
+ "        "
+};
+*/
+/*
+
 
 int CORE_ReadArrayInitPiece(char *array[], CHESS_CORE_PLAYER player) {
 
@@ -613,3 +704,61 @@ int CORE_ReadArrayInitPiece(char *array[], CHESS_CORE_PLAYER player) {
     return (EXIT_SUCCESS);
 }
 */
+
+CHESS_CORE_ENUM_PIECE CORE_CaseEnumPiece(CHESS_CORE_PLAYER player, char character) {
+    
+    switch(character)
+    {
+        case 'K':
+        return KING;
+        break;
+            
+        case 'k':
+        return BKING;
+        break;
+            
+        case 'P':
+        return PAWN;
+        break;
+            
+        case 'p':
+        return BPAWN;
+        break;
+            
+        case 'N':
+        return KNIGHT;
+        break;
+            
+        case 'n':
+        return BKNIGHT;
+        break;
+            
+        case 'B':
+        return BISHOP;
+        break;
+            
+        case 'b':
+        return BBISHOP;
+        break;
+            
+        case 'R':
+        return ROOK;
+        break;
+            
+        case 'r':
+        return BROOK;
+        break;
+            
+        case 'Q':
+        return QUEEN;
+        break;
+            
+        case 'q':
+        return BQUEEN;
+        break;
+
+        default:
+        return NONE;
+        break;
+    }
+}
