@@ -1,14 +1,14 @@
 /* Private Project Four Me */
 
 #ifdef _WIN32
-#include <winsock2.h> //ws2_32
-#include <windows.h>
+    #include <winsock2.h> //ws2_32
+    #include <windows.h>
 #else // _UNIX
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <arpa/inet.h>
-#include <netdb.h>
+    #include <netinet/in.h>
+    #include <sys/socket.h>
+    #include <sys/types.h>
+    #include <arpa/inet.h>
+    #include <netdb.h>
 #endif
 
 #include <stdio.h>

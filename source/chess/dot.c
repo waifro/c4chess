@@ -3,9 +3,10 @@
 
 #include "../pp4m/pp4m_draw.h"
 #include "../pp4m/pp4m.h"
+#include "../global.h"
+
 #include "dot.h"
 #include "core.h"
-#include "../global.h"
 
 CHESS_DOT glo_chess_dot[64];
 
