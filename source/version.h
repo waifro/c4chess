@@ -8,8 +8,8 @@
 	#define UBUNTU_VERSION_STYLE  "22.03"
 	
 	//Software Status
-	#define STATUS  ""
-	#define STATUS_SHORT  ""
+	#define STATUS  "Alpha"
+	#define STATUS_SHORT  "a"
 	
 	//Standard Version Type
 	#define MAJOR  0
@@ -18,7 +18,7 @@
 	#define REVISION  54
 	
 	//Miscellaneous Version Types
-	#define BUILDS_COUNT  13
+	#define BUILDS_COUNT  14
 	#define RC_FILEVERSION 0,0,9,54
 	#define RC_FILEVERSION_STRING "0, 0, 9, 54\0"
 	#define FULLVERSION_STRING  "0.0.9.54"
