@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-//#define SDL_MAIN_HANDLED
+#define SDL_MAIN_HANDLED
 
 // local libraries
 #include "global.h"
@@ -24,10 +24,6 @@ int main (int argc, char *argv[]) {
 
     // main player (meaning choosen player)
     CORE_Testing(WHITE_PLAYER);
-
-    // testing
-    //GUI_PopupWindow_Core(300, 300, 275, 275, "hello");
-    //GUI_Testing();
 
     // Exiting from game
     pp4m_TTF_Quit();

@@ -1,0 +1,1892 @@
+# depslib dependency file v1.0
+1647841101 source:c:\users\w7\desktop\progetti\c4chess-cb\source\animation\animation.c
+	"animation.h"
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\animation\animation.h
+
+1647841101 source:c:\users\w7\desktop\progetti\c4chess-cb\source\chess\chess.c
+	<stdbool.h>
+	"event.h"
+	"chess.h"
+	"middle.h"
+	"core.h"
+	"dot.h"
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\chess\event.h
+	<stdbool.h>
+	"core.h"
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\chess\core.h
+	<stdbool.h>
+	<SDL2/SDL.h>
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl.h
+	"SDL_main.h"
+	"SDL_stdinc.h"
+	"SDL_assert.h"
+	"SDL_atomic.h"
+	"SDL_audio.h"
+	"SDL_clipboard.h"
+	"SDL_cpuinfo.h"
+	"SDL_endian.h"
+	"SDL_error.h"
+	"SDL_events.h"
+	"SDL_filesystem.h"
+	"SDL_gamecontroller.h"
+	"SDL_haptic.h"
+	"SDL_hidapi.h"
+	"SDL_hints.h"
+	"SDL_joystick.h"
+	"SDL_loadso.h"
+	"SDL_log.h"
+	"SDL_messagebox.h"
+	"SDL_metal.h"
+	"SDL_mutex.h"
+	"SDL_power.h"
+	"SDL_render.h"
+	"SDL_rwops.h"
+	"SDL_sensor.h"
+	"SDL_shape.h"
+	"SDL_system.h"
+	"SDL_thread.h"
+	"SDL_timer.h"
+	"SDL_version.h"
+	"SDL_video.h"
+	"SDL_locale.h"
+	"SDL_misc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_main.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_stdinc.h
+	"SDL_config.h"
+	<sys/types.h>
+	<stdio.h>
+	<stdlib.h>
+	<stddef.h>
+	<stdarg.h>
+	<stdlib.h>
+	<malloc.h>
+	<stddef.h>
+	<stdarg.h>
+	<memory.h>
+	<string.h>
+	<strings.h>
+	<wchar.h>
+	<inttypes.h>
+	<stdint.h>
+	<ctype.h>
+	<math.h>
+	<float.h>
+	<alloca.h>
+	<malloc.h>
+	<malloc.h>
+	<malloc.h>
+	<stdlib.h>
+	<sal.h>
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_config.h
+	"SDL_platform.h"
+	<winsdkver.h>
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_platform.h
+	"AvailabilityMacros.h"
+	"TargetConditionals.h"
+	<winapifamily.h>
+	"begin_code.h"
+	"close_code.h"
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winapifamily.h
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\begin_code.h
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\close_code.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winsdkver.h
+	<winapifamily.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sys\types.h
+	<crtdefs.h>
+	<_mingw_off_t.h>
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\crtdefs.h
+	<_mingw.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\_mingw.h
+	"_mingw_mac.h"
+	"_mingw_secapi.h"
+	"_cygwin.h"
+	<vadefs.h>
+	"sdks/_mingw_directx.h"
+	"sdks/_mingw_ddk.h"
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\_mingw_mac.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\_mingw_secapi.h
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\_cygwin.h
+	<stddef.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\stddef.h
+	<crtdefs.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\vadefs.h
+	<_mingw.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdks\_mingw_directx.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdks\_mingw_ddk.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\_mingw_off_t.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\stdio.h
+	<crtdefs.h>
+	<_mingw_print_push.h>
+	<_mingw_off_t.h>
+	<swprintf.inl>
+	<sec_api/stdio_s.h>
+	<_mingw_print_pop.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\_mingw_print_push.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\swprintf.inl
+	<vadefs.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sec_api\stdio_s.h
+	<stdio.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\_mingw_print_pop.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\stdlib.h
+	<crtdefs.h>
+	<limits.h>
+	<sec_api/stdlib_s.h>
+	<malloc.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\limits.h
+	<crtdefs.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sec_api\stdlib_s.h
+	<stdlib.h>
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\malloc.h
+	<crtdefs.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\stdarg.h
+	<_mingw_stdarg.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\_mingw_stdarg.h
+	<vadefs.h>
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\memory.h
+	<crtdefs.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\string.h
+	<crtdefs.h>
+	<sec_api/string_s.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sec_api\string_s.h
+	<string.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\strings.h
+	<string.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\wchar.h
+	<crtdefs.h>
+	<_mingw_print_push.h>
+	<_mingw_off_t.h>
+	<_mingw_stat64.h>
+	<swprintf.inl>
+	<sec_api/wchar_s.h>
+	<_mingw_print_pop.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\_mingw_stat64.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sec_api\wchar_s.h
+	<wchar.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\inttypes.h
+	<crtdefs.h>
+	<stdint.h>
+	<stddef.h>
+	<_mingw_print_push.h>
+	<_mingw_print_pop.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\stdint.h
+	<crtdefs.h>
+	<stddef.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\ctype.h
+	<crtdefs.h>
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\math.h
+	<crtdefs.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\float.h
+	<crtdefs.h>
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sal.h
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_assert.h
+	"SDL_config.h"
+	"begin_code.h"
+	<signal.h>
+	"close_code.h"
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\signal.h
+	<crtdefs.h>
+	<pthread_signal.h>
+
+1526089820 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\pthread_signal.h
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_atomic.h
+	"SDL_stdinc.h"
+	"SDL_platform.h"
+	"begin_code.h"
+	<sys/cpuinline.h>
+	<mbarrier.h>
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_audio.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_endian.h"
+	"SDL_mutex.h"
+	"SDL_thread.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_error.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_endian.h
+	"SDL_stdinc.h"
+	<intrin.h>
+	<endian.h>
+	<endian.h>
+	<sys/endian.h>
+	"begin_code.h"
+	"close_code.h"
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\intrin.h
+	<crtdefs.h>
+	<setjmp.h>
+	<stddef.h>
+	<psdk_inc/intrin-impl.h>
+	<stdlib.h>
+	<errno.h>
+	<malloc.h>
+	<x86intrin.h>
+	<mmintrin.h>
+	<mm3dnow.h>
+	<xmmintrin.h>
+	<emmintrin.h>
+	<pmmintrin.h>
+	<mm3dnow.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\setjmp.h
+	<crtdefs.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\psdk_inc\intrin-impl.h
+	<intrin.h>
+	<psdk_inc/intrin-impl.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\errno.h
+	<crtdefs.h>
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_mutex.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_thread.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_atomic.h"
+	"SDL_mutex.h"
+	<process.h>
+	<process.h>
+	<stdlib.h>
+	"begin_code.h"
+	"close_code.h"
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\process.h
+	<crtdefs.h>
+	<corecrt_startup.h>
+	<sys/types.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\corecrt_startup.h
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_rwops.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_clipboard.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_cpuinfo.h
+	"SDL_stdinc.h"
+	<intrin.h>
+	<intrin.h>
+	<arm_neon.h>
+	<altivec.h>
+	<arm_neon.h>
+	<armintr.h>
+	<arm_neon.h>
+	<arm64intr.h>
+	<arm64_neon.h>
+	<mm3dnow.h>
+	<immintrin.h>
+	<mmintrin.h>
+	<xmmintrin.h>
+	<emmintrin.h>
+	<pmmintrin.h>
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_events.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"SDL_keyboard.h"
+	"SDL_mouse.h"
+	"SDL_joystick.h"
+	"SDL_gamecontroller.h"
+	"SDL_quit.h"
+	"SDL_gesture.h"
+	"SDL_touch.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_video.h
+	"SDL_stdinc.h"
+	"SDL_pixels.h"
+	"SDL_rect.h"
+	"SDL_surface.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_pixels.h
+	"SDL_stdinc.h"
+	"SDL_endian.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_rect.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_pixels.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_surface.h
+	"SDL_stdinc.h"
+	"SDL_pixels.h"
+	"SDL_rect.h"
+	"SDL_blendmode.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_blendmode.h
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_keyboard.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_keycode.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_keycode.h
+	"SDL_stdinc.h"
+	"SDL_scancode.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_scancode.h
+	"SDL_stdinc.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_mouse.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_joystick.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_gamecontroller.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_rwops.h"
+	"SDL_sensor.h"
+	"SDL_joystick.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_sensor.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_quit.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_gesture.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"SDL_touch.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_touch.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_filesystem.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_haptic.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_joystick.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_hidapi.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_hints.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_loadso.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_log.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_messagebox.h
+	"SDL_stdinc.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_metal.h
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_power.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_render.h
+	"SDL_stdinc.h"
+	"SDL_rect.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_shape.h
+	"SDL_stdinc.h"
+	"SDL_pixels.h"
+	"SDL_rect.h"
+	"SDL_surface.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_system.h
+	"SDL_stdinc.h"
+	"SDL_keyboard.h"
+	"SDL_render.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_timer.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_version.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_locale.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641849092 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_misc.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\chess\chess.h
+	<stdbool.h>
+	"core.h"
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\chess\middle.h
+	<stdio.h>
+	<stdbool.h>
+	"core.h"
+	"touch.h"
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\chess\touch.h
+	<SDL2/SDL.h>
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\chess\dot.h
+	<stdbool.h>
+	<SDL2/SDL.h>
+
+1647842266 source:c:\users\w7\desktop\progetti\c4chess-cb\source\chess\core.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdbool.h>
+	<SDL2/SDL.h>
+	"../pp4m/pp4m.h"
+	"../pp4m/pp4m_draw.h"
+	"../pp4m/pp4m_image.h"
+	"../global.h"
+	"event.h"
+	"chess.h"
+	"dot.h"
+	"touch.h"
+	"middle.h"
+	"core.h"
+	"fen.h"
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\pp4m\pp4m.h
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+
+1561866798 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_image.h
+	"SDL.h"
+	"SDL_version.h"
+	"begin_code.h"
+	"close_code.h"
+
+1641928996 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdl2\sdl_ttf.h
+	"SDL.h"
+	"begin_code.h"
+	"close_code.h"
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\pp4m\pp4m_draw.h
+	<SDL2/SDL.h>
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\pp4m\pp4m_image.h
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\global.h
+	<SDL2/SDL.h>
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\chess\fen.h
+	"chess.h"
+
+1647841101 source:c:\users\w7\desktop\progetti\c4chess-cb\source\chess\dot.c
+	<stdio.h>
+	<SDL2/SDL.h>
+	"../pp4m/pp4m_draw.h"
+	"../pp4m/pp4m.h"
+	"../global.h"
+	"dot.h"
+	"core.h"
+
+1647841101 source:c:\users\w7\desktop\progetti\c4chess-cb\source\chess\event.c
+	<stdio.h>
+	"event.h"
+	"core.h"
+	"chess.h"
+
+1647841101 source:c:\users\w7\desktop\progetti\c4chess-cb\source\chess\fen.c
+	<stdio.h>
+	<unistd.h>
+	<ctype.h>
+	<SDL2/SDL.h>
+	"../pp4m/pp4m_image.h"
+	"../global.h"
+	"fen.h"
+	"chess.h"
+	"core.h"
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\unistd.h
+	<io.h>
+	<process.h>
+	<getopt.h>
+	<sys/types.h>
+	<pthread_unistd.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\io.h
+	<crtdefs.h>
+	<string.h>
+	<_mingw_off_t.h>
+	<string.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\getopt.h
+	<crtdefs.h>
+
+1526089820 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\pthread_unistd.h
+
+1647841101 source:c:\users\w7\desktop\progetti\c4chess-cb\source\chess\middle.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<stdbool.h>
+	<SDL2/SDL.h>
+	"../global.h"
+	"event.h"
+	"chess.h"
+	"dot.h"
+	"core.h"
+	"touch.h"
+	"middle.h"
+
+1647841101 source:c:\users\w7\desktop\progetti\c4chess-cb\source\chess\touch.c
+	<stdio.h>
+	<stdbool.h>
+	<SDL2/SDL.h>
+	"touch.h"
+
+1647841101 source:c:\users\w7\desktop\progetti\c4chess-cb\source\dashboard\gui.c
+	<string.h>
+	<SDL2/SDL.h>
+	"../pp4m/pp4m.h"
+	"../pp4m/pp4m_ttf.h"
+	"../pp4m/pp4m_draw.h"
+	"../global.h"
+	"gui.h"
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\pp4m\pp4m_ttf.h
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\dashboard\gui.h
+	"gui_alias.h"
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\dashboard\gui_alias.h
+	<SDL2/SDL.h>
+
+1647841101 source:c:\users\w7\desktop\progetti\c4chess-cb\source\dashboard\gui_alias.c
+	<stdio.h>
+	<stdlib.h>
+	"gui_alias.h"
+
+1647841101 source:c:\users\w7\desktop\progetti\c4chess-cb\source\global.c
+	<SDL2/SDL.h>
+	"global.h"
+	"pp4m/pp4m.h"
+
+1647841101 source:c:\users\w7\desktop\progetti\c4chess-cb\source\network\net.c
+	<stdio.h>
+	"../pp4m/pp4m_net.h"
+	"net.h"
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\pp4m\pp4m_net.h
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\network\net.h
+
+1647841101 source:c:\users\w7\desktop\progetti\c4chess-cb\source\network\recv.c
+	"recv.h"
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\network\recv.h
+
+1647841101 source:c:\users\w7\desktop\progetti\c4chess-cb\source\network\send.c
+	"send.h"
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\network\send.h
+
+1647841101 source:c:\users\w7\desktop\progetti\c4chess-cb\source\pp4m\pp4m.c
+	<time.h>
+	<string.h>
+	<stdbool.h>
+	<SDL2/SDL.h>
+	"pp4m.h"
+	"pp4m_image.h"
+	"pp4m_ttf.h"
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\time.h
+	<crtdefs.h>
+	<_timeval.h>
+	<sys/timeb.h>
+	<pthread_time.h>
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\_timeval.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sys\timeb.h
+	<crtdefs.h>
+	<sec_api/sys/timeb_s.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sec_api\sys\timeb_s.h
+	<sys/timeb.h>
+
+1526089820 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\pthread_time.h
+	<sys/timeb.h>
+
+1647841101 source:c:\users\w7\desktop\progetti\c4chess-cb\source\pp4m\pp4m_draw.c
+	<SDL2/SDL.h>
+	"pp4m_draw.h"
+
+1647841101 source:c:\users\w7\desktop\progetti\c4chess-cb\source\pp4m\pp4m_image.c
+	<stdio.h>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	"pp4m.h"
+	"pp4m_io.h"
+	"pp4m_image.h"
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\pp4m\pp4m_io.h
+	<stdbool.h>
+
+1647841101 source:c:\users\w7\desktop\progetti\c4chess-cb\source\pp4m\pp4m_io.c
+	<stdio.h>
+	<string.h>
+	<stdbool.h>
+	<sys/stat.h>
+	"pp4m_io.h"
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sys\stat.h
+	<crtdefs.h>
+	<io.h>
+	<sys/types.h>
+	<_mingw_stat64.h>
+
+1647841101 source:c:\users\w7\desktop\progetti\c4chess-cb\source\pp4m\pp4m_net.c
+	<winsock2.h>
+	<windows.h>
+	<netinet/in.h>
+	<sys/socket.h>
+	<sys/types.h>
+	<arpa/inet.h>
+	<netdb.h>
+	<stdio.h>
+	<unistd.h>
+	<errno.h>
+	<string.h>
+	"pp4m_io.h"
+	"pp4m_net.h"
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winsock2.h
+	<_mingw_unicode.h>
+	<windows.h>
+	<psdk_inc/_ws1_undef.h>
+	<_timeval.h>
+	<_bsd_types.h>
+	<inaddr.h>
+	<psdk_inc/_socket_types.h>
+	<psdk_inc/_fd_types.h>
+	<psdk_inc/_ip_types.h>
+	<psdk_inc/_wsadata.h>
+	<ws2def.h>
+	<psdk_inc/_wsa_errnos.h>
+	<qos.h>
+	<guiddef.h>
+	<poppack.h>
+	<wsipv6ok.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\_mingw_unicode.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\windows.h
+	<_mingw.h>
+	<sdkddkver.h>
+	<winresrc.h>
+	<excpt.h>
+	<stdarg.h>
+	<windef.h>
+	<winbase.h>
+	<wingdi.h>
+	<winuser.h>
+	<winnls.h>
+	<wincon.h>
+	<winver.h>
+	<winreg.h>
+	<winnetwk.h>
+	<virtdisk.h>
+	<cderr.h>
+	<dde.h>
+	<ddeml.h>
+	<dlgs.h>
+	<lzexpand.h>
+	<mmsystem.h>
+	<nb30.h>
+	<rpc.h>
+	<shellapi.h>
+	<winperf.h>
+	<winsock.h>
+	<wincrypt.h>
+	<winefs.h>
+	<winscard.h>
+	<winspool.h>
+	<ole.h>
+	<ole2.h>
+	<commdlg.h>
+	<stralign.h>
+	<ole2.h>
+	<winsvc.h>
+	<mcx.h>
+	<imm.h>
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sdkddkver.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winresrc.h
+	<winuser.rh>
+	<commctrl.rh>
+	<dde.rh>
+	<winnt.rh>
+	<dlgs.h>
+	<winver.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winuser.rh
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\commctrl.rh
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\dde.rh
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winnt.rh
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\dlgs.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winver.h
+	<_mingw.h>
+	<_mingw_unicode.h>
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\excpt.h
+	<crtdefs.h>
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\windef.h
+	<minwindef.h>
+	<winnt.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\minwindef.h
+	<_mingw.h>
+	<winapifamily.h>
+	<specstrings.h>
+	<winnt.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\specstrings.h
+	<sal.h>
+	<driverspecs.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\driverspecs.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winnt.h
+	<_mingw_unicode.h>
+	<_mingw.h>
+	<ctype.h>
+	<excpt.h>
+	<winapifamily.h>
+	<apiset.h>
+	<specstrings.h>
+	<psdk_inc/intrin-impl.h>
+	<sdkddkver.h>
+	<basetsd.h>
+	<guiddef.h>
+	<x86intrin.h>
+	<emmintrin.h>
+	<emmintrin.h>
+	<pshpack4.h>
+	<poppack.h>
+	"pshpack4.h"
+	"pshpack2.h"
+	"poppack.h"
+	"pshpack2.h"
+	<pshpack2.h>
+	<poppack.h>
+	"poppack.h"
+	"pshpack8.h"
+	"poppack.h"
+	"poppack.h"
+	<string.h>
+	<pshpack8.h>
+	<poppack.h>
+	<ktmtypes.h>
+	"pshpack4.h"
+	"poppack.h"
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\apiset.h
+	<_mingw.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\basetsd.h
+	<_mingw.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\guiddef.h
+	<_mingw.h>
+	<string.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\pshpack4.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\poppack.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\pshpack2.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\pshpack8.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\ktmtypes.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winbase.h
+	<_mingw_unicode.h>
+	<apisetcconv.h>
+	<winapifamily.h>
+	<minwinbase.h>
+	<bemapiset.h>
+	<debugapi.h>
+	<errhandlingapi.h>
+	<fibersapi.h>
+	<fileapi.h>
+	<handleapi.h>
+	<heapapi.h>
+	<ioapiset.h>
+	<interlockedapi.h>
+	<jobapi.h>
+	<libloaderapi.h>
+	<memoryapi.h>
+	<namedpipeapi.h>
+	<namespaceapi.h>
+	<processenv.h>
+	<processthreadsapi.h>
+	<processtopologyapi.h>
+	<profileapi.h>
+	<realtimeapiset.h>
+	<securityappcontainer.h>
+	<securitybaseapi.h>
+	<synchapi.h>
+	<sysinfoapi.h>
+	<systemtopologyapi.h>
+	<threadpoolapiset.h>
+	<threadpoollegacyapiset.h>
+	<utilapiset.h>
+	<wow64apiset.h>
+	<psdk_inc/intrin-impl.h>
+	<winerror.h>
+	<timezoneapi.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\apisetcconv.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\minwinbase.h
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\bemapiset.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\debugapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\errhandlingapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\fibersapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\fileapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\handleapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\heapapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\ioapiset.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\interlockedapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\jobapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\libloaderapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\memoryapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\namedpipeapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\namespaceapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\processenv.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\processthreadsapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\processtopologyapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\profileapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\realtimeapiset.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\securityappcontainer.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\securitybaseapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\synchapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sysinfoapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\systemtopologyapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\threadpoolapiset.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\threadpoollegacyapiset.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\utilapiset.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\wow64apiset.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winerror.h
+	<fltwinerror.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\fltwinerror.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\timezoneapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\wingdi.h
+	<winapifamily.h>
+	<_mingw_unicode.h>
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack2.h>
+	<poppack.h>
+	<pshpack2.h>
+	<poppack.h>
+	<pshpack4.h>
+	<poppack.h>
+	<pshpack4.h>
+	<poppack.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\pshpack1.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winuser.h
+	<winapifamily.h>
+	<_mingw_unicode.h>
+	<apisetcconv.h>
+	<_mingw.h>
+	<stdarg.h>
+	<guiddef.h>
+	<libloaderapi.h>
+	<pshpack2.h>
+	<poppack.h>
+	<tvout.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\tvout.h
+	<guiddef.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winnls.h
+	<winapifamily.h>
+	<datetimeapi.h>
+	<libloaderapi.h>
+	<stringapiset.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\datetimeapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\stringapiset.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<winnls.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\wincon.h
+	<_mingw_unicode.h>
+	<winapifamily.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winreg.h
+	<_mingw_unicode.h>
+	<reason.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\reason.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winnetwk.h
+	<winapifamily.h>
+	<_mingw_unicode.h>
+	<wnnc.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\wnnc.h
+	<winapifamily.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\virtdisk.h
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\cderr.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\dde.h
+	<windef.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\ddeml.h
+	<_mingw_unicode.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\lzexpand.h
+	<_mingw_unicode.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\mmsystem.h
+	<_mingw_unicode.h>
+	<pshpack1.h>
+	<poppack.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\nb30.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\rpc.h
+	<_mingw.h>
+	<windows.h>
+	<basetsd.h>
+	<pshpack8.h>
+	<rpcdce.h>
+	<rpcnsi.h>
+	<rpcnterr.h>
+	<excpt.h>
+	<winerror.h>
+	<rpcasync.h>
+	<poppack.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\rpcdce.h
+	<_mingw_unicode.h>
+	<specstrings.h>
+	<guiddef.h>
+	<rpcdcep.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\rpcdcep.h
+	<_mingw_unicode.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\rpcnsi.h
+	<_mingw_unicode.h>
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\rpcnterr.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\rpcasync.h
+	<_mingw_unicode.h>
+	<pshpack8.h>
+	<poppack.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\shellapi.h
+	<winapifamily.h>
+	<_mingw_unicode.h>
+	<specstrings.h>
+	<pshpack1.h>
+	<poppack.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winperf.h
+	<pshpack8.h>
+	<poppack.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winsock.h
+	<windows.h>
+	<_timeval.h>
+	<_bsd_types.h>
+	<inaddr.h>
+	<psdk_inc/_socket_types.h>
+	<psdk_inc/_fd_types.h>
+	<psdk_inc/_ip_types.h>
+	<psdk_inc/_ip_mreq1.h>
+	<psdk_inc/_wsadata.h>
+	<psdk_inc/_xmitfile.h>
+	<psdk_inc/_wsa_errnos.h>
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\_bsd_types.h
+	<_mingw.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\inaddr.h
+	<_bsd_types.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\psdk_inc\_socket_types.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\psdk_inc\_fd_types.h
+	<psdk_inc/_socket_types.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\psdk_inc\_ip_types.h
+	<_bsd_types.h>
+	<inaddr.h>
+	<_timeval.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\psdk_inc\_ip_mreq1.h
+	<inaddr.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\psdk_inc\_wsadata.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\psdk_inc\_xmitfile.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\psdk_inc\_wsa_errnos.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\wincrypt.h
+	<_mingw.h>
+	<_mingw_unicode.h>
+	<guiddef.h>
+	<winapifamily.h>
+	<apisetcconv.h>
+	<bcrypt.h>
+	<ncrypt.h>
+	<dpapi.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\bcrypt.h
+	<winapifamily.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\ncrypt.h
+	<winapifamily.h>
+	<bcrypt.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\dpapi.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winefs.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winscard.h
+	<_mingw_unicode.h>
+	<wtypes.h>
+	<winioctl.h>
+	"winsmcrd.h"
+	"SCardErr.h"
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\wtypes.h
+	<rpc.h>
+	<rpcndr.h>
+	<windows.h>
+	<ole2.h>
+	<wtypesbase.h>
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\rpcndr.h
+	<pshpack8.h>
+	<basetsd.h>
+	<rpcnsip.h>
+	<rpcsal.h>
+	<poppack.h>
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\rpcnsip.h
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\rpcsal.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\ole2.h
+	<winapifamily.h>
+	<pshpack8.h>
+	<winerror.h>
+	<objbase.h>
+	<oleauto.h>
+	<oleidl.h>
+	<poppack.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\objbase.h
+	<winapifamily.h>
+	<rpc.h>
+	<rpcndr.h>
+	<pshpack8.h>
+	<combaseapi.h>
+	<objidl.h>
+	<urlmon.h>
+	<propidl.h>
+	<poppack.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\combaseapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<rpc.h>
+	<rpcndr.h>
+	<pshpack8.h>
+	<stdlib.h>
+	<wtypesbase.h>
+	<unknwnbase.h>
+	<objidlbase.h>
+	<guiddef.h>
+	<cguid.h>
+	<poppack.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\wtypesbase.h
+	<rpc.h>
+	<rpcndr.h>
+	<windows.h>
+	<ole2.h>
+	<basetsd.h>
+	<guiddef.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\unknwnbase.h
+	<rpc.h>
+	<rpcndr.h>
+	<windows.h>
+	<ole2.h>
+	<wtypesbase.h>
+	<winapifamily.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\objidlbase.h
+	<rpc.h>
+	<rpcndr.h>
+	<windows.h>
+	<ole2.h>
+	<unknwnbase.h>
+	<wtypesbase.h>
+	<winapifamily.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\cguid.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\objidl.h
+	<rpc.h>
+	<rpcndr.h>
+	<windows.h>
+	<ole2.h>
+	<unknwn.h>
+	<wtypes.h>
+	<winapifamily.h>
+	<winapifamily.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\unknwn.h
+	<rpc.h>
+	<rpcndr.h>
+	<windows.h>
+	<ole2.h>
+	<wtypes.h>
+	<winapifamily.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\urlmon.h
+	<rpc.h>
+	<rpcndr.h>
+	<windows.h>
+	<ole2.h>
+	<objidl.h>
+	<oleidl.h>
+	<servprov.h>
+	<msxml.h>
+	<winapifamily.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\oleidl.h
+	<rpc.h>
+	<rpcndr.h>
+	<windows.h>
+	<ole2.h>
+	<objidl.h>
+	<winapifamily.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\servprov.h
+	<rpc.h>
+	<rpcndr.h>
+	<windows.h>
+	<ole2.h>
+	<objidl.h>
+	<winapifamily.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\msxml.h
+	<rpc.h>
+	<rpcndr.h>
+	<windows.h>
+	<ole2.h>
+	<unknwn.h>
+	<objidl.h>
+	<oaidl.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\oaidl.h
+	<rpc.h>
+	<rpcndr.h>
+	<windows.h>
+	<ole2.h>
+	<objidl.h>
+	<winapifamily.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\propidl.h
+	<rpc.h>
+	<rpcndr.h>
+	<windows.h>
+	<ole2.h>
+	<wtypes.h>
+	<objidl.h>
+	<oaidl.h>
+	<winapifamily.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\oleauto.h
+	<pshpack8.h>
+	<oaidl.h>
+	<poppack.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winioctl.h
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack1.h>
+	<poppack.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winsmcrd.h
+	<_mingw_unicode.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\scarderr.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winspool.h
+	<_mingw_unicode.h>
+	<prsht.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\prsht.h
+	<_mingw_unicode.h>
+	<pshpack8.h>
+	<pshpack4.h>
+	<poppack.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\ole.h
+	<winapifamily.h>
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\commdlg.h
+	<winapifamily.h>
+	<_mingw_unicode.h>
+	<prsht.h>
+	<pshpack1.h>
+	<poppack.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\stralign.h
+	<sec_api/stralign_s.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\sec_api\stralign_s.h
+	<stralign.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\winsvc.h
+	<_mingw.h>
+	<_mingw_unicode.h>
+	<apisetcconv.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\mcx.h
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\imm.h
+	<_mingw_unicode.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\psdk_inc\_ws1_undef.h
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\ws2def.h
+	<_mingw.h>
+	<winapifamily.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\qos.h
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\wsipv6ok.h
+	<ws2tcpip.h>
+	<wspiapi.h>
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\ws2tcpip.h
+	<_mingw_unicode.h>
+	<winsock2.h>
+	<ws2ipdef.h>
+	<psdk_inc/_ip_mreq1.h>
+	<winapifamily.h>
+	<ws2ipdef.h>
+	<mstcpip.h>
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\ws2ipdef.h
+	<_mingw_unicode.h>
+	<winapifamily.h>
+	<in6addr.h>
+
+1526089814 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\in6addr.h
+	<_bsd_types.h>
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\mstcpip.h
+	<_mingw_unicode.h>
+	<winapifamily.h>
+
+1526089816 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\wspiapi.h
+	<stdio.h>
+	<stdlib.h>
+	<malloc.h>
+	<string.h>
+	<ws2tcpip.h>
+	<_mingw_print_push.h>
+	<_mingw_print_pop.h>
+
+1647841101 source:c:\users\w7\desktop\progetti\c4chess-cb\source\pp4m\pp4m_ttf.c
+	<SDL2/SDL.h>
+	<SDL2/SDL_ttf.h>
+	"pp4m.h"
+	"pp4m_ttf.h"
+
+1647841101 source:c:\users\w7\desktop\progetti\c4chess-cb\source\security\debug.c
+	"debug.h"
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\security\debug.h
+
+1647841101 source:c:\users\w7\desktop\progetti\c4chess-cb\source\security\sec.c
+	"sec.h"
+
+1647841101 c:\users\w7\desktop\progetti\c4chess-cb\source\security\sec.h
+
+1647841634 source:c:\users\w7\desktop\progetti\c4chess-cb\source\main.c
+	<stdio.h>
+	<unistd.h>
+	"global.h"
+	"pp4m/pp4m.h"
+	"pp4m/pp4m_ttf.h"
+	"version.h"
+	"chess/core.h"
+	"dashboard/gui.h"
+
+1647842267 c:\users\w7\desktop\progetti\c4chess-cb\source\version.h
+
+1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\animation\animation.c
+	"animation.h"
+
+1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\animation\animation.h
+
+1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\chess\chess.c
+	<stdbool.h>
+	"event.h"
+	"chess.h"
+	"middle.h"
+	"core.h"
+	"dot.h"
+
+1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\chess\event.h
+	<stdbool.h>
+	"core.h"
+
+1647842365 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\chess\core.h
+	<stdbool.h>
+	<SDL2/SDL.h>
+
+1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\chess\chess.h
+	<stdbool.h>
+	"core.h"
+
+1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\chess\middle.h
+	<stdio.h>
+	<stdbool.h>
+	"core.h"
+	"touch.h"
+
+1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\chess\touch.h
+	<SDL2/SDL.h>
+
+1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\chess\dot.h
+	<stdbool.h>
+	<SDL2/SDL.h>
+
+1647843883 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\chess\core.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdbool.h>
+	<SDL2/SDL.h>
+	"../pp4m/pp4m.h"
+	"../pp4m/pp4m_draw.h"
+	"../pp4m/pp4m_image.h"
+	"../global.h"
+	"event.h"
+	"chess.h"
+	"dot.h"
+	"touch.h"
+	"middle.h"
+	"core.h"
+	"fen.h"
+
+1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\pp4m\pp4m.h
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+
+1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\pp4m\pp4m_draw.h
+	<SDL2/SDL.h>
+
+1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\pp4m\pp4m_image.h
+
+1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\global.h
+	<SDL2/SDL.h>
+
+1647842356 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\chess\fen.h
+	"chess.h"
+
+1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\chess\dot.c
+	<stdio.h>
+	<SDL2/SDL.h>
+	"../pp4m/pp4m_draw.h"
+	"../pp4m/pp4m.h"
+	"../global.h"
+	"dot.h"
+	"core.h"
+
+1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\chess\event.c
+	<stdio.h>
+	"event.h"
+	"core.h"
+	"chess.h"
+
+1647842339 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\chess\fen.c
+	<stdio.h>
+	<unistd.h>
+	<ctype.h>
+	<SDL2/SDL.h>
+	"../pp4m/pp4m_image.h"
+	"../global.h"
+	"fen.h"
+	"chess.h"
+	"core.h"
+
+1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\chess\middle.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<stdbool.h>
+	<SDL2/SDL.h>
+	"../global.h"
+	"event.h"
+	"chess.h"
+	"dot.h"
+	"core.h"
+	"touch.h"
+	"middle.h"
+
+1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\chess\touch.c
+	<stdio.h>
+	<stdbool.h>
+	<SDL2/SDL.h>
+	"touch.h"
+
+1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\dashboard\gui.c
+	<string.h>
+	<SDL2/SDL.h>
+	"../pp4m/pp4m.h"
+	"../pp4m/pp4m_ttf.h"
+	"../pp4m/pp4m_draw.h"
+	"../global.h"
+	"gui.h"
+
+1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\pp4m\pp4m_ttf.h
+
+1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\dashboard\gui.h
+	"gui_alias.h"
+
+1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\dashboard\gui_alias.h
+	<SDL2/SDL.h>
+
+1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\dashboard\gui_alias.c
+	<stdio.h>
+	<stdlib.h>
+	"gui_alias.h"
+
+1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\global.c
+	<SDL2/SDL.h>
+	"global.h"
+	"pp4m/pp4m.h"
+
+1647841634 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\main.c
+	<stdio.h>
+	<unistd.h>
+	"global.h"
+	"pp4m/pp4m.h"
+	"pp4m/pp4m_ttf.h"
+	"version.h"
+	"chess/core.h"
+	"dashboard/gui.h"
+
+1647844124 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\version.h
+
+1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\network\net.c
+	<stdio.h>
+	"../pp4m/pp4m_net.h"
+	"net.h"
+
+1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\pp4m\pp4m_net.h
+
+1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\network\net.h
+
+1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\network\recv.c
+	"recv.h"
+
+1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\network\recv.h
+
+1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\network\send.c
+	"send.h"
+
+1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\network\send.h
+
+1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\pp4m\pp4m.c
+	<time.h>
+	<string.h>
+	<stdbool.h>
+	<SDL2/SDL.h>
+	"pp4m.h"
+	"pp4m_image.h"
+	"pp4m_ttf.h"
+
+1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\pp4m\pp4m_draw.c
+	<SDL2/SDL.h>
+	"pp4m_draw.h"
+
+1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\pp4m\pp4m_image.c
+	<stdio.h>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	"pp4m.h"
+	"pp4m_io.h"
+	"pp4m_image.h"
+
+1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\pp4m\pp4m_io.h
+	<stdbool.h>
+
+1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\pp4m\pp4m_io.c
+	<stdio.h>
+	<string.h>
+	<stdbool.h>
+	<sys/stat.h>
+	"pp4m_io.h"
+
+1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\pp4m\pp4m_net.c
+	<winsock2.h>
+	<windows.h>
+	<netinet/in.h>
+	<sys/socket.h>
+	<sys/types.h>
+	<arpa/inet.h>
+	<netdb.h>
+	<stdio.h>
+	<unistd.h>
+	<errno.h>
+	<string.h>
+	"pp4m_io.h"
+	"pp4m_net.h"
+
+1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\pp4m\pp4m_ttf.c
+	<SDL2/SDL.h>
+	<SDL2/SDL_ttf.h>
+	"pp4m.h"
+	"pp4m_ttf.h"
+
+1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\security\debug.c
+	"debug.h"
+
+1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\security\debug.h
+
+1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\security\sec.c
+	"sec.h"
+
+1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\security\sec.h
+

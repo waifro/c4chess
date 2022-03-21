@@ -302,3 +302,61 @@ int CORE_InitPiece(CHESS_CORE_PIECE *piece, int tile, CHESS_CORE_ENUM_PIECE name
     return (EXIT_SUCCESS);
 }
 */
+
+CHESS_CORE_ENUM_PIECE FEN_CaseEnumPiece(CHESS_CORE_PLAYER player, char character) {
+
+    switch(character)
+    {
+        case 'K':
+        return KING;
+        break;
+
+        case 'k':
+        return BKING;
+        break;
+
+        case 'P':
+        return PAWN;
+        break;
+
+        case 'p':
+        return BPAWN;
+        break;
+
+        case 'N':
+        return KNIGHT;
+        break;
+
+        case 'n':
+        return BKNIGHT;
+        break;
+
+        case 'B':
+        return BISHOP;
+        break;
+
+        case 'b':
+        return BBISHOP;
+        break;
+
+        case 'R':
+        return ROOK;
+        break;
+
+        case 'r':
+        return BROOK;
+        break;
+
+        case 'Q':
+        return QUEEN;
+        break;
+
+        case 'q':
+        return BQUEEN;
+        break;
+
+        default:
+        return NONE;
+        break;
+    }
+}

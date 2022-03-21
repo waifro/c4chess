@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="c4chess-cb" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Release">
+				<Option output="bin/Release/c4chess-cb" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add directory="C:/Program Files/CodeBlocks/MinGW/x86_64-w64-mingw32/include" />
+		</Compiler>
+		<Linker>
+			<Add library="mingw32" />
+			<Add library="SDL2main" />
+			<Add library="SDL2.dll" />
+			<Add library="user32" />
+			<Add library="gdi32" />
+			<Add library="winmm" />
+			<Add library="dxguid" />
+			<Add directory="C:/Program Files/CodeBlocks/MinGW/x86_64-w64-mingw32/lib" />
+		</Linker>
+		<ExtraCommands>
+			<Add after="XCOPY $(#sdl2)\bin\*.dll $(TARGET_OUTPUT_DIR) /D /Y" />
+		</ExtraCommands>
+		<Unit filename="source/animation/animation.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/animation/animation.h" />
+		<Unit filename="source/chess/chess.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/chess/chess.h" />
+		<Unit filename="source/chess/core.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/chess/core.h" />
+		<Unit filename="source/chess/dot.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/chess/dot.h" />
+		<Unit filename="source/chess/event.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/chess/event.h" />
+		<Unit filename="source/chess/fen.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/chess/fen.h" />
+		<Unit filename="source/chess/middle.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/chess/middle.h" />
+		<Unit filename="source/chess/touch.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/chess/touch.h" />
+		<Unit filename="source/dashboard/gui.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/dashboard/gui.h" />
+		<Unit filename="source/dashboard/gui_alias.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/dashboard/gui_alias.h" />
+		<Unit filename="source/global.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/global.h" />
+		<Unit filename="source/main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/network/net.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/network/net.h" />
+		<Unit filename="source/network/recv.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/network/recv.h" />
+		<Unit filename="source/network/send.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/network/send.h" />
+		<Unit filename="source/pp4m/pp4m.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/pp4m/pp4m.h" />
+		<Unit filename="source/pp4m/pp4m_draw.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/pp4m/pp4m_draw.h" />
+		<Unit filename="source/pp4m/pp4m_image.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/pp4m/pp4m_image.h" />
+		<Unit filename="source/pp4m/pp4m_io.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/pp4m/pp4m_io.h" />
+		<Unit filename="source/pp4m/pp4m_net.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/pp4m/pp4m_net.h" />
+		<Unit filename="source/pp4m/pp4m_ttf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/pp4m/pp4m_ttf.h" />
+		<Unit filename="source/security/debug.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/security/debug.h" />
+		<Unit filename="source/security/sec.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/security/sec.h" />
+		<Unit filename="source/version.h" />
+		<Extensions>
+			<AutoVersioning>
+				<Scheme minor_max="10" build_max="0" rev_max="0" rev_rand_max="10" build_times_to_increment_minor="100" />
+				<Settings autoincrement="1" date_declarations="1" use_define="1" update_manifest="0" do_auto_increment="1" ask_to_increment="0" language="C" svn="0" svn_directory="" header_path="source\version.h" />
+				<Changes_Log show_changes_editor="0" app_title="released version %M.%m.%b of %p" changeslog_path="ChangesLog.txt" />
+				<Code header_guard="VERSION_H" namespace="AutoVersion" prefix="" />
+			</AutoVersioning>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

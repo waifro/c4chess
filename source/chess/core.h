@@ -64,6 +64,5 @@ void CORE_GlobalClearChessTile(void);
 void CORE_ResetGlobal_CorePiece(void);
 
 void CORE_Testing(CHESS_CORE_PLAYER player);
-CHESS_CORE_ENUM_PIECE CORE_CaseEnumPiece(CHESS_CORE_PLAYER player, char character);
 
 #endif
