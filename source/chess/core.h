@@ -61,7 +61,9 @@ void CORE_ChessInitTag(CHESS_CORE_PLAYER player);
 void CORE_GlobalDestroyPiece(CHESS_CORE_PIECE *piece);
 void CORE_GlobalClearCorePiece(void);
 void CORE_GlobalClearChessTile(void);
+
 void CORE_ResetGlobal_CorePiece(void);
+void CORE_Chessboard_Reverse(void);
 
 void CORE_Testing(CHESS_CORE_PLAYER player);
 

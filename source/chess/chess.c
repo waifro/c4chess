@@ -8,48 +8,37 @@
 
 void CHESS_RedirectPiecePattern(int tile, CHESS_CORE_PLAYER player, bool check) {
 
-    if (glo_chess_core_player == WHITE_PLAYER) {
-        switch(glo_chess_core_tile[tile].piece->enum_piece) {
-            case KING: CHESS_PiecePatternKing(tile, player, check);
-            break;
-            case PAWN: CHESS_PiecePatternPawn(tile, player, check);
-            break;
-            case BPAWN: CHESS_PiecePatternBPawn(tile, player, check);
-            break;
-            case KNIGHT: //CHESS_PiecePatternKnight(tile, player, check);
-            break;
-            case BISHOP: //CHESS_PiecePatternBishop(tile, player, check);
-            break;
-            case ROOK: //CHESS_PiecePatternRook(tile, player, check);
-            break;
-            case QUEEN: //CHESS_PiecePatternQueen(tile, player, check);
-            break;
-        }
-    }
-
-    else if (glo_chess_core_player == BLACK_PLAYER){
-        switch(glo_chess_core_tile[tile].piece->enum_piece) {
-            case KING: CHESS_PiecePatternKing(tile, player, check);
-            break;
-            case PAWN: CHESS_PiecePatternBPawn(tile, player, check);
-            break;
-            case BPAWN: CHESS_PiecePatternPawn(tile, player, check);
-            break;
-            case KNIGHT: //CHESS_PiecePatternKnight(tile, player, check);
-            break;
-            case BISHOP: //CHESS_PiecePatternBishop(tile, player, check);
-            break;
-            case ROOK: //CHESS_PiecePatternRook(tile, player, check);
-            break;
-            case QUEEN: //CHESS_PiecePatternQueen(tile, player, check);
-            break;
-        }
+    switch(glo_chess_core_tile[tile].piece->enum_piece) {
+        case KING: CHESS_PiecePattern_King(tile, player, check);
+        break;
+        case BKING: CHESS_PiecePattern_King(tile, player, check);
+        break;
+        case PAWN: CHESS_PiecePattern_Pawn(tile, player, check);
+        break;
+        case BPAWN: CHESS_PiecePattern_BPawn(tile, player, check);
+        break;
+        case KNIGHT: //CHESS_PiecePattern_Knight(tile, player, check);
+        break;
+        case BKNIGHT: //CHESS_PiecePattern_Knight(tile, player, check);
+        break;
+        case BISHOP: //CHESS_PiecePattern_Bishop(tile, player, check);
+        break;
+        case BBISHOP: //CHESS_PiecePattern_Bishop(tile, player, check);
+        break;
+        case ROOK: //CHESS_PiecePattern_Rook(tile, player, check);
+        break;
+        case BROOK: //CHESS_PiecePattern_Rook(tile, player, check);
+        break;
+        case QUEEN: //CHESS_PiecePattern_Queen(tile, player, check);
+        break;
+        case BQUEEN: //CHESS_PiecePattern_Queen(tile, player, check);
+        break;
     }
 
     return;
 }
 
-void CHESS_PiecePatternPawnAttack(int tile, CHESS_CORE_PLAYER player, bool check) {
+void CHESS_PiecePattern_PawnAttack(int tile, CHESS_CORE_PLAYER player, bool check) {
 
     char alpha[] = "abcdefgh";
     int row = MIDDLE_ReturnRowTile(tile) + 1;
@@ -86,7 +75,7 @@ void CHESS_PiecePatternPawnAttack(int tile, CHESS_CORE_PLAYER player, bool check
     return;
 }
 
-void CHESS_PiecePatternBPawnAttack(int tile, CHESS_CORE_PLAYER player, bool check) {
+void CHESS_PiecePattern_BPawnAttack(int tile, CHESS_CORE_PLAYER player, bool check) {
 
     char alpha[] = "abcdefgh";
     int row = MIDDLE_ReturnRowTile(tile) - 1;
@@ -123,7 +112,7 @@ void CHESS_PiecePatternBPawnAttack(int tile, CHESS_CORE_PLAYER player, bool chec
     return;
 }
 
-void CHESS_PiecePatternKing(int tile, CHESS_CORE_PLAYER player, bool check) {
+void CHESS_PiecePattern_King(int tile, CHESS_CORE_PLAYER player, bool check) {
 
     char alpha[] = "abcdefgh";
     CHESS_CORE_TILE_TAG tag;
@@ -180,7 +169,7 @@ void CHESS_PiecePatternKing(int tile, CHESS_CORE_PLAYER player, bool check) {
     return;
 }
 
-void CHESS_PiecePatternPawn(int tile, CHESS_CORE_PLAYER player, bool check) {
+void CHESS_PiecePattern_Pawn(int tile, CHESS_CORE_PLAYER player, bool check) {
 
     if (check == false) {
 
@@ -216,12 +205,12 @@ void CHESS_PiecePatternPawn(int tile, CHESS_CORE_PLAYER player, bool check) {
 
     }
 
-    CHESS_PiecePatternPawnAttack(tile, player, check);
+    CHESS_PiecePattern_PawnAttack(tile, player, check);
 
     return;
 }
 
-void CHESS_PiecePatternBPawn(int tile, CHESS_CORE_PLAYER player, bool check) {
+void CHESS_PiecePattern_BPawn(int tile, CHESS_CORE_PLAYER player, bool check) {
 
     if (check == false) {
 
@@ -257,12 +246,12 @@ void CHESS_PiecePatternBPawn(int tile, CHESS_CORE_PLAYER player, bool check) {
 
     }
 
-    CHESS_PiecePatternBPawnAttack(tile, player, check);
+    CHESS_PiecePattern_BPawnAttack(tile, player, check);
 
     return;
 }
 
-void CHESS_PiecePatternKnight(int tile, CHESS_CORE_PLAYER player, bool check) {
+void CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, bool check) {
 
     // temporary fix to warning
     (void)player; (void)check;

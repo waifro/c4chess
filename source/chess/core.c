@@ -143,6 +143,18 @@ void CORE_ResetGlobal_CorePiece(void) {
     return;
 }
 
+void CORE_Chessboard_Reverse(void) {
+    // reverse the board for:
+    // - switching view
+    // - black player
+
+    // create a fac-simile chess_core_tile;
+    // start from glo_chess_core_tile and reverse order to chess_core_tile
+    // paste chess_core_tile into glo_chess_core_tile
+
+    return;
+}
+
 void CORE_Testing(CHESS_CORE_PLAYER player) {
 
     glo_chess_core_player = player;
@@ -156,7 +168,8 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     CORE_ResetGlobal_CorePiece();
 
     // init pieces for main player
-    FEN_Init(glo_chess_core_player, "4k3/6p1/8/8/8/8/3K/8");
+    // FEN_Init(glo_chess_core_player, "4k3/6p1/8/8/8/8/3K/8");
+    FEN_Init(glo_chess_core_player, "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R");
 
     printf("finish FEN notation\n");
 

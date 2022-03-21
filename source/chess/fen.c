@@ -57,15 +57,15 @@ int FEN_Init(CHESS_CORE_PLAYER init_player, char *fen_board) {
     char character = 0;
 
     // index keeps track of pieces initialized
-    volatile short int tile = 0;
-    volatile short int index = 0;
+    short int tile = 0;
+    short int index = 0;
 
     printf("len: %d\n", fen_length);
 
     for (int n = 0; n <= fen_length; n++) {
 
         character = fen_board[n];
-        printf("FEN char: %c\n", character);
+        printf("FEN_Init:\n    character[%c] - tile[%d]\n", character, tile);
 
         if (isalpha(character) != 0)
         {
@@ -84,12 +84,15 @@ int FEN_Init(CHESS_CORE_PLAYER init_player, char *fen_board) {
 
         else if (isdigit(character) != 0)
         {
-            int foo = -1;
+            short int foo = 0;
             // increase number of tiles from character
-            sscanf(&character, "%d", &foo);
 
+            char bar[5];
+            sprintf(bar, "%c", character);
+
+            sscanf(bar, "%hd", &foo);
+            printf("foo: %d\n", foo);
             tile += foo;
-            continue;
         }
 
     }
@@ -98,22 +101,6 @@ int FEN_Init(CHESS_CORE_PLAYER init_player, char *fen_board) {
 }
 
 int FEN_InitPiece(CHESS_CORE_PLAYER player, CHESS_CORE_PIECE *piece, CHESS_CORE_ENUM_PIECE name, int tile) {
-
-    /*
-    NONE = 0,
-    KING,
-    BKING,
-    PAWN,
-    BPAWN,
-    KNIGHT,
-    BKNIGHT,
-    BISHOP,
-    BBISHOP,
-    ROOK,
-    BROOK,
-    QUEEN,
-    BQUEEN
-    */
 
     // promemoria
     // invertire i movimenti quando sei nero
@@ -138,8 +125,33 @@ int FEN_InitPiece(CHESS_CORE_PLAYER player, CHESS_CORE_PIECE *piece, CHESS_CORE_
         case BPAWN:
             piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BPAWN, &piece->rect, 0, 0, 50, 50);
         break;
+        case KNIGHT:
+            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WKNIGHT, &piece->rect, 0, 0, 50, 50);
+        break;
+        case BKNIGHT:
+            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKNIGHT, &piece->rect, 0, 0, 50, 50);
+        break;
+        case BISHOP:
+            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WBISHOP, &piece->rect, 0, 0, 50, 50);
+        break;
+        case BBISHOP:
+            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BBISHOP, &piece->rect, 0, 0, 50, 50);
+        break;
+        case ROOK:
+            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WROOK, &piece->rect, 0, 0, 50, 50);
+        break;
+        case BROOK:
+            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BROOK, &piece->rect, 0, 0, 50, 50);
+        break;
+        case QUEEN:
+            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WQUEEN, &piece->rect, 0, 0, 50, 50);
+        break;
+        case BQUEEN:
+            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BQUEEN, &piece->rect, 0, 0, 50, 50);
+        break;
+        
         default:
-            printf("error FEN_InitPiece\n");
+            printf("error FEN_InitPiece - probably NONE case\n");
             exit(1);
         break;
     }
