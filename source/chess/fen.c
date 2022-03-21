@@ -46,11 +46,10 @@ moveBlack:  [2]
 
 */
 
-int FEN_Init(CHESS_CORE_PLAYER player, char *fen_board) {
+int FEN_Init(CHESS_CORE_PLAYER init_player, char *fen_board) {
 
     // switch from one player to another
-    CHESS_CORE_PLAYER init_player = WHITE_PLAYER;
-    if (player == WHITE_PLAYER) init_player = BLACK_PLAYER;
+    CHESS_CORE_PLAYER player = init_player;
 
     // grab length of ptr (the length could varie)
     short int fen_length = strlen(fen_board);
@@ -73,8 +72,11 @@ int FEN_Init(CHESS_CORE_PLAYER player, char *fen_board) {
             // when '/' is used to skip ranks
             if (character == '/' || character == '\\') continue;
 
+            if (isupper(character) != 0) player = WHITE_PLAYER;
+            else player = BLACK_PLAYER;
+
             // init piece from special case
-            FEN_InitPiece(init_player, &glo_chess_core_piece[index], FEN_EnumPiece(character), tile);
+            FEN_InitPiece(player, &glo_chess_core_piece[index], FEN_EnumPiece(character), tile);
 
             index += 1;
             tile += 1;
