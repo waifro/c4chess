@@ -17,7 +17,7 @@ int main (int argc, char *argv[]) {
     (void)argc; (void)argv;
 
     char title_ver[256];
-    sprintf(title_ver, "c4chess alpha-rewritten v%d.%d-%d%s%s%s", MAJOR, MINOR, BUILD, DATE, MONTH, YEAR);
+    sprintf(title_ver, "c4chess v%d.%d%s rev%d%d-%s%s%s", MAJOR, MINOR, STATUS_SHORT, BUILD, REVISION, DATE, MONTH, YEAR);
 
     glo_render = pp4m_Init(glo_window, title_ver, glo_screen_w, glo_screen_h, WINDOW);
     pp4m_TTF_Init();
