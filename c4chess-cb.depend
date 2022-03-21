@@ -1673,7 +1673,7 @@
 	<stdbool.h>
 	<SDL2/SDL.h>
 
-1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\chess\chess.h
+1647845924 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\chess\chess.h
 	<stdbool.h>
 	"core.h"
 
@@ -1721,7 +1721,7 @@
 1647841101 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\global.h
 	<SDL2/SDL.h>
 
-1647842356 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\chess\fen.h
+1647846161 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\chess\fen.h
 	"chess.h"
 
 1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\chess\dot.c
@@ -1739,7 +1739,7 @@
 	"core.h"
 	"chess.h"
 
-1647842339 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\chess\fen.c
+1647846296 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\chess\fen.c
 	<stdio.h>
 	<unistd.h>
 	<ctype.h>
@@ -1807,7 +1807,7 @@
 	"chess/core.h"
 	"dashboard/gui.h"
 
-1647844124 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\version.h
+1647846172 c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\version.h
 
 1647841101 source:c:\users\michele.spaziotempo\desktop\programmi\progetti\c4chess-cb\source\network\net.c
 	<stdio.h>
