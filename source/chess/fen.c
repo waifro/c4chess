@@ -77,6 +77,7 @@ int FEN_Init(CHESS_CORE_PLAYER player, char *fen_board) {
             FEN_InitPiece(init_player, &glo_chess_core_piece[index], FEN_EnumPiece(character), tile);
 
             index += 1;
+            tile += 1;
         }
 
         else if (isdigit(character) != 0)
@@ -85,13 +86,10 @@ int FEN_Init(CHESS_CORE_PLAYER player, char *fen_board) {
             // increase number of tiles from character
             sscanf(&character, "%d", &foo);
 
-            printf("FEN_Init: foo = %d\n", foo);
-
             tile += foo;
             continue;
         }
 
-        tile += 1;
     }
 
     return 0;
