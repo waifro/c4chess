@@ -9,6 +9,7 @@ void CHESS_RedirectPiecePattern(int tile, CHESS_CORE_PLAYER player, bool check);
 
 void CHESS_PiecePattern_PawnAttack(int tile, CHESS_CORE_PLAYER player, bool check);
 void CHESS_PiecePattern_BPawnAttack(int tile, CHESS_CORE_PLAYER player, bool check);
+void CHESS_PiecePattern_KnightAttack(int tile, CHESS_CORE_PLAYER player, bool check);
 
 void CHESS_PiecePattern_King(int tile, CHESS_CORE_PLAYER player, bool check);
 void CHESS_PiecePattern_Pawn(int tile, CHESS_CORE_PLAYER player, bool check);

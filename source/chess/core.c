@@ -165,13 +165,10 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     DOT_InitGlobalDot();
 
     // set glo_chess_core_piece to initial state
-    CORE_ResetGlobal_CorePiece();
+    //CORE_ResetGlobal_CorePiece();
 
     // init pieces for main player
-    // FEN_Init(glo_chess_core_player, "4k3/6p1/8/8/8/8/3K/8");
-    FEN_Init(glo_chess_core_player, "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R");
-
-    printf("finish FEN notation\n");
+    FEN_Init(glo_chess_core_player, "4k3/6p1/8/8/8/5N2/3K4/8");
 
     SDL_Event event;
     player = WHITE_PLAYER;
