@@ -178,7 +178,6 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
         EVENT_CheckPieceLayer(player);
 
-        // TODO: fix bug where touching first tile, triggers this function
         if (MIDDLE_UpdateChangeState(&event, player) == -2)
         {
             if (player == WHITE_PLAYER) player = BLACK_PLAYER;
