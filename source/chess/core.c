@@ -179,7 +179,13 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
         EVENT_CheckPieceLayer(player);
 
         // TODO: fix bug where touching first tile, triggers this function
-        if (MIDDLE_UpdateChangeState(&event, player) == 0) { player ^= 1; printf("CORE_Testing:\n  player_turn = %d\n", player); }
+        if (MIDDLE_UpdateChangeState(&event, player) == -2)
+        {
+            if (player == WHITE_PLAYER) player = BLACK_PLAYER;
+            else player = WHITE_PLAYER;
+
+            printf("CORE_Testing:\n  player_turn = %d\n", player);
+        }
 
         SDL_RenderClear(glo_render);
         for (int n = 0; n < 64; n++) {

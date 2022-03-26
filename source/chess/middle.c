@@ -93,6 +93,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player) {
 
     touch_pos = TOUCH_MouseState(event);
 
+    // select choosen piece from mem
     if (touch_pos.iner != -1 && position_old == -1) {
         result = MIDDLE_TouchToTile(touch_pos);
         if (result != -1 && glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player == player) {
@@ -103,6 +104,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player) {
         }
     }
 
+    // deselect choosen piece from mem
     else if (touch_pos.iner != -1 && position_old != -1) {
         result = MIDDLE_TouchToTile(touch_pos);
 
@@ -115,7 +117,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player) {
 
                 MIDDLE_UpdatePositionPiece(position_old, position_new);
                 DOT_StateGlobalDotReset();
-                position_new = -1; position_old = -1; result = 0;
+                position_new = -1; position_old = -1; result = -2;
 
 
             } else if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[position_old].piece->player == glo_chess_core_tile[result].piece->player) {
