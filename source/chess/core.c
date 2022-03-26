@@ -168,11 +168,10 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     //CORE_ResetGlobal_CorePiece();
 
     // init pieces for main player
-    FEN_Init(glo_chess_core_player, "4k3/6p1/8/8/8/5N2/3K4/8");
+    FEN_Init(glo_chess_core_player, "4k3/6p1/8/2n5/8/5N2/3K4/8");
 
     SDL_Event event;
-    player = WHITE_PLAYER;
-
+    
     while(1) {
         SDL_PollEvent(&event);
 
