@@ -38,8 +38,9 @@ void EVENT_CheckKingState(CHESS_CORE_PLAYER player) {
 
     for (int n = 0; n < 64; n++) {
 
-        if (glo_chess_core_tile[n].piece != NULL) {
-            if (glo_chess_core_tile[n].piece->player == player && glo_chess_core_tile[n].piece->enum_piece == KING) {
+        if (glo_chess_core_tile[n].piece != NULL && glo_chess_core_tile[n].piece->player == player) {
+            
+            if (glo_chess_core_tile[n].piece->enum_piece == KING) {
                 if (glo_chess_event_layer[n] == true) {
                     printf("\n\nKING UNDER ATTACK\n\n\n"); //check enabled, a func;
                 }
