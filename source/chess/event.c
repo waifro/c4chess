@@ -57,7 +57,9 @@ void EVENT_CheckPieceLayer(CHESS_CORE_PLAYER player) {
         for (int n = 0; n < 64; n++) {
             // piece range copy
             if (glo_chess_core_tile[n].piece != NULL && glo_chess_core_tile[n].piece->player != player) {
+                
                 CHESS_RedirectPiecePattern(n, pl_bak, true);
+                
                 for (int i = 0; i < 64; i++) {
                     if (glo_chess_core_tile[n].piece->range[i] == true) { glo_chess_event_layer[i] = true; }
                     //printf("EVENT_CheckPieceLayer: piece[%c%d] range[%c%d] = piece[%d] layer[%d]\n", glo_chess_core_tile[n].tag.col, glo_chess_core_tile[n].tag.row, glo_chess_core_tile[i].tag.col, glo_chess_core_tile[i].tag.row, glo_chess_core_tile[n].piece->range[i], glo_chess_event_layer[i]);
