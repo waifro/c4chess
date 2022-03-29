@@ -29,9 +29,9 @@ void CHESS_RedirectPiecePattern(int tile, CHESS_CORE_PLAYER player, bool check) 
         break;
         case BROOK: CHESS_PiecePattern_Rook(tile, player, check);
         break;
-        case QUEEN: //CHESS_PiecePattern_Queen(tile, player, check);
+        case QUEEN: CHESS_PiecePattern_Queen(tile, player, check);
         break;
-        case BQUEEN: //CHESS_PiecePattern_Queen(tile, player, check);
+        case BQUEEN: CHESS_PiecePattern_Queen(tile, player, check);
         break;
         default:
         break;
@@ -385,7 +385,11 @@ void CHESS_PiecePattern_Bishop(int tile, CHESS_CORE_PLAYER player, bool check) {
             else
             {
                 if (glo_chess_core_tile[result].piece == NULL) glo_chess_dot[result].state = true;
-                else if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player != player) glo_chess_dot[result].state = true;
+                else if (glo_chess_core_tile[result].piece != NULL)
+                {
+                    if (glo_chess_core_tile[result].piece->player != player) glo_chess_dot[result].state = true;
+                    break;
+                }
             }
         }
     }
@@ -423,11 +427,72 @@ void CHESS_PiecePattern_Rook(int tile, CHESS_CORE_PLAYER player, bool check) {
             else
             {
                 if (glo_chess_core_tile[result].piece == NULL) glo_chess_dot[result].state = true;
-                else if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player != player) glo_chess_dot[result].state = true;
+                else if (glo_chess_core_tile[result].piece != NULL)
+                {
+                    if (glo_chess_core_tile[result].piece->player != player) glo_chess_dot[result].state = true;
+                    break;
+                }
             }
         }
     }
 
+
+    return;
+}
+
+void CHESS_PiecePattern_Queen(int tile, CHESS_CORE_PLAYER player, bool check) {
+
+    CHESS_CORE_TILE_TAG tag;
+
+    char alpha[] = "abcdefgh";
+    int col_pos = MIDDLE_ReturnColTile(tile);
+
+    int result = -1;
+    for (int n = 0; n < 2; n++)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            col_pos = MIDDLE_ReturnColTile(tile);
+            tag.row = MIDDLE_ReturnRowTile(tile);
+            tag.col = alpha[col_pos];
+
+            for (int u = 0; u < 8; u++)
+            {
+                if (n == 0)
+                {
+                    if      (i == 0) { tag.row += 1; }
+                    else if (i == 1) { col_pos += 1; }
+                    else if (i == 2) { tag.row -= 1; }
+                    else if (i == 3) { col_pos -= 1; }
+                }
+
+                else if (n == 1)
+                {
+                    if      (i == 0) { col_pos -= 1; tag.row += 1; }
+                    else if (i == 1) { col_pos += 1; tag.row += 1; }
+                    else if (i == 2) { col_pos -= 1; tag.row -= 1; }
+                    else if (i == 3) { col_pos += 1; tag.row -= 1; }
+                }
+
+                tag.col = alpha[col_pos];
+
+                result = MIDDLE_TagToTile(tag);
+
+                if (result == -1) break;
+
+                if (check == true) glo_chess_core_tile[tile].piece->range[result] = true;
+                else
+                {
+                    if (glo_chess_core_tile[result].piece == NULL) glo_chess_dot[result].state = true;
+                    else if (glo_chess_core_tile[result].piece != NULL)
+                    {
+                        if (glo_chess_core_tile[result].piece->player != player) glo_chess_dot[result].state = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
     return;
 }
