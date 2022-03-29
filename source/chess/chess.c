@@ -381,9 +381,15 @@ void CHESS_PiecePattern_Bishop(int tile, CHESS_CORE_PLAYER player, bool check) {
 
             if (result == -1) break;
 
-            if (check == true) glo_chess_core_tile[tile].piece->range[result] = true;
-            else
-            {
+            if (check == true) {
+                glo_chess_core_tile[tile].piece->range[result] = true;
+
+                if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player != player) {
+                    if (glo_chess_core_tile[result].piece->enum_piece != KING && glo_chess_core_tile[result].piece->enum_piece != BKING) break;
+                }
+            }
+
+            else {
                 if (glo_chess_core_tile[result].piece == NULL) glo_chess_dot[result].state = true;
                 else if (glo_chess_core_tile[result].piece != NULL)
                 {
@@ -423,9 +429,15 @@ void CHESS_PiecePattern_Rook(int tile, CHESS_CORE_PLAYER player, bool check) {
 
             if (result == -1) break;
 
-            if (check == true) glo_chess_core_tile[tile].piece->range[result] = true;
-            else
-            {
+            if (check == true) {
+                glo_chess_core_tile[tile].piece->range[result] = true;
+
+                if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player != player) {
+                    if (glo_chess_core_tile[result].piece->enum_piece != KING && glo_chess_core_tile[result].piece->enum_piece != BKING) break;
+                }
+            }
+
+            else {
                 if (glo_chess_core_tile[result].piece == NULL) glo_chess_dot[result].state = true;
                 else if (glo_chess_core_tile[result].piece != NULL)
                 {
@@ -480,9 +492,15 @@ void CHESS_PiecePattern_Queen(int tile, CHESS_CORE_PLAYER player, bool check) {
 
                 if (result == -1) break;
 
-                if (check == true) glo_chess_core_tile[tile].piece->range[result] = true;
-                else
-                {
+                if (check == true) {
+                    glo_chess_core_tile[tile].piece->range[result] = true;
+
+                    if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player != player) {
+                        if (glo_chess_core_tile[result].piece->enum_piece != KING && glo_chess_core_tile[result].piece->enum_piece != BKING) break;
+                    }
+                }
+
+                else {
                     if (glo_chess_core_tile[result].piece == NULL) glo_chess_dot[result].state = true;
                     else if (glo_chess_core_tile[result].piece != NULL)
                     {

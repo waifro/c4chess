@@ -7,7 +7,7 @@
 extern bool glo_chess_event_layer[64];
 
 void EVENT_BlankLayer(void);
-void EVENT_BlankPieceLayer(void);
+void EVENT_BlankLayer_Piece(void);
 
 void EVENT_CheckDrawState(void);
 void EVENT_CheckKingState(CHESS_CORE_PLAYER player);

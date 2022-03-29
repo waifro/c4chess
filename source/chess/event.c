@@ -13,10 +13,10 @@ void EVENT_BlankLayer(void) {
     return;
 }
 
-void EVENT_BlankPieceLayer(void) {
+void EVENT_BlankLayer_Piece(void) {
     for (int n = 0; n < 64; n++) {
-        if (glo_chess_core_tile[n].piece != NULL) for (int i = 0; i < 64; i++) {
-            glo_chess_core_tile[n].piece->range[i] = false;
+        if (glo_chess_core_tile[n].piece != NULL) {
+            for (int i = 0; i < 64; i++) glo_chess_core_tile[n].piece->range[i] = false;
         }
     }
 
@@ -39,12 +39,12 @@ void EVENT_CheckKingState(CHESS_CORE_PLAYER player) {
     for (int n = 0; n < 64; n++) {
 
         if (glo_chess_core_tile[n].piece != NULL && glo_chess_core_tile[n].piece->player == player) {
-            
+
             if (glo_chess_core_tile[n].piece->enum_piece == KING) {
                 if (glo_chess_event_layer[n] == true) {
                     printf("\n\nKING UNDER ATTACK\n\n\n"); //check enabled, a func;
                 }
-                    
+
                 break;
             }
         }
@@ -54,25 +54,27 @@ void EVENT_CheckKingState(CHESS_CORE_PLAYER player) {
 }
 
 void EVENT_CheckPieceLayer(CHESS_CORE_PLAYER player) {
-    
+
     static CHESS_CORE_PLAYER pl_bak;
     if (pl_bak != player) {
 
         EVENT_BlankLayer();
-        EVENT_BlankPieceLayer();
+        EVENT_BlankLayer_Piece();
 
-        for (int n = 0; n < 64; n++) {
+        for (int n = 0; n < 64; n++)
+        {
             // piece range copy
             if (glo_chess_core_tile[n].piece != NULL && glo_chess_core_tile[n].piece->player != player) {
-                
+
                 CHESS_RedirectPiecePattern(n, pl_bak, true);
-                
+
                 for (int i = 0; i < 64; i++) {
 
                     if (glo_chess_core_tile[n].piece->range[i] == true) {
                         glo_chess_event_layer[i] = true;
                     }
 
+                    // better to create a visible layer
                     //printf("EVENT_CheckPieceLayer: piece[%c%d] range[%c%d] = piece[%d] layer[%d]\n", glo_chess_core_tile[n].tag.col, glo_chess_core_tile[n].tag.row, glo_chess_core_tile[i].tag.col, glo_chess_core_tile[i].tag.row, glo_chess_core_tile[n].piece->range[i], glo_chess_event_layer[i]);
                 }
             }
@@ -82,6 +84,6 @@ void EVENT_CheckPieceLayer(CHESS_CORE_PLAYER player) {
         EVENT_CheckDrawState();
         EVENT_CheckKingState(player);
     }
-    
+
     return;
 }
