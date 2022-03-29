@@ -16,5 +16,6 @@ void CHESS_PiecePattern_Pawn(int tile, CHESS_CORE_PLAYER player, bool check);
 void CHESS_PiecePattern_BPawn(int tile, CHESS_CORE_PLAYER player, bool check);
 void CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, bool check);
 void CHESS_PiecePattern_Bishop(int tile, CHESS_CORE_PLAYER player, bool check);
+void CHESS_PiecePattern_Rook(int tile, CHESS_CORE_PLAYER player, bool check);
 
 #endif

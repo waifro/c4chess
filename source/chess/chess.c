@@ -25,9 +25,9 @@ void CHESS_RedirectPiecePattern(int tile, CHESS_CORE_PLAYER player, bool check) 
         break;
         case BBISHOP: CHESS_PiecePattern_Bishop(tile, player, check);
         break;
-        case ROOK: //CHESS_PiecePattern_Rook(tile, player, check);
+        case ROOK: CHESS_PiecePattern_Rook(tile, player, check);
         break;
-        case BROOK: //CHESS_PiecePattern_Rook(tile, player, check);
+        case BROOK: CHESS_PiecePattern_Rook(tile, player, check);
         break;
         case QUEEN: //CHESS_PiecePattern_Queen(tile, player, check);
         break;
@@ -356,7 +356,7 @@ void CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, bool check) {
 
 void CHESS_PiecePattern_Bishop(int tile, CHESS_CORE_PLAYER player, bool check) {
 
-    CHESS_CORE_TILE_TAG tag = MIDDLE_TileToTag(tile);
+    CHESS_CORE_TILE_TAG tag;
 
     // save current state on col_pos
     char alpha[] = "abcdefgh";
@@ -371,7 +371,7 @@ void CHESS_PiecePattern_Bishop(int tile, CHESS_CORE_PLAYER player, bool check) {
 
         for (int i = 0; i < 8; i++)
         {
-            if (n == 0) { col_pos -= 1; tag.row += 1; }
+            if      (n == 0) { col_pos -= 1; tag.row += 1; }
             else if (n == 1) { col_pos += 1; tag.row += 1; }
             else if (n == 2) { col_pos -= 1; tag.row -= 1; }
             else if (n == 3) { col_pos += 1; tag.row -= 1; }
@@ -389,6 +389,45 @@ void CHESS_PiecePattern_Bishop(int tile, CHESS_CORE_PLAYER player, bool check) {
             }
         }
     }
+
+    return;
+}
+
+void CHESS_PiecePattern_Rook(int tile, CHESS_CORE_PLAYER player, bool check) {
+
+    CHESS_CORE_TILE_TAG tag;
+
+    char alpha[] = "abcdefgh";
+    int col_pos = MIDDLE_ReturnColTile(tile);
+
+    int result = -1;
+    for (int n = 0; n < 4; n++)
+    {
+        col_pos = MIDDLE_ReturnColTile(tile);
+        tag.row = MIDDLE_ReturnRowTile(tile);
+        tag.col = alpha[col_pos];
+
+        for (int i = 0; i < 8; i++)
+        {
+            if      (n == 0) { tag.row += 1; }
+            else if (n == 1) { col_pos += 1; }
+            else if (n == 2) { tag.row -= 1; }
+            else if (n == 3) { col_pos -= 1; }
+            tag.col = alpha[col_pos];
+
+            result = MIDDLE_TagToTile(tag);
+
+            if (result == -1) break;
+
+            if (check == true) glo_chess_core_tile[tile].piece->range[result] = true;
+            else
+            {
+                if (glo_chess_core_tile[result].piece == NULL) glo_chess_dot[result].state = true;
+                else if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player != player) glo_chess_dot[result].state = true;
+            }
+        }
+    }
+
 
     return;
 }
