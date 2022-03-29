@@ -60,12 +60,12 @@ int FEN_Init(CHESS_CORE_PLAYER init_player, char *fen_board) {
     short int tile = 0;
     short int index = 0;
 
-    printf("len: %d\n", fen_length);
+    printf("length FEN board: %d\n", fen_length);
 
     for (int n = 0; n <= fen_length; n++) {
 
         character = fen_board[n];
-        printf("FEN_Init:\n    character[%c] - tile[%d]\n", character, tile);
+        printf("FEN_Init:\n  character[%c] - tile[%d]\n", character, tile);
 
         if (isalpha(character) != 0)
         {
@@ -91,7 +91,6 @@ int FEN_Init(CHESS_CORE_PLAYER init_player, char *fen_board) {
             sprintf(bar, "%c", character);
 
             sscanf(bar, "%hd", &foo);
-            printf("foo: %d\n", foo);
             tile += foo;
         }
 
@@ -149,7 +148,7 @@ int FEN_InitPiece(CHESS_CORE_PLAYER player, CHESS_CORE_PIECE *piece, CHESS_CORE_
         case BQUEEN:
             piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BQUEEN, &piece->rect, 0, 0, 50, 50);
         break;
-        
+
         default:
             printf("error FEN_InitPiece - probably NONE case\n");
             exit(1);
