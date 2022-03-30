@@ -90,7 +90,7 @@ void CHESS_PiecePattern_BPawnAttack(int tile, CHESS_CORE_PLAYER player, bool che
     tag.row = row;
     tag.col = alpha[col_pos];
 
-    int result;
+    int result = -1;
     for (int n = 0; n < 3; n++) {
 
         if (col_pos < 0) { col_pos += 1; tag.col = alpha[col_pos]; continue; }
@@ -176,7 +176,7 @@ void CHESS_PiecePattern_Pawn(int tile, CHESS_CORE_PLAYER player, bool check) {
     if (check == false) {
 
         CHESS_CORE_TILE_TAG tag = glo_chess_core_tile[tile].tag;
-        int result;
+        int result = -1;
 
         if (tag.row == 8) return;
 
@@ -217,7 +217,7 @@ void CHESS_PiecePattern_BPawn(int tile, CHESS_CORE_PLAYER player, bool check) {
     if (check == false) {
 
         CHESS_CORE_TILE_TAG tag = glo_chess_core_tile[tile].tag;
-        int result;
+        int result = -1;
 
         if (tag.row == 1) return;
 
@@ -262,7 +262,7 @@ void CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, bool check) {
     tag.row = MIDDLE_ReturnRowTile(tile) - 2;
     tag.col = alpha[col_pos];
 
-    int result;
+    int result = -1;
 
     // might want to change this function
     for (int i = 0; i < 4; i++) {
