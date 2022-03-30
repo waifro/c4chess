@@ -53,7 +53,7 @@ void CHESS_PiecePattern_PawnAttack(int tile, CHESS_CORE_PLAYER player, bool chec
     tag.row = row;
     tag.col = alpha[col_pos];
 
-    int result;
+    int result = -1;
     for (int n = 0; n < 3; n++) {
 
         if (col_pos < 0) { col_pos += 1; tag.col = alpha[col_pos]; continue; }
@@ -123,7 +123,7 @@ void CHESS_PiecePattern_King(int tile, CHESS_CORE_PLAYER player, bool check) {
     tag.row = MIDDLE_ReturnRowTile(tile) - 1;
     tag.col = alpha[col_pos];
 
-    int result;
+    int result = -1;
 
     for (int n = 0; n < 9; n++) {
 
@@ -379,7 +379,7 @@ void CHESS_PiecePattern_Bishop(int tile, CHESS_CORE_PLAYER player, bool check) {
 
             result = MIDDLE_TagToTile(tag);
 
-            if (result == -1) break;
+            if (result == -1) continue;
 
             if (check == true) {
                 glo_chess_core_tile[tile].piece->range[result] = true;
@@ -427,7 +427,7 @@ void CHESS_PiecePattern_Rook(int tile, CHESS_CORE_PLAYER player, bool check) {
 
             result = MIDDLE_TagToTile(tag);
 
-            if (result == -1) break;
+            if (result == -1) continue;
 
             if (check == true) {
                 glo_chess_core_tile[tile].piece->range[result] = true;
@@ -490,7 +490,7 @@ void CHESS_PiecePattern_Queen(int tile, CHESS_CORE_PLAYER player, bool check) {
 
                 result = MIDDLE_TagToTile(tag);
 
-                if (result == -1) break;
+                if (result == -1) continue;
 
                 // temporary ?
                 if (glo_chess_core_tile[tile].piece->lock == true) {
