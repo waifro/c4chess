@@ -494,6 +494,7 @@ void CHESS_PiecePattern_Queen(int tile, CHESS_CORE_PLAYER player, bool check) {
 
                 // temporary ?
                 if (glo_chess_core_tile[tile].piece->lock == true) {
+
                     // where it needs to be locked? from event or here?
                 }
 

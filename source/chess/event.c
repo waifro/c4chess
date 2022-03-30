@@ -53,6 +53,16 @@ void EVENT_CheckKingState(CHESS_CORE_PLAYER player) {
 void EVENT_CheckPieceLayer(CHESS_CORE_PLAYER player) {
 
     static CHESS_CORE_PLAYER pl_bak;
+
+    static bool check_state;
+    if (!check_state) {
+
+        if (player == WHITE_PLAYER) pl_bak = BLACK_PLAYER;
+        else pl_bak = WHITE_PLAYER;
+
+        check_state = true;
+    }
+
     if (pl_bak != player) {
 
         EVENT_BlankLayer();
