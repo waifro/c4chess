@@ -273,6 +273,9 @@ void CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, bool check) {
 
         if (result == -1) continue;
 
+        // temporary fix to standardize locking piece through lock variable(?)
+        if (check == false && glo_chess_core_tile[tile].piece->lock == true) break;
+
         if (i == 0 || i == 2)
         {
             if (check == true)
@@ -293,6 +296,9 @@ void CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, bool check) {
         result = MIDDLE_TagToTile(tag);
 
         if (result == -1) continue;
+
+        // temporary fix to standardize locking piece through lock variable(?)
+        if (check == false && glo_chess_core_tile[tile].piece->lock == true) break;
 
         if (i == 0 || i == 2)
         {
@@ -316,6 +322,9 @@ void CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, bool check) {
 
         if (result == -1) continue;
 
+        // temporary fix to standardize locking piece through lock variable(?)
+        if (check == false && glo_chess_core_tile[tile].piece->lock == true) break;
+
         if (i == 0 || i == 2)
         {
             if (check == true)
@@ -336,6 +345,9 @@ void CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, bool check) {
         result = MIDDLE_TagToTile(tag);
 
         if (result == -1) continue;
+
+        // temporary fix to standardize locking piece through lock variable(?)
+        if (check == false && glo_chess_core_tile[tile].piece->lock == true) break;
 
         if (i == 0 || i == 2)
         {
@@ -380,6 +392,9 @@ void CHESS_PiecePattern_Bishop(int tile, CHESS_CORE_PLAYER player, bool check) {
             result = MIDDLE_TagToTile(tag);
 
             if (result == -1) continue;
+
+            // temporary fix to standardize locking piece through lock variable(?)
+            if (check == false && glo_chess_core_tile[tile].piece->lock == true) break;
 
             if (check == true) {
                 glo_chess_core_tile[tile].piece->range[result] = true;
@@ -428,6 +443,9 @@ void CHESS_PiecePattern_Rook(int tile, CHESS_CORE_PLAYER player, bool check) {
             result = MIDDLE_TagToTile(tag);
 
             if (result == -1) continue;
+
+            // temporary fix to standardize locking piece through lock variable(?)
+            if (check == false && glo_chess_core_tile[tile].piece->lock == true) break;
 
             if (check == true) {
                 glo_chess_core_tile[tile].piece->range[result] = true;
@@ -492,11 +510,8 @@ void CHESS_PiecePattern_Queen(int tile, CHESS_CORE_PLAYER player, bool check) {
 
                 if (result == -1) continue;
 
-                // temporary ?
-                if (glo_chess_core_tile[tile].piece->lock == true) {
-
-                    // where it needs to be locked? from event or here?
-                }
+                // temporary fix to standardize locking piece through lock variable(?)
+                if (check == false && glo_chess_core_tile[tile].piece->lock == true) break;
 
                 if (check == true) {
                     glo_chess_core_tile[tile].piece->range[result] = true;
