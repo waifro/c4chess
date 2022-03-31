@@ -5,6 +5,9 @@
 
 #include "core.h"
 
+extern bool glo_wking_uatk;
+extern bool glo_bking_uatk;
+
 void CHESS_RedirectPiecePattern(int tile, CHESS_CORE_PLAYER player, bool check);
 
 void CHESS_PiecePattern_King(int tile, CHESS_CORE_PLAYER player, bool check);

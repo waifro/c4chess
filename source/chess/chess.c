@@ -190,101 +190,34 @@ void CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, bool check) {
 
     int result = -1;
 
-    // might want to change this function
-    for (int i = 0; i < 4; i++) {
+    for (int n = 0; n < 4; n++) {
 
-        col_pos += 1;
-        tag.col = alpha[col_pos];
-        result = MIDDLE_TagToTile(tag);
+        for (int i = 0; i < 4; i++) {
 
-        if (result == -1) continue;
+            if (n == 0) col_pos += 1;
+            else if (n == 1) tag.row += 1;
+            else if (n == 2) col_pos -= 1;
+            else if (n == 3) tag.row -= 1;
 
-        // temporary fix to standardize locking piece through lock variable(?)
-        if (check == false && glo_chess_core_tile[tile].piece->lock == true) break;
+            tag.col = alpha[col_pos];
+            result = MIDDLE_TagToTile(tag);
 
-        if (i == 0 || i == 2)
-        {
-            if (check == true)
+            if (result == -1) continue;
+
+            // temporary fix to standardize locking piece through lock variable(?)
+            if (check == false && glo_chess_core_tile[tile].piece->lock == true) break;
+
+            if (i == 0 || i == 2)
             {
-                glo_chess_core_tile[tile].piece->range[result] = true;
-            }
+                if (check == true)
+                {
+                    glo_chess_core_tile[tile].piece->range[result] = true;
+                }
 
-            else {
-                if (glo_chess_core_tile[result].piece == NULL) glo_chess_dot[result].state = true;
-                if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player != player) glo_chess_dot[result].state = true;
-            }
-        }
-    }
-
-    for (int i = 0; i < 4; i++) {
-
-        tag.row += 1;
-        result = MIDDLE_TagToTile(tag);
-
-        if (result == -1) continue;
-
-        // temporary fix to standardize locking piece through lock variable(?)
-        if (check == false && glo_chess_core_tile[tile].piece->lock == true) break;
-
-        if (i == 0 || i == 2)
-        {
-            if (check == true)
-            {
-                glo_chess_core_tile[tile].piece->range[result] = true;
-            }
-
-            else {
-                if (glo_chess_core_tile[result].piece == NULL) glo_chess_dot[result].state = true;
-                if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player != player) glo_chess_dot[result].state = true;
-            }
-        }
-    }
-
-    for (int i = 0; i < 4; i++) {
-
-        col_pos -= 1;
-        tag.col = alpha[col_pos];
-        result = MIDDLE_TagToTile(tag);
-
-        if (result == -1) continue;
-
-        // temporary fix to standardize locking piece through lock variable(?)
-        if (check == false && glo_chess_core_tile[tile].piece->lock == true) break;
-
-        if (i == 0 || i == 2)
-        {
-            if (check == true)
-            {
-                glo_chess_core_tile[tile].piece->range[result] = true;
-            }
-
-            else {
-                if (glo_chess_core_tile[result].piece == NULL) glo_chess_dot[result].state = true;
-                if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player != player) glo_chess_dot[result].state = true;
-            }
-        }
-    }
-
-    for (int i = 0; i < 4; i++) {
-
-        tag.row -= 1;
-        result = MIDDLE_TagToTile(tag);
-
-        if (result == -1) continue;
-
-        // temporary fix to standardize locking piece through lock variable(?)
-        if (check == false && glo_chess_core_tile[tile].piece->lock == true) break;
-
-        if (i == 0 || i == 2)
-        {
-            if (check == true)
-            {
-                glo_chess_core_tile[tile].piece->range[result] = true;
-            }
-
-            else {
-                if (glo_chess_core_tile[result].piece == NULL) glo_chess_dot[result].state = true;
-                if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player != player) glo_chess_dot[result].state = true;
+                else {
+                    if (glo_chess_core_tile[result].piece == NULL) glo_chess_dot[result].state = true;
+                    if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player != player) glo_chess_dot[result].state = true;
+                }
             }
         }
     }

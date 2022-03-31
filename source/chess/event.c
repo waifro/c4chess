@@ -38,8 +38,11 @@ void EVENT_CheckKingState(CHESS_CORE_PLAYER player) {
 
         if (glo_chess_core_tile[n].piece != NULL && glo_chess_core_tile[n].piece->player == player) {
             if (glo_chess_core_tile[n].piece->enum_piece == KING || glo_chess_core_tile[n].piece->enum_piece == BKING) {
+
                 if (glo_chess_event_layer[n] == true) {
                     printf("\n\nKING UNDER ATTACK\n\n\n"); //check enabled, a func;
+                    // if (player == WHITE_PLAYER) glo_wking_uatk = true;
+                    // else if (player == BLACK_PLAYER) glo_bking_uatk = true;
                 }
 
                 break;
