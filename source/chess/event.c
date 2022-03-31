@@ -5,8 +5,7 @@
 #include "chess.h"
 
 bool glo_chess_event_layer[64];
-bool glo_chess_event_wking_uatk;
-bool glo_chess_event_bking_uatk;
+bool glo_chess_event_king_uatk;
 
 void EVENT_BlankLayer(void) {
     for (int n = 0; n < 64; n++) {
@@ -44,13 +43,15 @@ void EVENT_CheckKingState(CHESS_CORE_PLAYER player) {
                 if (glo_chess_event_layer[n] == true) {
                     printf("\n\nKING UNDER ATTACK\n\n\n"); //check enabled, a func;
 
-                    if (player == WHITE_PLAYER) glo_chess_event_wking_uatk = true;
-                    else if (player == BLACK_PLAYER) glo_chess_event_bking_uatk = true;
-                    break;
+                    //if (player == WHITE_PLAYER) glo_chess_event_wking_uatk = true;
+                    //else if (player == BLACK_PLAYER) glo_chess_event_bking_uatk = true;
+                    glo_chess_event_king_uatk = true;
+                    return;
                 }
 
-                if (player == WHITE_PLAYER) glo_chess_event_wking_uatk = false;
-                else if (player == BLACK_PLAYER) glo_chess_event_bking_uatk = false;
+                //if (player == WHITE_PLAYER) glo_chess_event_wking_uatk = false;
+                //else if (player == BLACK_PLAYER) glo_chess_event_bking_uatk = false;
+                glo_chess_event_king_uatk = false;
                 break;
             }
         }
@@ -58,6 +59,8 @@ void EVENT_CheckKingState(CHESS_CORE_PLAYER player) {
 
     return;
 }
+
+void EVENT_InterposeAttack()
 
 void EVENT_CheckPieceLayer(CHESS_CORE_PLAYER player) {
 
