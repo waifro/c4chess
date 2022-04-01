@@ -196,6 +196,15 @@ int CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, bool check) {
     // or
     // make complex use of loops to identify where attack is coming from, to glow dot on enemy direction of attack.
 
+
+    // another solution
+    // on event, on checking king if under attack, check (before accepting middle) ,
+    // every piece in defense if can "stop" the attack.
+    // make another check afterwards (always before accepting middle) ,
+    // which detects if the global variable was untouched.
+    // if was untouched, it means that the king NEEDS to move itself, else ,
+    // continue the defense, from the first checking the first check which signals a possible move.
+
     for (int n = 0; n < 4; n++) {
 
         for (int i = 0; i < 4; i++) {
@@ -226,7 +235,8 @@ int CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, bool check) {
                             int j = 0;
                             j = CHESS_RedirectPiecePattern(x, glo_chess_core_tile[x].piece->player, true);
 
-                            if (j == 1) {
+                            if (j == 1 && glo_chess_event_layer[result] == true) {
+                                printf("ciao\n");
                                 glo_chess_dot[result].state = true;
                                 break;
                             }
