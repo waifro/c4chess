@@ -226,7 +226,7 @@ int CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, bool check) {
                             int j = 0;
                             j = CHESS_RedirectPiecePattern(x, glo_chess_core_tile[x].piece->player, true);
 
-                            if (j == result) {
+                            if (j == 1) {
                                 glo_chess_dot[result].state = true;
                                 break;
                             }
@@ -338,13 +338,16 @@ int CHESS_PiecePattern_Rook(int tile, CHESS_CORE_PLAYER player, bool check) {
 
             if (check == true) {
 
+                // THIS IS ALSO A FALSE CHECK, BETTER TO FIX THIS ALSO
+                // (ONLY NEEDS TO LOOK FOR THE FALSE/TRUE OF RANGE)
+
                 // what if double attack happends?
                 // i need to check if the defending piece could block the attack
                 // i also need to check if i expose the king once i move the defending piece
                 if (glo_chess_event_king_uatk == true) {
                     if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player != player) {
                         if (glo_chess_core_tile[result].piece->enum_piece == KING || glo_chess_core_tile[result].piece->enum_piece == BKING) {
-                            return result;
+                            return 1;
                         }
                     }
                 } else {
