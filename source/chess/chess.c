@@ -181,6 +181,7 @@ void CHESS_PiecePattern_BPawn(int tile, CHESS_CORE_PLAYER player, bool check) {
 
 void CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, bool check) {
 
+    // initialization
     char alpha[] = "abcdefgh";
     CHESS_CORE_TILE_TAG tag;
 
@@ -190,9 +191,10 @@ void CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, bool check) {
 
     int result = -1;
 
-    // da fare:
-    // risolvere stato glo_chess_event_layer in caso di preintercettazione
-    //
+    // todo:
+    // make range of piece stop if king is inside, while keeping glo_chess_event_layer range continue, or viceversa (probably better)
+    // or
+    // make complex use of loops to identify where attack is coming from, to glow dot on enemy direction of attack.
 
     for (int n = 0; n < 4; n++) {
 
@@ -208,31 +210,33 @@ void CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, bool check) {
 
             if (result == -1) continue;
 
-            // temporary fix to standardize locking piece through lock variable(?)
             if (i == 0 || i == 2)
             {
                 if (check == true)
                 {
                     glo_chess_core_tile[tile].piece->range[result] = true;
+                    continue;
+                }
 
-                } else
+                if (glo_chess_event_king_uatk == true)
                 {
+                    if (glo_chess_event_layer[result] == true) {
+                            if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player == player) continue;
 
-                    if (glo_chess_event_king_uatk == true) {
-                        for (int u = 0; u < 32; u++) {
-                            for (int x = 0; x < 64; x++) {
-                                if (glo_chess_core_piece[u].range[x] == true && result == x) glo_chess_dot[result].state = true;
-                            }
-                        }
-                    } else {
-
-                        if (glo_chess_core_tile[result].piece == NULL) glo_chess_dot[result].state = true;
-                        if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player != player) glo_chess_dot[result].state = true;
-
+                            glo_chess_dot[result].state = true;
                     }
 
-
+                    continue;
                 }
+
+                if (glo_chess_core_tile[result].piece == NULL)
+                {
+                    glo_chess_dot[result].state = true;
+                    continue;
+                }
+
+                if (glo_chess_core_tile[result].piece->player != player) glo_chess_dot[result].state = true;
+
             }
         }
     }

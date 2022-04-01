@@ -60,7 +60,10 @@ void EVENT_CheckKingState(CHESS_CORE_PLAYER player) {
     return;
 }
 
-void EVENT_InterposeAttack()
+void EVENT_InterposeAttack(void) {
+
+    return;
+}
 
 void EVENT_CheckPieceLayer(CHESS_CORE_PLAYER player) {
 
