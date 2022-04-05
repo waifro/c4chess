@@ -226,34 +226,6 @@ int CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, bool check) {
                     continue;
                 }
 
-                if (glo_chess_event_king_uatk == true) {
-
-                    for (int x = 0; x < 64; x++) {
-
-                        if (glo_chess_core_tile[x].piece != NULL && glo_chess_core_tile[x].piece->player != player) {
-
-                            int j = 0;
-                            j = CHESS_RedirectPiecePattern(x, glo_chess_core_tile[x].piece->player, true);
-
-                            if (j == 1 && glo_chess_event_layer[result] == true) {
-                                printf("ciao\n");
-                                glo_chess_dot[result].state = true;
-                                break;
-                            }
-                        }
-
-                    }
-
-                    /*
-                    if (glo_chess_event_layer[result] == true) {
-                        if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player == player) continue;
-                        glo_chess_dot[result].state = true;
-                    }
-                    */
-
-                    continue;
-                }
-
                 if (glo_chess_core_tile[result].piece == NULL) {
                     glo_chess_dot[result].state = true;
                     continue;
