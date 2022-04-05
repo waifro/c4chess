@@ -5,7 +5,6 @@
 #include "chess.h"
 
 bool glo_chess_event_layer[64];
-bool glo_chess_event_king_uatk;
 
 void EVENT_BlankLayer(void) {
     for (int n = 0; n < 64; n++) {
@@ -45,13 +44,13 @@ void EVENT_CheckKingState(CHESS_CORE_PLAYER player) {
 
                     //if (player == WHITE_PLAYER) glo_chess_event_wking_uatk = true;
                     //else if (player == BLACK_PLAYER) glo_chess_event_bking_uatk = true;
-                    glo_chess_event_king_uatk = true;
+                    //glo_chess_event_king_uatk = true;
                     return;
                 }
 
                 //if (player == WHITE_PLAYER) glo_chess_event_wking_uatk = false;
                 //else if (player == BLACK_PLAYER) glo_chess_event_bking_uatk = false;
-                glo_chess_event_king_uatk = false;
+                //glo_chess_event_king_uatk = false;
                 break;
             }
         }
@@ -62,7 +61,7 @@ void EVENT_CheckKingState(CHESS_CORE_PLAYER player) {
 
 void EVENT_InterposeAttack(void) {
 
-    
+    //
 
     return;
 }
