@@ -23,7 +23,7 @@ int main (int argc, char *argv[]) {
     pp4m_TTF_Init();
 
     // main player (meaning choosen player)
-    CORE_Testing(WHITE_PLAYER);
+    CORE_Testing(BLACK_PLAYER);
 
     // Exiting from game
     pp4m_TTF_Quit();

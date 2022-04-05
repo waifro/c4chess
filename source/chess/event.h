@@ -12,6 +12,7 @@ void EVENT_BlankLayer_Piece(void);
 
 void EVENT_CheckDrawState(void);
 void EVENT_CheckKingState(CHESS_CORE_PLAYER player);
+void EVENT_InterposeAttack(void);
 
 void EVENT_CheckPieceLayer(CHESS_CORE_PLAYER player);
 

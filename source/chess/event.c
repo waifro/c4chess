@@ -62,6 +62,8 @@ void EVENT_CheckKingState(CHESS_CORE_PLAYER player) {
 
 void EVENT_InterposeAttack(void) {
 
+    
+
     return;
 }
 
