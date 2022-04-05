@@ -86,6 +86,8 @@ void MIDDLE_UpdatePositionPiece(int old, int new) {
 
 int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player, bool check) {
 
+    (void)check;
+    
     int result = -1;
     static int position_old = -1;
     static int position_new = -1;

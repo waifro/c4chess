@@ -168,7 +168,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     CORE_ResetGlobal_CorePiece();
 
     // init pieces for main player
-    FEN_Init(glo_chess_core_player, "r7/b7/8/8/8/8/8/K1k5");
+    FEN_Init(glo_chess_core_player, "8/3r4/8/8/5N2/8/3K4/8");
 
     // TODO: block framerate to 30/60 fps
     SDL_Event event;
@@ -179,7 +179,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
         EVENT_CheckPieceLayer(player);
 
         // makes the in-game changes during gameplay
-        if (MIDDLE_UpdateChangeState(&event, player) == -2)
+        if (MIDDLE_UpdateChangeState(&event, player, false) == -2)
         {
             if (player == WHITE_PLAYER) player = BLACK_PLAYER;
             else player = WHITE_PLAYER;
