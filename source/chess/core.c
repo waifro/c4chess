@@ -172,14 +172,16 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
     // TODO: block framerate to 30/60 fps
     SDL_Event event;
+    bool check;
+
     while(1) {
         SDL_PollEvent(&event);
 
         // checks if king under attack
-        EVENT_CheckPieceLayer(player);
+        check = EVENT_CheckPieceLayer(player);
 
         // makes the in-game changes during gameplay
-        if (MIDDLE_UpdateChangeState(&event, player, false) == -2)
+        if (MIDDLE_UpdateChangeState(&event, player, check) == -2)
         {
             if (player == WHITE_PLAYER) player = BLACK_PLAYER;
             else player = WHITE_PLAYER;

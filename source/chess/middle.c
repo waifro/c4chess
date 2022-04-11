@@ -86,14 +86,57 @@ void MIDDLE_UpdatePositionPiece(int old, int new) {
 
 int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player, bool check) {
 
-    (void)check;
-    
     int result = -1;
     static int position_old = -1;
     static int position_new = -1;
     TOUCH_POS touch_pos;
 
     touch_pos = TOUCH_MouseState(event);
+
+    if (check == true)
+    {
+        // select choosen piece from mem
+        if (touch_pos.iner != -1 && position_old == -1) {
+            result = MIDDLE_TouchToTile(touch_pos);
+            if (result != -1 && glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player == player) {
+
+                position_old = result;
+                CHESS_RedirectPiecePattern(result, player, false);
+
+            }
+        }
+
+        // deselect choosen piece from mem
+        else if (touch_pos.iner != -1 && position_old != -1) {
+            result = MIDDLE_TouchToTile(touch_pos);
+
+            if (result != -1) {
+
+                if (glo_chess_dot[result].state == true) {
+
+                    // if is a valid move, start changing piece state
+                    position_new = result;
+
+                    MIDDLE_UpdatePositionPiece(position_old, position_new);
+                    DOT_StateGlobalDotReset();
+                    position_new = -1; position_old = -1; result = -2;
+
+
+                } else if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[position_old].piece->player == glo_chess_core_tile[result].piece->player) {
+
+                    DOT_StateGlobalDotReset();
+                    position_old = result;
+                    CHESS_RedirectPiecePattern(result, player, false);
+
+                } else if ((glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[position_old].piece->player != glo_chess_core_tile[result].piece->player) || glo_chess_core_tile[result].piece == NULL) {
+
+                    DOT_StateGlobalDotReset();
+                    position_old = -1;
+
+                }
+            }
+        }
+    }
 
     // select choosen piece from mem
     if (touch_pos.iner != -1 && position_old == -1) {
@@ -138,5 +181,6 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player, bool ch
         }
     }
 
+    if (check == true) result = -1;
     return (result);
 }
