@@ -14,7 +14,7 @@ typedef struct
 extern CHESS_DOT glo_chess_dot[64];
 
 void DOT_InitTexture(int tile);
-void DOT_InitGlobalDot(void);
+void DOT_GlobalDot_Init(void);
 
 void DOT_StateGlobalDot(int tile);
 void DOT_StateGlobalDotReset(void);

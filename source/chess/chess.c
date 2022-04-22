@@ -6,7 +6,9 @@
 #include "core.h"
 #include "dot.h"
 
-int CHESS_RedirectPiecePattern(int tile, CHESS_CORE_PLAYER player, bool check) {
+int CHESS_RedirectPiecePattern(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
+
+    if (check == CHECK_KING) check = CHECK;
 
     switch(glo_chess_core_tile[tile].piece->enum_piece) {
         case KING: CHESS_PiecePattern_King(tile, player, check);
@@ -40,7 +42,7 @@ int CHESS_RedirectPiecePattern(int tile, CHESS_CORE_PLAYER player, bool check) {
     return tile;
 }
 
-int CHESS_PiecePattern_King(int tile, CHESS_CORE_PLAYER player, bool check) {
+int CHESS_PiecePattern_King(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
 
     char alpha[] = "abcdefgh";
     CHESS_CORE_TILE_TAG tag;
@@ -64,7 +66,7 @@ int CHESS_PiecePattern_King(int tile, CHESS_CORE_PLAYER player, bool check) {
         tag.col = alpha[col_pos];
         result = MIDDLE_TagToTile(tag);
 
-        if (check == true) {
+        if (check == CHECK) {
             if (glo_chess_core_tile[result].piece != NULL) {
                 if (glo_chess_event_layer[result] == false) {
                     glo_chess_core_tile[tile].piece->range[result] = true;
@@ -76,7 +78,7 @@ int CHESS_PiecePattern_King(int tile, CHESS_CORE_PLAYER player, bool check) {
             }
         }
 
-        else if (check == false) {
+        else if (check == ATTACK) {
             if (glo_chess_core_tile[result].piece != NULL) {
                 if (glo_chess_core_tile[result].piece->player != player) {
 
@@ -97,9 +99,9 @@ int CHESS_PiecePattern_King(int tile, CHESS_CORE_PLAYER player, bool check) {
     return 0;
 }
 
-int CHESS_PiecePattern_Pawn(int tile, CHESS_CORE_PLAYER player, bool check) {
+int CHESS_PiecePattern_Pawn(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
 
-    if (check == false /*&& glo_chess_core_tile[tile].piece->lock != true*/) {
+    if (check == ATTACK /*&& glo_chess_core_tile[tile].piece->lock != true*/) {
 
         CHESS_CORE_TILE_TAG tag = glo_chess_core_tile[tile].tag;
         int result = -1;
@@ -138,9 +140,9 @@ int CHESS_PiecePattern_Pawn(int tile, CHESS_CORE_PLAYER player, bool check) {
     return 0;
 }
 
-int CHESS_PiecePattern_BPawn(int tile, CHESS_CORE_PLAYER player, bool check) {
+int CHESS_PiecePattern_BPawn(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
 
-    if (check == false /*&& glo_chess_core_tile[tile].piece->lock != true*/) {
+    if (check == ATTACK /*&& glo_chess_core_tile[tile].piece->lock != true*/) {
 
         CHESS_CORE_TILE_TAG tag = glo_chess_core_tile[tile].tag;
         int result = -1;
@@ -179,7 +181,7 @@ int CHESS_PiecePattern_BPawn(int tile, CHESS_CORE_PLAYER player, bool check) {
     return 0;
 }
 
-int CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, bool check) {
+int CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
 
     // initialization
     char alpha[] = "abcdefgh";
@@ -221,7 +223,7 @@ int CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, bool check) {
 
             if (i == 0 || i == 2)
             {
-                if (check == true) {
+                if (check == CHECK) {
                     glo_chess_core_tile[tile].piece->range[result] = true;
                     continue;
                 }
@@ -240,7 +242,7 @@ int CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, bool check) {
     return 0;
 }
 
-int CHESS_PiecePattern_Bishop(int tile, CHESS_CORE_PLAYER player, bool check) {
+int CHESS_PiecePattern_Bishop(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
 
     CHESS_CORE_TILE_TAG tag;
 
@@ -270,7 +272,7 @@ int CHESS_PiecePattern_Bishop(int tile, CHESS_CORE_PLAYER player, bool check) {
             // temporary fix to standardize locking piece through lock variable(?)
             //if (check == false && glo_chess_core_tile[tile].piece->lock == true) break;
 
-            if (check == true) {
+            if (check == CHECK) {
                 glo_chess_core_tile[tile].piece->range[result] = true;
 
                 if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player != player) {
@@ -292,7 +294,7 @@ int CHESS_PiecePattern_Bishop(int tile, CHESS_CORE_PLAYER player, bool check) {
     return 0;
 }
 
-int CHESS_PiecePattern_Rook(int tile, CHESS_CORE_PLAYER player, bool check) {
+int CHESS_PiecePattern_Rook(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
 
     CHESS_CORE_TILE_TAG tag;
 
@@ -318,7 +320,7 @@ int CHESS_PiecePattern_Rook(int tile, CHESS_CORE_PLAYER player, bool check) {
 
             if (result == -1) continue;
 
-            if (check == true) {
+            if (check == CHECK) {
 
                 glo_chess_core_tile[tile].piece->range[result] = true;
 
@@ -341,7 +343,7 @@ int CHESS_PiecePattern_Rook(int tile, CHESS_CORE_PLAYER player, bool check) {
     return 0;
 }
 
-int CHESS_PiecePattern_Queen(int tile, CHESS_CORE_PLAYER player, bool check) {
+int CHESS_PiecePattern_Queen(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
 
     CHESS_CORE_TILE_TAG tag;
 
@@ -383,7 +385,7 @@ int CHESS_PiecePattern_Queen(int tile, CHESS_CORE_PLAYER player, bool check) {
                 // temporary fix to standardize locking piece through lock variable(?)
                 //if (check == false && glo_chess_core_tile[tile].piece->lock == true) break;
 
-                if (check == true) {
+                if (check == CHECK) {
                     glo_chess_core_tile[tile].piece->range[result] = true;
 
                     if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player != player) {
@@ -406,7 +408,7 @@ int CHESS_PiecePattern_Queen(int tile, CHESS_CORE_PLAYER player, bool check) {
     return 0;
 }
 
-int CHESS_PiecePattern_PawnAttack(int tile, CHESS_CORE_PLAYER player, bool check) {
+int CHESS_PiecePattern_PawnAttack(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
 
     char alpha[] = "abcdefgh";
     int row = MIDDLE_ReturnRowTile(tile) + 1;
@@ -429,12 +431,12 @@ int CHESS_PiecePattern_PawnAttack(int tile, CHESS_CORE_PLAYER player, bool check
 
         result = MIDDLE_TagToTile(tag);
 
-        if (check == true)
+        if (check == CHECK)
         {
             glo_chess_core_tile[tile].piece->range[result] = true;
         }
 
-        else if (check == false /* && glo_chess_core_tile[tile].piece->lock != true */)
+        else if (check == ATTACK /* && glo_chess_core_tile[tile].piece->lock != true */)
         {
             if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player != player) {
                 glo_chess_dot[result].state = true;
@@ -447,7 +449,7 @@ int CHESS_PiecePattern_PawnAttack(int tile, CHESS_CORE_PLAYER player, bool check
     return 0;
 }
 
-int CHESS_PiecePattern_BPawnAttack(int tile, CHESS_CORE_PLAYER player, bool check) {
+int CHESS_PiecePattern_BPawnAttack(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
 
     char alpha[] = "abcdefgh";
     int row = MIDDLE_ReturnRowTile(tile) - 1;
@@ -470,12 +472,12 @@ int CHESS_PiecePattern_BPawnAttack(int tile, CHESS_CORE_PLAYER player, bool chec
 
         result = MIDDLE_TagToTile(tag);
 
-        if (check == true)
+        if (check == CHECK)
         {
             glo_chess_core_tile[tile].piece->range[result] = true;
         }
 
-        else if (check == false /* && glo_chess_core_tile[tile].piece->lock != true */)
+        else if (check == ATTACK /* && glo_chess_core_tile[tile].piece->lock != true */)
         {
             if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player != player) {
                 glo_chess_dot[result].state = true;

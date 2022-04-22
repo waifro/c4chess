@@ -21,7 +21,27 @@ CHESS_CORE_PLAYER glo_chess_core_player;
 CHESS_CORE_TILE glo_chess_core_tile[64];
 CHESS_CORE_PIECE glo_chess_core_piece[32];
 
-void CORE_ChessCreateBoard(void) {
+bool glo_chess_event_king_uatk;
+
+int CORE_Testing_InterposeAttack(CHESS_CORE_PLAYER player) {
+    // essentially this is temporary fix for king under attack
+    // considering refreshing global core into v3
+
+    for (int n = 0; n < 64; n++) {
+        if (glo_chess_core_tile[n].piece == NULL) {
+            if (glo_chess_core_tile[n].piece->player == player) {
+                //CHESS_RedirectPiecePattern(n, player, CHECK_KING);
+
+                printf("testing\n");
+                glo_chess_event_king_uatk = false;
+            }
+        }
+    }
+
+    return 0;
+}
+
+void CORE_Chessboard_Init(void) {
 
     int size_tile = 50;
     int x_b = glo_screen_w / 2 - (size_tile * 4);
@@ -56,7 +76,7 @@ void CORE_ChessCreateBoard(void) {
     return;
 }
 
-void CORE_ChessInitTag(CHESS_CORE_PLAYER player) {
+void CORE_ChessTag_Init(CHESS_CORE_PLAYER player) {
 
     char colomn[] = "abcdefgh";
 
@@ -157,30 +177,37 @@ void CORE_Chessboard_Reverse(void) {
 
 void CORE_Testing(CHESS_CORE_PLAYER player) {
 
+    /* preserve player */
     glo_chess_core_player = player;
 
-    CORE_ChessCreateBoard();
-    CORE_ChessInitTag(player);
+    /* init chessboard gfx untagged */
+    CORE_Chessboard_Init();
 
-    DOT_InitGlobalDot();
+    /* setup chessboard tagged */
+    CORE_ChessTag_Init(player);
 
-    // set glo_chess_core_piece to initial state
+    /* init dot gfx */
+    DOT_GlobalDot_Init();
+
+    /* set glo_chess_core_piece to initial state */
     CORE_ResetGlobal_CorePiece();
 
-    // init pieces for main player
+    /* init pieces for main player */
     FEN_Init(glo_chess_core_player, "8/3r4/8/8/5N2/8/3K4/8");
 
-    // TODO: block framerate to 30/60 fps
+    // TODO: cap framerate to 30/60 fps
     SDL_Event event;
     bool check;
 
     while(1) {
         SDL_PollEvent(&event);
 
-        // checks if king under attack
+        /* checks if king under attack */
         check = EVENT_CheckPieceLayer(player);
 
-        // makes the in-game changes during gameplay
+        if (glo_chess_event_king_uatk != false) CORE_Testing_InterposeAttack(player);
+
+        /* makes the in-game changes during gameplay */
         if (MIDDLE_UpdateChangeState(&event, player, check) == -2)
         {
             if (player == WHITE_PLAYER) player = BLACK_PLAYER;
@@ -191,7 +218,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
         SDL_RenderClear(glo_render);
 
-        // renders every piece still on board and dots
+        /* renders everything chessboard releated */
         for (int n = 0; n < 64; n++) {
             SDL_RenderCopy(glo_render, glo_chess_core_tile[n].texture, NULL, &glo_chess_core_tile[n].rect);
             if (glo_chess_core_tile[n].piece != NULL) SDL_RenderCopy(glo_render, glo_chess_core_tile[n].piece->texture, NULL, &glo_chess_core_tile[n].rect);
@@ -201,7 +228,6 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
         SDL_RenderPresent(glo_render);
 
-        // quits
         if (event.type == SDL_QUIT) break;
     }
 

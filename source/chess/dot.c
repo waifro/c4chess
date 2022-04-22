@@ -21,7 +21,7 @@ void DOT_InitTexture(int tile) {
     return;
 }
 
-void DOT_InitGlobalDot(void) {
+void DOT_GlobalDot_Init(void) {
 
     for (int n = 0; n < 64; n++) {
 

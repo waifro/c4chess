@@ -42,9 +42,13 @@ void EVENT_CheckKingState(CHESS_CORE_PLAYER player) {
                 if (glo_chess_event_layer[n] == true) {
                     printf("\n\nKING UNDER ATTACK\n\n\n"); //check enabled, a func;
 
+                    glo_chess_event_king_uatk = true;
+
                     //if (player == WHITE_PLAYER) glo_chess_event_wking_uatk = true;
                     //else if (player == BLACK_PLAYER) glo_chess_event_bking_uatk = true;
                     //glo_chess_event_king_uatk = true;
+
+                    //CORE_Testing_InterposeAttack();
                     return;
                 }
 
@@ -59,14 +63,7 @@ void EVENT_CheckKingState(CHESS_CORE_PLAYER player) {
     return;
 }
 
-void EVENT_InterposeAttack(void) {
-
-    //
-
-    return;
-}
-
-void EVENT_CheckPieceLayer(CHESS_CORE_PLAYER player) {
+int EVENT_CheckPieceLayer(CHESS_CORE_PLAYER player) {
 
     static CHESS_CORE_PLAYER pl_bak;
 
@@ -89,7 +86,7 @@ void EVENT_CheckPieceLayer(CHESS_CORE_PLAYER player) {
             // piece range copy
             if (glo_chess_core_tile[n].piece != NULL && glo_chess_core_tile[n].piece->player != player) {
 
-                CHESS_RedirectPiecePattern(n, pl_bak, true);
+                CHESS_RedirectPiecePattern(n, pl_bak, CHECK);
 
                 for (int i = 0; i < 64; i++) {
 
@@ -108,5 +105,5 @@ void EVENT_CheckPieceLayer(CHESS_CORE_PLAYER player) {
         EVENT_CheckKingState(player);
     }
 
-    return;
+    return 0;
 }

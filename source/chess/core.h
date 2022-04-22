@@ -52,10 +52,11 @@ typedef struct {
 extern CHESS_CORE_PLAYER glo_chess_core_player;
 extern CHESS_CORE_TILE glo_chess_core_tile[64];
 extern CHESS_CORE_PIECE glo_chess_core_piece[32];
+extern bool glo_chess_event_king_uatk;
 
 /* prototypes */
 void CORE_DestroyPiece(CHESS_CORE_PIECE *piece);
-void CORE_ChessCreateBoard(void);
+void CORE_Chessboard_Init(void);
 void CORE_ChessInitTag(CHESS_CORE_PLAYER player);
 
 void CORE_GlobalDestroyPiece(CHESS_CORE_PIECE *piece);
@@ -65,6 +66,7 @@ void CORE_GlobalClearChessTile(void);
 void CORE_ResetGlobal_CorePiece(void);
 void CORE_Chessboard_Reverse(void);
 
+int CORE_Testing_InterposeAttack(CHESS_CORE_PLAYER player);
 void CORE_Testing(CHESS_CORE_PLAYER player);
 
 #endif
