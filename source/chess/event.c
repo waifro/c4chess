@@ -67,7 +67,7 @@ void EVENT_CheckKingState(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player)
 
                 //if (player == WHITE_PLAYER) glo_chess_event_wking_uatk = false;
                 //else if (player == BLACK_PLAYER) glo_chess_event_bking_uatk = false;
-                //glo_chess_event_king_uatk = false;
+                glo_chess_event_king_uatk = false;
                 break;
             }
         }

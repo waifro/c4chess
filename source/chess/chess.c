@@ -230,7 +230,7 @@ int CHESS_PiecePattern_Knight(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_
 
                     if (chess_tile[result].piece->player != player) glo_chess_dot[result].state = true;
                 }
-                
+
                 if (check == CHECK) {
                     printf("check CHECK\n");
                     chess_tile[tile].piece->range[result] = true;
@@ -240,7 +240,7 @@ int CHESS_PiecePattern_Knight(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_
                 if (check == CHECK_KING) {
 
                     CHESS_CORE_PLAYER unsafe_player = CORE_ReversePlayer_State(player);
-                    //glo_chess_event_king_uatk = true;
+                    glo_chess_event_king_uatk = true;
 
                     // create copy of tile
                     CHESS_CORE_TILE unsafe_tile[64];
@@ -287,8 +287,11 @@ int CHESS_PiecePattern_Knight(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_
                     EVENT_CheckDrawState();
                     EVENT_CheckKingState(unsafe_tile, player);
 
-                    /*
+                    printf("glo_chess_event_king_uatk state: %d\n", glo_chess_event_king_uatk);
+
                     if (glo_chess_event_king_uatk == false) {
+
+                        printf("testing glo_chess_dot\n");
 
                         if (chess_tile[result].piece == NULL) {
                             glo_chess_dot[result].state = true;
@@ -297,7 +300,7 @@ int CHESS_PiecePattern_Knight(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_
 
                         if (chess_tile[result].piece->player != player) glo_chess_dot[result].state = true;
                     }
-                    */
+
                     // restore old chess tile
                     //EVENT_CheckPieceLayer(chess_tile, unsafe_player);
                     /*
