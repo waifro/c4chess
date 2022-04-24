@@ -6,9 +6,7 @@
 #include "core.h"
 #include "dot.h"
 
-int CHESS_RedirectPiecePattern(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
-
-    if (check == CHECK_KING) check = CHECK;
+int CHESS_RedirectPiecePattern(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
 
     switch(glo_chess_core_tile[tile].piece->enum_piece) {
         case KING: CHESS_PiecePattern_King(tile, player, check);
@@ -19,17 +17,17 @@ int CHESS_RedirectPiecePattern(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_A
         break;
         case BPAWN: CHESS_PiecePattern_BPawn(tile, player, check);
         break;
-        case KNIGHT: CHESS_PiecePattern_Knight(tile, player, check);
+        case KNIGHT: CHESS_PiecePattern_Knight(chess_tile, tile, player, check);
         break;
-        case BKNIGHT: CHESS_PiecePattern_Knight(tile, player, check);
+        case BKNIGHT: CHESS_PiecePattern_Knight(chess_tile, tile, player, check);
         break;
         case BISHOP: CHESS_PiecePattern_Bishop(tile, player, check);
         break;
         case BBISHOP: CHESS_PiecePattern_Bishop(tile, player, check);
         break;
-        case ROOK: CHESS_PiecePattern_Rook(tile, player, check);
+        case ROOK: CHESS_PiecePattern_Rook(chess_tile, tile, player, check);
         break;
-        case BROOK: CHESS_PiecePattern_Rook(tile, player, check);
+        case BROOK: CHESS_PiecePattern_Rook(chess_tile, tile, player, check);
         break;
         case QUEEN: CHESS_PiecePattern_Queen(tile, player, check);
         break;
@@ -181,7 +179,7 @@ int CHESS_PiecePattern_BPawn(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK
     return 0;
 }
 
-int CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
+int CHESS_PiecePattern_Knight(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
 
     // initialization
     char alpha[] = "abcdefgh";
@@ -224,16 +222,50 @@ int CHESS_PiecePattern_Knight(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_AT
             if (i == 0 || i == 2)
             {
                 if (check == CHECK) {
-                    glo_chess_core_tile[tile].piece->range[result] = true;
+                    chess_tile[tile].piece->range[result] = true;
                     continue;
                 }
 
-                if (glo_chess_core_tile[result].piece == NULL) {
+                if (check == CHECK_KING) {
+
+                    glo_chess_event_king_uatk = false;
+
+                    // create copy of tile
+                    CHESS_CORE_TILE unsafe_tile[64]; CHESS_CORE_PLAYER unsafe_player;
+                    MIDDLE_UnsafePosition_Copy(unsafe_tile);
+
+                    // apply changes to unsafe tile
+                    MIDDLE_UpdatePositionPiece(unsafe_tile, tile, result);
+
+                    // check if any opposite attack still attack king
+                    for (int u = 0; u < 64; u++) {
+                        if (unsafe_tile[u].piece != NULL) {
+                            if (unsafe_tile[u].piece->player != player) {
+
+                                if (player == WHITE_PLAYER) unsafe_player = BLACK_PLAYER;
+                                else unsafe_player = WHITE_PLAYER;
+
+                                CHESS_RedirectPiecePattern(unsafe_tile, u, unsafe_player, CHECK);
+                            }
+                        }
+                    }
+
+                    // now apply position if attack stops king_uatk
+                    EVENT_CheckPieceLayer(unsafe_tile, player);
+
+                    if (glo_chess_event_king_uatk == false) {
+                        glo_chess_dot[result].state = true;
+                    }
+
+                    continue;
+                }
+
+                if (chess_tile[result].piece == NULL) {
                     glo_chess_dot[result].state = true;
                     continue;
                 }
 
-                if (glo_chess_core_tile[result].piece->player != player) glo_chess_dot[result].state = true;
+                if (chess_tile[result].piece->player != player) glo_chess_dot[result].state = true;
 
             }
         }
@@ -294,7 +326,7 @@ int CHESS_PiecePattern_Bishop(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_AT
     return 0;
 }
 
-int CHESS_PiecePattern_Rook(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
+int CHESS_PiecePattern_Rook(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
 
     CHESS_CORE_TILE_TAG tag;
 
@@ -322,19 +354,19 @@ int CHESS_PiecePattern_Rook(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK 
 
             if (check == CHECK) {
 
-                glo_chess_core_tile[tile].piece->range[result] = true;
+                chess_tile[tile].piece->range[result] = true;
 
-                if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player != player) {
-                    if (glo_chess_core_tile[result].piece->enum_piece != KING && glo_chess_core_tile[result].piece->enum_piece != BKING) break;
+                if (chess_tile[result].piece != NULL && chess_tile[result].piece->player != player) {
+                    if (chess_tile[result].piece->enum_piece != KING && chess_tile[result].piece->enum_piece != BKING) break;
                 }
 
                 continue;
             }
 
-            if (glo_chess_core_tile[result].piece == NULL) glo_chess_dot[result].state = true;
-            else if (glo_chess_core_tile[result].piece != NULL)
+            if (chess_tile[result].piece == NULL) glo_chess_dot[result].state = true;
+            else if (chess_tile[result].piece != NULL)
             {
-                if (glo_chess_core_tile[result].piece->player != player) glo_chess_dot[result].state = true;
+                if (chess_tile[result].piece->player != player) glo_chess_dot[result].state = true;
                 break;
             }
         }

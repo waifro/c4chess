@@ -22,8 +22,11 @@ int MIDDLE_TouchToTile(TOUCH_POS touch_pos) {
         && touch_pos.y >= glo_chess_core_tile[n].rect.y && touch_pos.y <= (glo_chess_core_tile[n].rect.y + glo_chess_core_tile[n].rect.h)) {
 
             printf("MIDDLE_TouchToTile:\n  piece = %p\n  tile[%d] tag[%c%d]", glo_chess_core_tile[n].piece, n, glo_chess_core_tile[n].tag.col, glo_chess_core_tile[n].tag.row);
-            if (glo_chess_core_tile[n].piece != NULL) printf(" name[%d] player[%d]\n", glo_chess_core_tile[n].piece->enum_piece, glo_chess_core_tile[n].piece->player);
-            else printf("\n");
+            if (glo_chess_core_tile[n].piece != NULL)
+            {
+                printf(" name[%d] player[%d]\n", glo_chess_core_tile[n].piece->enum_piece, glo_chess_core_tile[n].piece->player);
+
+            } else printf("\n");
 
             result = n; break;
         }
@@ -67,19 +70,26 @@ int MIDDLE_ReturnColTile(int tile) {
     return (col_pos);
 }
 
-void MIDDLE_UpdatePositionPiece(int old, int new) {
+void MIDDLE_UpdatePositionPiece(CHESS_CORE_TILE *tile, int old, int new) {
 
     if (old == new) return;
     if ((old < 0 || old > 63) || (new < 0 || old > 63)) return;
-    if (glo_chess_core_tile[old].piece == NULL) return;
+    if (tile[old].piece == NULL) return;
 
-    printf("MIDDLE_UpdatePosPiece:\n  glo_chess_core_tile[old] = %p\n  glo_chess_core_tile[new] = %p\n", glo_chess_core_tile[old].piece, glo_chess_core_tile[new].piece);
+    printf("MIDDLE_UpdatePositionPiece:\n  glo_chess_core_tile[old] = %p\n  glo_chess_core_tile[new] = %p\n", tile[old].piece, tile[new].piece);
 
-    if (glo_chess_core_tile[new].piece != NULL) CORE_GlobalDestroyPiece(glo_chess_core_tile[new].piece);
+    if (tile[new].piece != NULL) CORE_GlobalDestroyPiece(tile[new].piece);
 
-    glo_chess_core_tile[new].piece = glo_chess_core_tile[old].piece;
-    glo_chess_core_tile[new].piece->rect = glo_chess_core_tile[new].rect;
-    glo_chess_core_tile[old].piece = NULL;
+    tile[new].piece = tile[old].piece;
+    tile[new].piece->rect = tile[new].rect;
+    tile[old].piece = NULL;
+
+    return;
+}
+
+void MIDDLE_UnsafePosition_Copy(CHESS_CORE_TILE *unsafe_tile) {
+
+    memcpy(unsafe_tile, glo_chess_core_tile, sizeof(glo_chess_core_tile));
 
     return;
 }
@@ -101,7 +111,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player, bool ch
             if (result != -1 && glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player == player) {
 
                 position_old = result;
-                CHESS_RedirectPiecePattern(result, player, ATTACK);
+                CHESS_RedirectPiecePattern(glo_chess_core_tile, result, player, ATTACK);
 
             }
         }
@@ -117,7 +127,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player, bool ch
                     // if is a valid move, start changing piece state
                     position_new = result;
 
-                    MIDDLE_UpdatePositionPiece(position_old, position_new);
+                    MIDDLE_UpdatePositionPiece(glo_chess_core_tile, position_old, position_new);
                     DOT_StateGlobalDotReset();
                     position_new = -1; position_old = -1; result = -2;
 
@@ -126,7 +136,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player, bool ch
 
                     DOT_StateGlobalDotReset();
                     position_old = result;
-                    CHESS_RedirectPiecePattern(result, player, ATTACK);
+                    CHESS_RedirectPiecePattern(glo_chess_core_tile, result, player, ATTACK);
 
                 } else if ((glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[position_old].piece->player != glo_chess_core_tile[result].piece->player) || glo_chess_core_tile[result].piece == NULL) {
 
@@ -144,7 +154,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player, bool ch
         if (result != -1 && glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player == player) {
 
             position_old = result;
-            CHESS_RedirectPiecePattern(result, player, ATTACK);
+            CHESS_RedirectPiecePattern(glo_chess_core_tile, result, player, ATTACK);
 
         }
     }
@@ -160,7 +170,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player, bool ch
                 // if is a valid move, start changing piece state
                 position_new = result;
 
-                MIDDLE_UpdatePositionPiece(position_old, position_new);
+                MIDDLE_UpdatePositionPiece(glo_chess_core_tile, position_old, position_new);
                 DOT_StateGlobalDotReset();
                 position_new = -1; position_old = -1; result = -2;
 
@@ -169,7 +179,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player, bool ch
 
                 DOT_StateGlobalDotReset();
                 position_old = result;
-                CHESS_RedirectPiecePattern(result, player, ATTACK);
+                CHESS_RedirectPiecePattern(glo_chess_core_tile, result, player, ATTACK);
 
             } else if ((glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[position_old].piece->player != glo_chess_core_tile[result].piece->player) || glo_chess_core_tile[result].piece == NULL) {
 

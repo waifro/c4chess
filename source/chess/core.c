@@ -24,19 +24,39 @@ CHESS_CORE_PIECE glo_chess_core_piece[32];
 bool glo_chess_event_king_uatk;
 
 int CORE_Testing_InterposeAttack(CHESS_CORE_PLAYER player) {
+    (void)player;
+
     // essentially this is temporary fix for king under attack
     // considering refreshing global core into v3
+
+    // provando a simulare un attacco utilizzando i tag prendendo spunto dal pezzo attaccante
+    /*
+    CHESS_CORE_TILE_TAG tag;
+
+    char alpha[] = "abcdefgh";
+    int col_pos = -1;
+
+
+    for (int n = 0; n < 64; n++) {
+        if (glo_chess_core_tile[n].piece != NULL && glo_chess_core_tile[n].piece->player != player) {
+
+            // prendiamo la posizione del pezzo
+            tag = MIDDLE_TileToTag(n);
+
+
+        }
+    }
 
     for (int n = 0; n < 64; n++) {
         if (glo_chess_core_tile[n].piece != NULL) {
             if (glo_chess_core_tile[n].piece->player == player) {
                 //CHESS_RedirectPiecePattern(n, player, CHECK_KING);
 
-                printf("testing\n");
-                glo_chess_event_king_uatk = false;
+
             }
         }
     }
+    */
 
     return 0;
 }
@@ -203,9 +223,9 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
         SDL_PollEvent(&event);
 
         /* checks if king under attack */
-        check = EVENT_CheckPieceLayer(player);
+        check = EVENT_CheckPieceLayer(glo_chess_core_tile, player);
 
-        if (glo_chess_event_king_uatk != false) CORE_Testing_InterposeAttack(player);
+        if (glo_chess_event_king_uatk == true) check = CHECK_KING; //CORE_Testing_InterposeAttack(player);
 
         /* makes the in-game changes during gameplay */
         if (MIDDLE_UpdateChangeState(&event, player, check) == -2)
