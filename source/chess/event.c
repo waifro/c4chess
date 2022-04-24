@@ -7,13 +7,14 @@
 bool glo_chess_event_layer[64];
 bool glo_chess_event_layer_[64];
 
-void EVENT_BlankLayer(void) {
+void EVENT_BlankLayer_Global(void) {
     for (int n = 0; n < 64; n++) {
         glo_chess_event_layer[n] = false;
     }
     return;
 }
 
+// instead of searching for eveery tile, search for glo_chess_core_piece[]
 void EVENT_BlankLayer_Piece(CHESS_CORE_TILE *chess_tile) {
     for (int n = 0; n < 64; n++) {
         if (chess_tile[n].piece != NULL) {
@@ -79,18 +80,16 @@ int EVENT_CheckPieceLayer(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player)
 
     static CHESS_CORE_PLAYER pl_bak;
 
+    // for sake of testing other things, let me point out this bool can expire
     static bool check_state;
     if (!check_state) {
-
-        if (player == WHITE_PLAYER) pl_bak = BLACK_PLAYER;
-        else pl_bak = WHITE_PLAYER;
-
+        pl_bak = CORE_ReversePlayer_State(player);
         check_state = true;
     }
 
     if (pl_bak != player) {
 
-        EVENT_BlankLayer();
+        EVENT_BlankLayer_Global();
         EVENT_BlankLayer_Piece(chess_tile);
 
         for (int n = 0; n < 64; n++)
@@ -117,5 +116,6 @@ int EVENT_CheckPieceLayer(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player)
         EVENT_CheckKingState(chess_tile, player);
     }
 
+    if (glo_chess_event_king_uatk == true) return 2;
     return 0;
 }

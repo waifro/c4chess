@@ -183,6 +183,11 @@ void CORE_ResetGlobal_CorePiece(void) {
     return;
 }
 
+CHESS_CORE_PLAYER CORE_ReversePlayer_State(CHESS_CORE_PLAYER player) {
+    if (player == WHITE_PLAYER) return BLACK_PLAYER;
+    else return WHITE_PLAYER;
+}
+
 void CORE_Chessboard_Reverse(void) {
     // reverse the board for:
     // - switching view
@@ -213,7 +218,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     CORE_ResetGlobal_CorePiece();
 
     /* init pieces for main player */
-    FEN_Init(glo_chess_core_player, "8/3r4/8/8/5N2/8/3K4/8");
+    FEN_Init(glo_chess_core_player, "8/2r5/8/8/5N2/8/3K4/8");
 
     // TODO: cap framerate to 30/60 fps
     SDL_Event event;
@@ -225,14 +230,12 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
         /* checks if king under attack */
         check = EVENT_CheckPieceLayer(glo_chess_core_tile, player);
 
-        if (glo_chess_event_king_uatk == true) check = CHECK_KING; //CORE_Testing_InterposeAttack(player);
+        //if (glo_chess_event_king_uatk == true) check = CHECK_KING;
 
         /* makes the in-game changes during gameplay */
         if (MIDDLE_UpdateChangeState(&event, player, check) == -2)
         {
-            if (player == WHITE_PLAYER) player = BLACK_PLAYER;
-            else player = WHITE_PLAYER;
-
+            player = CORE_ReversePlayer_State(player);
             printf("CORE_Testing:\n  player_turn = %d\n", player);
         }
 
