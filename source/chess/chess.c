@@ -76,7 +76,7 @@ int CHESS_PiecePattern_King(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK 
             }
         }
 
-        else if (check == ATTACK) {
+        else if (check == ATTACK || check == CHECK_KING) {
             if (glo_chess_core_tile[result].piece != NULL) {
                 if (glo_chess_core_tile[result].piece->player != player) {
 
@@ -240,75 +240,85 @@ int CHESS_PiecePattern_Knight(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_
                 if (check == CHECK_KING) {
 
                     CHESS_CORE_PLAYER unsafe_player = CORE_ReversePlayer_State(player);
-                    glo_chess_event_king_uatk = true;
+                    if (chess_tile[result].piece == NULL || chess_tile[result].piece->player != player) {
 
-                    // create copy of tile
-                    CHESS_CORE_TILE unsafe_tile[64];
-                    MIDDLE_UnsafePosition_Copy(unsafe_tile);
+                        glo_chess_event_king_uatk = true;
 
-                    // apply changes to unsafe tile
-                    MIDDLE_UpdatePositionPiece(unsafe_tile, tile, result);
+                        // create copy of tile
+                        CHESS_CORE_TILE unsafe_tile[64];
+                        MIDDLE_UnsafePosition_Copy(unsafe_tile);
 
-                    // check if any opposite attack still attack king
-                    for (int u = 0; u < 64; u++) {
-                        if (unsafe_tile[u].piece != NULL) {
-                            if (unsafe_tile[u].piece->player == unsafe_player) {
+                        // apply changes to unsafe tile
+                        MIDDLE_UpdatePositionPiece(unsafe_tile, tile, result);
+
+                        // check if any opposite attack still attack king
+                        for (int u = 0; u < 64; u++) {
+                            if (unsafe_tile[u].piece != NULL) {
+                                if (unsafe_tile[u].piece->player == unsafe_player) {
+
+                                    CHESS_RedirectPiecePattern(unsafe_tile, u, unsafe_player, CHECK);
+                                }
+                            }
+                        }
+
+                        // now apply position if attack stops king_uatk
+                        //EVENT_CheckPieceLayer(unsafe_tile, player);
+                        EVENT_BlankLayer_Global();
+                        EVENT_BlankLayer_Piece(unsafe_tile);
+
+                        for (int u = 0; u < 64; u++)
+                        {
+                            // piece range copy
+                            if (unsafe_tile[u].piece != NULL && unsafe_tile[u].piece->player == unsafe_player) {
 
                                 CHESS_RedirectPiecePattern(unsafe_tile, u, unsafe_player, CHECK);
-                            }
-                        }
-                    }
 
-                    // now apply position if attack stops king_uatk
-                    //EVENT_CheckPieceLayer(unsafe_tile, player);
-                    EVENT_BlankLayer_Global();
-                    EVENT_BlankLayer_Piece(unsafe_tile);
+                                for (int x = 0; x < 64; x++) {
 
-                    for (int u = 0; u < 64; u++)
-                    {
-                        // piece range copy
-                        if (unsafe_tile[u].piece != NULL && unsafe_tile[u].piece->player == unsafe_player) {
+                                    if (unsafe_tile[u].piece->range[x] == true) {
+                                        glo_chess_event_layer[x] = true;
+                                    }
 
-                            CHESS_RedirectPiecePattern(unsafe_tile, u, unsafe_player, CHECK);
-
-                            for (int x = 0; x < 64; x++) {
-
-                                if (unsafe_tile[u].piece->range[x] == true) {
-                                    glo_chess_event_layer[x] = true;
+                                    // better to create a visible layer
+                                    //printf("EVENT_CheckPieceLayer: piece[%c%d] range[%c%d] = piece[%d] layer[%d]\n", chess_tile[n].tag.col, chess_tile[n].tag.row, chess_tile[i].tag.col, chess_tile[i].tag.row, chess_tile[n].piece->range[i], glo_chess_event_layer[i]);
                                 }
-
-                                // better to create a visible layer
-                                //printf("EVENT_CheckPieceLayer: piece[%c%d] range[%c%d] = piece[%d] layer[%d]\n", chess_tile[n].tag.col, chess_tile[n].tag.row, chess_tile[i].tag.col, chess_tile[i].tag.row, chess_tile[n].piece->range[i], glo_chess_event_layer[i]);
                             }
                         }
+
+                        EVENT_CheckKingState(unsafe_tile, player);
+
+                        if (glo_chess_event_king_uatk == false) glo_chess_dot[result].state = true;
                     }
 
-                    //pl_bak = player;
-                    EVENT_CheckDrawState();
-                    EVENT_CheckKingState(unsafe_tile, player);
+                    printf("n = %d || i = %d\n", n, i);
 
-                    printf("glo_chess_event_king_uatk state: %d\n", glo_chess_event_king_uatk);
+                    if (n == 3 && i == 2) {
 
-                    if (glo_chess_event_king_uatk == false) {
+                        printf("im in\n");
+                        EVENT_BlankLayer_Global();
+                        EVENT_BlankLayer_Piece(chess_tile);
 
-                        printf("testing glo_chess_dot\n");
+                        for (int u = 0; u < 64; u++)
+                        {
+                            // piece range copy
+                            if (chess_tile[u].piece != NULL && chess_tile[u].piece->player == unsafe_player) {
 
-                        if (chess_tile[result].piece == NULL) {
-                            glo_chess_dot[result].state = true;
-                            continue;
+                                CHESS_RedirectPiecePattern(chess_tile, u, unsafe_player, CHECK);
+
+                                for (int x = 0; x < 64; x++) {
+
+                                    if (chess_tile[u].piece->range[x] == true) {
+                                        glo_chess_event_layer[x] = true;
+                                    }
+
+                                    // better to create a visible layer
+                                    //printf("EVENT_CheckPieceLayer: piece[%c%d] range[%c%d] = piece[%d] layer[%d]\n", chess_tile[n].tag.col, chess_tile[n].tag.row, chess_tile[i].tag.col, chess_tile[i].tag.row, chess_tile[n].piece->range[i], glo_chess_event_layer[i]);
+                                }
+                            }
                         }
 
-                        if (chess_tile[result].piece->player != player) glo_chess_dot[result].state = true;
+                        EVENT_CheckKingState(chess_tile, player);
                     }
-
-                    // restore old chess tile
-                    //EVENT_CheckPieceLayer(chess_tile, unsafe_player);
-                    /*
-                    EVENT_BlankLayer_Global();
-                    EVENT_BlankLayer_Piece(unsafe_tile);
-                    EVENT_CheckDrawState();
-                    EVENT_CheckKingState(unsafe_tile, player);
-                    */
 
                     continue;
                 }

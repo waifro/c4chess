@@ -16,6 +16,8 @@ int MIDDLE_ReturnRowTile(int tile);
 int MIDDLE_ReturnColTile(int tile);
 
 void MIDDLE_UpdatePositionPiece(CHESS_CORE_TILE *tile, int old, int new);
+void MIDDLE_Unsafe_UpdatePositionPiece(CHESS_CORE_TILE *chess_tile, int old, int new);
+
 void MIDDLE_UnsafePosition_Copy(CHESS_CORE_TILE *unsafe_tile);
 
 int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check);

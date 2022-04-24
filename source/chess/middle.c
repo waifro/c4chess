@@ -87,6 +87,23 @@ void MIDDLE_UpdatePositionPiece(CHESS_CORE_TILE *chess_tile, int old, int new) {
     return;
 }
 
+void MIDDLE_Unsafe_UpdatePositionPiece(CHESS_CORE_TILE *chess_tile, int old, int new) {
+
+    if (old == new) return;
+    if ((old < 0 || old > 63) || (new < 0 || old > 63)) return;
+    if (chess_tile[old].piece == NULL) return;
+
+    printf("MIDDLE_UpdatePositionPiece:\n  chess_tile[old] = %p, %c%d\n  chess_tile[new] = %p, %c%d\n", chess_tile[old].piece, chess_tile[old].tag.col, chess_tile[old].tag.row, chess_tile[new].piece, chess_tile[new].tag.col, chess_tile[new].tag.row);
+
+    if (chess_tile[new].piece != NULL) CORE_GlobalDestroyPiece(chess_tile[new].piece);
+
+    chess_tile[new].piece = chess_tile[old].piece;
+    chess_tile[new].piece->rect = chess_tile[new].rect;
+    chess_tile[old].piece = NULL;
+
+    return;
+}
+
 void MIDDLE_UnsafePosition_Copy(CHESS_CORE_TILE *unsafe_tile) {
 
     memcpy(unsafe_tile, glo_chess_core_tile, sizeof(glo_chess_core_tile));
