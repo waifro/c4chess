@@ -28,7 +28,7 @@ int CORE_Testing_InterposeAttack(CHESS_CORE_PLAYER player) {
     // considering refreshing global core into v3
 
     for (int n = 0; n < 64; n++) {
-        if (glo_chess_core_tile[n].piece == NULL) {
+        if (glo_chess_core_tile[n].piece != NULL) {
             if (glo_chess_core_tile[n].piece->player == player) {
                 //CHESS_RedirectPiecePattern(n, player, CHECK_KING);
 
