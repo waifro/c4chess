@@ -94,7 +94,7 @@ void MIDDLE_UnsafePosition_Copy(CHESS_CORE_TILE *unsafe_tile) {
     return;
 }
 
-int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player, bool check) {
+int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
 
     int result = -1;
     static int position_old = -1;
@@ -103,7 +103,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player, bool ch
 
     touch_pos = TOUCH_MouseState(event);
 
-    if (check == true)
+    if (check == ATTACK || check == CHECK_KING)
     {
         // select choosen piece from mem
         if (touch_pos.iner != -1 && position_old == -1) {
@@ -111,7 +111,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player, bool ch
             if (result != -1 && glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player == player) {
 
                 position_old = result;
-                CHESS_RedirectPiecePattern(glo_chess_core_tile, result, player, ATTACK);
+                CHESS_RedirectPiecePattern(glo_chess_core_tile, result, player, check);
 
             }
         }
@@ -191,6 +191,6 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player, bool ch
         }
     }
 
-    if (check == true) result = -1;
+    if (check == ATTACK) result = -1;
     return (result);
 }

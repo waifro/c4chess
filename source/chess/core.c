@@ -217,7 +217,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
     // TODO: cap framerate to 30/60 fps
     SDL_Event event;
-    bool check;
+    CHESS_PIECE_ATK check;
 
     while(1) {
         SDL_PollEvent(&event);

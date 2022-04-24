@@ -228,6 +228,8 @@ int CHESS_PiecePattern_Knight(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_
 
                 if (check == CHECK_KING) {
 
+                    printf("hello\n");
+
                     glo_chess_event_king_uatk = false;
 
                     // create copy of tile
