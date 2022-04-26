@@ -6,6 +6,31 @@
 #include "core.h"
 #include "dot.h"
 
+int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER player) {
+
+    // crea un singolo loop da 64 per creare i pattern di ogni singolo pezzo sulla scacchiera
+    // controllare gli stati dei pezzi bianchi e neri e confrontarli per attacchi
+    // per permette ai pezzi di abilitare glo_chess_dot, controllano semplicemente in un altro loop da 64
+    // che il loro raggio sia attivo (chiamando successivamente con ATTACK)
+
+
+    // resettare i raggi di ogni singolo pezzo
+    // ps: si potrebbe anche semplicemente aggiornare il pattern, senza resettarlo,
+    // ma richiederebbe del tempo che non ho (prima voglio finire il gioco lol)
+    // le ottimizzazioni si fanno a fine game ;)
+    for (int n = 0; n < 64; n++) {
+        if (core_tile[n].piece != NULL) {
+            for (int i = 0; i < 64; i++) core_tile[n].piece->range[i] = false;
+
+            // creare i pattern di ogni singolo pezzo
+            CHESS_RedirectPiecePattern(core_tile, n, player, CHECK);
+        }
+    }
+
+    // creare il glo_chess_core_event
+    return 0;
+}
+
 int CHESS_RedirectPiecePattern(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
 
     switch(glo_chess_core_tile[tile].piece->enum_piece) {
@@ -221,6 +246,9 @@ int CHESS_PiecePattern_Knight(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_
 
             if (i == 0 || i == 2)
             {
+                //if (chess_tile[tile].piece->lock == true) continue;
+
+                /*
                 if (check == ATTACK) {
                     printf("check ATTACK\n");
                     if (chess_tile[result].piece == NULL) {
@@ -230,19 +258,19 @@ int CHESS_PiecePattern_Knight(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_
 
                     if (chess_tile[result].piece->player != player) glo_chess_dot[result].state = true;
                 }
+                */
 
                 if (check == CHECK) {
-                    printf("check CHECK\n");
                     chess_tile[tile].piece->range[result] = true;
                     continue;
                 }
 
-                if (check == CHECK_KING) {
+                if (check == ATTACK || check == CHECK_KING) {
 
                     CHESS_CORE_PLAYER unsafe_player = CORE_ReversePlayer_State(player);
                     if (chess_tile[result].piece == NULL || chess_tile[result].piece->player != player) {
 
-                        glo_chess_event_king_uatk = true;
+                        //glo_chess_event_king_uatk = true;
 
                         // create copy of tile
                         CHESS_CORE_TILE unsafe_tile[64];
@@ -289,8 +317,6 @@ int CHESS_PiecePattern_Knight(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_
 
                         if (glo_chess_event_king_uatk == false) glo_chess_dot[result].state = true;
                     }
-
-                    printf("n = %d || i = %d\n", n, i);
 
                     if (n == 3 && i == 2) {
 
@@ -407,8 +433,8 @@ int CHESS_PiecePattern_Rook(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PL
 
             if (result == -1) continue;
 
-            if (check == CHECK) {
-
+            if (check == CHECK)
+            {
                 chess_tile[tile].piece->range[result] = true;
 
                 if (chess_tile[result].piece != NULL && chess_tile[result].piece->player != player) {
@@ -418,11 +444,14 @@ int CHESS_PiecePattern_Rook(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PL
                 continue;
             }
 
-            if (chess_tile[result].piece == NULL) glo_chess_dot[result].state = true;
-            else if (chess_tile[result].piece != NULL)
+            if (check == ATTACK)
             {
-                if (chess_tile[result].piece->player != player) glo_chess_dot[result].state = true;
-                break;
+                if (chess_tile[result].piece == NULL) glo_chess_dot[result].state = true;
+                else if (chess_tile[result].piece != NULL)
+                {
+                    if (chess_tile[result].piece->player != player) glo_chess_dot[result].state = true;
+                    break;
+                }
             }
         }
     }
