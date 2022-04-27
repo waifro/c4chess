@@ -228,7 +228,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
         SDL_PollEvent(&event);
 
         /* checks if king under attack */
-        check = EVENT_CheckPieceLayer(glo_chess_core_tile, player);
+        //check = EVENT_CheckPieceLayer(glo_chess_core_tile, player);
 
         //if (glo_chess_event_king_uatk == true) check = CHECK_KING;
 

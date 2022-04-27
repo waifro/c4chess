@@ -120,6 +120,53 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player, CHESS_P
 
     touch_pos = TOUCH_MouseState(event);
 
+    // select choosen piece from mem
+    if (touch_pos.iner != -1 && position_old == -1) {
+        result = MIDDLE_TouchToTile(touch_pos);
+        if (result != -1 && glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player == player) {
+
+            position_old = result;
+            //CHESS_RedirectPiecePattern(glo_chess_core_tile, result, player, check);
+
+            CHESS_PiecePattern_RangeAllowed(glo_chess_core_tile, result);
+        }
+    }
+
+    // deselect choosen piece from mem
+    else if (touch_pos.iner != -1 && position_old != -1) {
+        result = MIDDLE_TouchToTile(touch_pos);
+
+        if (result != -1) {
+
+            if (glo_chess_dot[result].state == true) {
+
+                // if is a valid move, start changing piece state
+                position_new = result;
+
+                MIDDLE_UpdatePositionPiece(glo_chess_core_tile, position_old, position_new);
+                DOT_StateGlobalDotReset();
+                position_new = -1; position_old = -1; result = -2;
+
+
+            } else if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[position_old].piece->player == glo_chess_core_tile[result].piece->player) {
+
+                DOT_StateGlobalDotReset();
+                position_old = result;
+                //CHESS_RedirectPiecePattern(glo_chess_core_tile, result, player, check);
+
+                CHESS_PiecePattern_RangeAllowed(go_chess_core_tile, result);
+
+            } else if ((glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[position_old].piece->player != glo_chess_core_tile[result].piece->player) || glo_chess_core_tile[result].piece == NULL) {
+
+                DOT_StateGlobalDotReset();
+                position_old = -1;
+
+            }
+
+        }
+    }
+
+    /* old
     if (check == ATTACK || check == CHECK_KING)
     {
         // select choosen piece from mem
@@ -165,8 +212,9 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player, CHESS_P
             }
         }
     }
+    */
 
-    /*
+    /* old old
     // select choosen piece from mem
     if (touch_pos.iner != -1 && position_old == -1) {
         result = MIDDLE_TouchToTile(touch_pos);

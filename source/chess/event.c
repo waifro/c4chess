@@ -90,14 +90,14 @@ int EVENT_CheckPieceLayer(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player)
     if (pl_bak != player) {
 
         EVENT_BlankLayer_Global();
-        EVENT_BlankLayer_Piece(chess_tile);
+        //EVENT_BlankLayer_Piece(chess_tile);
 
         for (int n = 0; n < 64; n++)
         {
             // piece range copy
             if (chess_tile[n].piece != NULL && chess_tile[n].piece->player != player) {
 
-                CHESS_RedirectPiecePattern(chess_tile, n, pl_bak, CHECK);
+                //CHESS_RedirectPiecePattern(chess_tile, n, pl_bak, CHECK);
 
                 for (int i = 0; i < 64; i++) {
 
