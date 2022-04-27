@@ -67,6 +67,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
 
         if (glo_chess_event_king_uatk == true) {
 
+            printf("CHESS_PiecePattern_UpdateState:\n  king uatk detected\n");
             // grab enemy player
             //CHESS_CORE_PLAYER unsafe_player = CORE_ReversePlayer_State(player);
 
@@ -79,7 +80,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
             // pieces
             for (int n = 0; n < 64; n++)
             {
-                if (unsafe_tile[n].piece != NULL && unsafe_tile[n].piece->player == player)
+                if (unsafe_tile[n].piece != NULL && unsafe_tile[n].piece->player == player && unsafe_tile[n].piece->enum_piece != KING && unsafe_tile[n].piece->enum_piece != BKING)
                 {
                     // range
                     for (int i = 0; i < 64; i++)
@@ -96,13 +97,22 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
                                 }
                             }
 
-                            EVENT_CheckPieceLayer(unsafe_tile, player);
+                            for (int x = 0; x < 64; x++) {
+                                if (unsafe_tile[x].piece != NULL && unsafe_tile[x].piece->player == pl_bak) {
+                                    for (int u = 0; u < 64; u++) {
+                                        if (unsafe_tile[x].piece->range[u] == true) glo_chess_event_layer[u] = true;
+                                    }
+                                }
+                            }
+
+                            EVENT_CheckKingState(unsafe_tile, player);
 
                             if (glo_chess_event_king_uatk == true) {
                                 core_tile[n].piece->range[i] = false;
                             }
 
                             // reset
+                            //MIDDLE_UpdatePositionPiece(unsafe_tile, i, n);
                             MIDDLE_UnsafePosition_Copy(unsafe_tile);
                         }
                     }
@@ -663,8 +673,8 @@ int CHESS_PiecePattern_Rook(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PL
                     if (allow_range == false) {
 
                         if (chess_tile[result].piece->enum_piece == KING || chess_tile[result].piece->enum_piece == BKING) {
-                            if (prev_piece != NULL) prev_piece->lock = true;
-                            glo_chess_event_king_uatk = true;
+                            //if (prev_piece != NULL) prev_piece->lock = true;
+                            //glo_chess_event_king_uatk = true;
                         }
 
                         break;
