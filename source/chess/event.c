@@ -5,7 +5,7 @@
 #include "chess.h"
 
 bool glo_chess_event_layer[64];
-bool glo_chess_event_layer_[64];
+bool glo_chess_event_king_uatk;
 
 void EVENT_BlankLayer_Global(void) {
     for (int n = 0; n < 64; n++) {

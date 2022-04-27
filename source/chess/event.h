@@ -5,7 +5,7 @@
 #include "core.h"
 
 extern bool glo_chess_event_layer[64];
-extern bool glo_chess_event_layer_[64];
+extern bool glo_chess_event_king_uatk;
 
 void EVENT_BlankLayer_Global(void);
 void EVENT_BlankLayer_Piece(CHESS_CORE_TILE *chess_tile);

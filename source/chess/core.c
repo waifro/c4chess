@@ -21,46 +21,6 @@ CHESS_CORE_PLAYER glo_chess_core_player;
 CHESS_CORE_TILE glo_chess_core_tile[64];
 CHESS_CORE_PIECE glo_chess_core_piece[32];
 
-bool glo_chess_event_king_uatk;
-
-int CORE_Testing_InterposeAttack(CHESS_CORE_PLAYER player) {
-    (void)player;
-
-    // essentially this is temporary fix for king under attack
-    // considering refreshing global core into v3
-
-    // provando a simulare un attacco utilizzando i tag prendendo spunto dal pezzo attaccante
-    /*
-    CHESS_CORE_TILE_TAG tag;
-
-    char alpha[] = "abcdefgh";
-    int col_pos = -1;
-
-
-    for (int n = 0; n < 64; n++) {
-        if (glo_chess_core_tile[n].piece != NULL && glo_chess_core_tile[n].piece->player != player) {
-
-            // prendiamo la posizione del pezzo
-            tag = MIDDLE_TileToTag(n);
-
-
-        }
-    }
-
-    for (int n = 0; n < 64; n++) {
-        if (glo_chess_core_tile[n].piece != NULL) {
-            if (glo_chess_core_tile[n].piece->player == player) {
-                //CHESS_RedirectPiecePattern(n, player, CHECK_KING);
-
-
-            }
-        }
-    }
-    */
-
-    return 0;
-}
-
 void CORE_Chessboard_Init(void) {
 
     int size_tile = 50;
@@ -229,7 +189,8 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
         /* checks if king under attack */
         //check = EVENT_CheckPieceLayer(glo_chess_core_tile, player);
-
+        CHESS_PiecePattern_UpdateState(glo_chess_core_tile, player);
+        
         //if (glo_chess_event_king_uatk == true) check = CHECK_KING;
 
         /* makes the in-game changes during gameplay */
