@@ -456,7 +456,7 @@ int CHESS_PiecePattern_Knight(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_
 
                     if (chess_tile[result].piece != NULL && chess_tile[result].piece->player != player) {
                         if (chess_tile[result].piece->enum_piece == KING || chess_tile[result].piece->enum_piece == BKING) {
-                            glo_chess_event_king_uatk = true;
+                            //glo_chess_event_king_uatk = true;
                         }
 
                         chess_tile[tile].piece->range[result] = true;
@@ -675,7 +675,7 @@ int CHESS_PiecePattern_Rook(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PL
                     prev_piece = chess_tile[result].piece;
 
                     if (allow_range == true) {
-                        if (chess_tile[result].piece->enum_piece == KING || chess_tile[result].piece->enum_piece == BKING) glo_chess_event_king_uatk = true;
+                        //if (chess_tile[result].piece->enum_piece == KING || chess_tile[result].piece->enum_piece == BKING) glo_chess_event_king_uatk = true;
                         chess_tile[tile].piece->range[result] = true;
                     }
 

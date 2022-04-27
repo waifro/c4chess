@@ -57,7 +57,7 @@ void EVENT_CheckKingState(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player)
                 if (glo_chess_event_layer[n] == true) {
                     printf("\n\nKING UNDER ATTACK\n\n\n"); //check enabled, a func;
 
-                    //glo_chess_event_king_uatk = true;
+                    glo_chess_event_king_uatk = true;
 
                     //if (player == WHITE_PLAYER) glo_chess_event_wking_uatk = true;
                     //else if (player == BLACK_PLAYER) glo_chess_event_bking_uatk = true;
@@ -69,7 +69,7 @@ void EVENT_CheckKingState(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player)
 
                 //if (player == WHITE_PLAYER) glo_chess_event_wking_uatk = false;
                 //else if (player == BLACK_PLAYER) glo_chess_event_bking_uatk = false;
-                //glo_chess_event_king_uatk = false;
+                glo_chess_event_king_uatk = false;
                 break;
             }
         }
