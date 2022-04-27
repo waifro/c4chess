@@ -27,9 +27,11 @@ void EVENT_BlankLayer_Piece(CHESS_CORE_TILE *chess_tile) {
 
 void EVENT_CheckDrawState(void) {
 
+    /*
     for (int n = 0; n < 32; n++) {
         if (glo_chess_core_piece[n].texture != 0 && glo_chess_core_piece[n].enum_piece == NONE) { printf("  dead mouse = %d\n\n", n); }
     }
+    */
 
     return;
 }
@@ -55,7 +57,7 @@ void EVENT_CheckKingState(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player)
                 if (glo_chess_event_layer[n] == true) {
                     printf("\n\nKING UNDER ATTACK\n\n\n"); //check enabled, a func;
 
-                    glo_chess_event_king_uatk = true;
+                    //glo_chess_event_king_uatk = true;
 
                     //if (player == WHITE_PLAYER) glo_chess_event_wking_uatk = true;
                     //else if (player == BLACK_PLAYER) glo_chess_event_bking_uatk = true;
@@ -67,7 +69,7 @@ void EVENT_CheckKingState(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player)
 
                 //if (player == WHITE_PLAYER) glo_chess_event_wking_uatk = false;
                 //else if (player == BLACK_PLAYER) glo_chess_event_bking_uatk = false;
-                glo_chess_event_king_uatk = false;
+                //glo_chess_event_king_uatk = false;
                 break;
             }
         }
@@ -80,7 +82,6 @@ int EVENT_CheckPieceLayer(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player)
 
     static CHESS_CORE_PLAYER pl_bak;
 
-    // for sake of testing other things, let me point out this bool can expire
     static bool check_state;
     if (!check_state) {
         pl_bak = CORE_ReversePlayer_State(player);

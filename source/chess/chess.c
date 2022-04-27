@@ -54,7 +54,22 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
         // with each piece from player.
 
         after
-        if (check == ATTACK || check == CHECK_KING) {
+        */
+        if (glo_chess_event_king_uatk == true) {
+
+            // grab enemy player
+            CHESS_CORE_PLAYER unsafe_player = CORE_ReversePlayer_State(player);
+
+            // create copy of tile
+            CHESS_CORE_TILE unsafe_tile[64];
+            MIDDLE_UnsafePosition_Copy(unsafe_tile);
+
+            // apply changes to unsafe tile
+            MIDDLE_UpdatePositionPiece(unsafe_tile, tile, result);
+
+            for (int n = 0; n < 64; n++) {
+
+            }
 
             CHESS_CORE_PLAYER unsafe_player = CORE_ReversePlayer_State(player);
             if (chess_tile[result].piece == NULL || chess_tile[result].piece->player != player) {
