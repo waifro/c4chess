@@ -30,6 +30,8 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
 
     if (pl_bak != player) {
 
+        glo_chess_event_king_uatk = false;
+
         for (int n = 0; n < 64; n++) {
 
             // seperated because first loop needs to unlock any piece before locking again
@@ -92,13 +94,13 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
                             EVENT_BlankLayer_Global();
 
                             for (int x = 0; x < 64; x++) {
-                                if (unsafe_tile[x].piece != NULL && unsafe_tile[x].piece->player == pl_bak) {
+                                if (unsafe_tile[x].piece != NULL && unsafe_tile[x].piece->player != player) {
                                     CHESS_RedirectPiecePattern(unsafe_tile, x, pl_bak, CHECK);
                                 }
                             }
 
                             for (int x = 0; x < 64; x++) {
-                                if (unsafe_tile[x].piece != NULL && unsafe_tile[x].piece->player == pl_bak) {
+                                if (unsafe_tile[x].piece != NULL && unsafe_tile[x].piece->player != player) {
                                     for (int u = 0; u < 64; u++) {
                                         if (unsafe_tile[x].piece->range[u] == true) glo_chess_event_layer[u] = true;
                                     }
@@ -108,6 +110,8 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
                             EVENT_CheckKingState(unsafe_tile, player);
 
                             if (glo_chess_event_king_uatk == true) {
+
+                                printf("coretile: %d !! range: %d\n", n, i);
                                 core_tile[n].piece->range[i] = false;
                             }
 
@@ -641,8 +645,9 @@ int CHESS_PiecePattern_Rook(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PL
     int result = -1;
     for (int n = 0; n < 4; n++)
     {
-        // reset to default setting: true
+        // reset to default settings
         allow_range = true;
+        prev_piece = NULL;
 
         col_pos = MIDDLE_ReturnColTile(tile);
         tag.row = MIDDLE_ReturnRowTile(tile);
@@ -659,6 +664,7 @@ int CHESS_PiecePattern_Rook(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PL
             result = MIDDLE_TagToTile(tag);
 
             if (result == -1) continue;
+            if (result == tile) continue;
 
             // testing approach v2
             if (check == CHECK) {
@@ -667,7 +673,7 @@ int CHESS_PiecePattern_Rook(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PL
                     if (allow_range == true) chess_tile[tile].piece->range[result] = true;
                 }
 
-                else if (chess_tile[result].piece != NULL) {
+                else if (chess_tile[result].piece->player != player) {
 
                     // compare if king is hit after
                     if (allow_range == false) {
@@ -691,6 +697,11 @@ int CHESS_PiecePattern_Rook(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PL
 
                     if (chess_tile[result].piece->enum_piece != KING && chess_tile[result].piece->enum_piece != BKING) allow_range = false;
 
+                }
+
+                else if (chess_tile[result].piece->player == player) {
+                    chess_tile[tile].piece->range[result] = true;
+                    break;
                 }
             }
 
