@@ -64,13 +64,9 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
                             EVENT_CheckKingState(unsafe_tile, player);
 
                             if (glo_chess_event_king_uatk == true)
-                            {
-                                printf("coretile: %d !! range: %d\n", n, i);
                                 core_tile[n].piece->range[i] = false;
-                            }
 
                             // reset
-                            //MIDDLE_UpdatePositionPiece(unsafe_tile, i, n);
                             MIDDLE_UnsafePosition_Copy(unsafe_tile);
                         }
                     }
