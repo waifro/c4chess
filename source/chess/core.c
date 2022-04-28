@@ -180,6 +180,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     /* setup chessboard tagged */
     CORE_ChessTag_Init(player);
 
+    /* reverse chessboard if needed */
     CORE_Chessboard_Reverse(glo_chess_core_tile);
 
     /* init dot gfx */
