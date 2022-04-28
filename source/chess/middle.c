@@ -111,9 +111,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player, CHESS_P
         if (result != -1 && glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player == player) {
 
             position_old = result;
-            //CHESS_RedirectPiecePattern(glo_chess_core_tile, result, player, check);
-
-            CHESS_PiecePattern_RangeAllowed(glo_chess_core_tile, result);
+            CHESS_PiecePattern_RangeAllowed(glo_chess_core_tile, result, player);
         }
     }
 
@@ -137,9 +135,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player, CHESS_P
 
                 DOT_StateGlobalDotReset();
                 position_old = result;
-                //CHESS_RedirectPiecePattern(glo_chess_core_tile, result, player, check);
-
-                CHESS_PiecePattern_RangeAllowed(glo_chess_core_tile, result);
+                CHESS_PiecePattern_RangeAllowed(glo_chess_core_tile, result, player);
 
             } else if ((glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[position_old].piece->player != glo_chess_core_tile[result].piece->player) || glo_chess_core_tile[result].piece == NULL) {
 

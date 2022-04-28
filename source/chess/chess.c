@@ -21,13 +21,10 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
         glo_chess_event_king_uatk = false;
 
         for (int n = 0; n < 64; n++) {
-            if (core_tile[n].piece != NULL)
+            if (core_tile[n].piece != NULL) {
                 for (int i = 0; i < 64; i++) core_tile[n].piece->range[i] = false;
-        }
-
-        for (int n = 0; n < 64; n++) {
-            if (core_tile[n].piece != NULL)
                 CHESS_RedirectPiecePattern(core_tile, n, player, CHECK);
+            }
         }
 
         // create copy of tile
@@ -96,10 +93,15 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
     return 0;
 }
 
-int CHESS_PiecePattern_RangeAllowed(CHESS_CORE_TILE *core_tile, int tile) {
+int CHESS_PiecePattern_RangeAllowed(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player) {
 
     for (int n = 0; n < 64; n++)
-        if (core_tile[tile].piece->range[n] == true) glo_chess_dot[n].state = true;
+        if (core_tile[tile].piece->range[n] == true) {
+            if (core_tile[n].piece != NULL && core_tile[n].piece->player == player)
+                continue;
+
+            glo_chess_dot[n].state = true;
+        }
 
     return 0;
 }
