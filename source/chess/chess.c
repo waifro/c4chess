@@ -10,99 +10,64 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
 
     static CHESS_CORE_PLAYER pl_bak;
 
-    // only needed first itineraction, every time it will change player, it will sum up by itselfs
     static bool check_state_once;
     if (!check_state_once) {
         pl_bak = CORE_ReversePlayer_State(player);
         check_state_once = true;
     }
 
-    // crea un singolo loop da 64 per creare i pattern di ogni singolo pezzo sulla scacchiera
-    // controllare gli stati dei pezzi bianchi e neri e confrontarli per attacchi
-    // per permette ai pezzi di abilitare glo_chess_dot, controllano semplicemente in un altro loop da 64
-    // che il loro raggio sia attivo (chiamando successivamente con ATTACK)
-
-
-    // resettare i raggi di ogni singolo pezzo
-    // ps: si potrebbe anche semplicemente aggiornare il pattern, senza resettarlo,
-    // ma richiederebbe del tempo che non ho (prima voglio finire il gioco lol)
-    // le ottimizzazioni si fanno a fine game ;)
-
     if (pl_bak != player) {
 
         glo_chess_event_king_uatk = false;
 
         for (int n = 0; n < 64; n++) {
-
-            // seperated because first loop needs to unlock any piece before locking again
-            /*if (core_tile[n].piece != NULL && core_tile[n].piece->player == player) {
-                core_tile[n].piece->lock = false;
-            }*/
-
-            if (core_tile[n].piece != NULL) {
-
+            if (core_tile[n].piece != NULL)
                 for (int i = 0; i < 64; i++) core_tile[n].piece->range[i] = false;
-
-                /*
-                if (core_tile[n].piece->enum_piece != KING && core_tile[n].piece->enum_piece != BKING) {
-                    // creare i pattern di ogni singolo pezzo
-                    CHESS_RedirectPiecePattern(core_tile, n, player, CHECK);
-                }
-                */
-                CHESS_RedirectPiecePattern(core_tile, n, player, CHECK);
-
-            }
         }
 
-        // leaving this here (but requires modification)
-        // because i need to check if king of player is under attack
-
-        // if king is indeed under attack go inside here the knight copypaste
-
-        /* copy pasted from Knight pattern;
-        // im going to use this for intercepting the attack,
-        // with each piece from player.
-
-        after
-        */
+        for (int n = 0; n < 64; n++) {
+            if (core_tile[n].piece != NULL)
+                CHESS_RedirectPiecePattern(core_tile, n, player, CHECK);
+        }
 
         // create copy of tile
         CHESS_CORE_TILE unsafe_tile[64];
         MIDDLE_UnsafePosition_Copy(unsafe_tile);
 
-        //MIDDLE_UpdatePositionPiece(unsafe_tile, tile, result);
-
         // pieces
         for (int n = 0; n < 64; n++)
         {
-            if (unsafe_tile[n].piece != NULL && unsafe_tile[n].piece->player == player && unsafe_tile[n].piece->enum_piece != KING && unsafe_tile[n].piece->enum_piece != BKING)
+            if (unsafe_tile[n].piece != NULL && unsafe_tile[n].piece->player == player)
             {
-                // range
-                for (int i = 0; i < 64; i++)
+                if (unsafe_tile[n].piece->enum_piece != KING && unsafe_tile[n].piece->enum_piece != BKING)
                 {
-                    if (unsafe_tile[n].piece->range[i] == true)
+                    // range
+                    for (int i = 0; i < 64; i++)
                     {
-                        MIDDLE_UpdatePositionPiece(unsafe_tile, n, i);
+                        if (unsafe_tile[n].piece->range[i] == true)
+                        {
+                            MIDDLE_UpdatePositionPiece(unsafe_tile, n, i);
 
-                        EVENT_BlankLayer_Global();
+                            EVENT_BlankLayer_Global();
 
-                        for (int x = 0; x < 64; x++) {
-                            if (unsafe_tile[x].piece != NULL && unsafe_tile[x].piece->player != player) {
+                            for (int x = 0; x < 64; x++) {
+                                if (unsafe_tile[x].piece != NULL && unsafe_tile[x].piece->player != player) {
 
-                                for (int u = 0; u < 64; u++) if (unsafe_tile[x].piece->range[u] == true)
-                                    unsafe_tile[x].piece->range[u] = false;
+                                    for (int u = 0; u < 64; u++) if (unsafe_tile[x].piece->range[u] == true)
+                                        unsafe_tile[x].piece->range[u] = false;
 
-                                CHESS_RedirectPiecePattern(unsafe_tile, x, pl_bak, CHECK);
+                                    CHESS_RedirectPiecePattern(unsafe_tile, x, pl_bak, CHECK);
 
-                                for (int u = 0; u < 64; u++)
-                                    if (unsafe_tile[x].piece->range[u] == true) glo_chess_event_layer[u] = true;
+                                    for (int u = 0; u < 64; u++)
+                                        if (unsafe_tile[x].piece->range[u] == true) glo_chess_event_layer[u] = true;
+                                }
                             }
 
 
                             EVENT_CheckKingState(unsafe_tile, player);
 
-                            if (glo_chess_event_king_uatk == true) {
-
+                            if (glo_chess_event_king_uatk == true)
+                            {
                                 printf("coretile: %d !! range: %d\n", n, i);
                                 core_tile[n].piece->range[i] = false;
                             }
@@ -116,15 +81,12 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
             }
         }
 
-        // king safe or not, create pattern for both kings (USING GLO_CHESS_EVENT_LAYER!!!)
-        // thats why check before calling the kings at the top if need to move (before copypaste)
         for (int n = 0; n < 64; n++) {
             if (core_tile[n].piece != NULL && core_tile[n].piece->player == player && (core_tile[n].piece->enum_piece == KING || core_tile[n].piece->enum_piece == BKING)) {
                 for (int i = 0; i < 64; i++) core_tile[n].piece->range[i] = false;
 
                 CHESS_RedirectPiecePattern(core_tile, n, player, CHECK);
             }
-
         }
 
         pl_bak = player;
