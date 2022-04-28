@@ -18,7 +18,7 @@
 	#define REVISION  19
 	
 	//Miscellaneous Version Types
-	#define BUILDS_COUNT  5
+	#define BUILDS_COUNT  3
 	#define RC_FILEVERSION 0,0,3,19
 	#define RC_FILEVERSION_STRING "0, 0, 3, 19\0"
 	#define FULLVERSION_STRING  "0.0.3.19"

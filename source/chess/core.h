@@ -63,7 +63,7 @@ void CORE_GlobalClearCorePiece(void);
 void CORE_GlobalClearChessTile(void);
 
 void CORE_ResetGlobal_CorePiece(void);
-CHESS_CORE_TILE *CORE_Chessboard_Reverse(CHESS_CORE_TILE *core_tile;
+void CORE_Chessboard_Reverse(CHESS_CORE_TILE *core_tile);
 CHESS_CORE_PLAYER CORE_ReversePlayer_State(CHESS_CORE_PLAYER player);
 
 int CORE_Testing_InterposeAttack(CHESS_CORE_PLAYER player);

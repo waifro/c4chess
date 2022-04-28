@@ -148,7 +148,7 @@ CHESS_CORE_PLAYER CORE_ReversePlayer_State(CHESS_CORE_PLAYER player) {
     else return WHITE_PLAYER;
 }
 
-CHESS_CORE_TILE *CORE_Chessboard_Reverse(CHESS_CORE_TILE *core_tile) {
+void CORE_Chessboard_Reverse(CHESS_CORE_TILE *core_tile) {
     // reverse the board for:
     // - switching view
     // - black player
@@ -159,14 +159,14 @@ CHESS_CORE_TILE *CORE_Chessboard_Reverse(CHESS_CORE_TILE *core_tile) {
     CHESS_CORE_TILE core_tile_bak[64];
 
     for (int n = 0; n < 64; n++) {
-        core_tile_bak[63 - n] = core_tile[n];
+        core_tile_bak[n] = core_tile[63 - n];
     }
 
     for (int n = 0; n < 64; n++) {
-        core_tile[63 - n] = core_tile_bak[n];
+        core_tile[n] = core_tile_bak[n];
     }
 
-    return core_tile;
+    return;
 }
 
 void CORE_Testing(CHESS_CORE_PLAYER player) {
@@ -180,7 +180,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     /* setup chessboard tagged */
     CORE_ChessTag_Init(player);
 
-    //CORE_Chessboard_Reverse(glo_chess_core_tile);
+    CORE_Chessboard_Reverse(glo_chess_core_tile);
 
     /* init dot gfx */
     DOT_GlobalDot_Init();
