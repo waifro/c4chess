@@ -28,7 +28,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
         }
 
         // create copy of tile
-        CHESS_CORE_TILE unsafe_tile[64]; CHESS_CORE_PIECE *pc_bak = NULL;
+        CHESS_CORE_TILE unsafe_tile[64];
         MIDDLE_UnsafePosition_Copy(unsafe_tile);
 
         // pieces
@@ -43,7 +43,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
                     {
                         if (unsafe_tile[n].piece->range[i] == true)
                         {
-                            MIDDLE_UpdatePositionPiece(unsafe_tile, n, i);
+                            MIDDLE_Unsafe_UpdatePositionPiece(unsafe_tile, n, i);
 
                             EVENT_BlankLayer_Global();
 
@@ -537,7 +537,7 @@ int CHESS_PiecePattern_BPawnAttack(int tile, CHESS_CORE_PLAYER player, CHESS_PIE
             glo_chess_core_tile[tile].piece->range[result] = true;
         }
 
-        else if (check == ATTACK /* && glo_chess_core_tile[tile].piece->lock != true */)
+        else if (check == ATTACK)
         {
             if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player != player) {
                 glo_chess_dot[result].state = true;
