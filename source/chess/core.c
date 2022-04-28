@@ -182,17 +182,15 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
     // TODO: cap framerate to 30/60 fps
     SDL_Event event;
-    CHESS_PIECE_ATK check;
 
     while(1) {
         SDL_PollEvent(&event);
 
         /* checks if king under attack */
-        //check = EVENT_CheckPieceLayer(glo_chess_core_tile, player);
         CHESS_PiecePattern_UpdateState(glo_chess_core_tile, player);
 
         /* makes the in-game changes during gameplay */
-        if (MIDDLE_UpdateChangeState(&event, player, check) == -2)
+        if (MIDDLE_UpdateChangeState(&event, player) == -2)
         {
             player = CORE_ReversePlayer_State(player);
             printf("CORE_Testing:\n  player_turn = %d\n", player);

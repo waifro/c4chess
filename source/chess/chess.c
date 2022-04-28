@@ -28,7 +28,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
         }
 
         // create copy of tile
-        CHESS_CORE_TILE unsafe_tile[64];
+        CHESS_CORE_TILE unsafe_tile[64]; CHESS_CORE_PIECE *pc_bak = NULL;
         MIDDLE_UnsafePosition_Copy(unsafe_tile);
 
         // pieces
@@ -113,17 +113,17 @@ int CHESS_RedirectPiecePattern(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_
         break;
         case BPAWN: CHESS_PiecePattern_BPawn(tile, player, check);
         break;
-        case KNIGHT: CHESS_PiecePattern_Knight(core_tile, tile, player, check);
+        case KNIGHT: CHESS_PiecePattern_Knight(core_tile, tile, player);
         break;
-        case BKNIGHT: CHESS_PiecePattern_Knight(core_tile, tile, player, check);
+        case BKNIGHT: CHESS_PiecePattern_Knight(core_tile, tile, player);
         break;
         case BISHOP: CHESS_PiecePattern_Bishop(tile, player, check);
         break;
         case BBISHOP: CHESS_PiecePattern_Bishop(tile, player, check);
         break;
-        case ROOK: CHESS_PiecePattern_Rook(core_tile, tile, player, check);
+        case ROOK: CHESS_PiecePattern_Rook(core_tile, tile, player);
         break;
-        case BROOK: CHESS_PiecePattern_Rook(core_tile, tile, player, check);
+        case BROOK: CHESS_PiecePattern_Rook(core_tile, tile, player);
         break;
         case QUEEN: CHESS_PiecePattern_Queen(tile, player, check);
         break;
@@ -263,9 +263,8 @@ int CHESS_PiecePattern_BPawn(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK
     return 0;
 }
 
-int CHESS_PiecePattern_Knight(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
+int CHESS_PiecePattern_Knight(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PLAYER player) {
 
-    // initialization
     char alpha[] = "abcdefgh";
     CHESS_CORE_TILE_TAG tag;
 
@@ -291,16 +290,11 @@ int CHESS_PiecePattern_Knight(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_
 
             if (i == 0 || i == 2)
             {
-                if (check == CHECK) {
+                if (chess_tile[result].piece == NULL)
+                    chess_tile[tile].piece->range[result] = true;
 
-                    if (chess_tile[result].piece == NULL)
-                        chess_tile[tile].piece->range[result] = true;
-
-                    if (chess_tile[result].piece != NULL && chess_tile[result].piece->player != player) {
-                        chess_tile[tile].piece->range[result] = true;
-                    }
-
-                    continue;
+                else if (chess_tile[result].piece != NULL && chess_tile[result].piece->player != player) {
+                    chess_tile[tile].piece->range[result] = true;
                 }
             }
         }
@@ -361,28 +355,16 @@ int CHESS_PiecePattern_Bishop(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_AT
     return 0;
 }
 
-int CHESS_PiecePattern_Rook(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
+int CHESS_PiecePattern_Rook(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PLAYER player) {
 
     CHESS_CORE_TILE_TAG tag;
 
     char alpha[] = "abcdefgh";
     int col_pos = MIDDLE_ReturnColTile(tile);
 
-    // save previous piece encountered (useful if second piece encountered is king the lock this)
-    CHESS_CORE_PIECE *prev_piece = NULL;
-
-    // using this variable to allow the algorithm to sign his range.
-    // i call this "ghosting" because if i want to lock a piece, i need to know if king is behind
-    // i cant just break if any piece (not king) was encountered
-    bool allow_range;
-
     int result = -1;
     for (int n = 0; n < 4; n++)
     {
-        // reset to default settings
-        allow_range = true;
-        prev_piece = NULL;
-
         col_pos = MIDDLE_ReturnColTile(tile);
         tag.row = MIDDLE_ReturnRowTile(tile);
         tag.col = alpha[col_pos];
@@ -400,24 +382,20 @@ int CHESS_PiecePattern_Rook(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PL
             if (result == -1) continue;
             if (result == tile) continue;
 
-            // testing approach v2
-            if (check == CHECK) {
+            if (chess_tile[result].piece == NULL) {
+                chess_tile[tile].piece->range[result] = true;
+            }
 
-                if (chess_tile[result].piece == NULL) {
-                    if (allow_range == true) chess_tile[tile].piece->range[result] = true;
-                }
+            else if (chess_tile[result].piece->player != player) {
 
-                else if (chess_tile[result].piece->player != player) {
+                chess_tile[tile].piece->range[result] = true;
+                if (chess_tile[result].piece->enum_piece == KING || chess_tile[tile].piece->enum_piece == BKING) continue;
+                break;
+            }
 
-                    chess_tile[tile].piece->range[result] = true;
-                    if (chess_tile[result].piece->enum_piece == KING || chess_tile[tile].piece->enum_piece == BKING) continue;
-                    break;
-                }
-
-                else if (chess_tile[result].piece->player == player) {
-                    chess_tile[tile].piece->range[result] = true;
-                    break;
-                }
+            else if (chess_tile[result].piece->player == player) {
+                chess_tile[tile].piece->range[result] = true;
+                break;
             }
         }
     }

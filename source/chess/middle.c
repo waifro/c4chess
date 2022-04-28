@@ -94,9 +94,7 @@ void MIDDLE_UnsafePosition_Copy(CHESS_CORE_TILE *unsafe_tile) {
     return;
 }
 
-int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
-
-    (void)check;
+int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player) {
 
     int result = -1;
     static int position_old = -1;
