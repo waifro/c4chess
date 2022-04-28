@@ -35,9 +35,9 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
         for (int n = 0; n < 64; n++) {
 
             // seperated because first loop needs to unlock any piece before locking again
-            if (core_tile[n].piece != NULL && core_tile[n].piece->player == player) {
+            /*if (core_tile[n].piece != NULL && core_tile[n].piece->player == player) {
                 core_tile[n].piece->lock = false;
-            }
+            }*/
 
             if (core_tile[n].piece != NULL) {
 
@@ -88,11 +88,14 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
 
                         for (int x = 0; x < 64; x++) {
                             if (unsafe_tile[x].piece != NULL && unsafe_tile[x].piece->player != player) {
+
+                                for (int u = 0; u < 64; u++) if (unsafe_tile[x].piece->range[u] == true)
+                                    unsafe_tile[x].piece->range[u] = false;
+
                                 CHESS_RedirectPiecePattern(unsafe_tile, x, pl_bak, CHECK);
 
-                                for (int u = 0; u < 64; u++) {
+                                for (int u = 0; u < 64; u++)
                                     if (unsafe_tile[x].piece->range[u] == true) glo_chess_event_layer[u] = true;
-                                }
                             }
 
 
@@ -132,8 +135,6 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
 }
 
 int CHESS_PiecePattern_RangeAllowed(CHESS_CORE_TILE *core_tile, int tile) {
-
-    if (core_tile[tile].piece->lock == true) return -1;
 
     for (int n = 0; n < 64; n++)
         if (core_tile[tile].piece->range[n] == true) glo_chess_dot[n].state = true;
@@ -212,32 +213,7 @@ int CHESS_PiecePattern_King(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
                     core_tile[tile].piece->range[result] = true;
                 }
             }
-
-            /*
-            else if(core_tile[tile].piece->player == player) {
-                if (glo_chess_event_layer[result] == false) {
-                    core_tile[tile].piece->range[result] = true;
-                }
-            }
-            */
         }
-
-        /*
-        else if (check == ATTACK || check == CHECK_KING) {
-            if (glo_chess_core_tile[result].piece != NULL) {
-                if (glo_chess_core_tile[result].piece->player != player) {
-
-                    if (glo_chess_event_layer[result] == false) {
-                        glo_chess_dot[result].state = true;
-                    }
-                }
-            }
-
-            else if (glo_chess_core_tile[result].piece == NULL) {
-                if (glo_chess_event_layer[result] == false) glo_chess_dot[result].state = true;
-            }
-        }
-        */
 
         tag.row += 1;
     }
@@ -247,7 +223,7 @@ int CHESS_PiecePattern_King(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
 
 int CHESS_PiecePattern_Pawn(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
 
-    if (check == ATTACK /*&& glo_chess_core_tile[tile].piece->lock != true*/) {
+    if (check == ATTACK) {
 
         CHESS_CORE_TILE_TAG tag = glo_chess_core_tile[tile].tag;
         int result = -1;
@@ -288,7 +264,7 @@ int CHESS_PiecePattern_Pawn(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK 
 
 int CHESS_PiecePattern_BPawn(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
 
-    if (check == ATTACK /*&& glo_chess_core_tile[tile].piece->lock != true*/) {
+    if (check == ATTACK) {
 
         CHESS_CORE_TILE_TAG tag = glo_chess_core_tile[tile].tag;
         int result = -1;

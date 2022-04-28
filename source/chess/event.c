@@ -15,9 +15,9 @@ void EVENT_BlankLayer_Global(void) {
 }
 
 // instead of searching for eveery tile, search for glo_chess_core_piece[]
-void EVENT_BlankLayer_Piece(CHESS_CORE_TILE *chess_tile) {
+void EVENT_BlankLayer_Piece(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player) {
     for (int n = 0; n < 64; n++) {
-        if (chess_tile[n].piece != NULL) {
+        if (chess_tile[n].piece != NULL && chess_tile[n].piece->player == player) {
             for (int i = 0; i < 64; i++) chess_tile[n].piece->range[i] = false;
         }
     }
@@ -59,18 +59,11 @@ void EVENT_CheckKingState(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player)
 
                     glo_chess_event_king_uatk = true;
 
-                    //if (player == WHITE_PLAYER) glo_chess_event_wking_uatk = true;
-                    //else if (player == BLACK_PLAYER) glo_chess_event_bking_uatk = true;
-                    //glo_chess_event_king_uatk = true;
-
-                    //CORE_Testing_InterposeAttack();
                     return;
                 }
 
-                //if (player == WHITE_PLAYER) glo_chess_event_wking_uatk = false;
-                //else if (player == BLACK_PLAYER) glo_chess_event_bking_uatk = false;
                 glo_chess_event_king_uatk = false;
-                break;
+                return;
             }
         }
     }
@@ -91,14 +84,11 @@ int EVENT_CheckPieceLayer(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player)
     if (pl_bak != player) {
 
         EVENT_BlankLayer_Global();
-        //EVENT_BlankLayer_Piece(chess_tile);
 
         for (int n = 0; n < 64; n++)
         {
             // piece range copy
             if (chess_tile[n].piece != NULL && chess_tile[n].piece->player != player) {
-
-                //CHESS_RedirectPiecePattern(chess_tile, n, pl_bak, CHECK);
 
                 for (int i = 0; i < 64; i++) {
 

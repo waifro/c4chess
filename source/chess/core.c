@@ -136,7 +136,7 @@ void CORE_ResetGlobal_CorePiece(void) {
         glo_chess_core_piece[n].rect.w = 0;
         glo_chess_core_piece[n].rect.h = 0;
 
-        glo_chess_core_piece[n].lock = -1;
+        //glo_chess_core_piece[n].lock = -1;
 
     }
 
@@ -190,8 +190,6 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
         /* checks if king under attack */
         //check = EVENT_CheckPieceLayer(glo_chess_core_tile, player);
         CHESS_PiecePattern_UpdateState(glo_chess_core_tile, player);
-        
-        //if (glo_chess_event_king_uatk == true) check = CHECK_KING;
 
         /* makes the in-game changes during gameplay */
         if (MIDDLE_UpdateChangeState(&event, player, check) == -2)
