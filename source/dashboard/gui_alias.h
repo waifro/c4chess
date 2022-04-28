@@ -7,7 +7,7 @@
 
 typedef struct {
     int x, y, w, h, z, j; // z & j are only for arithmetic calc.
-}   GUI_RectAlias;
+} GUI_RectAlias;
 
 typedef struct {
     GUI_RectAlias rect_als;

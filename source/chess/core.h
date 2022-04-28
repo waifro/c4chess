@@ -37,7 +37,6 @@ typedef struct {
     int enum_piece;             // piece identificitaion
     SDL_Texture *texture;       // texture piece
     SDL_Rect rect;              // rect pos of texture
-    //bool lock;                  // is used to lock a piece if encounters an attack directly in front of the king
     bool range[64];             // layer of the range attack each piece have
 } CHESS_CORE_PIECE;
 
@@ -64,7 +63,7 @@ void CORE_GlobalClearCorePiece(void);
 void CORE_GlobalClearChessTile(void);
 
 void CORE_ResetGlobal_CorePiece(void);
-void CORE_Chessboard_Reverse(void);
+CHESS_CORE_TILE *CORE_Chessboard_Reverse(CHESS_CORE_TILE *core_tile;
 CHESS_CORE_PLAYER CORE_ReversePlayer_State(CHESS_CORE_PLAYER player);
 
 int CORE_Testing_InterposeAttack(CHESS_CORE_PLAYER player);
