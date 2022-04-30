@@ -105,11 +105,11 @@ int CHESS_PiecePattern_RangeAllowed(CHESS_CORE_TILE *core_tile, int tile, CHESS_
 int CHESS_RedirectPiecePattern(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
 
     switch(glo_chess_core_tile[tile].piece->enum_piece) {
-        case KING: CHESS_PiecePattern_King(core_tile, tile, player, check);
+        case KING: CHESS_PiecePattern_King(core_tile, tile, player);
         break;
-        case BKING: CHESS_PiecePattern_King(core_tile, tile, player, check);
+        case BKING: CHESS_PiecePattern_King(core_tile, tile, player);
         break;
-        case PAWN: CHESS_PiecePattern_Pawn(tile, player, check);
+        case PAWN: CHESS_PiecePattern_Pawn(core_tile, tile, player);
         break;
         case BPAWN: CHESS_PiecePattern_BPawn(tile, player, check);
         break;
@@ -485,7 +485,7 @@ int CHESS_PiecePattern_PawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CO
         result = MIDDLE_TagToTile(tag);
 
         if (core_tile[result].piece != NULL && core_tile[result].piece->player != player) {
-            core_tile[tile].piece->[result] = true;
+            core_tile[tile].piece->range[result] = true;
         }
 
         col_pos += 1; tag.col = alpha[col_pos];
