@@ -18,6 +18,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
 
     if (pl_bak != player) {
 
+        printf("CHESS_PiecePattern_UpdateState:\n  updating state pieces..\n");
         glo_chess_event_king_uatk = false;
 
         for (int n = 0; n < 64; n++) {
@@ -75,14 +76,16 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
         }
 
         for (int n = 0; n < 64; n++) {
-            if (core_tile[n].piece != NULL && core_tile[n].piece->player == player && (core_tile[n].piece->enum_piece == KING || core_tile[n].piece->enum_piece == BKING)) {
-                for (int i = 0; i < 64; i++) core_tile[n].piece->range[i] = false;
+            if (core_tile[n].piece != NULL && core_tile[n].piece->player == player) {
+                if (core_tile[n].piece->enum_piece == KING || core_tile[n].piece->enum_piece == BKING)) {
+                    for (int i = 0; i < 64; i++) core_tile[n].piece->range[i] = false;
 
-                CHESS_RedirectPiecePattern(core_tile, n, player, CHECK);
+                    CHESS_RedirectPiecePattern(core_tile, n, player, CHECK);
+                }
             }
         }
 
-        pl_bak = player;
+        pl_bak = CORE_ReversePlayer_State(pl_bak);
 
     }
 

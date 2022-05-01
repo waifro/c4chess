@@ -125,8 +125,8 @@ void CORE_GlobalClearChessTile(void) {
 
 void CORE_ResetGlobal_CorePiece(void) {
 
-    for (int n = 0; n < 32; n++) {
-
+    for (int n = 0; n < 32; n++)
+    {
         glo_chess_core_piece[n].player = -1;
         glo_chess_core_piece[n].enum_piece = NONE;
         glo_chess_core_piece[n].texture = NULL;
@@ -135,9 +135,6 @@ void CORE_ResetGlobal_CorePiece(void) {
         glo_chess_core_piece[n].rect.y = 0;
         glo_chess_core_piece[n].rect.w = 0;
         glo_chess_core_piece[n].rect.h = 0;
-
-        //glo_chess_core_piece[n].lock = -1;
-
     }
 
     return;
@@ -149,13 +146,7 @@ CHESS_CORE_PLAYER CORE_ReversePlayer_State(CHESS_CORE_PLAYER player) {
 }
 
 void CORE_Chessboard_Reverse(CHESS_CORE_TILE *core_tile) {
-    // reverse the board for:
-    // - switching view
-    // - black player
 
-    // create a fac-simile chess_core_tile;
-    // start from glo_chess_core_tile and reverse order to chess_core_tile
-    // paste chess_core_tile into glo_chess_core_tile
     CHESS_CORE_TILE core_tile_bak[64];
 
     for (int n = 0; n < 64; n++) {
