@@ -98,16 +98,14 @@ void MIDDLE_Unsafe_UpdatePositionPiece(CHESS_CORE_TILE *chess_tile, int old, int
     //if (chess_tile[new].piece != NULL) CORE_GlobalDestroyPiece(chess_tile[new].piece);
 
     chess_tile[new].piece = chess_tile[old].piece;
-    chess_tile[new].piece->rect = chess_tile[new].rect;
+    //chess_tile[new].piece->rect = chess_tile[new].rect;
     chess_tile[old].piece = NULL;
 
     return;
 }
 
 void MIDDLE_UnsafePosition_Copy(CHESS_CORE_TILE *unsafe_tile) {
-
     memcpy(unsafe_tile, glo_chess_core_tile, sizeof(glo_chess_core_tile));
-
     return;
 }
 

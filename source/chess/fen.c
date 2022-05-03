@@ -101,15 +101,6 @@ int FEN_Init(CHESS_CORE_PLAYER init_player, char *fen_board) {
 
 int FEN_InitPiece(CHESS_CORE_PLAYER player, CHESS_CORE_PIECE *piece, CHESS_CORE_ENUM_PIECE name, int tile) {
 
-    // promemoria
-    // invertire i movimenti quando sei nero
-    // processo per inizializzare i pezzi:
-
-    // 1 - inizializza scacchiera con i pezzi pronti
-    // 2 - invertire scacchiera se sei nero (equivale a reverse list)
-    // 3 - teoricamente non devo invertire i movimenti se sono nero perche
-    //      praticamente se inverto la scacchiera, i pezzi sono gia allocati e pronti per la pos. dei tile
-
     switch(name)
     {
         case KING:

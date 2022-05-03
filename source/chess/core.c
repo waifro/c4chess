@@ -181,7 +181,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     CORE_ResetGlobal_CorePiece();
 
     /* init pieces for main player */
-    FEN_Init(glo_chess_core_player, "8/2r5/8/8/5N2/8/3K4/8");
+    FEN_Init(glo_chess_core_player, "8/r1r5/8/8/5N2/8/3K4/8");
 
     // TODO: cap framerate to 30/60 fps
     SDL_Event event;
