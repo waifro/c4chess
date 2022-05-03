@@ -24,7 +24,8 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
         for (int n = 0; n < 64; n++) {
             if (core_tile[n].piece != NULL) {
                 for (int i = 0; i < 64; i++) core_tile[n].piece->range[i] = false;
-                CHESS_RedirectPiecePattern(core_tile, n, player, CHECK);
+                if (core_tile[n].piece->enum_piece != KING && core_tile[n].piece->enum_piece != BKING)
+                    CHESS_RedirectPiecePattern(core_tile, n, player, CHECK);
             }
         }
 
@@ -78,8 +79,6 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
         for (int n = 0; n < 64; n++) {
             if (core_tile[n].piece != NULL && core_tile[n].piece->player == player) {
                 if (core_tile[n].piece->enum_piece == KING || core_tile[n].piece->enum_piece == BKING) {
-                    for (int i = 0; i < 64; i++) core_tile[n].piece->range[i] = false;
-
                     CHESS_RedirectPiecePattern(core_tile, n, player, CHECK);
                 }
             }
