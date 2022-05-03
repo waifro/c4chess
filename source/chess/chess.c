@@ -18,8 +18,12 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
 
     if (pl_bak != player) {
 
-        printf("CHESS_PiecePattern_UpdateState:\n  updating state pieces..\n");
+        printf("CHESS_PiecePattern_UpdateState:\n  updating state pieces...\n");
         glo_chess_event_king_uatk = false;
+
+        // create copy of tile
+        CHESS_CORE_TILE unsafe_tile[64];
+        MIDDLE_UnsafePosition_Copy(core_tile, unsafe_tile);
 
         for (int n = 0; n < 64; n++) {
             if (core_tile[n].piece != NULL) {
@@ -28,10 +32,6 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
                     CHESS_RedirectPiecePattern(core_tile, n, player, CHECK);
             }
         }
-
-        // create copy of tile
-        CHESS_CORE_TILE unsafe_tile[64];
-        MIDDLE_UnsafePosition_Copy(unsafe_tile);
 
         // pieces
         for (int n = 0; n < 64; n++)
@@ -63,15 +63,12 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
 
                             EVENT_CheckKingState(unsafe_tile, player);
 
-                            if (glo_chess_event_king_uatk == true)  {
+                            if (glo_chess_event_king_uatk == true)
                                 core_tile[n].piece->range[i] = false;
-
-                                printf("glo_chess_event_king_uatk = true\n range[%d] false;\n", i);
-                            }
 
                             // reset
                             EVENT_BlankLayer_Global();
-                            MIDDLE_UnsafePosition_Copy(unsafe_tile);
+                            MIDDLE_UnsafePosition_Copy(core_tile, unsafe_tile);
                         }
                     }
                 //}
@@ -91,16 +88,13 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
                             glo_chess_event_layer[i] = true;
                 }
 
-        for (int n = 0; n < 64; n++) {
-            if (core_tile[n].piece != NULL && core_tile[n].piece->player == player) {
-                if (core_tile[n].piece->enum_piece == KING || core_tile[n].piece->enum_piece == BKING) {
+        for (int n = 0; n < 64; n++)
+            if (core_tile[n].piece != NULL && core_tile[n].piece->player == player)
+                if (core_tile[n].piece->enum_piece == KING || core_tile[n].piece->enum_piece == BKING)
                     CHESS_RedirectPiecePattern(core_tile, n, player, CHECK);
-                }
-            }
-        }
 
         pl_bak = CORE_ReversePlayer_State(pl_bak);
-
+        MIDDLE_UnsafePosition_Copy(NULL, unsafe_tile);
     }
 
     return 0;

@@ -104,8 +104,10 @@ void MIDDLE_Unsafe_UpdatePositionPiece(CHESS_CORE_TILE *chess_tile, int old, int
     return;
 }
 
-void MIDDLE_UnsafePosition_Copy(CHESS_CORE_TILE *unsafe_tile) {
-    memcpy(unsafe_tile, glo_chess_core_tile, sizeof(glo_chess_core_tile));
+void MIDDLE_UnsafePosition_Copy(CHESS_CORE_TILE *src, CHESS_CORE_TILE *dst) {
+    if (src == NULL) return;
+
+    memcpy(dst, src, sizeof(glo_chess_core_tile));
     return;
 }
 
