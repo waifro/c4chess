@@ -106,7 +106,7 @@ void GUI_Testing(void) {
 
     SDL_Texture *texture = SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 100, 100);
     SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
-    SDL_SetTextureAlphaMod(texture, 25);
+    SDL_SetTextureAlphaMod(texture, 100);
 
     SDL_Rect rect = { (glo_screen_w/2-50), (glo_screen_h/2-50), 100, 100};
 
