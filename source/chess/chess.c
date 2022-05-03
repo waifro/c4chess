@@ -6,12 +6,6 @@
 #include "core.h"
 #include "dot.h"
 
-int CHESS_PiecePattern_RangeReset(CHESS_CORE_TILE *core_tile, int tile) {
-    for (int n = 0; n < 64; n++)
-        core_tile[tile].piece->range[n] = false;
-    return 0;
-}
-
 int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER player) {
 
     static CHESS_CORE_PLAYER pl_bak;
@@ -98,6 +92,12 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
         MIDDLE_UnsafePosition_Copy(NULL, unsafe_tile);
     }
 
+    return 0;
+}
+
+int CHESS_PiecePattern_RangeReset(CHESS_CORE_TILE *core_tile, int tile) {
+    for (int n = 0; n < 64; n++)
+        core_tile[tile].piece->range[n] = false;
     return 0;
 }
 
