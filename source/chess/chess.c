@@ -47,8 +47,6 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
                         {
                             MIDDLE_Unsafe_UpdatePositionPiece(unsafe_tile, n, i);
 
-                            EVENT_BlankLayer_Global();
-
                             for (int x = 0; x < 64; x++) {
                                 if (unsafe_tile[x].piece != NULL && unsafe_tile[x].piece->player != player) {
 
@@ -72,6 +70,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
                             }
 
                             // reset
+                            EVENT_BlankLayer_Global();
                             MIDDLE_UnsafePosition_Copy(unsafe_tile);
                         }
                     }
@@ -79,12 +78,18 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
             }
         }
 
-        for (int n = 0; n < 64; n++) {
-            if (core_tile[n].piece != NULL && core_tile[n].piece->player != player) {
-                for (int i = 0; i < 64; i++) core_tile[n].piece->range[i] = false;
-                CHESS_RedirectPiecePattern(core_tile, n, pl_bak, CHECK);
-            }
-        }
+        for (int n = 0; n < 64; n++)
+            if (core_tile[n].piece != NULL && core_tile[n].piece->player != player)
+                if (core_tile[n].piece->enum_piece != KING && core_tile[n].piece->enum_piece != BKING) {
+                    for (int i = 0; i < 64; i++)
+                        core_tile[n].piece->range[i] = false;
+
+                    CHESS_RedirectPiecePattern(core_tile, n, pl_bak, CHECK);
+
+                    for (int i = 0; i < 64; i++)
+                        if (core_tile[n].piece->range[i] == true)
+                            glo_chess_event_layer[i] = true;
+                }
 
         for (int n = 0; n < 64; n++) {
             if (core_tile[n].piece != NULL && core_tile[n].piece->player == player) {
