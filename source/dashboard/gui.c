@@ -12,7 +12,7 @@ SDL_Texture *GUI_PopupWindow_Title(char title[256], SDL_Rect *rect, SDL_Rect win
     if (strlen(title) > 255) return (NULL);
 
     SDL_Texture *texture_title = NULL;
-
+    //void pp4m_TTF_MEM_TextureFont(SDL_Renderer *renderer, PP4M_SDL *st, const char *text, const char *path, int point, float x, float y, SDL_Color color)
     texture_title = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_BLACK, 24, rect, window_pos.x, window_pos.y, title);
 
     return (texture_title);
@@ -23,11 +23,11 @@ GUI_TextureAlias GUI_CreateTexture_BackgroundPolarize(void) {
     // initializing variables
     GUI_TextureAlias background;
     GUI_TextureAlias_InitRect(&background, 0, 0, 1280, 720, FULL);
-    background.texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY, &background.rect, 0, 0, glo_screen_w, glo_screen_h);
+    background.texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_BLACK, &background.rect, 0, 0, glo_screen_w, glo_screen_h);
 
     // blending the texture for trasparent filter
-    //SDL_SetTextureBlendMode(background.texture, SDL_BLENDMODE_BLEND);
-    //SDL_SetTextureAlphaMod(background.texture, 100);
+    SDL_SetTextureBlendMode(background.texture, SDL_BLENDMODE_BLEND);
+    SDL_SetTextureAlphaMod(background.texture, 50);
 
     return (background);
 }
@@ -70,7 +70,7 @@ int GUI_PopupWindow_Core(int x, int y, int w, int h, char *title) {
 
     GUI_TextureAlias TextureTitle;
     TextureTitle.texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_RED, 24, &TextureTitle.rect, PopupWindow.rect.x, PopupWindow.rect.y, title);
-    //TextureTitle.texture = GUI_PopupWindow_Title(title, &TextureTitle.rect, PopupWindow.rect);
+    TextureTitle.texture = GUI_PopupWindow_Title(title, &TextureTitle.rect, PopupWindow.rect);
 
     // button exit
     GUI_TextureAlias ButtonExit;

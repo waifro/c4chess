@@ -25,7 +25,8 @@ int main (int argc, char *argv[]) {
     // start offline 2-player game (wip)
     //CORE_Testing(BLACK_PLAYER);
 
-    GUI_Testing();
+    GUI_PopupWindow_Core(100, 50, 1080, 590, "test");
+    //GUI_Testing();
 
     // Exiting from game
     pp4m_TTF_Quit();
