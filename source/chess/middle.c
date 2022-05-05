@@ -4,15 +4,15 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 
+#include "../pp4m/pp4m_input.h"
 #include "../global.h"
 #include "event.h"
 #include "chess.h"
 #include "dot.h"
 #include "core.h"
-#include "touch.h"
 #include "middle.h"
 
-int MIDDLE_TouchToTile(TOUCH_POS touch_pos) {
+int MIDDLE_TouchToTile(PP4M_INPUT_POS touch_pos) {
 
     int result = -1;
 
@@ -116,7 +116,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player) {
     int result = -1;
     static int position_old = -1;
     static int position_new = -1;
-    TOUCH_POS touch_pos;
+    PP4M_INPUT_POS touch_pos;
 
     touch_pos = TOUCH_MouseState(event);
 

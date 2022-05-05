@@ -67,10 +67,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="source/chess/middle.h" />
-		<Unit filename="source/chess/touch.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="source/chess/touch.h" />
 		<Unit filename="source/dashboard/gui.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -110,6 +106,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="source/pp4m/pp4m_image.h" />
+		<Unit filename="source/pp4m/pp4m_input.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/pp4m/pp4m_input.h" />
 		<Unit filename="source/pp4m/pp4m_io.c">
 			<Option compilerVar="CC" />
 		</Unit>

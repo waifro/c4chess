@@ -19,7 +19,7 @@ ODIR := output
 dummy_build_folder := $(shell mkdir $(ODIR))
 OUTPUT := $(ODIR)/$(notdir $(CURDIR))
 
-DEP_PP4M := source/pp4m/pp4m.c source/pp4m/pp4m_io.c source/pp4m/pp4m_draw.c source/pp4m/pp4m_image.c source/pp4m/pp4m_ttf.c source/pp4m/pp4m_net.c
+DEP_PP4M := source/pp4m/pp4m.c source/pp4m/pp4m_io.c source/pp4m/pp4m_draw.c source/pp4m/pp4m_image.c source/pp4m/pp4m_ttf.c source/pp4m/pp4m_net.c source/pp4m/pp4m_input.c
 LIBS := -lSDL2 -lSDL2_ttf -lSDL2_image
 
 Release : $(SOURCE_PROJECT) $(DEP_PP4M)
