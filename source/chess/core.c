@@ -7,12 +7,12 @@
 #include "../pp4m/pp4m.h"
 #include "../pp4m/pp4m_draw.h"
 #include "../pp4m/pp4m_image.h"
+#include "../pp4m/pp4m_input.h"
 
 #include "../global.h"
 #include "event.h"
 #include "chess.h"
 #include "dot.h"
-#include "touch.h"
 #include "middle.h"
 #include "core.h"
 #include "fen.h"

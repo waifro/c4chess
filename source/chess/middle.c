@@ -116,9 +116,9 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player) {
     int result = -1;
     static int position_old = -1;
     static int position_new = -1;
-    PP4M_INPUT_POS touch_pos;
 
-    touch_pos = TOUCH_MouseState(event);
+    PP4M_INPUT_POS touch_pos;
+    touch_pos = pp4m_INPUT_MouseState(event);
 
     // select choosen piece from mem
     if (touch_pos.iner != -1 && position_old == -1) {

@@ -4,10 +4,10 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#include "../pp4m/pp4m_input.h"
 #include "core.h"
-#include "touch.h"
 
-int MIDDLE_TouchToTile(TOUCH_POS touch_pos);
+int MIDDLE_TouchToTile(PP4M_INPUT_POS touch_pos);
 
 int MIDDLE_TagToTile(CHESS_CORE_TILE_TAG tag);
 CHESS_CORE_TILE_TAG MIDDLE_TileToTag(int tile);
