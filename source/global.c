@@ -22,7 +22,7 @@ size_t GLOBAL_HookArray_Size(uintptr_t **array) {
 
 size_t GLOBAL_HookArray_Reference(uintptr_t **array, uintptr_t *ptr) {
     size_t index = GLOBAL_HookArray_Size(array);
-    if (index == -1) return -1;
+    if (index == (size_t)-1) return -1;
 
     array = realloc(array, index+1);
     array[index] = ptr;
@@ -32,7 +32,7 @@ size_t GLOBAL_HookArray_Reference(uintptr_t **array, uintptr_t *ptr) {
 
 size_t GLOBAL_HookArray_Dereference(uintptr_t **array) {
     size_t index = GLOBAL_HookArray_Size(array);
-    if (index == -1) return -1;
+    if (index == (size_t)-1) return -1;
 
     array[index-1] = NULL;
     array = realloc(array, index-1); // truncates size of array
