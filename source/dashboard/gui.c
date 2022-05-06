@@ -10,7 +10,7 @@
 #include "../global.h"
 #include "gui.h"
 
-SDL_Texture *GUI_PopupWindow_Title(char title[256], SDL_Rect *rect, SDL_Rect window_pos) {
+SDL_Texture *GUI_PopupWindow_Title(char *title, SDL_Rect *rect, SDL_Rect window_pos) {
     if (strlen(title) > 255) return (NULL);
 
     SDL_Texture *texture_title = NULL;
@@ -58,23 +58,26 @@ GUI_TextureAlias GUI_CreateTexture_ButtonExit(int x, int y) {
     return (button_exit);
 }
 
-int GUI_PopupWindow_Core(uintptr_t **list_hook_render, int x, int y, int w, int h, char *title) {
+int GUI_PopupWindow_Core(uintptr_t **list_hook, int x, int y, int w, int h, char *title) {
     SDL_Event event;
 
-    printf("list_hook_render: %p\n", list_hook_render);
+    //printf("list_hook: %p\n", list_hook);
 
     // background cloudy/blurred/polarized
     GUI_TextureAlias BackgroundPolar;
     BackgroundPolar = GUI_CreateTexture_BackgroundPolarize();
+    printf("ready\n");
 
     // popup window
     GUI_TextureAlias PopupWindow;
     GUI_TextureAlias_InitRect(&PopupWindow, x, y, w, h, FULL);
     PopupWindow.texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_WHITE, &PopupWindow.rect, x, y, w, h);
+    printf("ready\n");
 
-    GUI_TextureAlias TextureTitle;
-    TextureTitle.texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_RED, 24, &TextureTitle.rect, PopupWindow.rect.x, PopupWindow.rect.y, title);
-    TextureTitle.texture = GUI_PopupWindow_Title(title, &TextureTitle.rect, PopupWindow.rect);
+    // GUI_TextureAlias TextureTitle;
+    //TextureTitle.texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_RED, 24, &TextureTitle.rect, PopupWindow.rect.x, PopupWindow.rect.y, title);
+    //TextureTitle.texture = GUI_PopupWindow_Title(title, &TextureTitle.rect, PopupWindow.rect);
+    printf("ready\n");
 
     // button exit
     GUI_TextureAlias ButtonExit;
@@ -83,22 +86,24 @@ int GUI_PopupWindow_Core(uintptr_t **list_hook_render, int x, int y, int w, int 
 
     ButtonExit = GUI_CreateTexture_ButtonExit(foo, bar);
 
+    printf("ready\n");
+
     while(event.type != SDL_QUIT) {
 
         SDL_PollEvent(&event);
 
         SDL_RenderClear(glo_render);
 
-        int val = GLOBAL_HookArray_Size(list_hook_render);
-
+        int val = GLOBAL_HookArray_Size(list_hook);
+        printf("sizeof hook_array: %d\n", val);
             for (int n = 0; n < val; n++) {
-                printf("list_hook_render[n]: %p\n", list_hook_render[n]);
-                SDL_RenderCopy(glo_render, (SDL_Texture*)&list_hook_render[n], NULL, &(SDL_Rect){50, 50,50,50});
+                //printf("list_hook[%d]: %p\n", n, list_hook[n]);
+                //SDL_RenderCopy(glo_render, (SDL_Texture*)&list_hook[n], NULL, (SDL_Rect*)&list_hook[n++]);
             }
 
         SDL_RenderCopy(glo_render, BackgroundPolar.texture, NULL, &BackgroundPolar.rect);
         SDL_RenderCopy(glo_render, PopupWindow.texture, NULL, &PopupWindow.rect);
-        SDL_RenderCopy(glo_render, TextureTitle.texture, NULL, &TextureTitle.rect);
+        //SDL_RenderCopy(glo_render, TextureTitle.texture, NULL, &TextureTitle.rect);
         SDL_RenderCopy(glo_render, ButtonExit.texture, NULL, &ButtonExit.rect);
         SDL_RenderPresent(glo_render);
 
@@ -108,7 +113,7 @@ int GUI_PopupWindow_Core(uintptr_t **list_hook_render, int x, int y, int w, int 
 
     SDL_DestroyTexture(BackgroundPolar.texture);
     SDL_DestroyTexture(PopupWindow.texture);
-    SDL_DestroyTexture(TextureTitle.texture);
+    //SDL_DestroyTexture(TextureTitle.texture);
     SDL_DestroyTexture(ButtonExit.texture);
 
     return 0;

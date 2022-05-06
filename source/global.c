@@ -1,4 +1,5 @@
 // third-party libraries
+#include <stdio.h>
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 
@@ -13,35 +14,44 @@ SDL_Renderer *glo_render = NULL;
 int glo_screen_w = 1280;
 int glo_screen_h = 720;
 
-// functions
-size_t GLOBAL_HookArray_Size(uintptr_t **array) {
-    for (int n = 0; n < BUF_MAX; n++)
-        if (array[n] == NULL) return (n);
-    return -1;
+// functions https://www.learn-c.org/en/Linked_lists
+void *GLOBAL_HookArray_Init(uintptr_t **array) {
+    array = malloc(sizeof(char*) * 1);
+    int size = 0; *array[0] = size;
+    return (array);
 }
 
-size_t GLOBAL_HookArray_Reference(uintptr_t **array, void *ptr) {
-    size_t index = GLOBAL_HookArray_Size(array);
-    if (index == (size_t)-1) return -1;
+size_t GLOBAL_HookArray_Size(void **array) {
+    size_t size = *(int*)array[0];
+    return (size);
+}
 
-    array = realloc(array, index+1);
-    array[index] = ptr;
+size_t GLOBAL_HookArray_Reference(void **array, void *ptr) {
+    size_t size = *(int*)GLOBAL_HookArray_Size(array);
+    if (size == (size_t)-1) return -1;
 
-    return (index);
+    size += 1;
+    array = realloc(array, size);
+
+    array[size] = ptr;
+
+    array[0] += (int)1;
+
+    //printf("sizeof array: %d = %p\n", (int)*array[0], array[size] );
+
+    return (size);
 }
 
 size_t GLOBAL_HookArray_Dereference(uintptr_t **array) {
-    size_t index = GLOBAL_HookArray_Size(array);
-    if (index == (size_t)-1) return -1;
+    size_t size = GLOBAL_HookArray_Size(array);
+    if (size == (size_t)-1) return -1;
 
-    array[index-1] = NULL;
-    array = realloc(array, index-1); // truncates size of array
+    array[size] = NULL;
+    size -= 1;
+    array = realloc(array, size);
+    *array[0] -= 1;
 
-    return (index-1);
+    return (size);
 }
 
-uintptr_t **GLOBAL_HookArray_Init(void) {
-    uintptr_t **array = malloc(sizeof(void*) * 1);
-    array[0] = NULL;
-    return (array);
-}
+

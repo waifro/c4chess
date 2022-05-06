@@ -201,19 +201,18 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
             // testing trigger pause interface
             if (val == 27) { // esc key
 
-                //uintptr_t ** list_hook_render;
-                uintptr_t ** list_hook_render_texture;
-                //uintptr_t ** list_hook_render_rect;
-
-                list_hook_render_texture = GLOBAL_HookArray_Init();
+                uintptr_t **list_hook;
+                GLOBAL_HookArray_Init(list_hook);
+                //printf("list_hook[0]: %p (%d)\n", list_hook[0], *(int*)list_hook[0]);
 
                 for (int n = 0; n < 64; n++) {
-                    printf("texture: %p\n", &glo_chess_core_tile[n].texture);
-                    GLOBAL_HookArray_Reference(list_hook_render_texture, &glo_chess_core_tile[n].texture);
-                    printf("list_hook: %p\n", list_hook_render_texture[n]);
+                    printf("glo_chess_core_tile[%d].texture: %p\n",n, &glo_chess_core_tile[n].texture);
+                    GLOBAL_HookArray_Reference(list_hook, &glo_chess_core_tile[n].texture);
+                    GLOBAL_HookArray_Reference(list_hook, &glo_chess_core_tile[n].rect);
                 }
 
-                GUI_PopupWindow_Core(list_hook_render_texture, 100, 50, 1080, 590, "test");
+                GUI_PopupWindow_Core(list_hook, 100, 50, 1080, 590, "test");
+
             }
         }
 
