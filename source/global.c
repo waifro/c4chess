@@ -20,7 +20,7 @@ size_t GLOBAL_HookArray_Size(uintptr_t **array) {
     return -1;
 }
 
-size_t GLOBAL_HookArray_Reference(uintptr_t **array, uintptr_t *ptr) {
+size_t GLOBAL_HookArray_Reference(uintptr_t **array, void *ptr) {
     size_t index = GLOBAL_HookArray_Size(array);
     if (index == (size_t)-1) return -1;
 

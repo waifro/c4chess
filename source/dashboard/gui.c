@@ -1,6 +1,8 @@
+#include <stdio.h>
 #include <string.h>
 #include <SDL2/SDL.h>
 
+#include "../chess/core.h"
 #include "../pp4m/pp4m.h"
 #include "../pp4m/pp4m_ttf.h"
 #include "../pp4m/pp4m_draw.h"
@@ -56,8 +58,10 @@ GUI_TextureAlias GUI_CreateTexture_ButtonExit(int x, int y) {
     return (button_exit);
 }
 
-int GUI_PopupWindow_Core(int x, int y, int w, int h, char *title) {
+int GUI_PopupWindow_Core(uintptr_t **list_hook_render, int x, int y, int w, int h, char *title) {
     SDL_Event event;
+
+    printf("list_hook_render: %p\n", list_hook_render);
 
     // background cloudy/blurred/polarized
     GUI_TextureAlias BackgroundPolar;
@@ -84,6 +88,14 @@ int GUI_PopupWindow_Core(int x, int y, int w, int h, char *title) {
         SDL_PollEvent(&event);
 
         SDL_RenderClear(glo_render);
+
+        int val = GLOBAL_HookArray_Size(list_hook_render);
+
+            for (int n = 0; n < val; n++) {
+                printf("list_hook_render[n]: %p\n", list_hook_render[n]);
+                SDL_RenderCopy(glo_render, (SDL_Texture*)&list_hook_render[n], NULL, &(SDL_Rect){50, 50,50,50});
+            }
+
         SDL_RenderCopy(glo_render, BackgroundPolar.texture, NULL, &BackgroundPolar.rect);
         SDL_RenderCopy(glo_render, PopupWindow.texture, NULL, &PopupWindow.rect);
         SDL_RenderCopy(glo_render, TextureTitle.texture, NULL, &TextureTitle.rect);

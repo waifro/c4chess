@@ -20,7 +20,10 @@
 int pp4m_INPUT_KeyboardHit(void) {
 
     #ifdef _WIN32
-    return (_kbhit());
+    int val = _kbhit();
+    if (val == 1)
+        val = getch();
+    return (val);
     #else
 
     /*

@@ -9,6 +9,7 @@
 #include "../pp4m/pp4m_image.h"
 #include "../pp4m/pp4m_input.h"
 
+#include "../dashboard/gui.h"
 #include "../global.h"
 #include "event.h"
 #include "chess.h"
@@ -191,6 +192,30 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
         /* checks if king under attack */
         CHESS_PiecePattern_UpdateState(glo_chess_core_tile, player);
+
+        /* (wip) trigger on pressure of key */
+        int val = pp4m_INPUT_KeyboardHit();
+        if (val != 0) {
+            printf("keyboard pressed: %d\n", val);
+
+            // testing trigger pause interface
+            if (val == 27) { // esc key
+
+                //uintptr_t ** list_hook_render;
+                uintptr_t ** list_hook_render_texture;
+                //uintptr_t ** list_hook_render_rect;
+
+                list_hook_render_texture = GLOBAL_HookArray_Init();
+
+                for (int n = 0; n < 64; n++) {
+                    printf("texture: %p\n", &glo_chess_core_tile[n].texture);
+                    GLOBAL_HookArray_Reference(list_hook_render_texture, &glo_chess_core_tile[n].texture);
+                    printf("list_hook: %p\n", list_hook_render_texture[n]);
+                }
+
+                GUI_PopupWindow_Core(list_hook_render_texture, 100, 50, 1080, 590, "test");
+            }
+        }
 
         /* makes the in-game changes during gameplay */
         if (MIDDLE_UpdateChangeState(&event, player) == -2)

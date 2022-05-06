@@ -19,7 +19,7 @@ extern int glo_screen_h;
 
 // prototypes
 uintptr_t **GLOBAL_HookArray_Init(void);
-size_t GLOBAL_HookArray_Reference(uintptr_t **array, uintptr_t *ptr);
+size_t GLOBAL_HookArray_Reference(uintptr_t **array, void *ptr);
 size_t GLOBAL_HookArray_Dereference(uintptr_t **array);
 size_t GLOBAL_HookArray_Size(uintptr_t **array);
 
