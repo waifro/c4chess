@@ -113,6 +113,9 @@ PP4M_HOOK *pp4m_HOOK_Init(void) {
     if (!head)
         return NULL;
 
+    head->ptr = NULL;
+    head->next = NULL;
+    
     return (head);
 }
 
