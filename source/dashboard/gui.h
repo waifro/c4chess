@@ -7,7 +7,7 @@
 
 /* prototypes */
 
-SDL_Texture *GUI_PopupWindow_Title(char title[256], SDL_Rect *rect, SDL_Rect window_pos);
+SDL_Texture *GUI_PopupWindow_Title(char *title, SDL_Rect *rect, SDL_Rect window_pos);
 GUI_TextureAlias GUI_CreateTexture_BackgroundPolarize(void);
 GUI_TextureAlias GUI_CreateTexture_ButtonExit(int x, int y);
 

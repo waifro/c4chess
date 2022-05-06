@@ -202,14 +202,10 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
             if (val == 27) { // esc key
 
                 PP4M_HOOK *list_hook = pp4m_HOOK_Init();
-                //printf("list_hook[0]: %p (%d)\n", list_hook[0], *(int*)list_hook[0]);
-
-                for (int n = 0; n < 64; n++) {
-                    printf("glo_chess_core_tile[%d].texture: %p\n",n, &glo_chess_core_tile[n].texture);
+                for (int n = 0; n < 64; n++)
                     pp4m_HOOK_Next(list_hook, &glo_chess_core_tile[n]);
-                }
 
-                GUI_PopupWindow_Core(list_hook, 1000, 50, 1080, 590, "test");
+                GUI_PopupWindow_Core(list_hook, 420, 260, 440, 200, "pausa");
 
             }
         }
