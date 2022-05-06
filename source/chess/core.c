@@ -201,17 +201,17 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
             // testing trigger pause interface
             if (val == 27) { // esc key
 
-                uintptr_t **list_hook;
-                GLOBAL_HookArray_Init(list_hook);
+                PP4M_HOOK *list_hook = pp4m_HOOK_Init();
                 //printf("list_hook[0]: %p (%d)\n", list_hook[0], *(int*)list_hook[0]);
 
                 for (int n = 0; n < 64; n++) {
                     printf("glo_chess_core_tile[%d].texture: %p\n",n, &glo_chess_core_tile[n].texture);
-                    GLOBAL_HookArray_Reference(list_hook, &glo_chess_core_tile[n].texture);
-                    GLOBAL_HookArray_Reference(list_hook, &glo_chess_core_tile[n].rect);
+                    pp4m_HOOK_Next(list_hook, &glo_chess_core_tile[n].texture);
+
+                    pp4m_HOOK_Next(list_hook, &glo_chess_core_tile[n].rect);
                 }
 
-                GUI_PopupWindow_Core(list_hook, 100, 50, 1080, 590, "test");
+                GUI_PopupWindow_Core(list_hook, 1000, 50, 1080, 590, "test");
 
             }
         }
