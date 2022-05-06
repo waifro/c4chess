@@ -206,9 +206,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
                 for (int n = 0; n < 64; n++) {
                     printf("glo_chess_core_tile[%d].texture: %p\n",n, &glo_chess_core_tile[n].texture);
-                    pp4m_HOOK_Next(list_hook, &glo_chess_core_tile[n].texture);
-
-                    pp4m_HOOK_Next(list_hook, &glo_chess_core_tile[n].rect);
+                    pp4m_HOOK_Next(list_hook, &glo_chess_core_tile[n]);
                 }
 
                 GUI_PopupWindow_Core(list_hook, 1000, 50, 1080, 590, "test");

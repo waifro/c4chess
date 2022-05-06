@@ -89,17 +89,14 @@ int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h, char 
 
         int val = pp4m_HOOK_Size(list_hook);
         PP4M_HOOK *current = list_hook;
-        SDL_Texture *hook_texture = NULL;
-        SDL_Rect *hook_rect = NULL;
+        CHESS_CORE_TILE *hook_tile = NULL;
 
         for (int n = 0; n <= val; n++) {
 
-            hook_texture = current->ptr;
-            current = current->next;
-            hook_rect = (SDL_Rect*)current->ptr;
+            hook_tile= current->ptr;
             current = current->next;
 
-            SDL_RenderCopy(glo_render, hook_texture, NULL, hook_rect);
+            SDL_RenderCopy(glo_render, hook_tile->texture, NULL, &hook_tile->rect);
         }
 
         SDL_RenderCopy(glo_render, BackgroundPolar.texture, NULL, &BackgroundPolar.rect);
