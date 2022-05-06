@@ -37,6 +37,11 @@ typedef enum {
 
 } PP4M_WINDOW_SIZE;
 
+typedef struct _pp4m_link_t {
+    void *ptr;
+    struct _pp4m_link_t *next;
+} PP4M_HOOK;
+
 SDL_Renderer *pp4m_Init(SDL_Window *window, char *title, int width, int height, PP4M_WINDOW_SIZE size);
 void pp4m_Quit(SDL_Window *window, SDL_Renderer *renderer);
 
@@ -44,6 +49,10 @@ void pp4m_GetDateAndTime(char *dst);
 
 int pp4m_SecondsTick(void) ;
 int pp4m_Framerate(void);
+
+PP4M_HOOK *pp4m_HOOK_Init(void);
+void pp4m_HOOK_Next(PP4M_HOOK *head, void *ptr);
+void pp4m_HOOK_Remove(PP4M_HOOK *head);
 
 #endif // _PP4M_H
 

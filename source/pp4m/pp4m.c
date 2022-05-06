@@ -105,4 +105,53 @@ int pp4m_Framerate(void) {
     return result;
 }
 
+PP4M_HOOK *pp4m_HOOK_Init(void) {
+
+    PP4M_HOOK *head = NULL;
+    head = (PP4M_HOOK*)malloc(sizeof(PP4M_HOOK));
+
+    if (!head)
+        return NULL;
+
+    return (head);
+}
+
+void pp4m_HOOK_Next(PP4M_HOOK *head, void *ptr) {
+
+    if (head->ptr == NULL && head->next == NULL) {
+        head->ptr = ptr;
+        return;
+    }
+
+    PP4M_HOOK *current = head;
+    while(current->next != NULL) {
+        current = current->next;
+    }
+
+    current->next = (PP4M_HOOK*)malloc(sizeof(PP4M_HOOK));
+    current->next->ptr = ptr;
+    current->next->next = NULL;
+
+    return;
+}
+
+void pp4m_HOOK_Remove(PP4M_HOOK *head) {
+
+    if (head->next == NULL) {
+        free(head);
+        head = NULL;
+        return;
+    }
+
+    PP4M_HOOK *tail = head;
+    while (tail->next->next != NULL) {
+        tail = tail->next;
+    }
+
+    free(tail->next);
+    tail->next = NULL;
+
+    return;
+}
+
 /* 2022 @waifro */
