@@ -24,16 +24,25 @@ SDL_Texture *GUI_PopupWindow_Title(char *title, SDL_Rect *rect, SDL_Rect window_
     return (texture_title);
 }
 
-GUI_TextureAlias GUI_CreateTexture_BackgroundPolarize(void) {
+GUI_TextureAlias GUI_CreateTexture_BackgroundInit(SDL_Color color) {
+    // initializing variables
+    GUI_TextureAlias background;
+    GUI_TextureAlias_InitRect(&background, 0, 0, 1280, 720, FULL);
+    background.texture = pp4m_DRAW_TextureInitColor(glo_render, color, &background.rect, 0, 0, glo_screen_w, glo_screen_h);
+
+    return (background);
+}
+
+GUI_TextureAlias GUI_CreateTexture_BackgroundPolarize(SDL_Color color, int alpha) {
 
     // initializing variables
     GUI_TextureAlias background;
     GUI_TextureAlias_InitRect(&background, 0, 0, 1280, 720, FULL);
-    background.texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_BLACK, &background.rect, 0, 0, glo_screen_w, glo_screen_h);
+    background.texture = pp4m_DRAW_TextureInitColor(glo_render, color, &background.rect, 0, 0, glo_screen_w, glo_screen_h);
 
     // blending the texture for trasparent filter
     SDL_SetTextureBlendMode(background.texture, SDL_BLENDMODE_BLEND);
-    SDL_SetTextureAlphaMod(background.texture, 50);
+    SDL_SetTextureAlphaMod(background.texture, alpha);
 
     return (background);
 }
@@ -67,7 +76,7 @@ int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h, char 
 
     // background cloudy/blurred/polarized
     GUI_TextureAlias BackgroundPolar;
-    BackgroundPolar = GUI_CreateTexture_BackgroundPolarize();
+    BackgroundPolar = GUI_CreateTexture_BackgroundPolarize(PP4M_GREY_DARK, 200);
 
     // popup window
     GUI_TextureAlias PopupWindow;

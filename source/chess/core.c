@@ -48,7 +48,7 @@ void CORE_Chessboard_Init(void) {
 
         else if (toggle == true) {
             toggle = false;
-            glo_chess_core_tile[n].texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_RED, &glo_chess_core_tile[n].rect, x_b, y_b, size_tile, size_tile);
+            glo_chess_core_tile[n].texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY, &glo_chess_core_tile[n].rect, x_b, y_b, size_tile, size_tile);
         }
 
         x_b += size_tile; colomn += 1;
@@ -184,6 +184,9 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     /* init pieces for main player */
     FEN_Init(glo_chess_core_player, "8/r1r5/8/8/5N2/8/3K4/8");
 
+    GUI_TextureAlias background;
+    background = GUI_CreateTexture_BackgroundInit(PP4M_GREY_DARK);
+
     // TODO: cap framerate to 30/60 fps
     SDL_Event event;
 
@@ -219,6 +222,8 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
         SDL_RenderClear(glo_render);
 
+        SDL_RenderCopy(glo_render, background.texture, NULL, NULL);
+
         /* renders everything chessboard releated */
         for (int n = 0; n < 64; n++) {
             SDL_RenderCopy(glo_render, glo_chess_core_tile[n].texture, NULL, &glo_chess_core_tile[n].rect);
@@ -231,6 +236,8 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
         if (event.type == SDL_QUIT) break;
     }
+
+    SDL_DestroyTexture(background.texture);
 
     return;
 }

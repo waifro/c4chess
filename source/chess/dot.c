@@ -14,9 +14,9 @@ void DOT_InitTexture(int tile) {
 
     glo_chess_dot[tile].texture = SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 50, 50);
     SDL_SetTextureBlendMode(glo_chess_dot[tile].texture, SDL_BLENDMODE_BLEND);
-    SDL_SetTextureAlphaMod(glo_chess_dot[tile].texture, 75);
+    SDL_SetTextureAlphaMod(glo_chess_dot[tile].texture, 55);
 
-    pp4m_DRAW_TextureDrawCircle_Filled(glo_render, glo_chess_dot[tile].texture, PP4M_BLACK, (glo_chess_dot[tile].rect.w / 2), (glo_chess_dot[tile].rect.h / 2), 15);
+    pp4m_DRAW_TextureDrawCircle_Filled(glo_render, glo_chess_dot[tile].texture, PP4M_BLACK, (glo_chess_dot[tile].rect.w / 2), (glo_chess_dot[tile].rect.h / 2), 8);
 
     return;
 }
