@@ -191,15 +191,16 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     SDL_Event event;
 
     while(1) {
-        SDL_PollEvent(&event);
 
         if (event.type == SDL_QUIT) break;
-        else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
-            PP4M_HOOK *list_hook = pp4m_HOOK_Init();
-            for (int n = 0; n < 64; n++)
-                pp4m_HOOK_Next(list_hook, &glo_chess_core_tile[n]);
-
-            GUI_PopupWindow_Core(list_hook, 420, 260, 440, 200, "pausa");
+        while(SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) break;
+            if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
+                PP4M_HOOK *list_hook = pp4m_HOOK_Init();
+                for (int n = 0; n < 64; n++)
+                    pp4m_HOOK_Next(list_hook, &glo_chess_core_tile[n]);
+                GUI_PopupWindow_Core(list_hook, 420, 260, 440, 200, "pausa");
+            }
         }
 
         /* checks if king under attack */
