@@ -94,9 +94,10 @@ int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h, char 
 
     ButtonExit = GUI_CreateTexture_ButtonExit(foo, bar);
 
-    while(event.type != SDL_QUIT) {
-
+    while(1) {
+        
         SDL_PollEvent(&event);
+        if (event.type == SDL_QUIT) break;
 
         SDL_RenderClear(glo_render);
 
