@@ -192,6 +192,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
     while(1) {
 
+        /* (wip) trigger on pressure of key */
         if (event.type == SDL_QUIT) break;
         while(SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) break;
@@ -205,25 +206,6 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
         /* checks if king under attack */
         CHESS_PiecePattern_UpdateState(glo_chess_core_tile, player);
-
-        /* (wip) trigger on pressure of key */
-        /*
-        int val = pp4m_INPUT_KeyboardHit();
-        if (val != 0) {
-            printf("keyboard pressed: %d\n", val);
-
-            // testing trigger pause interface
-            if (val == 27) { // esc key
-
-                PP4M_HOOK *list_hook = pp4m_HOOK_Init();
-                for (int n = 0; n < 64; n++)
-                    pp4m_HOOK_Next(list_hook, &glo_chess_core_tile[n]);
-
-                GUI_PopupWindow_Core(list_hook, 420, 260, 440, 200, "pausa");
-
-            }
-        }
-        */
 
         /* makes the in-game changes during gameplay */
         if (MIDDLE_UpdateChangeState(&event, player) == -2)
