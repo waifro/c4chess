@@ -14,7 +14,6 @@ SDL_Texture *GUI_PopupWindow_Title(char *title, SDL_Rect *rect, SDL_Rect window_
     if (strlen(title) > 255) return (NULL);
 
     SDL_Texture *texture_title = NULL;
-    //void pp4m_TTF_MEM_TextureFont(SDL_Renderer *renderer, PP4M_SDL *st, const char *text, const char *path, int point, float x, float y, SDL_Color color)
     texture_title = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_BLACK, 24, rect, 0, 0, title);
 
     int w = 0, h = 0;
@@ -22,7 +21,7 @@ SDL_Texture *GUI_PopupWindow_Title(char *title, SDL_Rect *rect, SDL_Rect window_
 
     rect->x = (window_pos.w / 2) - (w / 2) + window_pos.x;
     rect->y = window_pos.y;
-    
+
     return (texture_title);
 }
 
