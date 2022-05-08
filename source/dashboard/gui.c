@@ -15,9 +15,14 @@ SDL_Texture *GUI_PopupWindow_Title(char *title, SDL_Rect *rect, SDL_Rect window_
 
     SDL_Texture *texture_title = NULL;
     //void pp4m_TTF_MEM_TextureFont(SDL_Renderer *renderer, PP4M_SDL *st, const char *text, const char *path, int point, float x, float y, SDL_Color color)
-    texture_title = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_BLACK, 24, rect, window_pos.x, window_pos.y, title);
-    rect->x = window_pos.x;
-    rect->y = window_pos.y;
+    texture_title = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_WHITE, 24, rect, window_pos.x, window_pos.y, title);
+
+    int w = 0, h = 0;
+    SDL_QueryTexture(texture_title, NULL, NULL, &w, &h);
+
+    rect->x = window_pos.x + ((w / 2) + (window_pos.w / 2));
+    rect->y = window_pos.y + ((h / 2) + (window_pos.h / 2));
+    //rect->y = window_pos.y - 5;
     //rect.w = window_pos.x;
     //rect.x = window_pos.x;
 
@@ -60,7 +65,7 @@ GUI_TextureAlias GUI_CreateTexture_ButtonExit(int x, int y) {
 
     SDL_SetRenderTarget(glo_render, button_exit.texture);
 
-    pp4m_DRAW_SetRenderColor(glo_render, PP4M_GREY_HEAVY);
+    pp4m_DRAW_SetRenderColor(glo_render, PP4M_GREY_NORMAL);
     SDL_RenderFillRect(glo_render, NULL);
 
     SDL_SetRenderTarget(glo_render, NULL);
@@ -81,7 +86,7 @@ int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h, char 
     // popup window
     GUI_TextureAlias PopupWindow;
     GUI_TextureAlias_InitRect(&PopupWindow, x, y, w, h, FULL);
-    PopupWindow.texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_NORMAL, &PopupWindow.rect, x, y, w, h);
+    PopupWindow.texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_LIGHT, &PopupWindow.rect, x, y, w, h);
 
     GUI_TextureAlias TextureTitle;
     TextureTitle.texture = GUI_PopupWindow_Title(title, &TextureTitle.rect, PopupWindow.rect);
