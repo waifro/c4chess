@@ -10,6 +10,7 @@
 #include "pp4m_ttf.h"
 
 SDL_Color PP4M_BLACK = {0, 0, 0, 255};
+SDL_Color PP4M_GREY_LIGHT = {128, 128, 128, 255};
 SDL_Color PP4M_GREY = {128, 128, 128, 255};
 SDL_Color PP4M_GREY_DARK = {51, 51, 51, 255};
 SDL_Color PP4M_WHITE = {255, 255, 255, 255};
@@ -115,7 +116,7 @@ PP4M_HOOK *pp4m_HOOK_Init(void) {
 
     head->ptr = NULL;
     head->next = NULL;
-    
+
     return (head);
 }
 

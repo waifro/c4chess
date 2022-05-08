@@ -8,6 +8,7 @@
 #include <SDL2/SDL_ttf.h>
 
 extern SDL_Color PP4M_BLACK;
+extern SDL_Color PP4M_GREY_LIGHT;
 extern SDL_Color PP4M_GREY;
 extern SDL_Color PP4M_GREY_DARK;
 extern SDL_Color PP4M_WHITE;
