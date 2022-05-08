@@ -84,7 +84,6 @@ int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h, char 
     PopupWindow.texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_NORMAL, &PopupWindow.rect, x, y, w, h);
 
     GUI_TextureAlias TextureTitle;
-    //TextureTitle.texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_RED, 24, &TextureTitle.rect, PopupWindow.rect.x, PopupWindow.rect.y, title);
     TextureTitle.texture = GUI_PopupWindow_Title(title, &TextureTitle.rect, PopupWindow.rect);
 
     // button exit
