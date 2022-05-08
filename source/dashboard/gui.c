@@ -15,17 +15,14 @@ SDL_Texture *GUI_PopupWindow_Title(char *title, SDL_Rect *rect, SDL_Rect window_
 
     SDL_Texture *texture_title = NULL;
     //void pp4m_TTF_MEM_TextureFont(SDL_Renderer *renderer, PP4M_SDL *st, const char *text, const char *path, int point, float x, float y, SDL_Color color)
-    texture_title = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_WHITE, 24, rect, window_pos.x, window_pos.y, title);
+    texture_title = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_BLACK, 24, rect, 0, 0, title);
 
     int w = 0, h = 0;
     SDL_QueryTexture(texture_title, NULL, NULL, &w, &h);
 
-    rect->x = window_pos.x + ((w / 2) + (window_pos.w / 2));
-    rect->y = window_pos.y + ((h / 2) + (window_pos.h / 2));
-    //rect->y = window_pos.y - 5;
-    //rect.w = window_pos.x;
-    //rect.x = window_pos.x;
-
+    rect->x = (window_pos.w / 2) - (w / 2) + window_pos.x;
+    rect->y = window_pos.y;
+    
     return (texture_title);
 }
 
@@ -52,23 +49,29 @@ GUI_TextureAlias GUI_CreateTexture_BackgroundPolarize(SDL_Color color, int alpha
     return (background);
 }
 
-GUI_TextureAlias GUI_CreateTexture_ButtonExit(int x, int y) {
+GUI_TextureAlias GUI_CreateTexture_Button(SDL_Color color, int x, int y) {
 
     // initializing variables
     GUI_TextureAlias button_exit;
     PP4M_PointToPoint ptp1 = {5, 5, 45, 45};
     PP4M_PointToPoint ptp2 = {45, 5, 5, 45};
 
-    GUI_TextureAlias_InitRect(&button_exit, x, y, 50, 50, FULL);
+    //GUI_TextureAlias_InitRect(&button_exit, x, y, 50, 50, FULL);
 
-    button_exit.texture = pp4m_DRAW_CreateTexture(glo_render, button_exit.rect.w, button_exit.rect.h);
+    //button_exit.texture = pp4m_DRAW_CreateTexture(glo_render, button_exit.rect.w, button_exit.rect.h);
 
+    button_exit.texture = pp4m_DRAW_TextureInitColor(glo_render, color, &button_exit.rect, x, y, 50, 50);
+
+    //SDL_RenderFillRound();
+
+    /*
     SDL_SetRenderTarget(glo_render, button_exit.texture);
 
     pp4m_DRAW_SetRenderColor(glo_render, PP4M_GREY_NORMAL);
     SDL_RenderFillRect(glo_render, NULL);
 
     SDL_SetRenderTarget(glo_render, NULL);
+    */
 
     pp4m_DRAW_TextureDrawLine(glo_render, button_exit.texture, PP4M_WHITE, &ptp1, 0, 0, 0, 0);
     pp4m_DRAW_TextureDrawLine(glo_render, button_exit.texture, PP4M_WHITE, &ptp2, 0, 0, 0, 0);
@@ -93,10 +96,7 @@ int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h, char 
 
     // button exit
     GUI_TextureAlias ButtonExit;
-    int foo = PopupWindow.rect_als.z - 60;
-    int bar = PopupWindow.rect_als.j - 60;
-
-    ButtonExit = GUI_CreateTexture_ButtonExit(foo, bar);
+    ButtonExit = GUI_CreateTexture_Button(PP4M_GREY_NORMAL, PopupWindow.rect_als.z - 60, PopupWindow.rect_als.j - 60);
 
     while(1) {
 

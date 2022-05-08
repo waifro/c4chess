@@ -56,7 +56,7 @@ SDL_Texture *pp4m_TTF_TextureFont(SDL_Renderer *renderer, char *filename, SDL_Co
     SDL_FreeSurface(surface);
     TTF_CloseFont(font);
 
-    if (dst == NULL) {
+    if (dst != NULL) {
         dst->x = x;
         dst->y = y;
     }
