@@ -104,8 +104,6 @@ int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h, char 
         PP4M_HOOK *current = list_hook;
         CHESS_CORE_TILE *hook_tile = NULL;
 
-        //SDL_RenderCopy(glo_render, list_hook->ptr, NULL, NULL);
-
         for (int n = 0; n <= val; n++) {
 
             if (n == 0) {
