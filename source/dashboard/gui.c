@@ -41,6 +41,7 @@ GUI_TextureAlias GUI_CreateTexture_BackgroundPolarize(SDL_Color color, int alpha
     background.texture = pp4m_DRAW_TextureInitColor(glo_render, color, &background.rect, 0, 0, glo_screen_w, glo_screen_h);
 
     // blending the texture for trasparent filter
+    //SDL_SetRenderDrawBlendMode(glo_render, SDL_BLENDMODE_BLEND);
     SDL_SetTextureBlendMode(background.texture, SDL_BLENDMODE_BLEND);
     SDL_SetTextureAlphaMod(background.texture, alpha);
 
@@ -76,7 +77,7 @@ int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h, char 
 
     // background cloudy/blurred/polarized
     GUI_TextureAlias BackgroundPolar;
-    BackgroundPolar = GUI_CreateTexture_BackgroundPolarize(PP4M_GREY_DARK, 200);
+    BackgroundPolar = GUI_CreateTexture_BackgroundPolarize(PP4M_BLACK, 150);
 
     // popup window
     GUI_TextureAlias PopupWindow;
@@ -88,14 +89,14 @@ int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h, char 
     TextureTitle.texture = GUI_PopupWindow_Title(title, &TextureTitle.rect, PopupWindow.rect);
 
     // button exit
-    GUI_TextureAlias ButtonExit;
+    //GUI_TextureAlias ButtonExit;
     int foo = PopupWindow.rect_als.z - 60;
     int bar = PopupWindow.rect_als.j - 60;
 
-    ButtonExit = GUI_CreateTexture_ButtonExit(foo, bar);
+    //ButtonExit = GUI_CreateTexture_ButtonExit(foo, bar);
 
     while(1) {
-        
+
         SDL_PollEvent(&event);
         if (event.type == SDL_QUIT) break;
 
@@ -105,7 +106,16 @@ int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h, char 
         PP4M_HOOK *current = list_hook;
         CHESS_CORE_TILE *hook_tile = NULL;
 
+        //SDL_RenderCopy(glo_render, list_hook->ptr, NULL, NULL);
+
         for (int n = 0; n <= val; n++) {
+
+            if (n == 0) {
+                SDL_RenderCopy(glo_render, list_hook->ptr, NULL, NULL);
+                hook_tile= current->ptr;
+                current = current->next;
+                continue;
+            }
 
             hook_tile= current->ptr;
             current = current->next;
@@ -117,7 +127,7 @@ int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h, char 
         SDL_RenderCopy(glo_render, BackgroundPolar.texture, NULL, &BackgroundPolar.rect);
         SDL_RenderCopy(glo_render, PopupWindow.texture, NULL, &PopupWindow.rect);
         SDL_RenderCopy(glo_render, TextureTitle.texture, NULL, &TextureTitle.rect);
-        SDL_RenderCopy(glo_render, ButtonExit.texture, NULL, &ButtonExit.rect);
+        //SDL_RenderCopy(glo_render, ButtonExit.texture, NULL, &ButtonExit.rect);
         SDL_RenderPresent(glo_render);
 
     }
@@ -127,7 +137,7 @@ int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h, char 
     SDL_DestroyTexture(BackgroundPolar.texture);
     SDL_DestroyTexture(PopupWindow.texture);
     SDL_DestroyTexture(TextureTitle.texture);
-    SDL_DestroyTexture(ButtonExit.texture);
+    //SDL_DestroyTexture(ButtonExit.texture);
 
     return 0;
 }
