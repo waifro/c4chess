@@ -48,7 +48,7 @@ void CORE_Chessboard_Init(void) {
 
         else if (toggle == true) {
             toggle = false;
-            glo_chess_core_tile[n].texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY, &glo_chess_core_tile[n].rect, x_b, y_b, size_tile, size_tile);
+            glo_chess_core_tile[n].texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_NORMAL, &glo_chess_core_tile[n].rect, x_b, y_b, size_tile, size_tile);
         }
 
         x_b += size_tile; colomn += 1;

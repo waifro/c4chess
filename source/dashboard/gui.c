@@ -41,7 +41,6 @@ GUI_TextureAlias GUI_CreateTexture_BackgroundPolarize(SDL_Color color, int alpha
     background.texture = pp4m_DRAW_TextureInitColor(glo_render, color, &background.rect, 0, 0, glo_screen_w, glo_screen_h);
 
     // blending the texture for trasparent filter
-    //SDL_SetRenderDrawBlendMode(glo_render, SDL_BLENDMODE_BLEND);
     SDL_SetTextureBlendMode(background.texture, SDL_BLENDMODE_BLEND);
     SDL_SetTextureAlphaMod(background.texture, alpha);
 
@@ -61,7 +60,7 @@ GUI_TextureAlias GUI_CreateTexture_ButtonExit(int x, int y) {
 
     SDL_SetRenderTarget(glo_render, button_exit.texture);
 
-    pp4m_DRAW_SetRenderColor(glo_render, PP4M_GREY_LIGHT);
+    pp4m_DRAW_SetRenderColor(glo_render, PP4M_GREY_HEAVY);
     SDL_RenderFillRect(glo_render, NULL);
 
     SDL_SetRenderTarget(glo_render, NULL);
@@ -82,7 +81,7 @@ int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h, char 
     // popup window
     GUI_TextureAlias PopupWindow;
     GUI_TextureAlias_InitRect(&PopupWindow, x, y, w, h, FULL);
-    PopupWindow.texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_WHITE, &PopupWindow.rect, x, y, w, h);
+    PopupWindow.texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_NORMAL, &PopupWindow.rect, x, y, w, h);
 
     GUI_TextureAlias TextureTitle;
     //TextureTitle.texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_RED, 24, &TextureTitle.rect, PopupWindow.rect.x, PopupWindow.rect.y, title);
