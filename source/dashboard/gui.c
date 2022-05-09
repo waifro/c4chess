@@ -53,18 +53,18 @@ GUI_TextureAlias GUI_CreateTexture_Button(char *title, SDL_Color color, int x, i
     // initializing variables
     GUI_TextureAlias button_exit;
 
-    button_exit.texture = pp4m_DRAW_TextureInitColor(glo_render, color, &button_exit.rect, x, y, 50, 50);
-
-    /*
+    //button_exit.texture = pp4m_DRAW_TextureInitColor(glo_render, color, &button_exit.rect, x, y, 50, 50);
+    button_exit.texture = SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 50, 50);
     SDL_SetRenderTarget(glo_render, button_exit.texture);
 
-    pp4m_DRAW_SetRenderColor(glo_render, PP4M_GREY_NORMAL);
-    SDL_RenderFillRect(glo_render, NULL);
+    //pp4m_DRAW_SetRenderColor(glo_render, PP4M_GREY_NORMAL);
+    //SDL_RenderFillRect(glo_render, NULL);
 
-    pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, color, 24, NULL, 0, 0, title);
+    //SDL_Texture *texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, color, 24, NULL, 0, 0, title);
+
+    //SDL_RenderCopy(glo_render, texture, NULL, NULL);
 
     SDL_SetRenderTarget(glo_render, NULL);
-    */
 
 
     return (button_exit);
