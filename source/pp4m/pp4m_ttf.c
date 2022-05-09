@@ -37,7 +37,7 @@ void pp4m_TTF_MEM_TextureFont(SDL_Renderer *renderer, PP4M_SDL *st, const char *
 	pd.rect.x = x; // horizontal point
 
 	memcpy(st, &pd, sizeof(pd));
-
+    
 	return;
 }
 
