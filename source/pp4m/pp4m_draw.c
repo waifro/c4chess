@@ -12,8 +12,9 @@ SDL_Texture *pp4m_DRAW_CreateTexture(SDL_Renderer *renderer, int width, int heig
     return texture;
 }
 
-void pp4m_DRAW_SetRenderColor(SDL_Renderer *renderer, SDL_Color color) {
-    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+void pp4m_DRAW_SetRenderColor(SDL_Renderer *renderer, SDL_Color *color) {
+    if (color != NULL) SDL_SetRenderDrawColor(renderer, color->r, color->g, color->b, color->a);
+    else SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
     return;
 }
 
