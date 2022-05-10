@@ -203,7 +203,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
                 for (int n = 0; n < 64; n++)
                     pp4m_HOOK_Next(list_hook, &glo_chess_core_tile[n]);
-                GUI_PopupWindow_Core(list_hook, 420, 270, 440, 180, "pausa");
+                GUI_PopupWindow_Core(list_hook, 420, 270, 440, 180);
             }
         }
 
