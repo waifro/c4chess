@@ -54,7 +54,6 @@ GUI_TextureAlias GUI_CreateTexture_Button(char *title, SDL_Color color, int x, i
     GUI_TextureAlias button;
 
     button.texture = pp4m_DRAW_TextureInitColor_Target(glo_render, color, &button.rect, x, y, w, h);
-    //button.texture = SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 150, 150);
 
     SDL_Texture *texture = NULL;
     SDL_Rect rect;
@@ -67,9 +66,6 @@ GUI_TextureAlias GUI_CreateTexture_Button(char *title, SDL_Color color, int x, i
     SDL_SetRenderTarget(glo_render, NULL);
 
     SDL_DestroyTexture(texture);
-
-    //button.rect.x = x;
-    //button.rect.y = y;
 
     return (button);
 }
@@ -86,8 +82,8 @@ int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h, char 
     GUI_TextureAlias_InitRect(&PopupWindow, x, y, w, h, FULL);
     PopupWindow.texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_NORMAL, &PopupWindow.rect, x, y, w, h);
 
-    GUI_TextureAlias TextureTitle;
-    TextureTitle.texture = GUI_PopupWindow_Title(title, &TextureTitle.rect, PP4M_WHITE, PopupWindow.rect);
+    //GUI_TextureAlias TextureTitle;
+    //TextureTitle.texture = GUI_PopupWindow_Title(title, &TextureTitle.rect, PP4M_WHITE, PopupWindow.rect);
 
     // button continue
     GUI_TextureAlias ButtonContinue;
@@ -126,7 +122,7 @@ int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h, char 
 
         SDL_RenderCopy(glo_render, BackgroundPolar.texture, NULL, &BackgroundPolar.rect);
         SDL_RenderCopy(glo_render, PopupWindow.texture, NULL, &PopupWindow.rect);
-        SDL_RenderCopy(glo_render, TextureTitle.texture, NULL, &TextureTitle.rect);
+        //SDL_RenderCopy(glo_render, TextureTitle.texture, NULL, &TextureTitle.rect);
         SDL_RenderCopy(glo_render, ButtonContinue.texture, NULL, &ButtonContinue.rect);
         SDL_RenderCopy(glo_render, ButtonExit.texture, NULL, &ButtonExit.rect);
         SDL_RenderPresent(glo_render);
@@ -137,7 +133,7 @@ int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h, char 
 
     SDL_DestroyTexture(BackgroundPolar.texture);
     SDL_DestroyTexture(PopupWindow.texture);
-    SDL_DestroyTexture(TextureTitle.texture);
+    //SDL_DestroyTexture(TextureTitle.texture);
     SDL_DestroyTexture(ButtonExit.texture);
     SDL_DestroyTexture(ButtonContinue.texture);
 
