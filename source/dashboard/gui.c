@@ -53,22 +53,23 @@ GUI_TextureAlias GUI_CreateTexture_Button(char *title, SDL_Color color, int x, i
     // initializing variables
     GUI_TextureAlias button;
 
-    //button.texture = pp4m_DRAW_TextureInitColor(glo_render, color, &button_exit.rect, x, y, 50, 50);
-    button.texture = SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 50, 50);
+    button.texture = pp4m_DRAW_TextureInitColor(glo_render, color, &button.rect, x, y, w, h);
+    //button.texture = SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 150, 150);
+
+    SDL_Texture *texture = NULL; SDL_Rect rect;
+
 
     SDL_SetRenderTarget(glo_render, button.texture);
 
-    pp4m_DRAW_SetRenderColor(glo_render, &PP4M_GREY_LIGHT);
-    SDL_RenderFillRect(glo_render, NULL);
-
-    //SDL_Texture *texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, color, 24, NULL, 0, 0, title);
-
-    //SDL_RenderCopy(glo_render, texture, NULL, NULL);
+    texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, color, 24, &rect, x, y, title);
+    SDL_RenderCopy(glo_render, texture, NULL, &rect);
 
     SDL_SetRenderTarget(glo_render, NULL);
 
-    button.rect.x = x;
-    button.rect.y = y;
+    SDL_DestroyTexture(texture);
+
+    //button.rect.x = x;
+    //button.rect.y = y;
 
     return (button);
 }
@@ -88,9 +89,13 @@ int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h, char 
     GUI_TextureAlias TextureTitle;
     TextureTitle.texture = GUI_PopupWindow_Title(title, &TextureTitle.rect, PP4M_WHITE, PopupWindow.rect);
 
+    // button continue
+    GUI_TextureAlias ButtonContinue;
+    ButtonContinue = GUI_CreateTexture_Button("Continue", PP4M_GREY_HEAVY, PopupWindow.rect_als.x + 10, PopupWindow.rect_als.y + 10, 420, 75);
+
     // button exit
     GUI_TextureAlias ButtonExit;
-    ButtonExit = GUI_CreateTexture_Button("Exit", PP4M_GREY_HEAVY, PopupWindow.rect_als.z - 60, PopupWindow.rect_als.j - 60);
+    ButtonExit = GUI_CreateTexture_Button("Exit", PP4M_GREY_HEAVY, PopupWindow.rect_als.x + 10, PopupWindow.rect_als.y + 95, 420, 75);
 
     while(1) {
 
@@ -122,6 +127,7 @@ int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h, char 
         SDL_RenderCopy(glo_render, BackgroundPolar.texture, NULL, &BackgroundPolar.rect);
         SDL_RenderCopy(glo_render, PopupWindow.texture, NULL, &PopupWindow.rect);
         SDL_RenderCopy(glo_render, TextureTitle.texture, NULL, &TextureTitle.rect);
+        SDL_RenderCopy(glo_render, ButtonContinue.texture, NULL, &ButtonContinue.rect);
         SDL_RenderCopy(glo_render, ButtonExit.texture, NULL, &ButtonExit.rect);
         SDL_RenderPresent(glo_render);
 
@@ -133,6 +139,7 @@ int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h, char 
     SDL_DestroyTexture(PopupWindow.texture);
     SDL_DestroyTexture(TextureTitle.texture);
     SDL_DestroyTexture(ButtonExit.texture);
+    SDL_DestroyTexture(ButtonContinue.texture);
 
     return 0;
 }

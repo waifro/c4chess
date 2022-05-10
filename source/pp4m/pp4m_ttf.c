@@ -37,7 +37,7 @@ void pp4m_TTF_MEM_TextureFont(SDL_Renderer *renderer, PP4M_SDL *st, const char *
 	pd.rect.x = x; // horizontal point
 
 	memcpy(st, &pd, sizeof(pd));
-    
+
 	return;
 }
 
@@ -59,9 +59,8 @@ SDL_Texture *pp4m_TTF_TextureFont(SDL_Renderer *renderer, char *filename, SDL_Co
     if (dst != NULL) {
         dst->x = x;
         dst->y = y;
+        SDL_QueryTexture(texture, NULL, NULL, &dst->w, &dst->h);
     }
-
-    SDL_QueryTexture(texture, NULL, NULL, &dst->w, &dst->h);
 
     return (texture);
 
