@@ -56,12 +56,12 @@ GUI_TextureAlias GUI_CreateTexture_Button(char *title, SDL_Color color, int x, i
     button.texture = pp4m_DRAW_TextureInitColor_Target(glo_render, color, &button.rect, x, y, w, h);
     //button.texture = SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 150, 150);
 
-    SDL_Texture *texture = NULL; SDL_Rect rect;
-
+    SDL_Texture *texture = NULL;
+    SDL_Rect rect;
 
     SDL_SetRenderTarget(glo_render, button.texture);
 
-    texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, color, 24, &rect, x, y, title);
+    texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_WHITE, 24, &rect, 0, 0, title);
     SDL_RenderCopy(glo_render, texture, NULL, &rect);
 
     SDL_SetRenderTarget(glo_render, NULL);
