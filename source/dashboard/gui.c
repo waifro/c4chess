@@ -53,7 +53,7 @@ GUI_TextureAlias GUI_CreateTexture_Button(char *title, SDL_Color color, int x, i
     // initializing variables
     GUI_TextureAlias button;
 
-    button.texture = pp4m_DRAW_TextureInitColor(glo_render, color, &button.rect, x, y, w, h);
+    button.texture = pp4m_DRAW_TextureInitColor_Target(glo_render, color, &button.rect, x, y, w, h);
     //button.texture = SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 150, 150);
 
     SDL_Texture *texture = NULL; SDL_Rect rect;

@@ -22,6 +22,7 @@ void pp4m_DRAW_TextureDrawPoint(SDL_Renderer *renderer, SDL_Texture *texture, SD
 void pp4m_DRAW_TextureDrawCircle(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Color color, int circle_center_x, int circle_center_y, int radius);
 void pp4m_DRAW_TextureDrawCircle_Filled(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Color color, int circle_center_x, int circle_center_y, int radius);
 
+SDL_Texture *pp4m_DRAW_TextureInitColor_Target(SDL_Renderer *renderer, SDL_Color color, SDL_Rect *rect, float x, float y, float w, float h);
 SDL_Texture *pp4m_DRAW_TextureInitColor(SDL_Renderer *renderer, SDL_Color color, SDL_Rect *rect, float x, float y, float w, float h);
 
 #endif // _PP4M_DRAW_H
