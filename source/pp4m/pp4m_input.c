@@ -50,6 +50,22 @@ int pp4m_INPUT_KeyboardHit(void) {
     #endif // _WIN32
 }
 
+
+
+void pp4m_INPUT_GetMouseState(SDL_Event *event, PP4M_INPUT_POS *foo) {
+
+    foo->iner = -1;
+
+    SDL_GetMouseState(&foo->x, &foo->y);
+    if (event->type == SDL_MOUSEBUTTONDOWN)
+        foo->iner = 1;
+
+    else if (event->type == SDL_MOUSEBUTTONDOWN)
+        foo->iner = -1;
+
+    return;
+}
+
 PP4M_INPUT_POS pp4m_INPUT_MouseState(SDL_Event *event) {
 
     static bool once = false;

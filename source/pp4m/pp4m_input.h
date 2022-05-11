@@ -9,7 +9,8 @@ typedef struct {
     int iner;
 } PP4M_INPUT_POS;
 
-int             pp4m_INPUT_KeyboardHit(void);
+int pp4m_INPUT_KeyboardHit(void);
+void pp4m_INPUT_GetMouseState(SDL_Event *event, PP4M_INPUT_POS *foo);
 PP4M_INPUT_POS  pp4m_INPUT_MouseState(SDL_Event *event);
 
 #endif // PP4M_INPUT_H
