@@ -190,14 +190,27 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     // TODO: cap framerate to 30/60 fps
     SDL_Event event;
 
+    // texture (tmp fix to make snapshot)
+    bool ttr_state = false;
+    SDL_Texture *ttr_snapshot = pp4m_DRAW_CreateTexture(glo_render, glo_screen_w, glo_screen_h);
     while(1) {
 
-        /* (wip) trigger on pressure of key */
-        if (event.type == SDL_QUIT) break;
-        while(SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) break;
-            if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
+        if (ttr_state == true) {
+            SDL_SetRenderTarget(glo_render, NULL);
+            PP4M_HOOK *hook_list = GUI_PopupWindow_Init(ttr_snapshot, 440, 180);
 
+            GUI_PopupWindow_CoreTest(hook_list);
+            ttr_state = 0; hook_list = NULL;
+        }
+
+        /* (wip) trigger on pressure of key */
+        SDL_PollEvent(&event);
+        if (event.type == SDL_QUIT) break;
+        if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
+            ttr_state = true;
+            SDL_SetRenderTarget(glo_render, ttr_snapshot);
+
+                /*
                 // this hook can be deleted by rendering directly into another texture
                 // (less pain for the CPU & more free memory)
                 PP4M_HOOK *list_hook = pp4m_HOOK_Init();
@@ -206,8 +219,9 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
                 for (int n = 0; n < 64; n++)
                     pp4m_HOOK_Next(list_hook, &glo_chess_core_tile[n]);
+
                 GUI_PopupWindow_Core(list_hook, 420, 270, 440, 180);
-            }
+                */
         }
 
         /* checks if king under attack */

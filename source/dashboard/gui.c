@@ -79,6 +79,100 @@ GUI_TextureAlias GUI_CreateTexture_Button(char *title, SDL_Color color, int x, i
     return (button);
 }
 
+int GUI_PopupWindow_Button(PP4M_HOOK *head, char *path, char *title, SDL_Color color_text, SDL_Color color_button, int point, int x_pp, int y_pp, int w, int h) {
+    if (head == NULL) return (-1);
+
+    GUI_TextureAlias *crt_alias = head->next->next->ptr;
+
+    int x = crt_alias->rect.x + x_pp;
+    int y = crt_alias->rect.y + y_pp;
+
+    // initializing variables
+    GUI_TextureAlias button;
+    button.texture = pp4m_DRAW_TextureInitColor_Target(glo_render, color_button, &button.rect, x, y, w, h);
+
+    SDL_Texture *texture = NULL;
+    SDL_Rect rect;
+
+    SDL_SetRenderTarget(glo_render, button.texture);
+
+    texture = pp4m_TTF_TextureFont(glo_render, path, color_text, point, &rect, 0, 0, title);
+
+    int w_text = 0;
+    int h_text = 0;
+    SDL_QueryTexture(texture, NULL, NULL, &w_text, &h_text);
+
+    rect.x = (w / 2) - (w_text / 2);
+    rect.y = (h / 2) - (h_text / 2);
+
+    SDL_RenderCopy(glo_render, texture, NULL, &rect);
+
+    SDL_SetRenderTarget(glo_render, NULL);
+
+    SDL_DestroyTexture(texture);
+    texture = NULL;
+
+    pp4m_HOOK_Next(head, &button);
+
+    return (0);
+}
+
+PP4M_HOOK *GUI_PopupWindow_Init(SDL_Texture *background, int w, int h) {
+
+    int x = (w / 2) - glo_screen_w / 2;
+    int y = (h / 2) - glo_screen_h / 2;
+
+    // background cloudy/blurred/polarized
+    GUI_TextureAlias BackgroundPolar;
+    BackgroundPolar = GUI_CreateTexture_BackgroundPolarize(PP4M_BLACK, 150);
+
+    // popup window
+    GUI_TextureAlias PopupWindow;
+    GUI_TextureAlias_InitRect(&PopupWindow, x, y, w, h, FULL);
+    PopupWindow.texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_NORMAL, &PopupWindow.rect, x, y, w, h);
+
+    PP4M_HOOK *head = pp4m_HOOK_Init();
+
+    pp4m_HOOK_Next(head, background);
+    pp4m_HOOK_Next(head, &BackgroundPolar);
+    pp4m_HOOK_Next(head, &PopupWindow);
+
+    return (head);
+}
+
+int GUI_PopupWindow_CoreTest(PP4M_HOOK *head) {
+
+    PP4M_HOOK *current = head;
+    int val = pp4m_HOOK_Size(head);
+    GUI_TextureAlias *crt_alias;
+
+    SDL_Event event; int result = 0;
+    while(result == 0) {
+
+        SDL_PollEvent(&event);
+        if (event.type == SDL_QUIT) result = -1;
+
+        SDL_RenderClear(glo_render);
+
+        current = head;
+        for (int n = 0; n <= val; n++) {
+
+            crt_alias = current->ptr;
+            current = current->next;
+
+            SDL_RenderCopy(glo_render, crt_alias->texture, NULL, &crt_alias->rect);
+        }
+
+        SDL_RenderPresent(glo_render);
+    }
+
+    // missing exiting animation
+    for (int n = 0; n <= val; n++)
+        pp4m_HOOK_Remove(head);
+
+    return (0);
+}
+
 int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h) {
     SDL_Event event;
 
