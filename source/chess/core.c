@@ -192,14 +192,25 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
     // texture (tmp fix to make snapshot)
     bool ttr_state = false;
-    SDL_Texture *ttr_snapshot = pp4m_DRAW_CreateTexture(glo_render, glo_screen_w, glo_screen_h);
+    SDL_Texture *ttr_snapshot = SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, glo_screen_w, glo_screen_h);
     while(1) {
 
         if (ttr_state == true) {
-            SDL_SetRenderTarget(glo_render, NULL);
-            PP4M_HOOK *hook_list = GUI_PopupWindow_Init(ttr_snapshot, 440, 180);
 
+            SDL_SetRenderTarget(glo_render, NULL);
+
+            while(1) {
+                SDL_PollEvent(&event);
+                if (event.type == SDL_QUIT) break;
+
+                SDL_RenderClear(glo_render);
+                SDL_RenderCopy(glo_render, ttr_snapshot, NULL, NULL);
+                SDL_RenderPresent(glo_render);
+            }
+
+            PP4M_HOOK *hook_list = GUI_PopupWindow_Init(ttr_snapshot, 440, 180);
             GUI_PopupWindow_CoreTest(hook_list);
+            
             ttr_state = 0; hook_list = NULL;
         }
 
