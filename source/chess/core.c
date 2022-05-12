@@ -197,6 +197,9 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
         while(SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) break;
             if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
+
+                // this hook can be deleted by rendering directly into another texture
+                // (less pain for the CPU & more free memory)
                 PP4M_HOOK *list_hook = pp4m_HOOK_Init();
 
                 pp4m_HOOK_Next(list_hook, background.texture);
