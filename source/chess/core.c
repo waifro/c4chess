@@ -199,27 +199,19 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
             SDL_SetRenderTarget(glo_render, NULL);
 
-            while(1) {
-                SDL_PollEvent(&event);
-                if (event.type == SDL_QUIT) break;
-
-                SDL_RenderClear(glo_render);
-                SDL_RenderCopy(glo_render, ttr_snapshot, NULL, NULL);
-                SDL_RenderPresent(glo_render);
-            }
-
             PP4M_HOOK *hook_list = GUI_PopupWindow_Init(ttr_snapshot, 440, 180);
             GUI_PopupWindow_CoreTest(hook_list);
-            
-            ttr_state = 0; hook_list = NULL;
+
+            ttr_state = false; hook_list = NULL;
         }
 
         /* (wip) trigger on pressure of key */
-        SDL_PollEvent(&event);
-        if (event.type == SDL_QUIT) break;
-        if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
-            ttr_state = true;
-            SDL_SetRenderTarget(glo_render, ttr_snapshot);
+        while(SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) break;
+            if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
+
+                ttr_state = true;
+                SDL_SetRenderTarget(glo_render, ttr_snapshot);
 
                 /*
                 // this hook can be deleted by rendering directly into another texture
@@ -233,6 +225,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
                 GUI_PopupWindow_Core(list_hook, 420, 270, 440, 180);
                 */
+            }
         }
 
         /* checks if king under attack */
