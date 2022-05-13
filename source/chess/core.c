@@ -185,7 +185,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     FEN_Init(glo_chess_core_player, "8/r1r5/8/8/5N2/8/3K4/8");
 
     GUI_TextureAlias background;
-    background = GUI_CreateTexture_BackgroundInit(PP4M_GREY_DARK);
+    GUI_CreateTexture_BackgroundInit(&background, PP4M_GREY_DARK, 255);
 
     // TODO: cap framerate to 30/60 fps
     SDL_Event event;
@@ -199,8 +199,8 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
             SDL_SetRenderTarget(glo_render, NULL);
 
-            PP4M_HOOK *hook_list = GUI_PopupWindow_Init(ttr_snapshot, 440, 180);
-            GUI_PopupWindow_CoreTest(hook_list);
+            PP4M_HOOK *hook_list = GUI_PopupWindow_Init(440, 180);
+            GUI_PopupWindow_CoreTest(hook_list, ttr_snapshot);
 
             ttr_state = false; hook_list = NULL;
         }
@@ -218,7 +218,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
                 // (less pain for the CPU & more free memory)
                 PP4M_HOOK *list_hook = pp4m_HOOK_Init();
 
-                pp4m_HOOK_Next(list_hook, background.texture);
+                pp4m_HOOK_Next(list_hook, background->texture);
 
                 for (int n = 0; n < 64; n++)
                     pp4m_HOOK_Next(list_hook, &glo_chess_core_tile[n]);

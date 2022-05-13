@@ -3,6 +3,18 @@
 #include <SDL2/SDL.h>
 #include "pp4m_draw.h"
 
+SDL_Rect pp4m_DRAW_InitRect(int x, int y, int w, int h) {
+
+    SDL_Rect rect;
+
+    rect.x = x;
+    rect.y = y;
+    rect.w = w;
+    rect.h = h;
+
+    return (rect);
+}
+
 SDL_Texture *pp4m_DRAW_CreateTexture(SDL_Renderer *renderer, int width, int height) {
 
     SDL_Texture *texture;

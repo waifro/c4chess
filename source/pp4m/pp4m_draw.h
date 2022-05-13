@@ -14,6 +14,7 @@ typedef struct {
 
 } PP4M_PointToPoint;
 
+SDL_Rect pp4m_DRAW_InitRect(int x, int y, int w, int h);
 SDL_Texture *pp4m_DRAW_CreateTexture(SDL_Renderer *renderer, int width, int height);
 void pp4m_DRAW_SetRenderColor(SDL_Renderer *renderer, SDL_Color *color);
 
