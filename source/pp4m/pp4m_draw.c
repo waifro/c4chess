@@ -156,7 +156,7 @@ void pp4m_DRAW_TextureDrawCircle_Filled(SDL_Renderer *renderer, SDL_Texture *tex
     return;
 }
 
-SDL_Texture *pp4m_DRAW_TextureInitColor_Target(SDL_Renderer *renderer, SDL_Color color, SDL_Rect *rect, float x, float y, float w, float h) {
+SDL_Texture *pp4m_DRAW_TextureInitColor_Target(SDL_Renderer *renderer, SDL_Color color, int alpha, SDL_Rect *rect, float x, float y, float w, float h) {
 
     SDL_Texture *texture = NULL;
 
@@ -164,21 +164,33 @@ SDL_Texture *pp4m_DRAW_TextureInitColor_Target(SDL_Renderer *renderer, SDL_Color
 
     SDL_SetRenderTarget(renderer, texture);
 
-    rect->x = 0;
-    rect->y = 0;
-    rect->w = (int)w;
-    rect->h = (int)h;
+    if (rect != NULL) {
+        rect->x = 0;
+        rect->y = 0;
+        rect->w = (int)w;
+        rect->h = (int)h;
+    }
 
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-    SDL_RenderFillRect(renderer, rect);
+
+    if (rect != NULL)
+        SDL_RenderFillRect(renderer, rect);
+    else
+        SDL_RenderFillRect(renderer, NULL);
+
     SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
 
-    rect->x = (int)x;
-    rect->y = (int)y;
-    rect->w = (int)w;
-    rect->h = (int)h;
+    if (rect != NULL) {
+        rect->x = (int)x;
+        rect->y = (int)y;
+        rect->w = (int)w;
+        rect->h = (int)h;
+    }
 
     SDL_SetRenderTarget(renderer, NULL);
+
+    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+    SDL_SetTextureAlphaMod(texture, alpha);
 
     return texture;
 
