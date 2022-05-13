@@ -10,6 +10,15 @@
 #include "../global.h"
 #include "gui.h"
 
+GUI_TextureAlias *GUI_PopupWindow_Window(SDL_Color color, int x, int y, int w, int h) {
+
+    GUI_TextureAlias *ttr_alias = NULL;
+    GUI_TextureAlias_InitRect(ttr_alias, x, y, w, h, FULL);
+    ttr_alias->texture = pp4m_DRAW_TextureInitColor(glo_render, color, &ttr_alias->rect, x, y, w, h);
+
+    return (ttr_alias);
+}
+
 SDL_Texture *GUI_PopupWindow_Title(char *title, SDL_Rect *rect, SDL_Color color, SDL_Rect window_pos) {
     if (strlen(title) > 255) return (NULL);
 
@@ -26,6 +35,7 @@ SDL_Texture *GUI_PopupWindow_Title(char *title, SDL_Rect *rect, SDL_Color color,
 }
 
 GUI_TextureAlias GUI_CreateTexture_BackgroundInit(SDL_Color color) {
+
     // initializing variables
     GUI_TextureAlias background;
     GUI_TextureAlias_InitRect(&background, 0, 0, glo_screen_w, glo_screen_h, FULL);
@@ -122,18 +132,16 @@ PP4M_HOOK *GUI_PopupWindow_Init(SDL_Texture *background, int w, int h) {
     int y = (h / 2) - glo_screen_h / 2;
 
     // background cloudy/blurred/polarized
-    GUI_TextureAlias *BackgroundPolar = GUI_CreateTexture_BackgroundPolarize(BackgroundPolar, PP4M_BLACK, 150);
+    GUI_TextureAlias *BackgroundPolar = GUI_CreateTexture_BackgroundPolarize(NULL, PP4M_BLACK, 150);
 
     // popup window
-    GUI_TextureAlias PopupWindow;
-    GUI_TextureAlias_InitRect(&PopupWindow, x, y, w, h, FULL);
-    PopupWindow.texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_NORMAL, &PopupWindow.rect, x, y, w, h);
+    //GUI_TextureAlias *PopupWindow = GUI_PopupWindow_Window(PP4M_GREY_NORMAL, x, y, w, h);
 
     PP4M_HOOK *head = pp4m_HOOK_Init();
 
     pp4m_HOOK_Next(head, background);
     pp4m_HOOK_Next(head, BackgroundPolar);
-    pp4m_HOOK_Next(head, &PopupWindow);
+    //pp4m_HOOK_Next(head, PopupWindow);
 
     return (head);
 }
@@ -143,41 +151,32 @@ int GUI_PopupWindow_CoreTest(PP4M_HOOK *head) {
     PP4M_HOOK *current = head;
     int val = pp4m_HOOK_Size(head);
 
-    GUI_TextureAlias *crt_alias;
+    GUI_TextureAlias *ttr_alias;
     SDL_Texture *background;
-    SDL_Event event; int result = 0;
+
+    SDL_Event event;
+    int result = 0;
 
     while(result == 0) {
-
-        current = head;
         SDL_PollEvent(&event);
-        if (event.type == SDL_QUIT) { result = -1; break; }
+        if (event.type == SDL_QUIT) result = -1;
+
+        //current = head;
+        background = current->ptr;
 
         SDL_RenderClear(glo_render);
-
-        printf("current->ptr %p\n", current->ptr);
-        background = current->ptr;
-
-        current = current->next;
-        printf("current->ptr %p\n", current->ptr);
-        crt_alias = current->ptr;
-        /*
-        for (int n = 0; n < val; n++) {
-            current = current->next;
-            crt_alias = current->ptr;
-
-
-            if (crt_alias->texture != NULL) {
-                SDL_RenderCopy(glo_render, crt_alias->texture, NULL, &crt_alias->rect);
-            }
-        }
-
-        current = head;
-        background = current->ptr;
-        printf("test123\n");
-        */
         SDL_RenderCopy(glo_render, background, NULL, NULL);
-        SDL_RenderCopy(glo_render, crt_alias->texture, NULL, &crt_alias->rect);
+
+        /*
+        if (current->next != NULL)
+            for (int n = 0; n <= val; n++) {
+                current = current->next;
+                ttr_alias = current->ptr;
+
+                SDL_RenderCopy(glo_render, ttr_alias->texture, NULL, &ttr_alias->rect);
+            }
+        */
+
         SDL_RenderPresent(glo_render);
     }
 

@@ -7,6 +7,7 @@
 
 /* prototypes */
 
+GUI_TextureAlias *GUI_PopupWindow_Window(SDL_Color color, int x, int y, int w, int h) ;
 SDL_Texture *GUI_PopupWindow_Title(char *title, SDL_Rect *rect, SDL_Color color, SDL_Rect window_pos);
 GUI_TextureAlias GUI_CreateTexture_BackgroundInit(SDL_Color color);
 GUI_TextureAlias *GUI_CreateTexture_BackgroundPolarize(GUI_TextureAlias *ttr_alias, SDL_Color color, int alpha);
