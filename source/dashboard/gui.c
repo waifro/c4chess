@@ -56,19 +56,6 @@ GUI_TextureAlias *GUI_Create_Texture_BackgroundInit(GUI_TextureAlias *ttr_alias,
     return (ttr_alias);
 }
 
-SDL_Texture *GUI_CreateTexture_BackgroundInit(SDL_Color color, int alpha) {
-
-    // initializing variables
-    SDL_Texture *texture;
-    texture = pp4m_DRAW_TextureInitColor(glo_render, color, NULL, 0, 0, glo_screen_w, glo_screen_h);
-
-    // blending the texture for trasparent filter
-    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
-    SDL_SetTextureAlphaMod(texture, alpha);
-
-    return (texture);
-}
-
 /*
 GUI_TextureAlias GUI_CreateTexture_Button(char *title, SDL_Color color, int x, int y, int w, int h) {
 
@@ -146,8 +133,8 @@ PP4M_HOOK *GUI_PopupWindow_Init(int w, int h) {
     int y = (h / 2) - glo_screen_h / 2;
 
     // background cloudy/blurred/polarized
-    SDL_Texture *background = GUI_CreateTexture_BackgroundInit(PP4M_BLACK, 150);
-
+    SDL_Texture *background = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_BLACK, 150, NULL, 0, 0, glo_screen_w, glo_screen_h);
+    
     // popup window
     //GUI_TextureAlias *PopupWindow = GUI_PopupWindow_Window(PP4M_GREY_NORMAL, x, y, w, h);
 
@@ -163,8 +150,7 @@ int GUI_PopupWindow_CoreTest(PP4M_HOOK *head, SDL_Texture *background) {
     PP4M_HOOK *current = head;
     int val = pp4m_HOOK_Size(head);
 
-    SDL_Texture *ttr_alias = current->ptr;
-    current = current->next;
+    SDL_Texture *texture = current->ptr;
     //SDL_Rect *rect = current->ptr;
 
     SDL_Event event;
@@ -178,7 +164,7 @@ int GUI_PopupWindow_CoreTest(PP4M_HOOK *head, SDL_Texture *background) {
         //current = head;
         SDL_RenderClear(glo_render);
         SDL_RenderCopy(glo_render, background, NULL, NULL);
-        SDL_RenderCopy(glo_render, ttr_alias, NULL, NULL);
+        SDL_RenderCopy(glo_render, texture, NULL, NULL);
 
         /*
         if (current->next != NULL)

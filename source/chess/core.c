@@ -184,8 +184,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     /* init pieces for main player */
     FEN_Init(glo_chess_core_player, "8/r1r5/8/8/5N2/8/3K4/8");
 
-    SDL_Texture *background = NULL; // (SDL_Renderer *renderer, SDL_Color color, SDL_Rect *rect, float x, float y, float w, float h);
-    background = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_DARK, 255, NULL, 0, 0, glo_screen_w, glo_screen_h);
+    SDL_Texture *background = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_DARK, 255, NULL, 0, 0, glo_screen_w, glo_screen_h);
 
     // TODO: cap framerate to 30/60 fps
     SDL_Event event;
