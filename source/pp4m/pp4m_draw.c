@@ -183,8 +183,6 @@ SDL_Texture *pp4m_DRAW_TextureInitColor_Target(SDL_Renderer *renderer, SDL_Color
     if (rect != NULL) {
         rect->x = (int)x;
         rect->y = (int)y;
-        rect->w = (int)w;
-        rect->h = (int)h;
     }
 
     SDL_SetRenderTarget(renderer, NULL);

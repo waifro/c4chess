@@ -129,21 +129,52 @@ int GUI_PopupWindow_Button(PP4M_HOOK *head, char *path, char *title, SDL_Color c
 
 PP4M_HOOK *GUI_PopupWindow_Init(int w, int h) {
 
-    int x = (w / 2) - glo_screen_w / 2;
-    int y = (h / 2) - glo_screen_h / 2;
+    int x = (glo_screen_w / 2) - (w / 2);
+    int y = (glo_screen_h / 2) - (h / 2);
 
     // background cloudy/blurred/polarized
-    SDL_Texture *background = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_BLACK, 150, NULL, 0, 0, glo_screen_w, glo_screen_h);
+    SDL_Rect *rect_bg = malloc(sizeof(SDL_Rect));
+    SDL_Texture *background = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_BLACK, 150, rect_bg, 0, 0, glo_screen_w, glo_screen_h);
 
     // popup window
-    SDL_Rect *rect = malloc(sizeof(SDL_Rect));
-    SDL_Texture *popupWindow = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_DARK, 255, rect, x, y, w, h);
+    SDL_Rect *rect_pop = malloc(sizeof(SDL_Rect));
+    SDL_Texture *popupWindow = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_DARK, 255, NULL, x, y, w, h);
 
     PP4M_HOOK *head = pp4m_HOOK_Init();
 
+    memcpy(&rect_pop->x, &x, sizeof(int));
+    memcpy(&rect_pop->y, &y, sizeof(int));
+    memcpy(&rect_pop->w, &w, sizeof(int));
+    memcpy(&rect_pop->h, &h, sizeof(int));
+
+    /*
+    memcpy(&rect_pop->x, &x, sizeof(int));
+    memcpy(&rect_pop->y, &y, sizeof(int));
+    memcpy(&rect_pop->w, &w, sizeof(int));
+    memcpy(&rect_pop->h, &h, sizeof(int));
+
+
+    rect_hookpop->x = (int)malloc(sizeof(int));
+    rect_hookpop->y = (int)malloc(sizeof(int));
+    rect_hookpop->w = (int)malloc(sizeof(int));
+    rect_hookpop->h = (int)malloc(sizeof(int));
+    */
+
+    /*
+    rect_hookpop->x = x;
+    rect_hookpop->y = y;
+    rect_hookpop->w = w;
+    rect_hookpop->h = h;
+    */
+
+
+
+    printf("x: %d %p\n", rect_pop->x, &rect_pop->x);
+
     pp4m_HOOK_Next(head, background);
+    pp4m_HOOK_Next(head, rect_bg);
     pp4m_HOOK_Next(head, popupWindow);
-    pp4m_HOOK_Next(head, rect);
+    pp4m_HOOK_Next(head, rect_pop);
 
     return (head);
 }
@@ -169,15 +200,17 @@ int GUI_PopupWindow_CoreTest(PP4M_HOOK *head, SDL_Texture *background) {
         SDL_RenderClear(glo_render);
         SDL_RenderCopy(glo_render, background, NULL, NULL);
 
-        // texture polarized
-        texture = current->ptr;
-        current = current->next;
-        SDL_RenderCopy(glo_render, texture, NULL, NULL);
-
-        // popupWindow
         texture = current->ptr;
         current = current->next;
         rect = current->ptr;
+
+        SDL_RenderCopy(glo_render, texture, NULL, rect);
+
+        texture = current->ptr;
+        current = current->next;
+        rect = current->ptr;
+
+        printf("x: %d %p\n", *(int*)&rect->x, &rect->x);
         SDL_RenderCopy(glo_render, texture, NULL, rect);
 
         SDL_RenderPresent(glo_render);
