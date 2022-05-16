@@ -137,23 +137,15 @@ PP4M_HOOK *GUI_PopupWindow_Init(int w, int h) {
     SDL_Texture *background = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_BLACK, 150, rect_bg, 0, 0, glo_screen_w, glo_screen_h);
 
     // popup window
-    SDL_Rect *rect_pop = malloc(sizeof(SDL_Rect));
-    SDL_Texture *popupWindow = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_DARK, 255, rect_pop, x, y, w, h);
+    SDL_Rect *rect_pw = malloc(sizeof(SDL_Rect));
+    SDL_Texture *popupWindow = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_DARK, 255, rect_pw, x, y, w, h);
 
     PP4M_HOOK *head = pp4m_HOOK_Init();
-
-    //PP4M_HOOK_RECT *test = malloc(sizeof(PP4M_HOOK_RECT));
-
-    rect_pop->x = x;
-    rect_pop->y = y;
-    rect_pop->w = w;
-    rect_pop->h = h;
-
 
     pp4m_HOOK_Next(head, background);
     pp4m_HOOK_Next(head, rect_bg);
     pp4m_HOOK_Next(head, popupWindow);
-    pp4m_HOOK_Next(head, rect_pop);
+    pp4m_HOOK_Next(head, rect_pw);
 
     return (head);
 }
@@ -165,7 +157,6 @@ int GUI_PopupWindow_CoreTest(PP4M_HOOK *head, SDL_Texture *background) {
 
     SDL_Texture *texture = NULL;
     SDL_Rect *rect = NULL;
-    PP4M_HOOK_RECT *test = NULL;
 
     SDL_Event event;
     int result = 0;
@@ -184,6 +175,7 @@ int GUI_PopupWindow_CoreTest(PP4M_HOOK *head, SDL_Texture *background) {
         current = current->next;
         rect = current->ptr;
 
+        printf("rect %p\n", rect);
         SDL_RenderCopy(glo_render, texture, NULL, rect);
 
         current = current->next;
@@ -197,7 +189,7 @@ int GUI_PopupWindow_CoreTest(PP4M_HOOK *head, SDL_Texture *background) {
         rect->w = *test->w;
         rect->h = *test->h;
         */
-
+        printf("rect %p\n", rect);
         SDL_RenderCopy(glo_render, texture, NULL, rect);
 
         SDL_RenderPresent(glo_render);
