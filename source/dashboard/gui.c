@@ -142,11 +142,23 @@ PP4M_HOOK *GUI_PopupWindow_Init(int w, int h) {
 
     PP4M_HOOK *head = pp4m_HOOK_Init();
 
-    memcpy(&rect_pop->x, &x, sizeof(int));
-    memcpy(&rect_pop->y, &y, sizeof(int));
-    memcpy(&rect_pop->w, &w, sizeof(int));
-    memcpy(&rect_pop->h, &h, sizeof(int));
+    PP4M_HOOK_RECT *test = malloc(sizeof(PP4M_HOOK_RECT));
 
+    test->x = (int*)malloc(sizeof(int));
+    test->y = (int*)malloc(sizeof(int));
+    test->w = (int*)malloc(sizeof(int));
+    test->h = (int*)malloc(sizeof(int));
+    memcpy(test->x, &x, sizeof(int));
+    memcpy(test->y, &y, sizeof(int));
+    memcpy(test->w, &w, sizeof(int));
+    memcpy(test->h, &h, sizeof(int));
+
+    /*
+    memcpy(test->x, &x, sizeof(int));
+    memcpy(test->y, &y, sizeof(int));
+    memcpy(test->w, &w, sizeof(int));
+    memcpy(test->h, &h, sizeof(int));
+    */
     /*
     memcpy(&rect_pop->x, &x, sizeof(int));
     memcpy(&rect_pop->y, &y, sizeof(int));
@@ -169,12 +181,12 @@ PP4M_HOOK *GUI_PopupWindow_Init(int w, int h) {
 
 
 
-    printf("x: %d %p\n", rect_pop->x, &rect_pop->x);
+    printf("x: %d %p\n", *test->x, test->x);
 
     pp4m_HOOK_Next(head, background);
     pp4m_HOOK_Next(head, rect_bg);
     pp4m_HOOK_Next(head, popupWindow);
-    pp4m_HOOK_Next(head, rect_pop);
+    pp4m_HOOK_Next(head, test);
 
     return (head);
 }
@@ -186,6 +198,7 @@ int GUI_PopupWindow_CoreTest(PP4M_HOOK *head, SDL_Texture *background) {
 
     SDL_Texture *texture = NULL;
     SDL_Rect *rect = NULL;
+    PP4M_HOOK_RECT *test = NULL;
 
     SDL_Event event;
     int result = 0;
@@ -208,9 +221,9 @@ int GUI_PopupWindow_CoreTest(PP4M_HOOK *head, SDL_Texture *background) {
 
         texture = current->ptr;
         current = current->next;
-        rect = current->ptr;
+        test = current->ptr;
 
-        printf("x: %d %p\n", *(int*)&rect->x, &rect->x);
+        printf("x: %d %p\n", *test->x, test->x);
         SDL_RenderCopy(glo_render, texture, NULL, rect);
 
         SDL_RenderPresent(glo_render);

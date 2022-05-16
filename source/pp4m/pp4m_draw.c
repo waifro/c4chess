@@ -164,13 +164,22 @@ SDL_Texture *pp4m_DRAW_TextureInitColor_Target(SDL_Renderer *renderer, SDL_Color
 
     SDL_SetRenderTarget(renderer, texture);
 
+    int a = 0;
+    if (rect != NULL) {
+        memcpy(&rect->x, &a, sizeof(int));
+        memcpy(&rect->y, &a, sizeof(int));
+        memcpy(&rect->w, &w, sizeof(int));
+        memcpy(&rect->h, &h, sizeof(int));
+    }
+
+    /*
     if (rect != NULL) {
         rect->x = 0;
         rect->y = 0;
         rect->w = (int)w;
         rect->h = (int)h;
     }
-
+    */
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 
     if (rect != NULL)
@@ -181,8 +190,8 @@ SDL_Texture *pp4m_DRAW_TextureInitColor_Target(SDL_Renderer *renderer, SDL_Color
     SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
 
     if (rect != NULL) {
-        rect->x = (int)x;
-        rect->y = (int)y;
+        memcpy(&rect->x, &x, sizeof(int));
+        memcpy(&rect->y, &y, sizeof(int));
     }
 
     SDL_SetRenderTarget(renderer, NULL);

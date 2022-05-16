@@ -47,10 +47,10 @@ typedef struct _pp4m_link_t {
 } PP4M_HOOK;
 
 typedef struct {
-    int x;
-    int y;
-    int w;
-    int h;
+    int *x;
+    int *y;
+    int *w;
+    int *h;
 } PP4M_HOOK_RECT;
 
 SDL_Renderer *pp4m_Init(SDL_Window *window, char *title, int width, int height, PP4M_WINDOW_SIZE size);
