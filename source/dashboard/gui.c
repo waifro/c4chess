@@ -138,55 +138,22 @@ PP4M_HOOK *GUI_PopupWindow_Init(int w, int h) {
 
     // popup window
     SDL_Rect *rect_pop = malloc(sizeof(SDL_Rect));
-    SDL_Texture *popupWindow = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_DARK, 255, NULL, x, y, w, h);
+    SDL_Texture *popupWindow = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_DARK, 255, rect_pop, x, y, w, h);
 
     PP4M_HOOK *head = pp4m_HOOK_Init();
 
-    PP4M_HOOK_RECT *test = malloc(sizeof(PP4M_HOOK_RECT));
+    //PP4M_HOOK_RECT *test = malloc(sizeof(PP4M_HOOK_RECT));
 
-    test->x = (int*)malloc(sizeof(int));
-    test->y = (int*)malloc(sizeof(int));
-    test->w = (int*)malloc(sizeof(int));
-    test->h = (int*)malloc(sizeof(int));
-    memcpy(test->x, &x, sizeof(int));
-    memcpy(test->y, &y, sizeof(int));
-    memcpy(test->w, &w, sizeof(int));
-    memcpy(test->h, &h, sizeof(int));
+    rect_pop->x = x;
+    rect_pop->y = y;
+    rect_pop->w = w;
+    rect_pop->h = h;
 
-    /*
-    memcpy(test->x, &x, sizeof(int));
-    memcpy(test->y, &y, sizeof(int));
-    memcpy(test->w, &w, sizeof(int));
-    memcpy(test->h, &h, sizeof(int));
-    */
-    /*
-    memcpy(&rect_pop->x, &x, sizeof(int));
-    memcpy(&rect_pop->y, &y, sizeof(int));
-    memcpy(&rect_pop->w, &w, sizeof(int));
-    memcpy(&rect_pop->h, &h, sizeof(int));
-
-
-    rect_hookpop->x = (int)malloc(sizeof(int));
-    rect_hookpop->y = (int)malloc(sizeof(int));
-    rect_hookpop->w = (int)malloc(sizeof(int));
-    rect_hookpop->h = (int)malloc(sizeof(int));
-    */
-
-    /*
-    rect_hookpop->x = x;
-    rect_hookpop->y = y;
-    rect_hookpop->w = w;
-    rect_hookpop->h = h;
-    */
-
-
-
-    printf("x: %d %p\n", *test->x, test->x);
 
     pp4m_HOOK_Next(head, background);
     pp4m_HOOK_Next(head, rect_bg);
     pp4m_HOOK_Next(head, popupWindow);
-    pp4m_HOOK_Next(head, test);
+    pp4m_HOOK_Next(head, rect_pop);
 
     return (head);
 }
@@ -219,11 +186,18 @@ int GUI_PopupWindow_CoreTest(PP4M_HOOK *head, SDL_Texture *background) {
 
         SDL_RenderCopy(glo_render, texture, NULL, rect);
 
+        current = current->next;
         texture = current->ptr;
         current = current->next;
-        test = current->ptr;
+        rect = current->ptr;
 
-        printf("x: %d %p\n", *test->x, test->x);
+        /*
+        rect->x = *test->x;
+        rect->y = *test->y;
+        rect->w = *test->w;
+        rect->h = *test->h;
+        */
+
         SDL_RenderCopy(glo_render, texture, NULL, rect);
 
         SDL_RenderPresent(glo_render);
