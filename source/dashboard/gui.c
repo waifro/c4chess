@@ -136,14 +136,14 @@ PP4M_HOOK *GUI_PopupWindow_Init(int w, int h) {
     SDL_Texture *background = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_BLACK, 150, NULL, 0, 0, glo_screen_w, glo_screen_h);
 
     // popup window
-    SDL_Rect rect;
-    SDL_Texture *popupWindow = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_DARK, 255, &rect, x, y, w, h);
+    SDL_Rect *rect = malloc(sizeof(SDL_Rect));
+    SDL_Texture *popupWindow = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_DARK, 255, rect, x, y, w, h);
 
     PP4M_HOOK *head = pp4m_HOOK_Init();
 
     pp4m_HOOK_Next(head, background);
     pp4m_HOOK_Next(head, popupWindow);
-    pp4m_HOOK_Next(head, &rect);
+    pp4m_HOOK_Next(head, rect);
 
     return (head);
 }
@@ -153,7 +153,8 @@ int GUI_PopupWindow_CoreTest(PP4M_HOOK *head, SDL_Texture *background) {
     PP4M_HOOK *current = head;
     int val = pp4m_HOOK_Size(head);
 
-    SDL_Texture *texture = NULL; SDL_Rect *rect = NULL;
+    SDL_Texture *texture = NULL;
+    SDL_Rect *rect = NULL;
 
     SDL_Event event;
     int result = 0;
@@ -168,15 +169,15 @@ int GUI_PopupWindow_CoreTest(PP4M_HOOK *head, SDL_Texture *background) {
         SDL_RenderClear(glo_render);
         SDL_RenderCopy(glo_render, background, NULL, NULL);
 
+        // texture polarized
         texture = current->ptr;
         current = current->next;
-
         SDL_RenderCopy(glo_render, texture, NULL, NULL);
 
+        // popupWindow
         texture = current->ptr;
         current = current->next;
         rect = current->ptr;
-
         SDL_RenderCopy(glo_render, texture, NULL, rect);
 
         SDL_RenderPresent(glo_render);
