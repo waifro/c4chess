@@ -178,7 +178,7 @@ int GUI_PopupWindow_CoreTest(PP4M_HOOK *head, SDL_Texture *background) {
             current = current->next; n++;
             SDL_RenderCopy(glo_render, texture, NULL, rect);
         }
-        
+
         SDL_RenderPresent(glo_render);
     }
 
