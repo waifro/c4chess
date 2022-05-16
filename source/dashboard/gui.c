@@ -171,27 +171,14 @@ int GUI_PopupWindow_CoreTest(PP4M_HOOK *head, SDL_Texture *background) {
         SDL_RenderClear(glo_render);
         SDL_RenderCopy(glo_render, background, NULL, NULL);
 
-        texture = current->ptr;
-        current = current->next;
-        rect = current->ptr;
-
-        printf("rect %p\n", rect);
-        SDL_RenderCopy(glo_render, texture, NULL, rect);
-
-        current = current->next;
-        texture = current->ptr;
-        current = current->next;
-        rect = current->ptr;
-
-        /*
-        rect->x = *test->x;
-        rect->y = *test->y;
-        rect->w = *test->w;
-        rect->h = *test->h;
-        */
-        printf("rect %p\n", rect);
-        SDL_RenderCopy(glo_render, texture, NULL, rect);
-
+        for (int n = 0; n <= val; n++) {
+            texture = current->ptr;
+            current = current->next;
+            rect = current->ptr;
+            current = current->next; n++;
+            SDL_RenderCopy(glo_render, texture, NULL, rect);
+        }
+        
         SDL_RenderPresent(glo_render);
     }
 
