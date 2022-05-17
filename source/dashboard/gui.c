@@ -164,7 +164,7 @@ int GUI_PopupWindow_CoreTest(PP4M_HOOK *head, SDL_Texture *background) {
     while(result == 0) {
 
         SDL_PollEvent(&event);
-        if (event.type == SDL_QUIT) result = -1;
+        if (event.type == SDL_QUIT) result = -2;
 
         current = head;
 

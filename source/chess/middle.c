@@ -111,7 +111,7 @@ void MIDDLE_UnsafePosition_Copy(CHESS_CORE_TILE *src, CHESS_CORE_TILE *dst) {
     return;
 }
 
-int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player) {
+int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player) {
 
     int result = -1;
     static int position_old = -1;
@@ -123,10 +123,10 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player) {
     // select choosen piece from mem
     if (touch_pos.iner != -1 && position_old == -1) {
         result = MIDDLE_TouchToTile(touch_pos);
-        if (result != -1 && glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player == player) {
+        if (result != -1 && glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player == *player) {
 
             position_old = result;
-            CHESS_PiecePattern_RangeAllowed(glo_chess_core_tile, result, player);
+            CHESS_PiecePattern_RangeAllowed(glo_chess_core_tile, result, *player);
         }
     }
 
@@ -150,7 +150,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player) {
 
                 DOT_StateGlobalDotReset();
                 position_old = result;
-                CHESS_PiecePattern_RangeAllowed(glo_chess_core_tile, result, player);
+                CHESS_PiecePattern_RangeAllowed(glo_chess_core_tile, result, *player);
 
             } else if ((glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[position_old].piece->player != glo_chess_core_tile[result].piece->player) || glo_chess_core_tile[result].piece == NULL) {
 
@@ -160,6 +160,11 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER player) {
             }
 
         }
+    }
+
+    if (result == -2) {
+        *player = CORE_ReversePlayer_State(*player);
+        printf("CORE_Testing:\n  player_turn = %d\n", *player);
     }
 
     return (result);

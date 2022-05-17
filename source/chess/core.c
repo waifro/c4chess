@@ -192,38 +192,26 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     // texture (tmp fix to make snapshot)
     bool ttr_state = false;
     SDL_Texture *ttr_snapshot = SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, glo_screen_w, glo_screen_h);
-    while(1) {
 
+    int running = 0;
+    while(running == 0) {
         if (ttr_state == true) {
 
             SDL_SetRenderTarget(glo_render, NULL);
 
             PP4M_HOOK *hook_list = GUI_PopupWindow_Init(440, 180);
-            GUI_PopupWindow_CoreTest(hook_list, ttr_snapshot);
+            if (GUI_PopupWindow_CoreTest(hook_list, ttr_snapshot) == -2) running = -1;
 
             ttr_state = false; hook_list = NULL;
         }
 
         /* (wip) trigger on pressure of key */
         while(SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) break;
+            if (event.type == SDL_QUIT) running = -1;
             if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 
                 ttr_state = true;
                 SDL_SetRenderTarget(glo_render, ttr_snapshot);
-
-                /*
-                // this hook can be deleted by rendering directly into another texture
-                // (less pain for the CPU & more free memory)
-                PP4M_HOOK *list_hook = pp4m_HOOK_Init();
-
-                pp4m_HOOK_Next(list_hook, background->texture);
-
-                for (int n = 0; n < 64; n++)
-                    pp4m_HOOK_Next(list_hook, &glo_chess_core_tile[n]);
-
-                GUI_PopupWindow_Core(list_hook, 420, 270, 440, 180);
-                */
             }
         }
 
@@ -231,14 +219,9 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
         CHESS_PiecePattern_UpdateState(glo_chess_core_tile, player);
 
         /* makes the in-game changes during gameplay */
-        if (MIDDLE_UpdateChangeState(&event, player) == -2)
-        {
-            player = CORE_ReversePlayer_State(player);
-            printf("CORE_Testing:\n  player_turn = %d\n", player);
-        }
+        MIDDLE_UpdateChangeState(&event, &player);
 
         SDL_RenderClear(glo_render);
-
         SDL_RenderCopy(glo_render, background, NULL, NULL);
 
         /* renders everything chessboard releated */
