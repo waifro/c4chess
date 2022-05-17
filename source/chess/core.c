@@ -201,8 +201,8 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
             PP4M_HOOK *hook_list = GUI_PopupWindow_Init(440, 180);
 
-            GUI_PopupWindow_Button(hook_list, OPENSANS_REGULAR, "Continua", PP4M_WHITE, PP4M_GREY_NORMAL, 24, 15, 15, 410, 70);
-            GUI_PopupWindow_Button(hook_list, OPENSANS_REGULAR, "Esci dal gioco", PP4M_WHITE, PP4M_GREY_NORMAL, 24, 15, 95, 410, 70);
+            GUI_PopupWindow_Button(hook_list, OPENSANS_REGULAR, -1, "Continua", PP4M_WHITE, PP4M_GREY_NORMAL, 24, 15, 15, 410, 70);
+            GUI_PopupWindow_Button(hook_list, OPENSANS_REGULAR, -2, "Esci dal gioco", PP4M_WHITE, PP4M_GREY_NORMAL, 24, 15, 95, 410, 70);
 
             if (GUI_PopupWindow_CoreTest(hook_list, ttr_snapshot) == -2) running = -1;
 

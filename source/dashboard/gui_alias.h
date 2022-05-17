@@ -6,7 +6,7 @@
 /* structures & variables */
 
 typedef struct {
-    int z, j;  // z & j are only for arithmetic calc.
+    int obj;
     SDL_Rect rect;
     SDL_Texture *texture;
 } GUI_TextureAlias;

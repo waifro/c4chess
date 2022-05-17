@@ -127,7 +127,7 @@ int GUI_PopupWindow_Button(PP4M_HOOK *head, char *path, char *title, SDL_Color c
 }
 */
 
-int GUI_PopupWindow_Button(PP4M_HOOK *head, char *path, char *title, SDL_Color color_text, SDL_Color color_button, int point, int x_pp, int y_pp, int w, int h) {
+int GUI_PopupWindow_Button(PP4M_HOOK *head, char *path, int FLAG_OBJ, char *title, SDL_Color color_text, SDL_Color color_button, int point, int x_pp, int y_pp, int w, int h) {
     if (head == NULL) return (-1);
 
     SDL_Rect *rect_pw = head->next->next->next->ptr;
@@ -137,11 +137,13 @@ int GUI_PopupWindow_Button(PP4M_HOOK *head, char *path, char *title, SDL_Color c
 
     /* initializing variables */
     // _btx is button
-    SDL_Rect *rect_btx = malloc(sizeof(SDL_Rect));
-    SDL_Texture *texture_btx = NULL;
-    texture_btx = pp4m_DRAW_TextureInitColor_Target(glo_render, color_button, 255, rect_btx, x, y, w, h);
 
-    SDL_SetRenderTarget(glo_render, texture_btx);
+    GUI_TextureAlias *txr_alias = malloc(sizeof(GUI_TextureAlias));
+    txr_alias->obj = FLAG_OBJ;
+
+    txr_alias->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, color_button, 255, &txr_alias->rect, x, y, w, h);
+
+    SDL_SetRenderTarget(glo_render, txr_alias->texture);
 
     // _fnt is font
     SDL_Rect rect_fnt;
@@ -162,9 +164,7 @@ int GUI_PopupWindow_Button(PP4M_HOOK *head, char *path, char *title, SDL_Color c
     SDL_DestroyTexture(texture_fnt);
     texture_fnt = NULL;
 
-    pp4m_HOOK_Next(head, texture_btx);
-    pp4m_HOOK_Next(head, rect_btx);
-
+    pp4m_HOOK_Next(head, txr_alias);
     return (0);
 }
 
@@ -196,8 +196,9 @@ int GUI_PopupWindow_CoreTest(PP4M_HOOK *head, SDL_Texture *background) {
     PP4M_HOOK *current = head;
     int val = pp4m_HOOK_Size(head);
 
-    SDL_Texture *texture = NULL;
-    SDL_Rect *rect = NULL;
+    GUI_TextureAlias    *txr_alias = NULL;
+    SDL_Texture         *texture = NULL;
+    SDL_Rect            *rect = NULL;
 
     SDL_Event event;
     int result = 0;
@@ -213,11 +214,19 @@ int GUI_PopupWindow_CoreTest(PP4M_HOOK *head, SDL_Texture *background) {
         SDL_RenderCopy(glo_render, background, NULL, NULL);
 
         for (int n = 0; n <= val; n++) {
-            texture = current->ptr;
-            current = current->next;
-            rect = current->ptr;
-            current = current->next; n++;
-            SDL_RenderCopy(glo_render, texture, NULL, rect);
+            if (n < 4) {
+                texture = current->ptr;
+                current = current->next;
+                rect = current->ptr;
+                current = current->next; n++;
+                SDL_RenderCopy(glo_render, texture, NULL, rect);
+                continue;
+            }
+
+           txr_alias = current->ptr;
+           current = current->next;
+           SDL_RenderCopy(glo_render, txr_alias->texture, NULL, &txr_alias->rect);
+
         }
 
         SDL_RenderPresent(glo_render);
