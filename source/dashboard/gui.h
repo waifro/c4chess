@@ -22,6 +22,7 @@ PP4M_HOOK *GUI_PopupWindow_Init(int w, int h);
 int GUI_PopupWindow_CoreTest(PP4M_HOOK *head, SDL_Texture *background);
 /*
 int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h);
-void GUI_Testing(void);
 */
+void GUI_Testing(void);
+
 #endif

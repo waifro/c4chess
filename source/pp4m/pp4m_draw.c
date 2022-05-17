@@ -18,7 +18,7 @@ SDL_Rect pp4m_DRAW_InitRect(int x, int y, int w, int h) {
 SDL_Texture *pp4m_DRAW_CreateTexture(SDL_Renderer *renderer, int width, int height) {
 
     SDL_Texture *texture;
-    texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, width, height);
+    texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
     SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 
     return texture;
@@ -30,18 +30,19 @@ void pp4m_DRAW_SetRenderColor(SDL_Renderer *renderer, SDL_Color *color) {
     return;
 }
 
-void pp4m_DRAW_TextureDrawLine(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Color color, PP4M_PointToPoint *ptp, int x, int y, int x2, int y2) {
-
+int pp4m_DRAW_TextureDrawLine(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Color color, PP4M_PointToPoint *ptp, int x, int y, int x2, int y2) {
+    int result = 0;
     SDL_SetRenderTarget(renderer, texture);
 
-    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+    pp4m_DRAW_SetRenderColor(renderer, &color);
 
-    if (ptp != NULL) SDL_RenderDrawLine(renderer, ptp->x, ptp->y, ptp->x2, ptp->y2);
-    else SDL_RenderDrawLine(renderer, x, y, x2, y2);
+    if (ptp != NULL) result = SDL_RenderDrawLine(renderer, ptp->x, ptp->y, ptp->x2, ptp->y2);
+    else result = SDL_RenderDrawLine(renderer, x, y, x2, y2);
 
+    pp4m_DRAW_SetRenderColor(renderer, NULL);
     SDL_SetRenderTarget(renderer, NULL);
 
-    return;
+    return (result);
 }
 
 void pp4m_DRAW_TextureDrawPoint(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Color color, int x, int y, int radius) {
@@ -118,42 +119,49 @@ void pp4m_DRAW_TextureDrawCircle(SDL_Renderer *renderer, SDL_Texture *texture, S
     return;
 }
 
-void pp4m_DRAW_TextureDrawCircle_Filled(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Color color, int circle_center_x, int circle_center_y, int radius) {
+int pp4m_DRAW_TextureDrawCircle_Filled(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Color color, int x, int y, int radius) {
+    int offsetx, offsety, d;
+    int status;
 
-    int x = (radius - 1);
-    int y = 0;
-
-    int tx = 1; int ty = 1;
-
-    int diameter = (radius * 2);
-    int error = (tx - diameter);
+    offsetx = 0;
+    offsety = radius;
+    d = radius -1;
+    status = 0;
 
     SDL_SetRenderTarget(renderer, texture);
+    pp4m_DRAW_SetRenderColor(renderer, &color);
 
-    while (x >= y) {
+    while (offsety >= offsetx) {
 
-        pp4m_DRAW_TextureDrawLine(renderer, texture, color, NULL, circle_center_x - x, circle_center_y - y, circle_center_x + x, circle_center_y - y);
-        pp4m_DRAW_TextureDrawLine(renderer, texture, color, NULL, circle_center_x - y, circle_center_y + x, circle_center_x + y, circle_center_y + x);
-        pp4m_DRAW_TextureDrawLine(renderer, texture, color, NULL, circle_center_x - y, circle_center_y - x, circle_center_x + y, circle_center_y - x);
-        pp4m_DRAW_TextureDrawLine(renderer, texture, color, NULL, circle_center_x - x, circle_center_y + y, circle_center_x + x, circle_center_y + y);
+        status += SDL_RenderDrawLine(renderer, x - offsety, y + offsetx, x + offsety, y + offsetx);
+        status += SDL_RenderDrawLine(renderer, x - offsetx, y + offsety, x + offsetx, y + offsety);
+        status += SDL_RenderDrawLine(renderer, x - offsetx, y - offsety, x + offsetx, y - offsety);
+        status += SDL_RenderDrawLine(renderer, x - offsety, y - offsetx, x + offsety, y - offsetx);
 
-        if (error <= 0) {
-            ++y;
-            error += ty;
-            ty += 2;
+        if (status < 0) {
+            status = -1;
+            break;
         }
 
-        if (error > 0) {
-            --x;
-            tx += 2;
-            error += (tx - diameter);
+        if (d >= 2*offsetx) {
+            d -= 2*offsetx + 1;
+            offsetx +=1;
+        }
+        else if (d < 2 * (radius - offsety)) {
+            d += 2 * offsety - 1;
+            offsety -= 1;
+        }
+        else {
+            d += 2 * (offsety - offsetx - 1);
+            offsety -= 1;
+            offsetx += 1;
         }
     }
 
     SDL_SetRenderTarget(renderer, NULL);
-    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
+    pp4m_DRAW_SetRenderColor(renderer, NULL);
 
-    return;
+    return status;
 }
 
 SDL_Texture *pp4m_DRAW_TextureInitColor_Target(SDL_Renderer *renderer, SDL_Color color, int alpha, SDL_Rect *rect, float x, float y, float w, float h) {

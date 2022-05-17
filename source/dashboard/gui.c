@@ -328,17 +328,57 @@ int GUI_PopupWindow_Core(PP4M_HOOK *list_hook, int x, int y, int w, int h) {
     return 0;
 }
 
-
+*/
 void GUI_Testing(void) {
 
-    SDL_Texture *texture = SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 100, 100);
-    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
-    SDL_SetTextureAlphaMod(texture, 100);
+    SDL_Texture *roundpw_txr = SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, glo_screen_w, glo_screen_h);
 
-    SDL_Rect rect = { (glo_screen_w/2-50), (glo_screen_h/2-50), 100, 100};
+    SDL_Rect draw_rect = { 0, 0, 100, 100};
 
-    //pp4m_DRAW_TextureDrawCircle_Filled(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Color color, int circle_center_x, int circle_center_y, int radius)
-    pp4m_DRAW_TextureDrawCircle_Filled(glo_render, texture, PP4M_RED, (rect.w / 2), (rect.h / 2), 50);
+    SDL_Texture *draw_txr = SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 100, 100);
+
+    pp4m_DRAW_TextureDrawCircle_Filled(glo_render, draw_txr, PP4M_WHITE, draw_rect.w / 2, draw_rect.h / 2, 50);
+
+    SDL_SetRenderTarget(glo_render, roundpw_txr);
+
+    SDL_RenderCopy(glo_render, draw_txr, NULL, &draw_rect);
+    draw_rect.x = 0;
+    draw_rect.y = 400;
+    SDL_RenderCopy(glo_render, draw_txr, NULL, &draw_rect);
+    draw_rect.x = 550;
+    draw_rect.y = 0;
+    SDL_RenderCopy(glo_render, draw_txr, NULL, &draw_rect);
+    draw_rect.x = 550;
+    draw_rect.y = 400;
+    SDL_RenderCopy(glo_render, draw_txr, NULL, &draw_rect);
+
+    //SDL_SetRenderTarget(glo_render, draw_txr);
+    //SDL_RenderClear(glo_render);
+
+    pp4m_DRAW_SetRenderColor(glo_render, &PP4M_WHITE);
+
+    draw_rect.x = 0;
+    draw_rect.y = 50;
+    draw_rect.w = 651;
+    draw_rect.h = 400;
+
+    SDL_RenderFillRect(glo_render, &draw_rect);
+
+    draw_rect.x = 50;
+    draw_rect.y = 0;
+    draw_rect.w = 550;
+    draw_rect.h = 501;
+
+    SDL_RenderFillRect(glo_render, &draw_rect);
+
+    SDL_SetRenderTarget(glo_render, NULL);
+    pp4m_DRAW_SetRenderColor(glo_render, NULL);
+
+    // moving the texture a bit away from the screen
+    draw_rect.x = 50;
+    draw_rect.y = 50;
+    draw_rect.w = 1280;
+    draw_rect.h = 720;
 
     SDL_Event event;
     while(1) {
@@ -346,11 +386,10 @@ void GUI_Testing(void) {
         if (event.type == SDL_QUIT) break;
 
         SDL_RenderClear(glo_render);
-        SDL_RenderCopy(glo_render, texture, NULL, &rect);
+        SDL_RenderCopy(glo_render, roundpw_txr, NULL, &draw_rect);
         SDL_RenderPresent(glo_render);
 
     }
 
     return;
 }
-*/
