@@ -179,7 +179,7 @@ PP4M_HOOK *GUI_PopupWindow_Init(int w, int h) {
 
     // popup window
     SDL_Rect *rect_pw = malloc(sizeof(SDL_Rect));
-    SDL_Texture *popupWindow = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_NORMAL, 255, rect_pw, x, y, w, h);
+    SDL_Texture *popupWindow = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_HEAVY, 255, rect_pw, x, y, w, h);
 
     PP4M_HOOK *head = pp4m_HOOK_Init();
 
