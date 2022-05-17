@@ -243,7 +243,7 @@ int GUI_PopupWindow_CoreTest(PP4M_HOOK *head, SDL_Texture *background) {
 
             if (input.x >= txr_alias->rect.x && input.x <= (txr_alias->rect.x + txr_alias->rect.w) &&
                 input.y >= txr_alias->rect.y && input.y <= (txr_alias->rect.y + txr_alias->rect.h)) {
-                SDL_SetTextureColorMod(txr_alias->texture, 150, 150, 150);
+                SDL_SetTextureColorMod(txr_alias->texture, 220, 220, 220);
             }
 
             SDL_RenderCopy(glo_render, txr_alias->texture, NULL, &txr_alias->rect);
