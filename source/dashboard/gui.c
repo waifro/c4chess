@@ -6,6 +6,7 @@
 #include "../pp4m/pp4m.h"
 #include "../pp4m/pp4m_ttf.h"
 #include "../pp4m/pp4m_draw.h"
+#include "../pp4m/pp4m_input.h"
 
 #include "../global.h"
 #include "gui.h"
@@ -199,14 +200,19 @@ int GUI_PopupWindow_CoreTest(PP4M_HOOK *head, SDL_Texture *background) {
     GUI_TextureAlias    *txr_alias = NULL;
     SDL_Texture         *texture = NULL;
     SDL_Rect            *rect = NULL;
+    SDL_Color color_btn_bak;
 
     SDL_Event event;
     int result = 0;
+
+    PP4M_INPUT_POS input;
 
     while(result == 0) {
 
         SDL_PollEvent(&event);
         if (event.type == SDL_QUIT) result = -2;
+
+        pp4m_INPUT_GetMouseState(&event, &input);
 
         current = head;
 
@@ -223,10 +229,25 @@ int GUI_PopupWindow_CoreTest(PP4M_HOOK *head, SDL_Texture *background) {
                 continue;
             }
 
-           txr_alias = current->ptr;
-           current = current->next;
-           SDL_RenderCopy(glo_render, txr_alias->texture, NULL, &txr_alias->rect);
+            txr_alias = current->ptr;
+            current = current->next;
+            SDL_GetTextureColorMod(txr_alias->texture, &color_btn_bak.r, &color_btn_bak.g, &color_btn_bak.b);
 
+            if (input.iner == 1) {
+                if (input.x >= txr_alias->rect.x && input.x <= (txr_alias->rect.x + txr_alias->rect.w) &&
+                    input.y >= txr_alias->rect.y && input.y <= (txr_alias->rect.y + txr_alias->rect.h)) {
+                    if (txr_alias->obj == 1) result = -1;
+                    else if (txr_alias->obj == 2) result = -2;
+                }
+            }
+
+            if (input.x >= txr_alias->rect.x && input.x <= (txr_alias->rect.x + txr_alias->rect.w) &&
+                input.y >= txr_alias->rect.y && input.y <= (txr_alias->rect.y + txr_alias->rect.h)) {
+                SDL_SetTextureColorMod(txr_alias->texture, 150, 150, 150);
+            }
+
+            SDL_RenderCopy(glo_render, txr_alias->texture, NULL, &txr_alias->rect);
+            SDL_SetTextureColorMod(txr_alias->texture, color_btn_bak.r, color_btn_bak.g, color_btn_bak.b);
         }
 
         SDL_RenderPresent(glo_render);

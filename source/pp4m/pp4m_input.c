@@ -57,10 +57,17 @@ void pp4m_INPUT_GetMouseState(SDL_Event *event, PP4M_INPUT_POS *foo) {
     foo->iner = -1;
 
     SDL_GetMouseState(&foo->x, &foo->y);
-    if (event->type == SDL_MOUSEBUTTONDOWN)
-        foo->iner = 1;
+
+    if (foo->iner == 0 && event->type == SDL_MOUSEBUTTONDOWN)
+        foo->iner = 0;
+
+    else if (foo->iner == 1 && event->type == SDL_MOUSEBUTTONDOWN)
+        foo->iner = 0;
 
     else if (event->type == SDL_MOUSEBUTTONDOWN)
+        foo->iner = 1;
+
+    else
         foo->iner = -1;
 
     return;
