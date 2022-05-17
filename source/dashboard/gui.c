@@ -367,7 +367,7 @@ void GUI_Testing(void) {
     draw_rect.x = 50;
     draw_rect.y = 0;
     draw_rect.w = 550;
-    draw_rect.h = 501;
+    draw_rect.h = 501; // might be the cause of radius -1?
 
     SDL_RenderFillRect(glo_render, &draw_rect);
 
