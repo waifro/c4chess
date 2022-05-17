@@ -127,6 +127,47 @@ int GUI_PopupWindow_Button(PP4M_HOOK *head, char *path, char *title, SDL_Color c
 }
 */
 
+int GUI_PopupWindow_Button(PP4M_HOOK *head, char *path, char *title, SDL_Color color_text, SDL_Color color_button, int point, int x_pp, int y_pp, int w, int h) {
+    if (head == NULL) return (-1);
+
+    SDL_Rect *rect_pw = head->next->next->next->ptr;
+
+    int x = rect_pw->x + x_pp;
+    int y = rect_pw->y + y_pp;
+
+    /* initializing variables */
+    // _btx is button
+    SDL_Rect *rect_btx = malloc(sizeof(SDL_Rect));
+    SDL_Texture *texture_btx = NULL;
+    texture_btx = pp4m_DRAW_TextureInitColor_Target(glo_render, color_button, 255, rect_btx, x, y, w, h);
+
+    SDL_SetRenderTarget(glo_render, texture_btx);
+
+    // _fnt is font
+    SDL_Rect rect_fnt;
+    SDL_Texture *texture_fnt = NULL;
+    texture_fnt = pp4m_TTF_TextureFont(glo_render, path, color_text, point, &rect_fnt, 0, 0, title);
+
+    int w_text = 0;
+    int h_text = 0;
+    SDL_QueryTexture(texture_fnt, NULL, NULL, &w_text, &h_text);
+
+    rect_fnt.x = (w / 2) - (w_text / 2);
+    rect_fnt.y = (h / 2) - (h_text / 2);
+
+    SDL_RenderCopy(glo_render, texture_fnt, NULL, &rect_fnt);
+
+    SDL_SetRenderTarget(glo_render, NULL);
+
+    SDL_DestroyTexture(texture_fnt);
+    texture_fnt = NULL;
+
+    pp4m_HOOK_Next(head, texture_btx);
+    pp4m_HOOK_Next(head, rect_btx);
+
+    return (0);
+}
+
 PP4M_HOOK *GUI_PopupWindow_Init(int w, int h) {
 
     int x = (glo_screen_w / 2) - (w / 2);
@@ -138,7 +179,7 @@ PP4M_HOOK *GUI_PopupWindow_Init(int w, int h) {
 
     // popup window
     SDL_Rect *rect_pw = malloc(sizeof(SDL_Rect));
-    SDL_Texture *popupWindow = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_DARK, 255, rect_pw, x, y, w, h);
+    SDL_Texture *popupWindow = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_NORMAL, 255, rect_pw, x, y, w, h);
 
     PP4M_HOOK *head = pp4m_HOOK_Init();
 
