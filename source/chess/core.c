@@ -191,7 +191,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     SDL_Event event;
 
     // texture (tmp fix to make snapshot)
-    SDL_Texture *txr_snapshot = SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, glo_screen_w, glo_screen_h);
+    SDL_Texture *txr_snapshot = NULL; //SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, glo_screen_w, glo_screen_h);
 
     int running = 0;
     while(running == 0) {
@@ -202,13 +202,28 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
 
                 txr_snapshot = GUI_Alias_CreateSnapshot(glo_render, glo_screen_w, glo_screen_h);
 
-                PP4M_HOOK *hook_list = GUI_PopupWindow_Init(440, 180);
+                while (1) {
 
-                GUI_PopupWindow_Button(hook_list, OPENSANS_REGULAR, 1, "Continua", PP4M_WHITE, PP4M_GREY_NORMAL, 24, 15, 15, 410, 70);
-                GUI_PopupWindow_Button(hook_list, OPENSANS_REGULAR, 2, "Esci dal gioco", PP4M_WHITE, PP4M_GREY_NORMAL, 24, 15, 95, 410, 70);
+                    if (running == -1) break;
 
-                if (GUI_PopupWindow_CoreTest(hook_list, txr_snapshot) == -2) running = -1;
+                    PP4M_HOOK *hook_list_pw = GUI_PopupWindow_Init(440, 180);
 
+                    GUI_PopupWindow_Button(hook_list_pw, OPENSANS_REGULAR, -1, "Continua", PP4M_WHITE, PP4M_GREY_NORMAL, 24, 15, 15, 410, 70);
+                    GUI_PopupWindow_Button(hook_list_pw, OPENSANS_REGULAR, -2, "Esci dal gioco", PP4M_WHITE, PP4M_GREY_NORMAL, 24, 15, 95, 410, 70);
+
+                    if (GUI_PopupWindow_Core(hook_list_pw, txr_snapshot) == -1) break;
+
+                    SDL_Texture *txr_snapshot2 = GUI_Alias_CreateSnapshot(glo_render, glo_screen_w, glo_screen_h);
+                    PP4M_HOOK *hook_list_pw_exit = GUI_PopupWindow_Init(440, 180);
+
+                    GUI_PopupWindow_Button(hook_list_pw_exit, OPENSANS_REGULAR, -1, "Annulla", PP4M_WHITE, PP4M_GREY_NORMAL, 24, 15, 15, 410, 70);
+                    GUI_PopupWindow_Button(hook_list_pw_exit, OPENSANS_REGULAR, -2, "Okay", PP4M_WHITE, PP4M_GREY_NORMAL, 24, 15, 95, 410, 70);
+
+                    if (GUI_PopupWindow_Core(hook_list_pw_exit, txr_snapshot2) == -2) running = -1;
+
+                    hook_list_pw_exit = NULL;
+
+                }
             }
         }
 

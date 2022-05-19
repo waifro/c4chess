@@ -119,8 +119,8 @@ int GUI_PopupWindow_Core(PP4M_HOOK *head, SDL_Texture *background) {
             if (input.iner == 1) {
                 if (input.x >= txr_alias->rect.x && input.x <= (txr_alias->rect.x + txr_alias->rect.w) &&
                     input.y >= txr_alias->rect.y && input.y <= (txr_alias->rect.y + txr_alias->rect.h)) {
-                    if (txr_alias->obj == 1) result = -1;
-                    else if (txr_alias->obj == 2) result = -2;
+                    if (txr_alias->obj == -1) result = -1;
+                    else if (txr_alias->obj == -2) result = -2;
                 }
             }
 
@@ -137,8 +137,8 @@ int GUI_PopupWindow_Core(PP4M_HOOK *head, SDL_Texture *background) {
     }
 
     // missing exiting animation
-    for (int n = 0; n <= val; n++)
-        pp4m_HOOK_Remove(head);
+    //for (int n = 0; n <= val; n++)
+        //pp4m_HOOK_Remove(head);
 
     return (result);
 }
