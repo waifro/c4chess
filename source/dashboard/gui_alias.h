@@ -13,6 +13,6 @@ typedef struct {
 
 
 /* prototypes */
-//GUI_TextureAlias *GUI_TextureAlias_InitRect(int x, int y, int w, int h, GUI_TextureFlagAlias flag);
+SDL_Texture *GUI_Alias_CreateSnapshot(SDL_Renderer *renderer, int width, int height);
 
 #endif

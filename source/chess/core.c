@@ -10,6 +10,7 @@
 #include "../pp4m/pp4m_input.h"
 
 #include "../dashboard/gui.h"
+#include "../dashboard/gui_alias.h"
 #include "../global.h"
 #include "event.h"
 #include "chess.h"
@@ -190,32 +191,24 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     SDL_Event event;
 
     // texture (tmp fix to make snapshot)
-    bool ttr_state = false;
-    SDL_Texture *ttr_snapshot = SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, glo_screen_w, glo_screen_h);
+    SDL_Texture *txr_snapshot = SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, glo_screen_w, glo_screen_h);
 
     int running = 0;
     while(running == 0) {
-        if (ttr_state == true) {
 
-            SDL_SetRenderTarget(glo_render, NULL);
-
-            PP4M_HOOK *hook_list = GUI_PopupWindow_Init(440, 180);
-
-            GUI_PopupWindow_Button(hook_list, OPENSANS_REGULAR, 1, "Continua", PP4M_WHITE, PP4M_GREY_NORMAL, 24, 15, 15, 410, 70);
-            GUI_PopupWindow_Button(hook_list, OPENSANS_REGULAR, 2, "Esci dal gioco", PP4M_WHITE, PP4M_GREY_NORMAL, 24, 15, 95, 410, 70);
-
-            if (GUI_PopupWindow_CoreTest(hook_list, ttr_snapshot) == -2) running = -1;
-
-            ttr_state = false; hook_list = NULL;
-        }
-
-        /* (wip) trigger on pressure of key */
         while(SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) running = -1;
             if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 
-                ttr_state = true;
-                SDL_SetRenderTarget(glo_render, ttr_snapshot);
+                txr_snapshot = GUI_Alias_CreateSnapshot(glo_render, glo_screen_w, glo_screen_h);
+
+                PP4M_HOOK *hook_list = GUI_PopupWindow_Init(440, 180);
+
+                GUI_PopupWindow_Button(hook_list, OPENSANS_REGULAR, 1, "Continua", PP4M_WHITE, PP4M_GREY_NORMAL, 24, 15, 15, 410, 70);
+                GUI_PopupWindow_Button(hook_list, OPENSANS_REGULAR, 2, "Esci dal gioco", PP4M_WHITE, PP4M_GREY_NORMAL, 24, 15, 95, 410, 70);
+
+                if (GUI_PopupWindow_CoreTest(hook_list, txr_snapshot) == -2) running = -1;
+
             }
         }
 
