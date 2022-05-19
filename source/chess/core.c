@@ -191,7 +191,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     SDL_Event event;
 
     // texture (tmp fix to make snapshot)
-    SDL_Texture *txr_snapshot = NULL; //SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, glo_screen_w, glo_screen_h);
+    SDL_Texture *txr_snapshot = NULL;
 
     int running = 0;
     while(running == 0) {
