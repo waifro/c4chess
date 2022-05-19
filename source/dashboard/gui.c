@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <SDL2/SDL.h>
 
@@ -10,11 +11,25 @@
 
 #include "../global.h"
 #include "gui.h"
-
-int GUI_PopupWindow_Button(PP4M_HOOK *head, char *path, int FLAG_OBJ, char *title, SDL_Color color_text, SDL_Color color_button, int point, int x_pp, int y_pp, int w, int h) {
-    if (head == NULL) return (-1);
+/*
+int GUI_PopupWindow_Title(PP4M_HOOK *head, char *path, char *title, SDL_Color color, int point) {
 
     SDL_Rect *rect_pw = head->next->next->next->ptr;
+    int x = rect_pw->w / 2;
+    int y = rect_pw->h;
+
+    SDL_Rect rect;
+    SDL_Texture *texture = NULL;
+
+    pp4m_HOOK_Next(head, texture);
+    pp4m_HOOK_Next(head, &rect);
+    return (0);
+}
+*/
+int GUI_PopupWindow_Button(PP4M_HOOK *head, char *path, int FLAG_OBJ, char *title, SDL_Color color_text, int point, SDL_Color color_button, int x_pp, int y_pp, int w, int h) {
+    if (head == NULL) return (-1);
+
+    SDL_Rect *rect_pw = head->next->ptr;
 
     int x = rect_pw->x + x_pp;
     int y = rect_pw->y + y_pp;
@@ -58,19 +73,19 @@ PP4M_HOOK *GUI_PopupWindow_Init(int w, int h) {
     int y = (glo_screen_h / 2) - (h / 2);
 
     // background cloudy/blurred/polarized
-    SDL_Rect *rect_bg = malloc(sizeof(SDL_Rect));
-    SDL_Texture *background = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_BLACK, 150, rect_bg, 0, 0, glo_screen_w, glo_screen_h);
+    GUI_TextureAlias *background = malloc(sizeof(GUI_TextureAlias));
+    background->obj = 0;
+    background->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_BLACK, 150, &background->rect, 0, 0, glo_screen_w, glo_screen_h);
 
     // popup window
-    SDL_Rect *rect_pw = malloc(sizeof(SDL_Rect));
-    SDL_Texture *popupWindow = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_HEAVY, 255, rect_pw, x, y, w, h);
+    GUI_TextureAlias *popupWindow = malloc(sizeof(GUI_TextureAlias));
+    popupWindow->obj = 0;
+    popupWindow->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_HEAVY, 255, &popupWindow->rect, x, y, w, h);
 
     PP4M_HOOK *head = pp4m_HOOK_Init();
 
     pp4m_HOOK_Next(head, background);
-    pp4m_HOOK_Next(head, rect_bg);
     pp4m_HOOK_Next(head, popupWindow);
-    pp4m_HOOK_Next(head, rect_pw);
 
     return (head);
 }
@@ -80,9 +95,7 @@ int GUI_PopupWindow_Core(PP4M_HOOK *head, SDL_Texture *background) {
     PP4M_HOOK *current = head;
     int val = pp4m_HOOK_Size(head);
 
-    GUI_TextureAlias    *txr_alias = NULL;
-    SDL_Texture         *texture = NULL;
-    SDL_Rect            *rect = NULL;
+    GUI_TextureAlias *txr_alias = NULL;
     SDL_Color color_btn_bak;
 
     SDL_Event event;
@@ -93,7 +106,7 @@ int GUI_PopupWindow_Core(PP4M_HOOK *head, SDL_Texture *background) {
     while(result == 0) {
 
         SDL_PollEvent(&event);
-        if (event.type == SDL_QUIT) result = -2;
+        if (event.type == SDL_QUIT) result = -3;
 
         pp4m_INPUT_GetMouseState(&event, &input);
 
@@ -103,12 +116,10 @@ int GUI_PopupWindow_Core(PP4M_HOOK *head, SDL_Texture *background) {
         SDL_RenderCopy(glo_render, background, NULL, NULL);
 
         for (int n = 0; n <= val; n++) {
-            if (n < 4) {
-                texture = current->ptr;
+            if (n < 2) {
+                txr_alias = current->ptr;
                 current = current->next;
-                rect = current->ptr;
-                current = current->next; n++;
-                SDL_RenderCopy(glo_render, texture, NULL, rect);
+                SDL_RenderCopy(glo_render, txr_alias->texture, NULL, &txr_alias->rect);
                 continue;
             }
 
@@ -137,8 +148,8 @@ int GUI_PopupWindow_Core(PP4M_HOOK *head, SDL_Texture *background) {
     }
 
     // missing exiting animation
-    //for (int n = 0; n <= val; n++)
-        //pp4m_HOOK_Remove(head);
+    for (int n = 0; n <= val; n++)
+        pp4m_HOOK_Remove(head);
 
     return (result);
 }
