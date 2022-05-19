@@ -14,17 +14,17 @@
 	//Standard Version Type
 	#define MAJOR  0
 	#define MINOR  0
-	#define BUILD  18
-	#define REVISION  89
+	#define BUILD  19
+	#define REVISION  99
 	
 	//Miscellaneous Version Types
-	#define BUILDS_COUNT  19
-	#define RC_FILEVERSION 0,0,18,89
-	#define RC_FILEVERSION_STRING "0, 0, 18, 89\0"
-	#define FULLVERSION_STRING  "0.0.18.89"
+	#define BUILDS_COUNT  20
+	#define RC_FILEVERSION 0,0,19,99
+	#define RC_FILEVERSION_STRING "0, 0, 19, 99\0"
+	#define FULLVERSION_STRING  "0.0.19.99"
 	
 	//These values are to keep track of your versioning state, don't modify them.
-	#define BUILD_HISTORY  18
+	#define BUILD_HISTORY  19
 	
 
 #endif //VERSION_H
