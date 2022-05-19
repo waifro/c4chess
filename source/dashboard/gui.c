@@ -11,21 +11,21 @@
 
 #include "../global.h"
 #include "gui.h"
-/*
+
 int GUI_PopupWindow_Title(PP4M_HOOK *head, char *path, char *title, SDL_Color color, int point) {
 
-    SDL_Rect *rect_pw = head->next->next->next->ptr;
-    int x = rect_pw->w / 2;
-    int y = rect_pw->h;
+    GUI_TextureAlias *rect_pw = head->next->ptr;
+    int x = rect_pw->rect.w / 2;
+    int y = rect_pw->rect.h;
 
-    SDL_Rect rect;
-    SDL_Texture *texture = NULL;
+    GUI_TextureAlias *txr_alias = calloc(1, sizeof(GUI_TextureAlias));
+    txr_alias->obj = 0;
+    txr_alias->texture = pp4m_TTF_TextureFont(glo_render, path, color, point, &txr_alias->rect, x, y, title);
 
-    pp4m_HOOK_Next(head, texture);
-    pp4m_HOOK_Next(head, &rect);
+    pp4m_HOOK_Next(head, txr_alias);
     return (0);
 }
-*/
+
 int GUI_PopupWindow_Button(PP4M_HOOK *head, char *path, int FLAG_OBJ, char *title, SDL_Color color_text, int point, SDL_Color color_button, int x_pp, int y_pp, int w, int h) {
     if (head == NULL) return (-1);
 
@@ -116,26 +116,20 @@ int GUI_PopupWindow_Core(PP4M_HOOK *head, SDL_Texture *background) {
         SDL_RenderCopy(glo_render, background, NULL, NULL);
 
         for (int n = 0; n <= val; n++) {
-            if (n < 2) {
-                txr_alias = current->ptr;
-                current = current->next;
-                SDL_RenderCopy(glo_render, txr_alias->texture, NULL, &txr_alias->rect);
-                continue;
-            }
 
             txr_alias = current->ptr;
             current = current->next;
             SDL_GetTextureColorMod(txr_alias->texture, &color_btn_bak.r, &color_btn_bak.g, &color_btn_bak.b);
 
             if (input.iner == 1) {
-                if (input.x >= txr_alias->rect.x && input.x <= (txr_alias->rect.x + txr_alias->rect.w) &&
+                if (txr_alias->obj != 0 && input.x >= txr_alias->rect.x && input.x <= (txr_alias->rect.x + txr_alias->rect.w) &&
                     input.y >= txr_alias->rect.y && input.y <= (txr_alias->rect.y + txr_alias->rect.h)) {
                     if (txr_alias->obj == -1) result = -1;
                     else if (txr_alias->obj == -2) result = -2;
                 }
             }
 
-            if (input.x >= txr_alias->rect.x && input.x <= (txr_alias->rect.x + txr_alias->rect.w) &&
+            if (txr_alias->obj != 0 && input.x >= txr_alias->rect.x && input.x <= (txr_alias->rect.x + txr_alias->rect.w) &&
                 input.y >= txr_alias->rect.y && input.y <= (txr_alias->rect.y + txr_alias->rect.h)) {
                 SDL_SetTextureColorMod(txr_alias->texture, 220, 220, 220);
             }
