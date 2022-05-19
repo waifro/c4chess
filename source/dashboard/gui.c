@@ -29,10 +29,10 @@ int GUI_PopupWindow_Title(PP4M_HOOK *head, char *path, char *title, SDL_Color co
 int GUI_PopupWindow_Button(PP4M_HOOK *head, char *path, int FLAG_OBJ, char *title, SDL_Color color_text, int point, SDL_Color color_button, int x_pp, int y_pp, int w, int h) {
     if (head == NULL) return (-1);
 
-    SDL_Rect *rect_pw = head->next->ptr;
+    GUI_TextureAlias *rect_pw = head->next->ptr;
 
-    int x = rect_pw->x + x_pp;
-    int y = rect_pw->y + y_pp;
+    int x = rect_pw->rect.x + x_pp;
+    int y = rect_pw->rect.y + y_pp;
 
     /* initializing variables */
     // _btx is button
@@ -73,12 +73,12 @@ PP4M_HOOK *GUI_PopupWindow_Init(int w, int h) {
     int y = (glo_screen_h / 2) - (h / 2);
 
     // background cloudy/blurred/polarized
-    GUI_TextureAlias *background = malloc(sizeof(GUI_TextureAlias));
+    GUI_TextureAlias *background = calloc(1, sizeof(GUI_TextureAlias));
     background->obj = 0;
     background->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_BLACK, 150, &background->rect, 0, 0, glo_screen_w, glo_screen_h);
 
     // popup window
-    GUI_TextureAlias *popupWindow = malloc(sizeof(GUI_TextureAlias));
+    GUI_TextureAlias *popupWindow = calloc(1, sizeof(GUI_TextureAlias));
     popupWindow->obj = 0;
     popupWindow->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_HEAVY, 255, &popupWindow->rect, x, y, w, h);
 
