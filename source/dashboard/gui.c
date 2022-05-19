@@ -15,12 +15,14 @@
 int GUI_PopupWindow_Title(PP4M_HOOK *head, char *path, char *title, SDL_Color color, int point) {
 
     GUI_TextureAlias *rect_pw = head->next->ptr;
-    int x = rect_pw->rect.w / 2;
-    int y = rect_pw->rect.h;
+    int x = rect_pw->rect.x + rect_pw->rect.w / 2;
+    int y = rect_pw->rect.y + 20;
 
     GUI_TextureAlias *txr_alias = calloc(1, sizeof(GUI_TextureAlias));
     txr_alias->obj = 0;
     txr_alias->texture = pp4m_TTF_TextureFont(glo_render, path, color, point, &txr_alias->rect, x, y, title);
+
+    txr_alias->rect.x = x - txr_alias->rect.w / 2;
 
     pp4m_HOOK_Next(head, txr_alias);
     return (0);

@@ -220,6 +220,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
                     SDL_Texture *txr_snapshot2 = GUI_Alias_CreateSnapshot(glo_render, glo_screen_w, glo_screen_h);
                     PP4M_HOOK *hook_list_pw_exit = GUI_PopupWindow_Init(400, 165);
 
+                    GUI_PopupWindow_Title(hook_list_pw_exit, OPENSANS_REGULAR, "Sei sicuro?", PP4M_WHITE, 32);
                     GUI_PopupWindow_Button(hook_list_pw_exit, OPENSANS_REGULAR, -1, "Annulla", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 10, 85, 185, 70);
                     GUI_PopupWindow_Button(hook_list_pw_exit, OPENSANS_REGULAR, -2, "Okay", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 205, 85, 185, 70);
 
