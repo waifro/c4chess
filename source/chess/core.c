@@ -162,6 +162,17 @@ void CORE_Chessboard_Reverse(CHESS_CORE_TILE *core_tile) {
     return;
 }
 
+void CORE_GlobalUpdate_StateRender(void) {
+
+    for (int n = 0; n < 64; n++) {
+        SDL_RenderCopy(glo_render, glo_chess_core_tile[n].texture, NULL, &glo_chess_core_tile[n].rect);
+        if (glo_chess_core_tile[n].piece != NULL) SDL_RenderCopy(glo_render, glo_chess_core_tile[n].piece->texture, NULL, &glo_chess_core_tile[n].rect);
+        DOT_StateGlobalDot(n);
+    }
+
+    return;
+}
+
 void CORE_Testing(CHESS_CORE_PLAYER player) {
 
     /* preserve player */
@@ -242,12 +253,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
         SDL_RenderCopy(glo_render, background, NULL, NULL);
 
         /* renders everything chessboard releated */
-        for (int n = 0; n < 64; n++) {
-            SDL_RenderCopy(glo_render, glo_chess_core_tile[n].texture, NULL, &glo_chess_core_tile[n].rect);
-            if (glo_chess_core_tile[n].piece != NULL) SDL_RenderCopy(glo_render, glo_chess_core_tile[n].piece->texture, NULL, &glo_chess_core_tile[n].rect);
-
-            DOT_StateGlobalDot(n);
-        }
+        CORE_GlobalUpdate_StateRender();
 
         SDL_RenderPresent(glo_render);
     }
