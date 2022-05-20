@@ -67,6 +67,20 @@ void pp4m_GetDateAndTime(char *dst) {
     return;
 }
 
+clock_t pp4m_LimitFramerate(clock_t framepersec) {
+
+    clock_t current = 0, delta = 0;
+    static clock_t last = clock();
+
+    while (delta < framepersec) {
+        current = clock();
+        delta += current - last;
+        last = current;
+    }
+
+    return delta;
+}
+
 int pp4m_SecondsTick(void) {
 
     static int result = 0;

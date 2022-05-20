@@ -57,7 +57,7 @@ SDL_Renderer *pp4m_Init(SDL_Window *window, char *title, int width, int height, 
 void pp4m_Quit(SDL_Window *window, SDL_Renderer *renderer);
 
 void pp4m_GetDateAndTime(char *dst);
-
+clock_t pp4m_LimitFramerate(clock_t framepersec);
 int pp4m_SecondsTick(void) ;
 int pp4m_Framerate(void);
 
