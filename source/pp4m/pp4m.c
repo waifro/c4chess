@@ -1,6 +1,7 @@
 /* Private Project Four Me */
 
 #include <time.h>
+#include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
 #include <SDL2/SDL.h>
@@ -70,12 +71,13 @@ void pp4m_GetDateAndTime(char *dst) {
 clock_t pp4m_LimitFramerate(clock_t framepersec) {
 
     clock_t current = 0, delta = 0;
-    static clock_t last = clock();
+    clock_t *last = malloc(sizeof(clock_t));
+    *last = clock();
 
     while (delta < framepersec) {
         current = clock();
-        delta += current - last;
-        last = current;
+        delta += current - *last;
+        *last = current;
     }
 
     return delta;

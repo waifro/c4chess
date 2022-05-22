@@ -3,6 +3,8 @@
 #ifndef _PP4M_H
 #define _PP4M_H
 
+#include <time.h>
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
