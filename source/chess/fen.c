@@ -104,40 +104,40 @@ int FEN_InitPiece(CHESS_CORE_PLAYER player, CHESS_CORE_PIECE *piece, CHESS_CORE_
     switch(name)
     {
         case KING:
-            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WKING, &piece->rect, 0, 0, 50, 50);
+            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WKING, &piece->rect, glo_chess_core_piece[tile].rect.x, glo_chess_core_piece[tile].rect.y, 50, 50);
         break;
         case BKING:
-            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKING, &piece->rect, 0, 0, 50, 50);
+            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKING, &piece->rect, glo_chess_core_piece[tile].rect.x, glo_chess_core_piece[tile].rect.y, 50, 50);
         break;
         case PAWN:
-            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WPAWN, &piece->rect, 0, 0, 50, 50);
+            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WPAWN, &piece->rect, glo_chess_core_piece[tile].rect.x, glo_chess_core_piece[tile].rect.y, 50, 50);
         break;
         case BPAWN:
-            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BPAWN, &piece->rect, 0, 0, 50, 50);
+            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BPAWN, &piece->rect, glo_chess_core_piece[tile].rect.x, glo_chess_core_piece[tile].rect.y, 50, 50);
         break;
         case KNIGHT:
-            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WKNIGHT, &piece->rect, 0, 0, 50, 50);
+            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WKNIGHT, &piece->rect, glo_chess_core_piece[tile].rect.x, glo_chess_core_piece[tile].rect.y, 50, 50);
         break;
         case BKNIGHT:
-            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKNIGHT, &piece->rect, 0, 0, 50, 50);
+            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BKNIGHT, &piece->rect, glo_chess_core_piece[tile].rect.x, glo_chess_core_piece[tile].rect.y, 50, 50);
         break;
         case BISHOP:
-            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WBISHOP, &piece->rect, 0, 0, 50, 50);
+            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WBISHOP, &piece->rect, glo_chess_core_piece[tile].rect.x, glo_chess_core_piece[tile].rect.y, 50, 50);
         break;
         case BBISHOP:
-            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BBISHOP, &piece->rect, 0, 0, 50, 50);
+            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BBISHOP, &piece->rect, glo_chess_core_piece[tile].rect.x, glo_chess_core_piece[tile].rect.y, 50, 50);
         break;
         case ROOK:
-            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WROOK, &piece->rect, 0, 0, 50, 50);
+            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WROOK, &piece->rect, glo_chess_core_piece[tile].rect.x, glo_chess_core_piece[tile].rect.y, 50, 50);
         break;
         case BROOK:
-            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BROOK, &piece->rect, 0, 0, 50, 50);
+            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BROOK, &piece->rect, glo_chess_core_piece[tile].rect.x, glo_chess_core_piece[tile].rect.y, 50, 50);
         break;
         case QUEEN:
-            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WQUEEN, &piece->rect, 0, 0, 50, 50);
+            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_WQUEEN, &piece->rect, glo_chess_core_piece[tile].rect.x, glo_chess_core_piece[tile].rect.y, 50, 50);
         break;
         case BQUEEN:
-            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BQUEEN, &piece->rect, 0, 0, 50, 50);
+            piece->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEX_BQUEEN, &piece->rect, glo_chess_core_piece[tile].rect.x, glo_chess_core_piece[tile].rect.y, 50, 50);
         break;
 
         default:
