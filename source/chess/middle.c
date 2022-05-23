@@ -119,7 +119,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, float 
     PP4M_INPUT_POS touch_pos;
     touch_pos = pp4m_INPUT_MouseState(event);
 
-    bool _wait_finish_animation = false;
+    static bool _wait_finish_animation = false;
 
     // select choosen piece from mem
     if (_wait_finish_animation == false) {
@@ -149,7 +149,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, float 
                     DOT_StateGlobalDotReset();
                     result = -2;
 
-                    //_wait_finish_animation = true;
+                    _wait_finish_animation = true;
 
                 } else if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[position_old].piece->player == glo_chess_core_tile[result].piece->player) {
 
@@ -167,21 +167,18 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, float 
         }
     }
 
-    if (result == -2) {
+    else if (_wait_finish_animation == true) {
 
-        if (_wait_finish_animation == false) {
+        printf("running... \n");
+
+        if (ANIM_UpdateRect(deltaTime, 50, &glo_chess_core_tile[position_new].piece->rect, glo_chess_core_tile[position_new].rect) == 0) {
+            _wait_finish_animation = false;
+            position_new = -1; position_old = -1;
             *player = CORE_ReversePlayer_State(*player);
             printf("CORE_Testing:\n  player_turn = %d\n", *player);
-        } else {
-
-            printf("%d, %d\n", glo_chess_core_tile[position_new].piece->rect.x, glo_chess_core_tile[position_new].piece->rect.y);
-
-            if (ANIM_UpdateRect(deltaTime, 50, &glo_chess_core_tile[position_new].piece->rect, glo_chess_core_tile[position_new].rect) == 0) {
-                _wait_finish_animation = false;
-                position_new = -1; position_old = -1;
-            }
         }
     }
+
 
     return (result);
 }
