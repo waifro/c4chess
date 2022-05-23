@@ -169,7 +169,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, float 
 
     else if (_wait_finish_animation == true) {
 
-        if (ANIM_UpdateRect(deltaTime, 500, 8, &glo_chess_core_tile[position_new].piece->rect, glo_chess_core_tile[position_new].rect) == 0) {
+        if (ANIM_UpdateRect(deltaTime, 500, 100, &glo_chess_core_tile[position_new].piece->rect, glo_chess_core_tile[position_new].rect) == 0) {
             _wait_finish_animation = false;
             position_new = -1; position_old = -1;
             *player = CORE_ReversePlayer_State(*player);
