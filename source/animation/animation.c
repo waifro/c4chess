@@ -6,12 +6,13 @@
 
 int ANIM_UpdateRect(float deltaTime, int quantity, SDL_Rect *src, SDL_Rect dest) {
 
-    printf("x %d, y %d\n", src->x, src->y);
+    if (src->x != dest.x || src->y != dest.y) {
 
-    if (src->x != dest.x && src->y != dest.y) {
+        if (src->x < dest.x) src->x += quantity * (int)deltaTime / CLOCKS_PER_SEC;
+        if (src->x > dest.x) src->x -= quantity * (int)deltaTime / CLOCKS_PER_SEC;
+        if (src->y < dest.y) src->y += quantity * (int)deltaTime / CLOCKS_PER_SEC;
+        if (src->y > dest.y) src->y -= quantity * (int)deltaTime / CLOCKS_PER_SEC;
 
-        src->x += quantity * deltaTime / CLOCKS_PER_SEC;
-        src->y += quantity * deltaTime / CLOCKS_PER_SEC;
         return -1;
 
     }

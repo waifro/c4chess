@@ -82,7 +82,7 @@ void MIDDLE_UpdatePositionPiece(CHESS_CORE_TILE *chess_tile, int old, int new) {
     if (chess_tile[new].piece != NULL) CORE_GlobalDestroyPiece(chess_tile[new].piece);
 
     chess_tile[new].piece = chess_tile[old].piece;
-    chess_tile[new].piece->rect = chess_tile[new].rect;
+    //chess_tile[new].piece->rect = chess_tile[new].rect;
     chess_tile[old].piece = NULL;
 
     return;
@@ -169,9 +169,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, float 
 
     else if (_wait_finish_animation == true) {
 
-        printf("running... \n");
-
-        if (ANIM_UpdateRect(deltaTime, 50, &glo_chess_core_tile[position_new].piece->rect, glo_chess_core_tile[position_new].rect) == 0) {
+        if (ANIM_UpdateRect(deltaTime, 500, &glo_chess_core_tile[position_new].piece->rect, glo_chess_core_tile[position_new].rect) == 0) {
             _wait_finish_animation = false;
             position_new = -1; position_old = -1;
             *player = CORE_ReversePlayer_State(*player);
