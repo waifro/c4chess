@@ -20,6 +20,6 @@ void MIDDLE_Unsafe_UpdatePositionPiece(CHESS_CORE_TILE *chess_tile, int old, int
 
 void MIDDLE_UnsafePosition_Copy(CHESS_CORE_TILE *src, CHESS_CORE_TILE *dst);
 
-int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player);
+int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, float deltaTime);
 
 #endif

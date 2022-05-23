@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 
 #include "../pp4m/pp4m_input.h"
+#include "../animation/animation.h"
 #include "../global.h"
 #include "event.h"
 #include "chess.h"
@@ -95,10 +96,8 @@ void MIDDLE_Unsafe_UpdatePositionPiece(CHESS_CORE_TILE *chess_tile, int old, int
 
     printf("MIDDLE_Unsafe_UpdatePositionPiece:\n  chess_tile[old] = %p, %c%d\n  chess_tile[new] = %p, %c%d\n", chess_tile[old].piece, chess_tile[old].tag.col, chess_tile[old].tag.row, chess_tile[new].piece, chess_tile[new].tag.col, chess_tile[new].tag.row);
 
-    //if (chess_tile[new].piece != NULL) CORE_GlobalDestroyPiece(chess_tile[new].piece);
-
     chess_tile[new].piece = chess_tile[old].piece;
-    //chess_tile[new].piece->rect = chess_tile[new].rect;
+    chess_tile[new].piece->rect = chess_tile[old].rect;
     chess_tile[old].piece = NULL;
 
     return;
@@ -111,7 +110,7 @@ void MIDDLE_UnsafePosition_Copy(CHESS_CORE_TILE *src, CHESS_CORE_TILE *dst) {
     return;
 }
 
-int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player) {
+int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, float deltaTime) {
 
     int result = -1;
     static int position_old = -1;
@@ -120,51 +119,68 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player) {
     PP4M_INPUT_POS touch_pos;
     touch_pos = pp4m_INPUT_MouseState(event);
 
+    bool _wait_finish_animation = false;
+
     // select choosen piece from mem
-    if (touch_pos.iner != -1 && position_old == -1) {
-        result = MIDDLE_TouchToTile(touch_pos);
-        if (result != -1 && glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player == *player) {
+    if (_wait_finish_animation == false) {
 
-            position_old = result;
-            CHESS_PiecePattern_RangeAllowed(glo_chess_core_tile, result, *player);
-        }
-    }
+            if (touch_pos.iner != -1 && position_old == -1) {
+            result = MIDDLE_TouchToTile(touch_pos);
+            if (result != -1 && glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player == *player) {
 
-    // deselect choosen piece from mem
-    else if (touch_pos.iner != -1 && position_old != -1) {
-        result = MIDDLE_TouchToTile(touch_pos);
-
-        if (result != -1) {
-
-            if (glo_chess_dot[result].state == true) {
-
-                // if is a valid move, start changing piece state
-                position_new = result;
-
-                MIDDLE_UpdatePositionPiece(glo_chess_core_tile, position_old, position_new);
-                DOT_StateGlobalDotReset();
-                position_new = -1; position_old = -1; result = -2;
-
-
-            } else if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[position_old].piece->player == glo_chess_core_tile[result].piece->player) {
-
-                DOT_StateGlobalDotReset();
                 position_old = result;
                 CHESS_PiecePattern_RangeAllowed(glo_chess_core_tile, result, *player);
-
-            } else if ((glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[position_old].piece->player != glo_chess_core_tile[result].piece->player) || glo_chess_core_tile[result].piece == NULL) {
-
-                DOT_StateGlobalDotReset();
-                position_old = -1;
-
             }
+        }
 
+        // deselect choosen piece from mem
+        else if (touch_pos.iner != -1 && position_old != -1) {
+            result = MIDDLE_TouchToTile(touch_pos);
+
+            if (result != -1) {
+
+                if (glo_chess_dot[result].state == true) {
+
+                    // if is a valid move, start changing piece state
+                    position_new = result;
+
+                    MIDDLE_UpdatePositionPiece(glo_chess_core_tile, position_old, position_new);
+
+                    DOT_StateGlobalDotReset();
+                    result = -2;
+
+                    //_wait_finish_animation = true;
+
+                } else if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[position_old].piece->player == glo_chess_core_tile[result].piece->player) {
+
+                    DOT_StateGlobalDotReset();
+                    position_old = result;
+                    CHESS_PiecePattern_RangeAllowed(glo_chess_core_tile, result, *player);
+
+                } else if ((glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[position_old].piece->player != glo_chess_core_tile[result].piece->player) || glo_chess_core_tile[result].piece == NULL) {
+
+                    DOT_StateGlobalDotReset();
+                    position_old = -1;
+
+                }
+            }
         }
     }
 
     if (result == -2) {
-        *player = CORE_ReversePlayer_State(*player);
-        printf("CORE_Testing:\n  player_turn = %d\n", *player);
+
+        if (_wait_finish_animation == false) {
+            *player = CORE_ReversePlayer_State(*player);
+            printf("CORE_Testing:\n  player_turn = %d\n", *player);
+        } else {
+
+            printf("%d, %d\n", glo_chess_core_tile[position_new].piece->rect.x, glo_chess_core_tile[position_new].piece->rect.y);
+
+            if (ANIM_UpdateRect(deltaTime, 50, &glo_chess_core_tile[position_new].piece->rect, glo_chess_core_tile[position_new].rect) == 0) {
+                _wait_finish_animation = false;
+                position_new = -1; position_old = -1;
+            }
+        }
     }
 
     return (result);

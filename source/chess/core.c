@@ -167,7 +167,7 @@ void CORE_GlobalUpdate_StateRender(void) {
 
     for (int n = 0; n < 64; n++) {
         SDL_RenderCopy(glo_render, glo_chess_core_tile[n].texture, NULL, &glo_chess_core_tile[n].rect);
-        if (glo_chess_core_tile[n].piece != NULL) SDL_RenderCopy(glo_render, glo_chess_core_tile[n].piece->texture, NULL, &glo_chess_core_tile[n].rect);
+        if (glo_chess_core_tile[n].piece != NULL) SDL_RenderCopy(glo_render, glo_chess_core_tile[n].piece->texture, NULL, &glo_chess_core_tile[n].piece->rect);
         DOT_StateGlobalDot(n);
     }
 
@@ -208,7 +208,10 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     int running = 0;
 
     // testing: cap framerate to 30/60 fps
+    float deltaTime = pp4m_DeltaFramerate();
+
     while(running == 0) {
+        deltaTime = pp4m_DeltaFramerate();
 
         while(SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) running = -1;
@@ -250,7 +253,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
         CHESS_PiecePattern_UpdateState(glo_chess_core_tile, player);
 
         /* makes the in-game changes during gameplay */
-        MIDDLE_UpdateChangeState(&event, &player);
+        MIDDLE_UpdateChangeState(&event, &player, deltaTime);
 
         SDL_RenderClear(glo_render);
         SDL_RenderCopy(glo_render, background, NULL, NULL);
