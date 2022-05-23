@@ -83,6 +83,18 @@ clock_t pp4m_LimitFramerate(clock_t framepersec) {
     return delta;
 }
 
+clock_t pp4m_DeltaFramerate(void) {
+
+    clock_t current = 0, delta = 0;
+    static clock_t last = 0; // = clock();
+
+    current = clock();
+    delta = current - last;
+    last = current;
+
+    return delta;
+}
+
 int pp4m_SecondsTick(void) {
 
     static int result = 0;
