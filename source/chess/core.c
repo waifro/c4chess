@@ -253,7 +253,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
         CHESS_PiecePattern_UpdateState(glo_chess_core_tile, player);
 
         /* makes the in-game changes during gameplay */
-        MIDDLE_UpdateChangeState(&event, &player, deltaTime);
+        MIDDLE_UpdateChangeState(&event, &player);
 
         SDL_RenderClear(glo_render);
         SDL_RenderCopy(glo_render, background, NULL, NULL);

@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 
-int ANIM_UpdateRect(float deltaTime, int quantity, float time, SDL_Rect *src, SDL_Rect dest) {
+int ANIM_UpdateRect(float deltaTime, int quantity, SDL_Rect *src, SDL_Rect dest) {
 
     /*
     if (src->x != dest.x || src->y != dest.y) {
@@ -30,8 +30,8 @@ int ANIM_UpdateRect(float deltaTime, int quantity, float time, SDL_Rect *src, SD
 
         src_bak = *src;
 
-        if (src_bak.x != dest.x) delta_time_x = (src_bak.x > dest.x ? src_bak.x - dest.x : src_bak.x + dest.x) / time;
-        if (src_bak.y != dest.y) delta_time_y = (src_bak.y > dest.y ? src_bak.y - dest.y : src_bak.y + dest.y) / time;
+        if (src_bak.x != dest.x) delta_time_x = (src_bak.x > dest.x ? src_bak.x - dest.x : src_bak.x + dest.x) / quantity;
+        if (src_bak.y != dest.y) delta_time_y = (src_bak.y > dest.y ? src_bak.y - dest.y : src_bak.y + dest.y) / quantity;
 
         printf("delta_x %f, delta_y %f, deltaTime %f\n", delta_time_x, delta_time_y, deltaTime);
 
@@ -56,8 +56,8 @@ int ANIM_UpdateRect(float deltaTime, int quantity, float time, SDL_Rect *src, SD
         }
         */
 
-        x1 += delta_time_x / (deltaTime / time); // / CLOCKS_PER_SEC;
-        y1 += delta_time_y / (deltaTime / time); // / CLOCKS_PER_SEC;
+        x1 += delta_time_x / (deltaTime / quantity); // / CLOCKS_PER_SEC;
+        y1 += delta_time_y / (deltaTime / quantity); // / CLOCKS_PER_SEC;
 
 
         printf("%d %f %d %f: %d\n", (int)x1, x1, (int)y1, y1, n);
@@ -70,7 +70,7 @@ int ANIM_UpdateRect(float deltaTime, int quantity, float time, SDL_Rect *src, SD
         else if (src->y > dest.y) src->y -= (int)y1;
         if (y1 > delta_time_y) y1 = delta_time_y;
 
-        if (++n >= time) return 0;
+        if (++n >= quantity) return 0;
         return -1;
     }
 
