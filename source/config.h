@@ -5,7 +5,12 @@
 
 FILE *CFG_BootFile_Init(void);
 FILE *CFG_BootFile_LoadConfig(void);
-char *CFG_BootFile_ReadLine(FILE *fd, char *set);
-int CFG_BootFile_Config(char *buffer, char *set);
+
+int CFG_BootFile_ReadLine(FILE *fd, char *buffer);
+
+int CFG_BootFile_ReadSet(char *buffer, char *dest);
+int CFG_BootFile_ReadValue(char *buffer, char *dest);
+
+int CFG_BootFile_ConfigRule(char *set, char *value);
 
 #endif // CONFIG_H

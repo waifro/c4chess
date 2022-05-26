@@ -1,14 +1,25 @@
 #include <stdio.h>
+#include <string.h>
 
 #include "config.h"
 #include "global.h"
 
 char *_cfg_boot_set[] = {
-    "language",
+    "lang",
     "style",
-    "workdir",
     "background"
 };
+
+char *_cfg_boot_set_lang[] = {
+    "it",
+    "en"
+};
+
+char *_cfg_boot_set_style[] = {
+    "boxed",
+    "rounded"
+};
+
 
 char *_cfg_boot_msg = {
     "# # # # # # # # # # # # # # GENERAL CONFIGURATION # # # # # # # # # # # #\n"
@@ -23,7 +34,7 @@ char *_cfg_boot_msg = {
 };
 
 char *_lang_cfg_it[] = {
-    "Errore", "Attenzione", "C'è qualcosa che non va", "Riprova", "Si", "No", "Okay", "Torna nel gioco", "Esci", "Continua",
+    "Errore", "Attenzione", "C'ï¿½ qualcosa che non va", "Riprova", "Si", "No", "Okay", "Torna nel gioco", "Esci", "Continua",
     "Gioca", "Info", "Impostazioni", "Statistiche", "Prossimamente", "Sei Sicuro?", "Premi",
     "stile", "personalizza", "immetti", "sfondo immagine", "suoni", "musica", "locale", "globale", "giocatori",
     "lobby trovate", "indirizzo Ip", "per uscire", "per entrare", "in chat"
@@ -52,10 +63,15 @@ FILE *CFG_BootFile_LoadConfig(void) {
     FILE *fd = fopen(CONFIG_BOOT_FILE, "r");
     if (fd == NULL) fd = CFG_BootFile_Init();
 
-    char *buffer = NULL;
+    char buffer[256];
     for (int n = 0; n < 256; n++) {
-        buffer = CFG_BootFile_ReadLine(fd, _cfg_boot_set[n]);
-        if (buffer != NULL) printf("buf\t[%s]\n", buffer);
+        if (CFG_BootFile_ReadLine(fd, buffer) < 2) continue;
+
+        char set[256]; char value[256];
+        CFG_BootFile_ReadSet(buffer, set);
+        CFG_BootFile_ReadValue(buffer, value);
+
+        CFG_BootFile_ConfigRule(set, value);
     }
 
     return (fd);
@@ -63,61 +79,68 @@ FILE *CFG_BootFile_LoadConfig(void) {
 
 
 // reads the set and changes behavior on value
-char *CFG_BootFile_ReadLine(FILE *fd, char *set) {
-
-    static char buffer[256];
+int CFG_BootFile_ReadLine(FILE *fd, char *buffer) {
 
     int let;
     for (int i = 0; i < 255; i++) {
         let = fgetc(fd);
 
+        if (let == EOF) {
+            buffer[i] = '\0';
+            break;
+        }
+
+        if (let == '\n') {
+            buffer[i] = '\0';
+            break;
+        }
+
         if (let == '#') {
             buffer[i] = '\0';
             while(1) {
-                let = fgetc(fd);
-                if (let == '\n') break;
-            } break;
-        }
+                if (fgetc(fd) == '\n') break;
+            }
 
-        if (let == EOF || let == '\n') {
-            buffer[i] = '\0';
             break;
         }
 
         buffer[i] = let;
     }
 
-    if (strlen(buffer) > 1) return (buffer);
-        else return (NULL);
+    return (strlen(buffer));
 }
 
-char *CFG_BootFile_ReadValue(char *buffer) {
+int CFG_BootFile_ReadSet(char *buffer, char *dest) {
 
-    //
+    for (int n = 0; n < (int)strlen(buffer); n++)
+        if (buffer[n] == '=') {
+            strncpy(dest, buffer, n);
+            break;
+        }
 
-    return;
+    return (0);
+}
+
+int CFG_BootFile_ReadValue(char *buffer, char *dest) {
+
+    for (int n = 0; n < (int)strlen(buffer); n++)
+        if (buffer[n] == '=') {
+            strncpy(dest, &buffer[++n], strlen(buffer));
+            break;
+        }
+
+    return (0);
 }
 
 
-int CFG_BootFile_ConfigRule(char *set) {
+int CFG_BootFile_ConfigRule(char *set, char *value) {
 
-    switch(set) {
+    printf("CFG_BootFile_ConfigRule:\n");
 
-    case _cfg_boot_set[0]:
-
-
-
-        break;
-    case _cfg_boot_set[1]:
-
-        break;
-    case _cfg_boot_set[2]:
-
-        break;
-    case _cfg_boot_set[3]:
-
-        break;
-
+    if (strncmp(set, _cfg_boot_set[0], strlen(_cfg_boot_set[1])) == 0) {
+        printf("  language set as: %s\n", value);
+    } else if (strncmp(set, _cfg_boot_set[1], strlen(_cfg_boot_set[1])) == 0) {
+        printf("  style set as: %s\n", value);
     }
 
     return (0);
