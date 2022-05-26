@@ -208,10 +208,11 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     int running = 0;
 
     // testing: cap framerate to 30/60 fps
-    float deltaTime = pp4m_DeltaFramerate();
+    float deltaTime;
 
     while(running == 0) {
         deltaTime = pp4m_DeltaFramerate();
+        (void)deltaTime;
 
         while(SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) running = -1;

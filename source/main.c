@@ -22,6 +22,8 @@ int main (int argc, char *argv[]) {
     glo_render = pp4m_Init(glo_window, title_ver, glo_screen_w, glo_screen_h, WINDOW);
     pp4m_TTF_Init();
 
+    GLOBAL_CfgBoot_LoadConfig();
+
     // start offline 2-player game (wip)
     CORE_Testing(BLACK_PLAYER);
 
