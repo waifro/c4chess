@@ -5,6 +5,7 @@
 #define SDL_MAIN_HANDLED
 
 // local libraries
+#include "config.h"
 #include "global.h"
 #include "pp4m/pp4m.h"
 #include "pp4m/pp4m_ttf.h"
@@ -22,7 +23,7 @@ int main (int argc, char *argv[]) {
     glo_render = pp4m_Init(glo_window, title_ver, glo_screen_w, glo_screen_h, WINDOW);
     pp4m_TTF_Init();
 
-    GLOBAL_CfgBoot_LoadConfig();
+    CFG_BootFile_LoadConfig();
 
     // start offline 2-player game (wip)
     CORE_Testing(BLACK_PLAYER);

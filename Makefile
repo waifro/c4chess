@@ -6,7 +6,7 @@ LIBMMAN := "-L. -lmman" -lws2_32
 # uncomment this line if you want to sanitize
 # SANITIZE := -fsanitize=address -static-libasan -Og -ggdb3
 
-SOURCE_MAIN := 			source/main.c source/global.c
+SOURCE_MAIN := 			source/main.c source/global.c source/config.c
 SOURCE_ANIMATION := 	source/animation/animation.c
 SOURCE_CHESS := 		source/chess/core.c source/chess/middle.c source/chess/chess.c source/chess/dot.c source/chess/event.c source/chess/fen.c
 SOURCE_DASHBOARD := 	source/dashboard/gui.c source/dashboard/gui_alias.c

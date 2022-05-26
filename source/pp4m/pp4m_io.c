@@ -30,7 +30,7 @@ void pp4m_IO_Feedback(char *filename, const char *text) {
         remove(filename);
         check_file = true;
     }
-    
+
     // if file didn't exist before, set state for runtime
     else if (result == false)
         check_file = true;
