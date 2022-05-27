@@ -9,7 +9,7 @@ LIBMMAN := "-L. -lmman" -lws2_32
 SOURCE_MAIN := 			source/main.c source/global.c source/config.c
 SOURCE_ANIMATION := 	source/animation/animation.c
 SOURCE_CHESS := 		source/chess/core.c source/chess/middle.c source/chess/chess.c source/chess/dot.c source/chess/event.c source/chess/fen.c
-SOURCE_DASHBOARD := 	source/dashboard/gui.c source/dashboard/gui_alias.c source/menu.c
+SOURCE_DASHBOARD := 	source/dashboard/gui.c source/dashboard/gui_alias.c source/dashboard/menu.c
 SOURCE_NETWORK	:=		source/network/net.c source/network/send.c source/network/recv.c
 SOURCE_SECURITY	:=		source/security/sec.c source/security/debug.c
 
