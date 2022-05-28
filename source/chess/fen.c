@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <ctype.h>
 #include <SDL2/SDL.h>
@@ -49,7 +51,7 @@ fullmoves:  [2]
 int FEN_Init(CHESS_CORE_PLAYER *init_player, char *fen_notation) {
 
     char fen_board[128]; // chess board pieces
-    char fen_play;       // player turn [w] or [b]
+    char fen_play[2];      // player turn [w] or [b]
     char fen_castle[4];  // [-] none | [QKq]castling available for king both ends, black king only queen
     char fen_passant[2]; // [-] none | ex. [f6] is signed for en passant
     int fen_halfmove;    // [+1] if no capture of pieces or pawn advance, else resets (draw on 100 moves)
@@ -58,11 +60,11 @@ int FEN_Init(CHESS_CORE_PLAYER *init_player, char *fen_notation) {
     printf("FEN_Init:\n");
     printf("  notation: ");
 
-    sscanf(fen_notation, "%s %c %s %s %d %d", fen_board, &fen_play, fen_castle, fen_passant, &fen_halfmove, &fen_fullmove);
+    sscanf(fen_notation, "%s %c %s %s %d %d", fen_board, fen_play, fen_castle, fen_passant, &fen_halfmove, &fen_fullmove);
 
-    printf("%s %c %s %s %d %d\n", fen_board, fen_play, fen_castle, fen_passant, fen_halfmove, fen_fullmove);
+    printf("%s %s %s %s %d %d\n", fen_board, fen_play, fen_castle, fen_passant, fen_halfmove, fen_fullmove);
     FEN_PlayerTurn((int*)init_player, fen_play);
-    
+
     FEN_InitBoard(*init_player, fen_board);
 
     return (0);
@@ -71,7 +73,9 @@ int FEN_Init(CHESS_CORE_PLAYER *init_player, char *fen_notation) {
 int FEN_PlayerTurn(int *init_player, char fen_play) {
 
     if (fen_play == 'w') *init_player = WHITE_PLAYER;
-    else *init_player = BLACK_PLAYER;
+    else if (fen_play == 'b') *init_player = BLACK_PLAYER;
+
+    printf("%c %d\n", fen_play, *init_player);
 
     return (0);
 }
