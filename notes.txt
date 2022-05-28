@@ -1,0 +1,11 @@
+en passant
+
+soluzione 1:
+quando una pedina si muove di due, attiva la casella dietro di lui,
+se la pedina attiva puo attaccare la cassella dietro di lui, abiliti il en passant.
+
+se non attacca en passant, il core resetta la casella attivata.
+se attacca, dobbiamo verificare che il pedone sia sulla casella attiva.
+se la casella e attiva, distrugge il pedone avversario.
+per distruggere il pedone, bisogna creare una funzione che semplicemente va indietro
+(oppure avanti dipendetemente dal giocat.) di 8 caselle, e distrugge il pezzo.
