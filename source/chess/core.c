@@ -203,7 +203,6 @@ void CORE_Testing(CHESS_CORE_PLAYER player_view) {
 
     SDL_Event event;
 
-    // texture (tmp fix to make snapshot)
     SDL_Texture *txr_snapshot = NULL;
 
     int running = 0;
