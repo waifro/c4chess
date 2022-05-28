@@ -61,8 +61,8 @@ int FEN_Init(CHESS_CORE_PLAYER *init_player, char *fen_notation) {
     sscanf(fen_notation, "%s %c %s %s %d %d", fen_board, &fen_play, fen_castle, fen_passant, &fen_halfmove, &fen_fullmove);
 
     printf("%s %c %s %s %d %d\n", fen_board, fen_play, fen_castle, fen_passant, fen_halfmove, fen_fullmove);
-
     FEN_PlayerTurn((int*)init_player, fen_play);
+    
     FEN_InitBoard(*init_player, fen_board);
 
     return (0);
