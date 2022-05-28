@@ -23,6 +23,7 @@
 CHESS_CORE_PLAYER glo_chess_core_player;
 CHESS_CORE_TILE glo_chess_core_tile[64];
 CHESS_CORE_PIECE glo_chess_core_piece[32];
+char glo_chess_core_castle[4];
 
 void CORE_Chessboard_Init(void) {
 
@@ -195,7 +196,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     CORE_ResetGlobal_CorePiece();
 
     /* init pieces for main player */
-    FEN_Init(glo_chess_core_player, "8/r1r5/8/8/5N2/8/3K4/8");
+    FEN_Init(glo_chess_core_player, "8/r3k3/3r4/8/5N2/8/3K4/8 w - - 0 1");
 
     SDL_Texture *background = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_DARK, 255, NULL, 0, 0, glo_screen_w, glo_screen_h);
 

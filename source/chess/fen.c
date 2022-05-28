@@ -39,14 +39,28 @@ board:      [rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R]
 player:     [b]
 castling:   [KQkq]
 passant:    [-]
-moveWhite:  [1]
-moveBlack:  [2]
+halfmoves:  [3]
+fullmoves:  [2]
 
 ( ͡° ͜ʖ ͡°)
 
 */
 
-int FEN_Init(CHESS_CORE_PLAYER init_player, char *fen_board) {
+int FEN_Init(CHESS_CORE_PLAYER init_player, char *fen_notation) {
+
+    char fen_board[64];  // chess board pieces
+    char fen_play;       // player turn [w] or [b]
+    char fen_castle[4];  // [-] none | [QKq]castling available for king both ends, black king only queen
+    char fen_passant[2]; // [-] none | ex. [f6] is signed for en passant
+    int fen_halfmove;    // [+1] if no capture of pieces or pawn advance, else resets (draw on 100 moves)
+    int fen_fullmove;    // [+1] a complete cycle by both players
+
+    FEN_InitBoard(init_player, fen_board);
+
+    return (0);
+}
+
+int FEN_InitBoard(CHESS_CORE_PLAYER init_player, char *fen_board) {
 
     // switch from one player to another
     CHESS_CORE_PLAYER player = init_player;
@@ -96,7 +110,7 @@ int FEN_Init(CHESS_CORE_PLAYER init_player, char *fen_board) {
 
     }
 
-    return 0;
+    return (0);
 }
 
 int FEN_InitPiece(CHESS_CORE_PLAYER player, CHESS_CORE_PIECE *piece, CHESS_CORE_ENUM_PIECE name, int tile) {
