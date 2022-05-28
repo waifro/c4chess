@@ -67,6 +67,6 @@ void CORE_Chessboard_Reverse(CHESS_CORE_TILE *core_tile);
 CHESS_CORE_PLAYER CORE_ReversePlayer_State(CHESS_CORE_PLAYER player);
 
 void CORE_GlobalUpdate_StateRender(void);
-void CORE_Testing(CHESS_CORE_PLAYER player);
+void CORE_Testing(CHESS_CORE_PLAYER player_view);
 
 #endif

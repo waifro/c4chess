@@ -175,10 +175,11 @@ void CORE_GlobalUpdate_StateRender(void) {
     return;
 }
 
-void CORE_Testing(CHESS_CORE_PLAYER player) {
+void CORE_Testing(CHESS_CORE_PLAYER player_view) {
 
     /* preserve player */
-    glo_chess_core_player = player;
+    CHESS_CORE_PLAYER player = player_view;
+    glo_chess_core_player = player_view;
 
     /* init chessboard gfx untagged */
     CORE_Chessboard_Init();
@@ -187,7 +188,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     CORE_ChessTag_Init(player);
 
     /* reverse chessboard if needed */
-    //CORE_Chessboard_Reverse(glo_chess_core_tile);
+    if (player_view == BLACK_PLAYER) CORE_Chessboard_Reverse(glo_chess_core_tile);
 
     /* init dot gfx */
     DOT_GlobalDot_Init();
@@ -196,7 +197,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player) {
     CORE_ResetGlobal_CorePiece();
 
     /* init pieces for main player */
-    FEN_Init(glo_chess_core_player, "8/r3k3/3r4/8/5N2/8/3K4/8 w - - 0 1");
+    FEN_Init(&player, "8/r3k3/3r4/8/5N2/8/3K4/8 w - - 0 1");
 
     SDL_Texture *background = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_DARK, 255, NULL, 0, 0, glo_screen_w, glo_screen_h);
 
