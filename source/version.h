@@ -8,8 +8,8 @@
 	#define UBUNTU_VERSION_STYLE  "22.05"
 
 	//Software Status
-	#define STATUS  ""
-	#define STATUS_SHORT  ""
+	#define STATUS  "Alpha"
+	#define STATUS_SHORT  "a"
 
 	//Standard Version Type
 	#define MAJOR  0
