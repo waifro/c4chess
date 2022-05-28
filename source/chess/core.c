@@ -201,7 +201,6 @@ void CORE_Testing(CHESS_CORE_PLAYER player_view) {
 
     SDL_Texture *background = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_DARK, 255, NULL, 0, 0, glo_screen_w, glo_screen_h);
 
-
     SDL_Event event;
 
     // texture (tmp fix to make snapshot)
