@@ -50,32 +50,63 @@ fullmoves:  [2]
 
 int FEN_Init(CHESS_CORE_PLAYER *init_player, char *fen_notation) {
 
-    char fen_board[128]; // chess board pieces
-    char fen_play[2];      // player turn [w] or [b]
-    char fen_castle[4];  // [-] none | [QKq]castling available for king both ends, black king only queen
-    char fen_passant[2]; // [-] none | ex. [f6] is signed for en passant
-    int fen_halfmove;    // [+1] if no capture of pieces or pawn advance, else resets (draw on 100 moves)
-    int fen_fullmove;    // [+1] a complete cycle by both players
+    char fen_board[128];    // chess board pieces
+    char fen_play[4];       // player turn [w] or [b]
+    char fen_castle[4];     // [-] none | [QKq]castling available for king both ends, black king only queen
+    char fen_passant[4];    // [-] none | ex. [f6] is signed for en passant
+    int fen_halfmove = 0;   // [+1] if no capture of pieces or pawn advance, else resets (draw on 100 moves)
+    int fen_fullmove = 0;   // [+1] a complete cycle by both players
 
     printf("FEN_Init:\n");
     printf("  notation: ");
 
-    sscanf(fen_notation, "%s %c %s %s %d %d", fen_board, fen_play, fen_castle, fen_passant, &fen_halfmove, &fen_fullmove);
+    FEN_StrTrunk(fen_notation, fen_board, fen_play, fen_castle, fen_passant, &fen_halfmove, &fen_fullmove);
 
-    printf("%s %s %s %s %d %d\n", fen_board, fen_play, fen_castle, fen_passant, fen_halfmove, fen_fullmove);
-    FEN_PlayerTurn((int*)init_player, fen_play);
+    FEN_PlayerTurn((int*)init_player, fen_play[0]);
+    getchar();
 
     FEN_InitBoard(*init_player, fen_board);
 
     return (0);
 }
 
+void FEN_StrTrunk(char *restrict str, char *restrict a, char *restrict b, char *restrict c, char *restrict d, int *restrict e, int *restrict f) {
+
+    int i = 0; int ind = 0;
+    for (int n = 0; n < (int)strlen(str); n++) {
+
+        if (str[n] == ' ') {
+
+            if (i == 0) a[++ind] = '\0';
+            if (i == 1) b[++ind] = '\0';
+            if (i == 2) c[++ind] = '\0';
+            if (i == 3) d[++ind] = '\0';
+
+            ind = 0;
+            i++;
+
+            continue;
+        }
+
+        if (i == 0) strncpy(&a[ind], &str[n], 1);
+        if (i == 1) strncpy(&b[ind], &str[n], 1);
+        if (i == 2) strncpy(&c[ind], &str[n], 1);
+        if (i == 3) strncpy(&d[ind], &str[n], 1);
+        if (i == 4) if (!*e) *e = atoi(&str[n]);
+        if (i == 5) if (!*e) *f = atoi(&str[n]);
+
+        ind++;
+    }
+
+    printf("[%s] [%s] [%s] [%s] [%d] [%d]\n", a, b, c, d, *e, *f);
+
+    return;
+}
+
 int FEN_PlayerTurn(int *init_player, char fen_play) {
 
     if (fen_play == 'w') *init_player = WHITE_PLAYER;
     else if (fen_play == 'b') *init_player = BLACK_PLAYER;
-
-    printf("%c %d\n", fen_play, *init_player);
 
     return (0);
 }

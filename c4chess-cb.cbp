@@ -38,7 +38,48 @@
 		<ExtraCommands>
 			<Add after="XCOPY $(#sdl2)\bin\*.dll $(TARGET_OUTPUT_DIR) /D /Y" />
 		</ExtraCommands>
+		<Unit filename=".gitignore" />
 		<Unit filename="Makefile" />
+		<Unit filename="README.md" />
+		<Unit filename="c4chess-cb.depend" />
+		<Unit filename="c4chess-cb.layout" />
+		<Unit filename="c4chess_debug.bat" />
+		<Unit filename="command-line.bat" />
+		<Unit filename="git-commit.sh" />
+		<Unit filename="obj/Release/source/chess/core.o" />
+		<Unit filename="output/SDL2.dll" />
+		<Unit filename="output/SDL2_image.dll" />
+		<Unit filename="output/SDL2_ttf.dll" />
+		<Unit filename="output/c4chess.exe" />
+		<Unit filename="output/config_boot.ini" />
+		<Unit filename="output/libatomic-1.dll" />
+		<Unit filename="output/libfreetype-6.dll" />
+		<Unit filename="output/libgcc_s_dw2-1.dll" />
+		<Unit filename="output/libgcc_s_seh-1.dll" />
+		<Unit filename="output/libgomp-1.dll" />
+		<Unit filename="output/libjpeg-9.dll" />
+		<Unit filename="output/libpng16-16.dll" />
+		<Unit filename="output/libquadmath-0.dll" />
+		<Unit filename="output/libssp-0.dll" />
+		<Unit filename="output/libstdc++-6.dll" />
+		<Unit filename="output/libtiff-5.dll" />
+		<Unit filename="output/libwebp-7.dll" />
+		<Unit filename="output/libwinpthread-1.dll" />
+		<Unit filename="output/resources/OpenSans-Regular.ttf" />
+		<Unit filename="output/resources/bbishop.png" />
+		<Unit filename="output/resources/bking.png" />
+		<Unit filename="output/resources/bknight.png" />
+		<Unit filename="output/resources/bpawn.png" />
+		<Unit filename="output/resources/bqueen.png" />
+		<Unit filename="output/resources/brook.png" />
+		<Unit filename="output/resources/gnu_logo.png" />
+		<Unit filename="output/resources/wbishop.png" />
+		<Unit filename="output/resources/wking.png" />
+		<Unit filename="output/resources/wknight.png" />
+		<Unit filename="output/resources/wpawn.png" />
+		<Unit filename="output/resources/wqueen.png" />
+		<Unit filename="output/resources/wrook.png" />
+		<Unit filename="output/zlib1.dll" />
 		<Unit filename="source/animation/animation.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -67,6 +108,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="source/chess/middle.h" />
+		<Unit filename="source/config.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/config.h" />
 		<Unit filename="source/dashboard/gui.c">
 			<Option compilerVar="CC" />
 		</Unit>
