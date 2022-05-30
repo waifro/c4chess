@@ -54,8 +54,8 @@ int FEN_Init(CHESS_CORE_PLAYER *init_player, char *fen_notation) {
     char fen_play[4];       // player turn [w] or [b]
     char fen_castle[4];     // [-] none | [QKq]castling available for king both ends, black king only queen
     char fen_passant[4];    // [-] none | ex. [f6] is signed for en passant
-    int fen_halfmove = 0;   // [+1] if no capture of pieces or pawn advance, else resets (draw on 100 moves)
-    int fen_fullmove = 0;   // [+1] a complete cycle by both players
+    int fen_halfmove;       // [+1] if no capture of pieces or pawn advance, else resets (draw on 100 moves)
+    int fen_fullmove;       // [+1] a complete cycle by both players
 
     printf("FEN_Init:\n");
     printf("  notation: ");
@@ -63,8 +63,6 @@ int FEN_Init(CHESS_CORE_PLAYER *init_player, char *fen_notation) {
     FEN_StrTrunk(fen_notation, fen_board, fen_play, fen_castle, fen_passant, &fen_halfmove, &fen_fullmove);
 
     FEN_PlayerTurn((int*)init_player, fen_play[0]);
-    getchar();
-
     FEN_InitBoard(*init_player, fen_board);
 
     return (0);
