@@ -286,18 +286,15 @@ int CHESS_PiecePattern_Bishop(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_
 
             if (n == 0) {
                 col_pos -= 1; tag.row += 1;
-                tag.col = alpha[col_pos];
             } else if (n == 1) {
                 col_pos += 1; tag.row += 1;
-                tag.col = alpha[col_pos];
             } else if (n == 2) {
                 col_pos += 1; tag.row -= 1;
-                tag.col = alpha[col_pos];
             } else if (n == 3) {
                 col_pos -= 1; tag.row -= 1;
-                tag.col = alpha[col_pos];
             }
 
+            tag.col = alpha[col_pos];
             result = MIDDLE_TagToTile(tag);
 
             if (result == -1) break;
