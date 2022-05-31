@@ -53,8 +53,13 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
                                 CHESS_RedirectPiecePattern(unsafe_tile, x, pl_bak);
 
                                 for (int u = 0; u < 64; u++)
-                                    if (unsafe_tile[x].piece->range[u] == true)
+                                    if (unsafe_tile[x].piece->range[u] == true) {
                                         glo_chess_event_layer[u] = true;
+                                        if (unsafe_tile[u].piece != NULL &&
+                                            (unsafe_tile[u].piece->enum_piece == KING ||
+                                            unsafe_tile[u].piece->enum_piece == BKING))
+                                            printf("piece[%d] attacks king on %c%d!!!\n", x, unsafe_tile[u].tag.col, unsafe_tile[u].tag.row);
+                                    }
                             }
                         }
 
