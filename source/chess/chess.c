@@ -306,8 +306,9 @@ int CHESS_PiecePattern_Bishop(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_
             if (chess_tile[result].piece == NULL)
                 continue;
 
-            if (chess_tile[result].piece->enum_piece == KING ||
-                chess_tile[result].piece->enum_piece == BKING)
+            if ((chess_tile[result].piece->enum_piece == KING ||
+                chess_tile[result].piece->enum_piece == BKING) &&
+                chess_tile[result].piece->player != player)
                 continue;
 
             break;
@@ -329,7 +330,7 @@ int CHESS_PiecePattern_Rook(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PL
 
     for (int n = 0; n < 4; n++) {
 
-        col_pos = 0;
+        col_pos = MIDDLE_ReturnColTile(tile);
         tag = chess_tile[tile].tag;
 
         for (int i = 0; i < 8; i++) {
@@ -349,8 +350,9 @@ int CHESS_PiecePattern_Rook(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PL
             if (chess_tile[result].piece == NULL)
                 continue;
 
-            if (chess_tile[result].piece->enum_piece == KING ||
-                chess_tile[result].piece->enum_piece == BKING)
+            if ((chess_tile[result].piece->enum_piece == KING ||
+                chess_tile[result].piece->enum_piece == BKING) &&
+                chess_tile[result].piece->player != player)
                 continue;
 
             break;
@@ -408,8 +410,9 @@ int CHESS_PiecePattern_Queen(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_P
                 if (chess_tile[result].piece == NULL)
                     continue;
 
-                if (chess_tile[result].piece->enum_piece == KING ||
-                    chess_tile[result].piece->enum_piece == BKING)
+                if ((chess_tile[result].piece->enum_piece == KING ||
+                    chess_tile[result].piece->enum_piece == BKING) &&
+                    chess_tile[result].piece->player != player)
                     continue;
 
                 break;
