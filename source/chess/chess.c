@@ -260,14 +260,7 @@ int CHESS_PiecePattern_Knight(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_
             if (result == -1) continue;
 
             if (i == 0 || i == 2)
-            {
-                if (chess_tile[result].piece == NULL)
-                    chess_tile[tile].piece->range[result] = true;
-
-                else if (chess_tile[result].piece != NULL && chess_tile[result].piece->player != player) {
-                    chess_tile[tile].piece->range[result] = true;
-                }
-            }
+              chess_tile[tile].piece->range[result] = true;
         }
     }
 
