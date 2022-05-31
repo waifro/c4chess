@@ -192,8 +192,6 @@ int CHESS_PiecePattern_King(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
 
 int CHESS_PiecePattern_Pawn(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player) {
 
-    printf("player = %d\n", player);
-
     CHESS_CORE_TILE_TAG tag = core_tile[tile].tag;
     int result = -1;
 
@@ -215,8 +213,6 @@ int CHESS_PiecePattern_Pawn(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
 }
 
 int CHESS_PiecePattern_BPawn(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player) {
-
-    printf("player = %d\n", player);
 
     CHESS_CORE_TILE_TAG tag = core_tile[tile].tag;
     int result = -1;
