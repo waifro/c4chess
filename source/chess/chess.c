@@ -29,7 +29,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
             if (core_tile[n].piece != NULL) {
                 CHESS_PiecePattern_RangeReset(core_tile, n);
                 if (core_tile[n].piece->enum_piece != KING && core_tile[n].piece->enum_piece != BKING)
-                    CHESS_RedirectPiecePattern(core_tile, n, player, CHECK);
+                    CHESS_RedirectPiecePattern(core_tile, n, player);
             }
         }
 
@@ -50,7 +50,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
 
                                 CHESS_PiecePattern_RangeReset(unsafe_tile, x);
 
-                                CHESS_RedirectPiecePattern(unsafe_tile, x, pl_bak, CHECK);
+                                CHESS_RedirectPiecePattern(unsafe_tile, x, pl_bak);
 
                                 for (int u = 0; u < 64; u++)
                                     if (unsafe_tile[x].piece->range[u] == true)
@@ -76,7 +76,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
                 if (core_tile[n].piece->enum_piece != KING && core_tile[n].piece->enum_piece != BKING)
                 {
                     CHESS_PiecePattern_RangeReset(core_tile, n);
-                    CHESS_RedirectPiecePattern(core_tile, n, pl_bak, CHECK);
+                    CHESS_RedirectPiecePattern(core_tile, n, pl_bak);
 
                     for (int i = 0; i < 64; i++)
                         if (core_tile[n].piece->range[i] == true)
@@ -86,7 +86,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
         for (int n = 0; n < 64; n++)
             if (core_tile[n].piece != NULL && core_tile[n].piece->player == player)
                 if (core_tile[n].piece->enum_piece == KING || core_tile[n].piece->enum_piece == BKING)
-                    CHESS_RedirectPiecePattern(core_tile, n, player, CHECK);
+                    CHESS_RedirectPiecePattern(core_tile, n, player);
 
         pl_bak = player;
         MIDDLE_UnsafePosition_Copy(NULL, unsafe_tile);
@@ -114,7 +114,7 @@ int CHESS_PiecePattern_RangeAllowed(CHESS_CORE_TILE *core_tile, int tile, CHESS_
     return 0;
 }
 
-int CHESS_RedirectPiecePattern(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
+int CHESS_RedirectPiecePattern(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player) {
 
     switch(glo_chess_core_tile[tile].piece->enum_piece) {
         case KING: CHESS_PiecePattern_King(core_tile, tile, player);
