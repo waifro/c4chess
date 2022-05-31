@@ -192,27 +192,21 @@ int CHESS_PiecePattern_King(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
 
 int CHESS_PiecePattern_Pawn(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player) {
 
+    printf("player = %d\n", player);
+
     CHESS_CORE_TILE_TAG tag = core_tile[tile].tag;
     int result = -1;
 
-    if (tag.row == 8) return 0;
-
-    tag.row += 1;
-    if (tag.row == 8) return 0;
-    result = MIDDLE_TagToTile(tag);
-
-    if (core_tile[result].piece == NULL)
-        core_tile[tile].piece->range[result] = true;
-
-    if (core_tile[tile].tag.row == 2) {
+    for (int n = 0; n < 2; n++) {
 
         tag.row += 1;
-        if (tag.row == 8) return 0;
+        if (tag.row > 7) break;
         result = MIDDLE_TagToTile(tag);
 
         if (core_tile[result].piece == NULL)
             core_tile[tile].piece->range[result] = true;
 
+        if (core_tile[tile].tag.row != 2) break;
     }
 
     CHESS_PiecePattern_PawnAttack(core_tile, tile, player);
@@ -470,32 +464,25 @@ int CHESS_PiecePattern_Queen(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK
 
 int CHESS_PiecePattern_PawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player) {
 
+    CHESS_CORE_TILE_TAG tag = core_tile[tile - 9].tag;
+
     char alpha[] = "abcdefgh";
-    int row = MIDDLE_ReturnRowTile(tile) + 1;
-    int col_pos = MIDDLE_ReturnColTile(tile) - 1;
-
-    // if piece is already at (ex.) e8, exit
-    if (row > 7) return 0;
-
-    CHESS_CORE_TILE_TAG tag;
-    tag.row = row;
-    tag.col = alpha[col_pos];
+    int col_pos = MIDDLE_ReturnColTile(tile - 9);
 
     int result = -1;
     for (int n = 0; n < 3; n++) {
 
-        if (col_pos < 0) { col_pos += 1; tag.col = alpha[col_pos]; continue; }
-        else if (col_pos > 7) { break; }
-
-        if (n == 1) { col_pos += 1; tag.col = alpha[col_pos]; continue; }
-
         result = MIDDLE_TagToTile(tag);
+
+        col_pos += 1;
+        tag.col = alpha[col_pos];
+
+        if (result == -1) continue;
+        if (n == 1) continue;
 
         if (core_tile[result].piece != NULL && core_tile[result].piece->player != player) {
             core_tile[tile].piece->range[result] = true;
         }
-
-        col_pos += 1; tag.col = alpha[col_pos];
     }
 
     return 0;
