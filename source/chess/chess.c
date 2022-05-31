@@ -229,7 +229,7 @@ int CHESS_PiecePattern_BPawn(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PL
         if (core_tile[tile].tag.row != 7) break;
     }
 
-    CHESS_PiecePattern_PawnAttack(core_tile, tile, player);
+    CHESS_PiecePattern_BPawnAttack(core_tile, tile, player);
 
     return 0;
 }
@@ -441,10 +441,14 @@ int CHESS_PiecePattern_Queen(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_P
 
 int CHESS_PiecePattern_PawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player) {
 
-    CHESS_CORE_TILE_TAG tag = core_tile[tile - 9].tag;
+    CHESS_CORE_TILE_TAG tag;
 
     char alpha[] = "abcdefgh";
-    int col_pos = MIDDLE_ReturnColTile(tile - 9);
+    int col_pos = 0;
+
+    col_pos = MIDDLE_ReturnColTile(tile) - 1;
+    tag.row = MIDDLE_ReturnRowTile(tile) + 1;
+    tag.col = alpha[col_pos];
 
     int result = -1;
     for (int n = 0; n < 3; n++) {
@@ -467,10 +471,14 @@ int CHESS_PiecePattern_PawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CO
 
 int CHESS_PiecePattern_BPawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player) {
 
-    CHESS_CORE_TILE_TAG tag = core_tile[tile + 9].tag;
+    CHESS_CORE_TILE_TAG tag;
 
     char alpha[] = "abcdefgh";
-    int col_pos = MIDDLE_ReturnColTile(tile + 9);
+    int col_pos = 0;
+
+    col_pos = MIDDLE_ReturnColTile(tile) - 1;
+    tag.row = MIDDLE_ReturnRowTile(tile) - 1;
+    tag.col = alpha[col_pos];
 
     int result = -1;
     for (int n = 0; n < 3; n++) {
