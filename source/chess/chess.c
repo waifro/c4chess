@@ -123,7 +123,7 @@ int CHESS_RedirectPiecePattern(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_
         break;
         case PAWN: CHESS_PiecePattern_Pawn(core_tile, tile, player);
         break;
-        case BPAWN: CHESS_PiecePattern_BPawn(tile, player, check);
+        case BPAWN: CHESS_PiecePattern_BPawn(core_tile, tile, player);
         break;
         case KNIGHT: CHESS_PiecePattern_Knight(core_tile, tile, player);
         break;
@@ -214,43 +214,26 @@ int CHESS_PiecePattern_Pawn(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
     return 0;
 }
 
-int CHESS_PiecePattern_BPawn(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
+int CHESS_PiecePattern_BPawn(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player) {
 
-    if (check == ATTACK) {
+    printf("player = %d\n", player);
 
-        CHESS_CORE_TILE_TAG tag = glo_chess_core_tile[tile].tag;
-        int result = -1;
+    CHESS_CORE_TILE_TAG tag = core_tile[tile].tag;
+    int result = -1;
 
-        if (tag.row == 1) return 0;
+    for (int n = 0; n < 2; n++) {
 
-        if (tag.row == 7) {
+        tag.row -= 1;
+        if (tag.row < 2) break;
+        result = MIDDLE_TagToTile(tag);
 
-            tag.row -= 1;
-            if (tag.row == 1) return 0;
-            result = MIDDLE_TagToTile(tag);
+        if (core_tile[result].piece == NULL)
+            core_tile[tile].piece->range[result] = true;
 
-            if (glo_chess_core_tile[result].piece == NULL) {
-                glo_chess_dot[result].state = true;
-
-                tag.row -= 1;
-                if (tag.row == 1) return 0;
-                result = MIDDLE_TagToTile(tag);
-
-                if (glo_chess_core_tile[result].piece == NULL) glo_chess_dot[result].state = true;
-            }
-        } else {
-
-            tag.row -= 1;
-            if (tag.row == 1) return 0;
-            result = MIDDLE_TagToTile(tag);
-
-            if (glo_chess_core_tile[result].piece == NULL) glo_chess_dot[result].state = true;
-
-        }
-
+        if (core_tile[tile].tag.row != 7) break;
     }
 
-    CHESS_PiecePattern_BPawnAttack(tile, player, check);
+    CHESS_PiecePattern_PawnAttack(core_tile, tile, player);
 
     return 0;
 }
@@ -488,42 +471,27 @@ int CHESS_PiecePattern_PawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CO
     return 0;
 }
 
-int CHESS_PiecePattern_BPawnAttack(int tile, CHESS_CORE_PLAYER player, CHESS_PIECE_ATK check) {
+int CHESS_PiecePattern_BPawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player) {
+
+    CHESS_CORE_TILE_TAG tag = core_tile[tile + 9].tag;
 
     char alpha[] = "abcdefgh";
-    int row = MIDDLE_ReturnRowTile(tile) - 1;
-    int col_pos = MIDDLE_ReturnColTile(tile) - 1;
-
-    // if piece is already at (ex.) e1, exit
-    if (row < 0) return 0;
-
-    CHESS_CORE_TILE_TAG tag;
-    tag.row = row;
-    tag.col = alpha[col_pos];
+    int col_pos = MIDDLE_ReturnColTile(tile + 9);
 
     int result = -1;
     for (int n = 0; n < 3; n++) {
 
-        if (col_pos < 0) { col_pos += 1; tag.col = alpha[col_pos]; continue; }
-        else if (col_pos > 7) { break; }
-
-        if (n == 1) { col_pos += 1; tag.col = alpha[col_pos]; continue; }
-
         result = MIDDLE_TagToTile(tag);
 
-        if (check == CHECK)
-        {
-            glo_chess_core_tile[tile].piece->range[result] = true;
-        }
+        col_pos += 1;
+        tag.col = alpha[col_pos];
 
-        else if (check == ATTACK)
-        {
-            if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player != player) {
-                glo_chess_dot[result].state = true;
-            }
-        }
+        if (result == -1) continue;
+        if (n == 1) continue;
 
-        col_pos += 1; tag.col = alpha[col_pos];
+        if (core_tile[result].piece != NULL && core_tile[result].piece->player != player) {
+            core_tile[tile].piece->range[result] = true;
+        }
     }
 
     return 0;
