@@ -308,16 +308,15 @@ int CHESS_PiecePattern_Bishop(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_
 
             if (result == -1) break;
 
-            if (chess_tile[result].piece == NULL) {
-                chess_tile[tile].piece->range[result] = true;
-                continue;
-            }
-
             if (chess_tile[result].piece->enum_piece == KING ||
                 chess_tile[result].piece->enum_piece == BKING)
                 continue;
 
             chess_tile[tile].piece->range[result] = true;
+
+            if (chess_tile[result].piece == NULL)
+                continue;
+
             break;
         }
 
