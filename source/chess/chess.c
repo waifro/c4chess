@@ -235,6 +235,7 @@ int CHESS_PiecePattern_BPawn(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PL
 }
 
 int CHESS_PiecePattern_Knight(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PLAYER player) {
+    (void)player;
 
     char alpha[] = "abcdefgh";
     CHESS_CORE_TILE_TAG tag;

@@ -55,7 +55,7 @@ void EVENT_CheckKingState(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player)
             if (chess_tile[n].piece->enum_piece == KING || chess_tile[n].piece->enum_piece == BKING) {
 
                 if (glo_chess_event_layer[n] == true) {
-                    //printf("\n\nKING UNDER ATTACK\n\n\n"); //check enabled, a func;
+                    printf("\n\nKING UNDER ATTACK\n\n\n"); //check enabled, a func;
 
                     glo_chess_event_king_uatk = true;
 
