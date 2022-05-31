@@ -8,23 +8,23 @@
 	#define UBUNTU_VERSION_STYLE  "22.05"
 	
 	//Software Status
-	#define STATUS  "Alpha"
-	#define STATUS_SHORT  "a"
+	#define STATUS  ""
+	#define STATUS_SHORT  ""
 	
 	//Standard Version Type
 	#define MAJOR  0
-	#define MINOR  2
-	#define BUILD  106
-	#define REVISION  635
+	#define MINOR  0
+	#define BUILD  2
+	#define REVISION  15
 	
 	//Miscellaneous Version Types
-	#define BUILDS_COUNT  119
-	#define RC_FILEVERSION 0,2,106,635
-	#define RC_FILEVERSION_STRING "0, 2, 106, 635\0"
-	#define FULLVERSION_STRING  "0.2.106.635"
+	#define BUILDS_COUNT  2
+	#define RC_FILEVERSION 0,0,2,15
+	#define RC_FILEVERSION_STRING "0, 0, 2, 15\0"
+	#define FULLVERSION_STRING  "0.0.2.15"
 	
 	//These values are to keep track of your versioning state, don't modify them.
-	#define BUILD_HISTORY  6
+	#define BUILD_HISTORY  2
 	
 
 #endif //VERSION_H

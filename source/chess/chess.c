@@ -301,16 +301,14 @@ int CHESS_PiecePattern_Bishop(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_
 
             if (result == -1) break;
 
-            if (chess_tile[result].piece == NULL) {
-                chess_tile[tile].piece->range[result] = true;
+            chess_tile[tile].piece->range[result] = true;
+
+            if (chess_tile[result].piece == NULL)
                 continue;
-            }
 
             if (chess_tile[result].piece->enum_piece == KING ||
                 chess_tile[result].piece->enum_piece == BKING)
                 continue;
-
-            chess_tile[tile].piece->range[result] = true;
 
             break;
         }
@@ -322,48 +320,40 @@ int CHESS_PiecePattern_Bishop(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_
 
 int CHESS_PiecePattern_Rook(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PLAYER player) {
 
-    CHESS_CORE_TILE_TAG tag;
+    CHESS_CORE_TILE_TAG tag = chess_tile[tile].tag;
 
     char alpha[] = "abcdefgh";
     int col_pos = MIDDLE_ReturnColTile(tile);
 
     int result = -1;
-    for (int n = 0; n < 4; n++)
-    {
-        col_pos = MIDDLE_ReturnColTile(tile);
-        tag.row = MIDDLE_ReturnRowTile(tile);
-        tag.col = alpha[col_pos];
 
-        for (int i = 0; i < 8; i++)
-        {
-            if      (n == 0) tag.row += 1;
+    for (int n = 0; n < 4; n++) {
+
+        col_pos = 0;
+        tag = chess_tile[tile].tag;
+
+        for (int i = 0; i < 8; i++) {
+
+            if (n == 0) tag.row += 1;
             else if (n == 1) col_pos += 1;
             else if (n == 2) tag.row -= 1;
             else if (n == 3) col_pos -= 1;
-            tag.col = alpha[col_pos];
 
+            tag.col = alpha[col_pos];
             result = MIDDLE_TagToTile(tag);
 
-            if (result == -1) continue;
-            if (result == tile) continue;
+            if (result == -1) break;
 
-            if (chess_tile[result].piece == NULL) {
-                chess_tile[tile].piece->range[result] = true;
-            }
+            chess_tile[tile].piece->range[result] = true;
 
-            else if (chess_tile[result].piece->player != player) {
+            if (chess_tile[result].piece == NULL)
+                continue;
 
-                chess_tile[tile].piece->range[result] = true;
-                if (chess_tile[result].piece->enum_piece == KING || chess_tile[tile].piece->enum_piece == BKING)
-                    continue;
+            if (chess_tile[result].piece->enum_piece == KING ||
+                chess_tile[result].piece->enum_piece == BKING)
+                continue;
 
-                break;
-            }
-
-            else if (chess_tile[result].piece->player == player) {
-                chess_tile[tile].piece->range[result] = true;
-                break;
-            }
+            break;
         }
     }
 
@@ -413,16 +403,14 @@ int CHESS_PiecePattern_Queen(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_P
 
                 if (result == -1) break;
 
-                if (chess_tile[result].piece == NULL) {
-                    chess_tile[tile].piece->range[result] = true;
+                chess_tile[tile].piece->range[result] = true;
+
+                if (chess_tile[result].piece == NULL)
                     continue;
-                }
 
                 if (chess_tile[result].piece->enum_piece == KING ||
                     chess_tile[result].piece->enum_piece == BKING)
                     continue;
-
-                chess_tile[tile].piece->range[result] = true;
 
                 break;
             }
