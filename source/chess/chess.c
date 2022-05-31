@@ -197,28 +197,21 @@ int CHESS_PiecePattern_Pawn(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
 
     if (tag.row == 8) return 0;
 
-    if (tag.row == 2) {
+    tag.row += 1;
+    if (tag.row == 8) return 0;
+    result = MIDDLE_TagToTile(tag);
+
+    if (core_tile[result].piece == NULL)
+        core_tile[tile].piece->range[result] = true;
+
+    if (core_tile[tile].tag.row == 2) {
 
         tag.row += 1;
         if (tag.row == 8) return 0;
         result = MIDDLE_TagToTile(tag);
 
-        if (core_tile[result].piece == NULL) {
+        if (core_tile[result].piece == NULL)
             core_tile[tile].piece->range[result] = true;
-
-            tag.row += 1;
-            if (tag.row == 8) return 0;
-            result = MIDDLE_TagToTile(tag);
-
-            if (core_tile[result].piece == NULL) core_tile[tile].piece->range[result] = true;
-        }
-    } else {
-
-        tag.row += 1;
-        if (tag.row == 8) return 0;
-        result = MIDDLE_TagToTile(tag);
-
-        if (core_tile[result].piece == NULL) core_tile[tile].piece->range[result] = true;
 
     }
 
