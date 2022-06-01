@@ -12,7 +12,7 @@ char *glo_chess_archive_flow_mark = "KBNRQ";
 void ARCHIVE_Notation_RecordMove(CHESS_CORE_TILE *chess_tile, bool king_uatk, int slot_old, int slot_new) {
 
     if (!glo_chess_archive_record)
-        glo_chess_archive_record = malloc(sizeof(char*));
+        glo_chess_archive_record = malloc(sizeof(char) * 1);
 
     char notation[16];
     ARCHIVE_NOTATION_PIECE piece_ntt;
@@ -32,12 +32,17 @@ void ARCHIVE_Notation_RecordMove(CHESS_CORE_TILE *chess_tile, bool king_uatk, in
         buffer[ind++] = 'x';
     }
 
-    sprintf(notation, "%s%c%d", buffer, tag.col, tag.row);
+    sprintf(notation, " %s%c%d", buffer, tag.col, tag.row);
 
     if (king_uatk == true)
-        strncat(notation, "+", 1);
+        strcat(notation, "+");
 
-    printf("buffer [%s]\n", notation);
+    printf("move: [%s]\n", notation);
+
+    glo_chess_archive_record = realloc(glo_chess_archive_record, sizeof(glo_chess_archive_record) + strlen(notation));
+    strncat(glo_chess_archive_record, notation, strlen(notation));
+
+    printf("archive: [%s]\n", glo_chess_archive_record);
 
     return;
 }
