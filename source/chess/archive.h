@@ -1,8 +1,11 @@
 #ifndef ARCHIVE_H
 #define ARCHIVE_H
 
+#include "core.h"
+
 typedef enum {
     KING_A,
+    PAWN_A,
     BISHOP_A,
     KNIGHT_A,
     ROOK_A,
