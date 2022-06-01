@@ -89,7 +89,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
                     CHESS_RedirectPiecePattern(core_tile, n, player);
 
         pl_bak = player;
-        MIDDLE_UnsafePosition_Copy(NULL, unsafe_tile);
+        //MIDDLE_UnsafePosition_Copy(NULL, unsafe_tile);
     }
 
     return 0;
@@ -150,8 +150,6 @@ int CHESS_RedirectPiecePattern(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_
 
 int CHESS_PiecePattern_King(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player) {
 
-    (void)player;
-
     char alpha[] = "abcdefgh";
     CHESS_CORE_TILE_TAG tag;
 
@@ -161,6 +159,40 @@ int CHESS_PiecePattern_King(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
 
     int result = -1;
 
+    // enemy king marks the event_layer first
+    for (int u = 0; u < 64; u++)
+    {
+        if (core_tile[u].piece != NULL && core_tile[u].piece->player != player &&
+            (core_tile[u].piece->enum_piece == KING || core_tile[u].piece->enum_piece == BKING))
+        {
+            CHESS_CORE_TILE_TAG tag_pec;
+
+            int col_pec = MIDDLE_ReturnColTile(u) - 1;
+            tag_pec.row = MIDDLE_ReturnRowTile(u) - 1;
+            tag_pec.col = alpha[col_pec];
+
+            int result_pec = -1;
+            for (int i = 0; i < 9; i++) {
+
+                if (i == 4) { tag_pec.row += 1; continue; }
+                if (i == 3 || i == 6) { col_pec += 1; tag_pec.row -= 3; }
+
+                if (col_pec < 0) { tag_pec.row += 1; continue; }
+                if (col_pec > 7) { tag_pec.row += 1; continue; }
+                if (tag_pec.row < 1) { tag_pec.row += 1; continue; }
+                if (tag_pec.row > 8) { tag_pec.row += 1; continue; }
+
+                tag_pec.col = alpha[col_pec];
+                result_pec = MIDDLE_TagToTile(tag_pec);
+
+                glo_chess_event_layer[result_pec] = true;
+
+                tag_pec.row += 1;
+            }
+        }
+    }
+
+    // now generate the king pattern
     for (int n = 0; n < 9; n++) {
 
         if (n == 4) { tag.row += 1; continue; }
@@ -175,13 +207,13 @@ int CHESS_PiecePattern_King(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
         result = MIDDLE_TagToTile(tag);
 
         if (core_tile[result].piece == NULL) {
-            if (glo_chess_event_layer[result] == false) core_tile[tile].piece->range[result] = true;
+            if (glo_chess_event_layer[result] == false)
+                core_tile[tile].piece->range[result] = true;
         }
 
         else if (core_tile[result].piece->player != player) {
-            if (glo_chess_event_layer[result] == false) {
+            if (glo_chess_event_layer[result] == false)
                 core_tile[tile].piece->range[result] = true;
-            }
         }
 
         tag.row += 1;
