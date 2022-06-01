@@ -18,7 +18,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
 
     if (pl_bak != player) {
 
-        printf("CHESS_PiecePattern_UpdateState:\n  updating state pieces...\n");
+        printf("CHESS_PiecePattern_UpdateState:\n  updating state pieces... ");
         glo_chess_event_king_uatk = false;
 
         // create copy of tile
@@ -89,7 +89,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
                     CHESS_Redirect_PiecePattern(core_tile, n, player);
 
         pl_bak = player;
-        //MIDDLE_UnsafePosition_Copy(NULL, unsafe_tile);
+        printf("done\n");
     }
 
     return 0;
