@@ -137,7 +137,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player) {
                 // if is a valid move, start changing piece state
                 position_new = result;
 
-                ARCHIVE_Notation_EnrollMove(glo_chess_core_tile, position_old, position_new);
+                ARCHIVE_Notation_RecordMove(glo_chess_core_tile, position_old, position_new);
                 MIDDLE_UpdatePositionPiece(glo_chess_core_tile, position_old, position_new);
 
                 DOT_StateGlobalDotReset();

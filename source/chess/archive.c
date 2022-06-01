@@ -6,19 +6,18 @@
 #include "chess.h"
 #include "archive.h"
 
-char *glo_chess_archive_flow = NULL;
+char *glo_chess_archive_record = NULL;
 char *glo_chess_archive_flow_mark = "kpbnrq";
 
-void ARCHIVE_Notation_EnrollMove(CHESS_CORE_TILE *chess_tile, int slot_old, int slot_new) {
+void ARCHIVE_Notation_RecordMove(CHESS_CORE_TILE *chess_tile, int slot_old, int slot_new) {
 
-    if (!glo_chess_archive_flow)
-        glo_chess_archive_flow = malloc(sizeof(char*));
+    if (!glo_chess_archive_record)
+        glo_chess_archive_record = malloc(sizeof(char*));
 
     ARCHIVE_NOTATION_PIECE piece_ntt;
     piece_ntt = ARCHIVE_Redirect_StateMove(chess_tile, slot_old);
 
     char buffer[3] = ""; int ind = 0;
-
     if (piece_ntt != NONE_A && piece_ntt != PAWN_A)
         buffer[ind++] = glo_chess_archive_flow_mark[piece_ntt];
     else if (piece_ntt == PAWN_A && chess_tile[slot_new].piece != NULL) {
