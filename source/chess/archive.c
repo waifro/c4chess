@@ -8,8 +8,10 @@
 
 char *glo_chess_archive_record = NULL;
 char *glo_chess_archive_flow_mark = "KBNRQ";
+int glo_chess_archive_tmp_tile[2];
+void *glo_chess_archive_tmp_piece = NULL;
 
-void ARCHIVE_Notation_RecordMove(CHESS_CORE_TILE *chess_tile, bool king_uatk, int slot_old, int slot_new) {
+void ARCHIVE_Notation_RecordMove(CHESS_CORE_TILE *chess_tile, bool king_uatk, void *piece, int slot_old, int slot_new) {
 
     if (!glo_chess_archive_record)
         glo_chess_archive_record = malloc(sizeof(char) * 1);
@@ -23,11 +25,11 @@ void ARCHIVE_Notation_RecordMove(CHESS_CORE_TILE *chess_tile, bool king_uatk, in
 
     if (piece_ntt != NONE_A && piece_ntt != PAWN_A) {
         buffer[ind++] = glo_chess_archive_flow_mark[piece_ntt];
-        if (chess_tile[slot_new].piece != NULL)
+        if (piece != NULL)
             buffer[ind++] = 'x';
     }
 
-    else if (piece_ntt == PAWN_A && chess_tile[slot_new].piece != NULL) {
+    else if (piece_ntt == PAWN_A && piece != NULL) {
         buffer[ind++] = chess_tile[slot_old].tag.col;
         buffer[ind++] = 'x';
     }

@@ -1,5 +1,6 @@
 #include <stdbool.h>
 
+#include "archive.h"
 #include "event.h"
 #include "chess.h"
 #include "middle.h"
@@ -73,7 +74,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
 
         for (int n = 0; n < 64; n++)
             if (core_tile[n].piece != NULL && core_tile[n].piece->player != player)
-                if (core_tile[n].piece->enum_piece != KING && core_tile[n].piece->enum_piece != BKING)
+                if (CHESS_Redirect_EnumKing(core_tile, n) == -1)
                 {
                     CHESS_PiecePattern_RangeReset(core_tile, n);
                     CHESS_Redirect_PiecePattern(core_tile, n, pl_bak);
@@ -85,9 +86,10 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
 
         for (int n = 0; n < 64; n++)
             if (core_tile[n].piece != NULL && core_tile[n].piece->player == player)
-                if (core_tile[n].piece->enum_piece == KING || core_tile[n].piece->enum_piece == BKING)
+                if (CHESS_Redirect_EnumKing(core_tile, n) == 0)
                     CHESS_Redirect_PiecePattern(core_tile, n, player);
 
+        ARCHIVE_Notation_RecordMove(core_tile, glo_chess_event_king_uatk, glo_chess_archive_tmp_piece, glo_chess_archive_tmp_tile[0], glo_chess_archive_tmp_tile[1]);
         pl_bak = player;
         printf("done\n");
     }
