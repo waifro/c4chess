@@ -25,8 +25,7 @@ void ARCHIVE_Notation_RecordMove(CHESS_CORE_TILE *chess_tile, bool king_uatk, vo
 
     if (piece_ntt != NONE_A && piece_ntt != PAWN_A) {
         buffer[ind++] = glo_chess_archive_flow_mark[piece_ntt];
-        if (piece != NULL)
-            buffer[ind++] = 'x';
+        if (piece != NULL) buffer[ind++] = 'x';
     }
 
     else if (piece_ntt == PAWN_A && piece != NULL) {
@@ -52,11 +51,11 @@ void ARCHIVE_Notation_RecordMove(CHESS_CORE_TILE *chess_tile, bool king_uatk, vo
 
 ARCHIVE_NOTATION_PIECE ARCHIVE_Redirect_StateMove(CHESS_CORE_TILE *chess_tile, int slot) {
 
+    if (chess_tile[slot].piece == NULL) return NONE_A;
     if (CHESS_Redirect_EnumKing(chess_tile, slot) == 0) return KING_A;
     else if (CHESS_Redirect_EnumBishop(chess_tile, slot) == 0) return BISHOP_A;
     else if (CHESS_Redirect_EnumKnight(chess_tile, slot) == 0) return KNIGHT_A;
     else if (CHESS_Redirect_EnumRook(chess_tile, slot) == 0) return ROOK_A;
     else if (CHESS_Redirect_EnumQueen(chess_tile, slot) == 0) return QUEEN_A;
     else if (CHESS_Redirect_EnumPawn(chess_tile, slot) == 0) return PAWN_A;
-    else return NONE_A;
 }
