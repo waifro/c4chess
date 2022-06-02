@@ -89,7 +89,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
                 if (CHESS_Redirect_EnumKing(core_tile, n) == 0)
                     CHESS_Redirect_PiecePattern(core_tile, n, player);
 
-        ARCHIVE_Notation_RecordMove(core_tile, glo_chess_event_king_uatk, glo_chess_archive_tmp_piece, glo_chess_archive_tmp_tile[0], glo_chess_archive_tmp_tile[1]);
+        ARCHIVE_Notation_RecordMove(core_tile, glo_chess_event_king_uatk, glo_chess_archive_tmp_ptr, glo_chess_archive_tmp_tile[0], glo_chess_archive_tmp_tile[1]);
         pl_bak = player;
         printf("done\n");
     }

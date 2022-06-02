@@ -139,8 +139,8 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player) {
 
                 glo_chess_archive_tmp_tile[0] = position_old;
                 glo_chess_archive_tmp_tile[1] = position_new;
-                if (glo_chess_core_tile[position_new].piece == NULL) glo_chess_archive_tmp_piece = NULL;
-                else glo_chess_archive_tmp_piece = &glo_chess_core_tile[position_new].piece;
+                if (glo_chess_core_tile[position_new].piece == NULL) glo_chess_archive_tmp_ptr = NULL;
+                else glo_chess_archive_tmp_ptr = &glo_chess_core_tile[position_new];
 
                 MIDDLE_UpdatePositionPiece(glo_chess_core_tile, position_old, position_new);
 
