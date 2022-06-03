@@ -249,10 +249,12 @@ int CHESS_PiecePattern_Pawn(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
 
         tag.row += 1;
         if (tag.row > 7) break;
-        if ((result = MIDDLE_TagToTile(tag)) == -1) break;
+        result = MIDDLE_TagToTile(tag);
 
-        if (core_tile[result].piece == NULL)
-            core_tile[tile].piece->range[result] = true;
+        if (result == -1) break;
+        if (core_tile[result].piece != NULL) break;
+
+        core_tile[tile].piece->range[result] = true;
 
         if (core_tile[tile].tag.row != 2) break;
     }
@@ -271,10 +273,12 @@ int CHESS_PiecePattern_BPawn(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PL
 
         tag.row -= 1;
         if (tag.row < 2) break;
-        if ((result = MIDDLE_TagToTile(tag)) == -1) break;
+        result = MIDDLE_TagToTile(tag);
 
-        if (core_tile[result].piece == NULL)
-            core_tile[tile].piece->range[result] = true;
+        if (result == -1) break;
+        if (core_tile[result].piece != NULL) break;
+
+        core_tile[tile].piece->range[result] = true;
 
         if (core_tile[tile].tag.row != 7) break;
     }
@@ -432,8 +436,7 @@ int CHESS_PiecePattern_Queen(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_P
                 if (chess_tile[result].piece == NULL)
                     continue;
 
-                if ((chess_tile[result].piece->enum_piece == KING ||
-                    chess_tile[result].piece->enum_piece == BKING) &&
+                if (CHESS_Redirect_EnumKing(chess_tile, result) == 0 &&
                     chess_tile[result].piece->player != player)
                     continue;
 
