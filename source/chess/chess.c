@@ -20,7 +20,6 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
     if (pl_bak != player) {
 
         printf("CHESS_PiecePattern_UpdateState:\n  updating state pieces... ");
-        glo_chess_event_king_uatk = false;
 
         // create copy of tile
         CHESS_CORE_TILE unsafe_tile[64];
@@ -44,6 +43,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
                 {
                     if (unsafe_tile[n].piece->range[i] == true)
                     {
+                        glo_chess_event_king_uatk = false;
                         MIDDLE_Unsafe_UpdatePositionPiece(unsafe_tile, n, i);
 
                         for (int x = 0; x < 64; x++) {
@@ -74,7 +74,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
 
         for (int n = 0; n < 64; n++)
             if (core_tile[n].piece != NULL && core_tile[n].piece->player != player)
-                if (CHESS_Redirect_EnumKing(core_tile, n) == -1)
+                //if (CHESS_Redirect_EnumKing(core_tile, n) == -1)
                 {
                     CHESS_PiecePattern_RangeReset(core_tile, n);
                     CHESS_Redirect_PiecePattern(core_tile, n, pl_bak);
@@ -89,7 +89,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
                 if (CHESS_Redirect_EnumKing(core_tile, n) == 0)
                     CHESS_Redirect_PiecePattern(core_tile, n, player);
 
-        ARCHIVE_Notation_RecordMove(core_tile, glo_chess_event_king_uatk, glo_chess_archive_tmp_ptr, glo_chess_archive_tmp_tile[0], glo_chess_archive_tmp_tile[1]);
+        //ARCHIVE_Notation_RecordMove(core_tile, glo_chess_event_king_uatk, glo_chess_archive_tmp_ptr, glo_chess_archive_tmp_tile[0], glo_chess_archive_tmp_tile[1]);
         pl_bak = player;
         printf("done\n");
     }
@@ -175,7 +175,7 @@ int CHESS_Redirect_EnumQueen(CHESS_CORE_TILE *chess_tile, int slot) {
 }
 
 int CHESS_PiecePattern_King(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player) {
-
+    /*
     // enemy king marks the event_layer first
     for (int u = 0; u < 64; u++) {
         if (core_tile[u].piece != NULL && core_tile[u].piece->player != player &&
@@ -204,7 +204,7 @@ int CHESS_PiecePattern_King(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
             }
         }
     }
-
+    */
     // now generate the king pattern
     CHESS_CORE_TILE_TAG tag;
 
@@ -286,15 +286,12 @@ int CHESS_PiecePattern_BPawn(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PL
 int CHESS_PiecePattern_Knight(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PLAYER player) {
     (void)player;
 
-    char alpha[] = "abcdefgh";
     CHESS_CORE_TILE_TAG tag;
 
     tag.col = MIDDLE_ReturnColTile(tile) - 2;
     tag.row = MIDDLE_ReturnRowTile(tile) - 2;
-    //tag.col = alpha[col_pos];
 
     int result = -1;
-
     for (int n = 0; n < 4; n++) {
 
         for (int i = 0; i < 4; i++) {
@@ -304,7 +301,6 @@ int CHESS_PiecePattern_Knight(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_
             else if (n == 2) tag.col -= 1;
             else if (n == 3) tag.row -= 1;
 
-            //tag.col = alpha[col_pos];
             result = MIDDLE_TagToTile(tag);
             if (result == -1) continue;
 
@@ -455,16 +451,17 @@ int CHESS_PiecePattern_PawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CO
     char alpha[] = "abcdefgh";
     int col_pos = 0;
 
-    col_pos = MIDDLE_ReturnColTile(tile) - 1;
+    tag.col = MIDDLE_ReturnColTile(tile) - 1;
     tag.row = MIDDLE_ReturnRowTile(tile) + 1;
-    tag.col = alpha[col_pos];
+    //tag.col = alpha[col_pos];
 
     int result = -1;
     for (int n = 0; n < 3; n++) {
 
         result = MIDDLE_TagToTile(tag);
 
-        tag.col = alpha[col_pos++];
+        tag.col += 1;
+        //tag.col = alpha[col_pos++];
 
         if (result == -1) continue;
         if (n == 1) continue;
@@ -483,16 +480,17 @@ int CHESS_PiecePattern_BPawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_C
     char alpha[] = "abcdefgh";
     int col_pos = 0;
 
-    col_pos = MIDDLE_ReturnColTile(tile) - 1;
+    tag.col = MIDDLE_ReturnColTile(tile) - 1;
     tag.row = MIDDLE_ReturnRowTile(tile) - 1;
-    tag.col = alpha[col_pos];
+    //tag.col = alpha[col_pos];
 
     int result = -1;
     for (int n = 0; n < 3; n++) {
 
         result = MIDDLE_TagToTile(tag);
 
-        tag.col = alpha[col_pos++];
+        tag.col += 1;
+        //tag.col = alpha[col_pos++];
 
         if (result == -1) continue;
         if (n == 1) continue;
