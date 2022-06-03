@@ -9,3 +9,6 @@ se attacca, dobbiamo verificare che il pedone sia sulla casella attiva.
 se la casella e attiva, distrugge il pedone avversario.
 per distruggere il pedone, bisogna creare una funzione che semplicemente va indietro
 (oppure avanti dipendetemente dal giocat.) di 8 caselle, e distrugge il pezzo.
+
+Aggiungere solis come font
+Aggiungere Doge-Sans come font
