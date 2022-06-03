@@ -78,7 +78,11 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
                 //if (CHESS_Redirect_EnumKing(core_tile, n) == -1)
                 {
                     CHESS_PiecePattern_RangeReset(core_tile, n);
-                    CHESS_Redirect_PiecePattern(core_tile, n, pl_bak);
+
+                    if (CHESS_Redirect_EnumPawn(core_tile, n) == 0) {
+                        if (core_tile[n].piece->enum_piece == PAWN) CHESS_PiecePattern_PawnAttack(core_tile, n, player, 1);
+                        if (core_tile[n].piece->enum_piece == BPAWN) CHESS_PiecePattern_BPawnAttack(core_tile, n, player, 1);
+                    } else CHESS_Redirect_PiecePattern(core_tile, n, pl_bak);
 
                     for (int i = 0; i < 64; i++)
                         if (core_tile[n].piece->range[i] == true)
@@ -176,37 +180,7 @@ int CHESS_Redirect_EnumQueen(CHESS_CORE_TILE *chess_tile, int slot) {
 }
 
 int CHESS_PiecePattern_King(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player) {
-    /*
-    // enemy king marks the event_layer first
-    for (int u = 0; u < 64; u++) {
-        if (core_tile[u].piece != NULL && core_tile[u].piece->player != player &&
-           CHESS_Redirect_EnumKing(core_tile, u) == 0)
-        {
-            CHESS_CORE_TILE_TAG tag_pec;
 
-            tag_pec.col = MIDDLE_ReturnColTile(u) - 1;
-            tag_pec.row = MIDDLE_ReturnRowTile(u) - 1;
-
-            int result_pec = -1;
-            for (int i = 0; i < 9; i++) {
-
-                if (i == 4) { tag_pec.row += 1; continue; }
-                if (i == 3 || i == 6) { tag_pec.col += 1; tag_pec.row -= 3; }
-
-                if (tag_pec.col < 'a' || tag_pec.col > 'h' || tag_pec.row < 1) {
-                    tag_pec.row += 1; continue;
-                } else if (tag_pec.row > 8)continue;
-
-                result_pec = MIDDLE_TagToTile(tag_pec);
-
-                glo_chess_event_layer[result_pec] = true;
-
-                tag_pec.row += 1;
-            }
-        }
-    }
-    */
-    // now generate the king pattern
     CHESS_CORE_TILE_TAG tag;
 
     tag.col = MIDDLE_ReturnColTile(tile) - 1;
@@ -215,14 +189,20 @@ int CHESS_PiecePattern_King(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
     int result = -1;
     for (int n = 0; n < 9; n++) {
 
-        if (n == 4) { tag.row += 1; continue; }
-        if (n == 3 || n == 6) { tag.col += 1; tag.row -= 3; }
+        if (n == 4) {
+            tag.row += 1;
+            continue;
+        }
 
-        if (tag.col < 'a' || tag.col > 'h' || tag.row < 1) {
-            tag.row += 1; continue;
-        } else if (tag.row > 8)continue;
+        else if (n == 3 || n == 6) {
+            tag.col += 1;
+            tag.row = MIDDLE_ReturnRowTile(tile) - 1;
+        }
 
         result = MIDDLE_TagToTile(tag);
+        tag.row += 1;
+
+        if (result == -1) continue;
 
         if (core_tile[result].piece == NULL) {
             if (glo_chess_event_layer[result] == false)
@@ -233,8 +213,6 @@ int CHESS_PiecePattern_King(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
             if (glo_chess_event_layer[result] == false)
                 core_tile[tile].piece->range[result] = true;
         }
-
-        tag.row += 1;
     }
 
     return 0;
@@ -259,7 +237,7 @@ int CHESS_PiecePattern_Pawn(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
         if (core_tile[tile].tag.row != 2) break;
     }
 
-    CHESS_PiecePattern_PawnAttack(core_tile, tile, player);
+    CHESS_PiecePattern_PawnAttack(core_tile, tile, player, 0);
 
     return 0;
 }
@@ -283,7 +261,7 @@ int CHESS_PiecePattern_BPawn(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PL
         if (core_tile[tile].tag.row != 7) break;
     }
 
-    CHESS_PiecePattern_BPawnAttack(core_tile, tile, player);
+    CHESS_PiecePattern_BPawnAttack(core_tile, tile, player, 0);
 
     return 0;
 }
@@ -448,7 +426,7 @@ int CHESS_PiecePattern_Queen(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_P
     return 0;
 }
 
-int CHESS_PiecePattern_PawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player) {
+int CHESS_PiecePattern_PawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player, int king_check) {
 
     CHESS_CORE_TILE_TAG tag;
 
@@ -465,6 +443,11 @@ int CHESS_PiecePattern_PawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CO
         if (result == -1) continue;
         if (n == 1) continue;
 
+        if (king_check == 1) {
+            core_tile[tile].piece->range[result] = true;
+            continue;
+        }
+
         if (core_tile[result].piece != NULL && core_tile[result].piece->player != player)
             core_tile[tile].piece->range[result] = true;
     }
@@ -472,7 +455,7 @@ int CHESS_PiecePattern_PawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CO
     return 0;
 }
 
-int CHESS_PiecePattern_BPawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player) {
+int CHESS_PiecePattern_BPawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player, int king_check) {
 
     CHESS_CORE_TILE_TAG tag;
 
@@ -488,6 +471,11 @@ int CHESS_PiecePattern_BPawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_C
 
         if (result == -1) continue;
         if (n == 1) continue;
+
+        if (king_check == 1) {
+            core_tile[tile].piece->range[result] = true;
+            continue;
+        }
 
         if (core_tile[result].piece != NULL && core_tile[result].piece->player != player)
             core_tile[tile].piece->range[result] = true;
