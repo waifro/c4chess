@@ -43,12 +43,12 @@ int MIDDLE_TagToTile(CHESS_CORE_TILE_TAG tag) {
     if (tag.col < 97 || tag.col > 104) return (-1);
     if (tag.row < 1 || tag.row > 8) return (-1);
 
-    int tile = -1;
     for (int n = 0; n < 64; n++) {
-        if (tag.col == glo_chess_core_tile[n].tag.col && tag.row == glo_chess_core_tile[n].tag.row) { tile = n; break; }
+        if (tag.col == glo_chess_core_tile[n].tag.col && tag.row == glo_chess_core_tile[n].tag.row)
+            return (n);
     }
 
-    return (tile);
+    return (-1);
 }
 
 CHESS_CORE_TILE_TAG MIDDLE_TileToTag(int tile) {
@@ -63,15 +63,9 @@ int MIDDLE_ReturnRowTile(int tile) {
 }
 
 int MIDDLE_ReturnColTile(int tile) {
-
-    int col_pos = 0;
-    char alpha[] = "abcdefgh";
-
-    for (int n = 0; n < 8; n++) {
-        if (alpha[n] == glo_chess_core_tile[tile].tag.col) { col_pos = n; break; }
-    }
-
-    return (col_pos);
+    int result;
+    result = glo_chess_core_tile[tile].tag.col;
+    return (result);
 }
 
 void MIDDLE_UpdatePositionPiece(CHESS_CORE_TILE *chess_tile, int old, int new) {
