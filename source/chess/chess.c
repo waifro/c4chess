@@ -448,12 +448,8 @@ int CHESS_PiecePattern_PawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CO
 
     CHESS_CORE_TILE_TAG tag;
 
-    char alpha[] = "abcdefgh";
-    int col_pos = 0;
-
     tag.col = MIDDLE_ReturnColTile(tile) - 1;
     tag.row = MIDDLE_ReturnRowTile(tile) + 1;
-    //tag.col = alpha[col_pos];
 
     int result = -1;
     for (int n = 0; n < 3; n++) {
@@ -461,7 +457,6 @@ int CHESS_PiecePattern_PawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CO
         result = MIDDLE_TagToTile(tag);
 
         tag.col += 1;
-        //tag.col = alpha[col_pos++];
 
         if (result == -1) continue;
         if (n == 1) continue;
@@ -477,12 +472,8 @@ int CHESS_PiecePattern_BPawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_C
 
     CHESS_CORE_TILE_TAG tag;
 
-    char alpha[] = "abcdefgh";
-    int col_pos = 0;
-
     tag.col = MIDDLE_ReturnColTile(tile) - 1;
     tag.row = MIDDLE_ReturnRowTile(tile) - 1;
-    //tag.col = alpha[col_pos];
 
     int result = -1;
     for (int n = 0; n < 3; n++) {
@@ -490,7 +481,6 @@ int CHESS_PiecePattern_BPawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_C
         result = MIDDLE_TagToTile(tag);
 
         tag.col += 1;
-        //tag.col = alpha[col_pos++];
 
         if (result == -1) continue;
         if (n == 1) continue;
