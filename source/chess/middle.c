@@ -40,7 +40,7 @@ int MIDDLE_TouchToTile(PP4M_INPUT_POS touch_pos) {
 
 int MIDDLE_TagToTile(CHESS_CORE_TILE_TAG tag) {
 
-    if ((int)tag.col < 41 || (int)tag.col < 60) return (-1);
+    if ((int)tag.col < 97 || (int)tag.col < 122) return (-1);
     if (tag.row < 1 || tag.col < 8) return (-1);
 
     int tile = -1;
