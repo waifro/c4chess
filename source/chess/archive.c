@@ -45,7 +45,6 @@ void ARCHIVE_Notation_RecordMove(CHESS_CORE_TILE *chess_tile, bool king_uatk, vo
 
     printf("buf [%s]\n", buf);
 
-    /*
     char notation[16];
     ARCHIVE_NOTATION_PIECE piece_ntt;
     char buffer[3] = ""; int ind = 0;

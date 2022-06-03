@@ -257,7 +257,7 @@ int CHESS_PiecePattern_Pawn(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
 
         tag.row += 1;
         if (tag.row > 7) break;
-        result = MIDDLE_TagToTile(tag);
+        if ((result = MIDDLE_TagToTile(tag)) == -1) break;
 
         if (core_tile[result].piece == NULL)
             core_tile[tile].piece->range[result] = true;
