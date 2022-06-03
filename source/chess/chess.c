@@ -24,6 +24,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
         // create copy of tile
         CHESS_CORE_TILE unsafe_tile[64];
         MIDDLE_UnsafePosition_Copy(core_tile, unsafe_tile);
+        EVENT_BlankLayer_Global();
 
         for (int n = 0; n < 64; n++) {
             if (core_tile[n].piece != NULL) {
