@@ -3,6 +3,7 @@
 
 #include "core.h"
 
+extern char *glo_chess_record_move;
 extern int glo_chess_archive_tmp_tile[2];
 extern void *glo_chess_archive_tmp_ptr;
 

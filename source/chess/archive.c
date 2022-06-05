@@ -6,6 +6,7 @@
 #include "chess.h"
 #include "archive.h"
 
+char *glo_chess_record_move;
 int glo_chess_archive_tmp_tile[2];
 void *glo_chess_archive_tmp_ptr;
 
@@ -41,14 +42,16 @@ void ARCHIVE_Notation_RecordMove(CHESS_CORE_TILE *chess_tile, bool king_uatk, vo
 
     strcat(buf, tag);
 
-    if (king_uatk == true) strcat(buf, "+ ");
-    else { buf[strlen(buf)] = ' '; buf[strlen(buf)] = '\0'; }
+    if (king_uatk == true) strcat(buf, "+");
+    else { /*buf[strlen(buf)] = ' ';*/ buf[strlen(buf)] = '\0'; }
 
-    printf("record[%s]\n", buf);
+    if (!glo_chess_record_move) glo_chess_record_move = malloc(strlen(buf) + 1);
+    strcpy(glo_chess_record_move, buf);
+
+    printf("[%s]\n", glo_chess_record_move);
 
     return;
 }
-
 
 ARCHIVE_NOTATION_PIECE ARCHIVE_Redirect_StateMove(CHESS_CORE_TILE *chess_tile, int slot) {
 
