@@ -30,14 +30,9 @@ void ARCHIVE_Notation_RecordMove(CHESS_CORE_TILE *chess_tile, bool king_uatk, vo
             break;
 
         default:
-            if (ptr != NULL) {
-                foo[0] = notation_piece_char[notation_piece];
-                foo[1] = 'x';
-
-            } else {
-                foo[0] = notation_piece_char[notation_piece];
-                foo[1] = '\0';
-            }
+            foo[0] = notation_piece_char[notation_piece];
+            if (ptr != NULL) foo[1] = 'x';
+            else foo[1] = '\0';
             break;
     }
 
