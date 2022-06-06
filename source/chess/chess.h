@@ -5,6 +5,8 @@
 
 #include "core.h"
 
+extern int _glo_chess_tile_passant;
+
 int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER player);
 int CHESS_PiecePattern_RangeReset(CHESS_CORE_TILE *core_tile, int tile);
 int CHESS_PiecePattern_RangeAllowed(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player);
@@ -26,6 +28,7 @@ int CHESS_PiecePattern_Rook(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PL
 int CHESS_PiecePattern_Queen(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PLAYER player);
 
 // pawns have special attacks, separated moves
+int CHESS_PawnEnPassant_CheckState(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player);
 int CHESS_PiecePattern_PawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player, int king_check);
 int CHESS_PiecePattern_BPawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player, int king_check);
 

@@ -7,6 +7,8 @@
 #include "core.h"
 #include "dot.h"
 
+int _glo_chess_tile_passant = -1;
+
 int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER player) {
 
     static CHESS_CORE_PLAYER pl_bak;
@@ -221,7 +223,7 @@ int CHESS_PiecePattern_King(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
 int CHESS_PiecePattern_Pawn(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player) {
 
     CHESS_CORE_TILE_TAG tag = core_tile[tile].tag;
-    int result = -1;
+    int result = -1; int state = 0;
 
     for (int n = 0; n < 2; n++) {
 
@@ -235,17 +237,19 @@ int CHESS_PiecePattern_Pawn(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
         core_tile[tile].piece->range[result] = true;
 
         if (core_tile[tile].tag.row != 2) break;
+
+        state++;
     }
 
     CHESS_PiecePattern_PawnAttack(core_tile, tile, player, 0);
 
-    return 0;
+    return (state);
 }
 
 int CHESS_PiecePattern_BPawn(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player) {
 
     CHESS_CORE_TILE_TAG tag = core_tile[tile].tag;
-    int result = -1;
+    int result = -1; int state = 0;
 
     for (int n = 0; n < 2; n++) {
 
@@ -259,11 +263,13 @@ int CHESS_PiecePattern_BPawn(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PL
         core_tile[tile].piece->range[result] = true;
 
         if (core_tile[tile].tag.row != 7) break;
+
+        state++;
     }
 
     CHESS_PiecePattern_BPawnAttack(core_tile, tile, player, 0);
 
-    return 0;
+    return (state);
 }
 
 int CHESS_PiecePattern_Knight(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PLAYER player) {
@@ -426,6 +432,50 @@ int CHESS_PiecePattern_Queen(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_P
     return 0;
 }
 
+int CHESS_PawnEnPassant_CheckState(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player) {
+
+    CHESS_CORE_TILE_TAG tag = chess_tile[position_old].tag;
+    if (chess_tile[position_old].piece->enum_piece == PAWN) {
+
+        if (CHESS_PiecePattern_Pawn(chess_tile, position_old, player) != 2) {
+
+            if (_glo_chess_tile_passant != -1) {
+                _glo_chess_tile_passant = -1;
+
+                CHESS_CORE_TILE_TAG tag_pl = chess_tile[position_new].tag;
+                tag_pl.row -= 1;
+
+                //CORE_DestroyPiece(chess_tile[MIDDLE_TagToTile(tag_pl)].piece);
+
+            } else _glo_chess_tile_passant = -1;
+            return (-1);
+        }
+
+        tag.row += 1;
+        _glo_chess_tile_passant = MIDDLE_TagToTile(tag);
+
+    } else if (chess_tile[position_old].piece->enum_piece == BPAWN) {
+
+        if (CHESS_PiecePattern_BPawn(chess_tile, position_old, player) != 2) {
+            if (_glo_chess_tile_passant != -1) {
+                _glo_chess_tile_passant = -1;
+
+                CHESS_CORE_TILE_TAG tag_pl = chess_tile[position_new].tag;
+                tag_pl.row += 1;
+
+                //CORE_DestroyPiece(chess_tile[MIDDLE_TagToTile(tag_pl)].piece);
+
+            } else _glo_chess_tile_passant = -1;
+            return (-1);
+        }
+
+        tag.row -= 1;
+        _glo_chess_tile_passant = MIDDLE_TagToTile(tag);
+    }
+
+    return (0);
+}
+
 int CHESS_PiecePattern_PawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player, int king_check) {
 
     CHESS_CORE_TILE_TAG tag;
@@ -448,7 +498,10 @@ int CHESS_PiecePattern_PawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CO
             continue;
         }
 
-        if (core_tile[result].piece != NULL && core_tile[result].piece->player != player)
+        if (_glo_chess_tile_passant == result)
+            core_tile[tile].piece->range[result] = true;
+
+        else if (core_tile[result].piece != NULL && core_tile[result].piece->player != player)
             core_tile[tile].piece->range[result] = true;
     }
 
@@ -477,7 +530,10 @@ int CHESS_PiecePattern_BPawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_C
             continue;
         }
 
-        if (core_tile[result].piece != NULL && core_tile[result].piece->player != player)
+        if (_glo_chess_tile_passant == result)
+            core_tile[tile].piece->range[result] = true;
+
+        else if (core_tile[result].piece != NULL && core_tile[result].piece->player != player)
             core_tile[tile].piece->range[result] = true;
     }
 
