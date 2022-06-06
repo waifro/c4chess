@@ -56,7 +56,6 @@ extern bool glo_chess_event_king_uatk;
 extern CHESS_CORE_TILE_TAG glo_chess_core_passant;
 
 /* prototypes */
-void CORE_DestroyPiece(CHESS_CORE_PIECE *piece);
 void CORE_Chessboard_Init(void);
 void CORE_ChessInitTag(CHESS_CORE_PLAYER player);
 
