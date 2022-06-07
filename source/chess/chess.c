@@ -190,6 +190,11 @@ int CHESS_PiecePattern_King(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
     tag.row = MIDDLE_ReturnRowTile(tile) - 1;
 
     int result = -1;
+
+    for (int n = 0; n < strlen(_glo_chess_king_castling); n++)
+        if ((result = CHESS_CheckState_CastleAvailable(tile, n)) != -1)
+            core_tile[tile].piece->range[result] = true;
+
     for (int n = 0; n < 9; n++) {
 
         if (n == 4) {
@@ -433,10 +438,58 @@ int CHESS_PiecePattern_Queen(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_P
     return 0;
 }
 
-int CHESS_CheckState_KingCastling(CHESS_CORE_TILE *chess_tile, int position_old, CHESS_CORE_PLAYER player) {
+int CHESS_CheckState_CastleAvailable(int tile, int index) {
+
+    if (_glo_chess_king_castling[index] == 'K' || _glo_chess_king_castling[index] == 'k') {
+
+        CHESS_CORE_TILE_TAG king_castle = MIDDLE_TileToTag(tile);
+        int res = -1; int u;
+
+        for (u = 0; u < 3; u++) {
+            res = MIDDLE_TagToTile(king_castle); king_castle.col += 1;
+            if (glo_chess_event_layer[res] == true) break;
+        }
+
+        if (u == 3) return (res);
+
+    } else if (_glo_chess_king_castling[index] == 'Q' || _glo_chess_king_castling[index] == 'q') {
+
+        CHESS_CORE_TILE_TAG king_castle = MIDDLE_TileToTag(tile);
+        int res = -1; int u;
+
+        for (u = 0; u < 3; u++) {
+            res = MIDDLE_TagToTile(king_castle); king_castle.col -= 1;
+            if (glo_chess_event_layer[res] == true) break;
+        }
+
+        if (u == 3) return (res);
+    }
+
+    return (-1);
+}
+
+int CHESS_CheckState_KingCastling(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player) {
     if (_glo_chess_king_castling[0] == '-') return -1;
 
     printf("before player[%d] %s\n", player, _glo_chess_king_castling);
+
+    int result = -1;
+    for (int n = 0; n < strlen(_glo_chess_king_castling); n++)
+        if ((result = CHESS_CheckState_CastleAvailable(position_old, n)) == position_new) {
+
+            CHESS_CORE_TILE_TAG tag;
+            if (chess_tile[result].tag.col == 'c') {
+                tag = MIDDLE_TileToTag(result - 2);
+
+                result = MIDDLE_TagToTile(tag);
+                MIDDLE_UpdatePositionPiece(chess_tile, result, result + 3);
+            } else if (chess_tile[result].tag.col == 'g') {
+                tag = MIDDLE_TileToTag(result + 1);
+
+                result = MIDDLE_TagToTile(tag);
+                MIDDLE_UpdatePositionPiece(chess_tile, result, result - 2);
+            }
+        }
 
     if (chess_tile[position_old].piece->enum_piece == KING) {
 
