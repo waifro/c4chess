@@ -143,7 +143,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player) {
                 if (CHESS_Redirect_EnumPawn(glo_chess_core_tile, position_old) == 0)
                     CHESS_CheckState_PawnEnPassant(glo_chess_core_tile, position_old, position_new, *player);
                 else if (CHESS_Redirect_EnumKing(glo_chess_core_tile, position_old) == 0)
-                    CHESS_CheckState_KingCastling(glo_chess_core_tile, position_old, position_new, *player);
+                    CHESS_CheckState_KingCastling(glo_chess_core_tile, position_old, *player);
                 else if (CHESS_Redirect_EnumRook(glo_chess_core_tile, position_old) == 0)
                     CHESS_CheckState_RookCastling(glo_chess_core_tile, position_old, position_new, *player);
 

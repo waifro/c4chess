@@ -433,10 +433,10 @@ int CHESS_PiecePattern_Queen(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_P
     return 0;
 }
 
-int CHESS_CheckState_KingCastling(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player) {
+int CHESS_CheckState_KingCastling(CHESS_CORE_TILE *chess_tile, int position_old, CHESS_CORE_PLAYER player) {
     if (_glo_chess_king_castling[0] == '-') return -1;
 
-    printf("player[%d] %s\n", player, _glo_chess_king_castling);
+    printf("before player[%d] %s\n", player, _glo_chess_king_castling);
 
     if (chess_tile[position_old].piece->enum_piece == KING) {
 
@@ -461,14 +461,137 @@ int CHESS_CheckState_KingCastling(CHESS_CORE_TILE *chess_tile, int position_old,
 
     if (strlen(_glo_chess_king_castling) == 0) strcpy(_glo_chess_king_castling, "-");
 
-    printf("player[%d] %s\n", player, _glo_chess_king_castling);
+    printf("after player[%d] %s\n", player, _glo_chess_king_castling);
 
     return 0;
 }
 
 int CHESS_CheckState_RookCastling(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player) {
+    if (_glo_chess_king_castling[0] == '-') return -1;
+
+    printf("before player[%d] %s\n", player, _glo_chess_king_castling);
+    char buf[5];
+
+    CHESS_CORE_TILE_TAG tag = MIDDLE_TileToTag(position_old);
+
+    if (chess_tile[position_old].piece->enum_piece == ROOK) {
+
+        if (tag.col == 'a') {
+
+            for (int n = 0; n < strlen(_glo_chess_king_castling); n++)
+                if (_glo_chess_king_castling[n] == 'Q') {
+
+                    for (int n = 0; n < strlen(_glo_chess_king_castling); n++) {
+                        if (_glo_chess_king_castling[n] != 'Q')
+                            continue;
+
+                    // remove char from _glo_chess_king_castling using buf
 
 
+                    for (int i = 0; i < strlen(_glo_chess_king_castling); i++) {
+                        if (i < n) {
+
+                            buf[i] = _glo_chess_king_castling[i];
+                            continue;
+                        }
+
+                        buf[i] = _glo_chess_king_castling[i+1];
+                        if (_glo_chess_king_castling[i+1] == '\0') break;
+                    }
+                }
+
+                strcpy(_glo_chess_king_castling, buf);
+            }
+        }
+
+        else if (tag.col == 'h') {
+            for (int n = 0; n < strlen(_glo_chess_king_castling); n++)
+                if (_glo_chess_king_castling[n] == 'K') {
+
+                    for (int n = 0; n < strlen(_glo_chess_king_castling); n++) {
+                        if (_glo_chess_king_castling[n] != 'K')
+                            continue;
+
+                    // remove char from _glo_chess_king_castling using buf
+
+
+                    for (int i = 0; i < strlen(_glo_chess_king_castling); i++) {
+                        if (i < n) {
+
+                            buf[i] = _glo_chess_king_castling[i];
+                            continue;
+                        }
+
+                        buf[i] = _glo_chess_king_castling[i+1];
+                        if (_glo_chess_king_castling[i+1] == '\0') break;
+                    }
+                }
+
+                strcpy(_glo_chess_king_castling, buf);
+            }
+        }
+
+    } else if (chess_tile[position_old].piece->enum_piece == BROOK) {
+
+        if (tag.col == 'a') {
+
+            for (int n = 0; n < strlen(_glo_chess_king_castling); n++)
+                if (_glo_chess_king_castling[n] == 'q') {
+
+                    for (int n = 0; n < strlen(_glo_chess_king_castling); n++) {
+                        if (_glo_chess_king_castling[n] != 'q')
+                            continue;
+
+                    // remove char from _glo_chess_king_castling using buf
+
+
+                    for (int i = 0; i < strlen(_glo_chess_king_castling); i++) {
+                        if (i < n) {
+
+                            buf[i] = _glo_chess_king_castling[i];
+                            continue;
+                        }
+
+                        buf[i] = _glo_chess_king_castling[i+1];
+                        if (_glo_chess_king_castling[i+1] == '\0') break;
+                    }
+                }
+
+                strcpy(_glo_chess_king_castling, buf);
+            }
+        }
+
+        else if (tag.col == 'h') {
+            for (int n = 0; n < strlen(_glo_chess_king_castling); n++)
+                if (_glo_chess_king_castling[n] == 'k') {
+
+                    for (int n = 0; n < strlen(_glo_chess_king_castling); n++) {
+                        if (_glo_chess_king_castling[n] != 'k')
+                            continue;
+
+                    // remove char from _glo_chess_king_castling using buf
+
+
+                    for (int i = 0; i < strlen(_glo_chess_king_castling); i++) {
+                        if (i < n) {
+
+                            buf[i] = _glo_chess_king_castling[i];
+                            continue;
+                        }
+
+                        buf[i] = _glo_chess_king_castling[i+1];
+                        if (_glo_chess_king_castling[i+1] == '\0') break;
+                    }
+                }
+
+                strcpy(_glo_chess_king_castling, buf);
+            }
+        }
+    }
+
+    if (strlen(_glo_chess_king_castling) == 0) strcpy(_glo_chess_king_castling, "-");
+
+    printf("after player[%d] %s\n", player, _glo_chess_king_castling);
 
     return 0;
 }
