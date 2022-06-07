@@ -25,29 +25,22 @@ void EVENT_BlankLayer_Piece(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER playe
     return;
 }
 
-void EVENT_CheckDrawState(void) {
+void EVENT_UpdateState_ChessEvent(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player) {
 
-    /*
-    for (int n = 0; n < 32; n++) {
-        if (glo_chess_core_piece[n].texture != 0 && glo_chess_core_piece[n].enum_piece == NONE) { printf("  dead mouse = %d\n\n", n); }
-    }
-    */
+    if (CHESS_Redirect_EnumPawn(chess_tile, position_old) == 0)
+        CHESS_CheckState_PawnEnPassant(chess_tile, position_old, position_new, player);
+    else if (CHESS_Redirect_EnumKing(chess_tile, position_old) == 0)
+        CHESS_CheckState_KingCastling(chess_tile, position_old, position_new, player);
+    else if (CHESS_Redirect_EnumRook(chess_tile, position_old) == 0)
+        CHESS_CheckState_RookCastling(chess_tile, position_old, position_new, player);
 
-    return;
-}
-
-void EVENT_CheckOppositeAttack(CHESS_CORE_PLAYER player) {
-
-    for (int n = 0; n < 64; n++) {
-        if (glo_chess_core_tile[n].piece != NULL && glo_chess_core_tile[n].piece->player != player) {
-            for (int i = 0; i < 64; i++) ;
-        }
-    }
+    if (CHESS_Redirect_EnumPawn(chess_tile, position_old) != 0)
+        _glo_chess_tile_passant = -1;
 
     return;
 }
 
-void EVENT_CheckKingState(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player) {
+void EVENT_CheckKing_UnderAttack(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player) {
 
     for (int n = 0; n < 64; n++) {
 
@@ -100,8 +93,7 @@ int EVENT_CheckPieceLayer(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player)
         }
 
         pl_bak = player;
-        EVENT_CheckDrawState();
-        EVENT_CheckKingState(chess_tile, player);
+        EVENT_CheckKing_UnderAttack(chess_tile, player);
     }
 
     if (glo_chess_event_king_uatk == true) return 2;
