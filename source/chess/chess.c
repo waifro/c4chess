@@ -192,7 +192,7 @@ int CHESS_PiecePattern_King(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
     int result = -1;
 
     for (int n = 0; n < strlen(_glo_chess_king_castling); n++)
-        if ((result = CHESS_CheckState_CastleAvailable(tile, n)) != -1)
+        if ((result = CHESS_CheckState_CastleAvailable(core_tile, tile, n)) != -1)
             core_tile[tile].piece->range[result] = true;
 
     for (int n = 0; n < 9; n++) {
@@ -438,7 +438,7 @@ int CHESS_PiecePattern_Queen(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_P
     return 0;
 }
 
-int CHESS_CheckState_CastleAvailable(int tile, int index) {
+int CHESS_CheckState_CastleAvailable(CHESS_CORE_TILE *chess_tile, int tile, int index) {
 
     if (_glo_chess_king_castling[index] == 'K' || _glo_chess_king_castling[index] == 'k') {
 
@@ -447,7 +447,7 @@ int CHESS_CheckState_CastleAvailable(int tile, int index) {
 
         for (u = 0; u < 3; u++) {
             res = MIDDLE_TagToTile(king_castle); king_castle.col += 1;
-            if (glo_chess_event_layer[res] == true) break;
+            if (glo_chess_event_layer[res] == true || (u != 0 && chess_tile[res].piece != NULL)) break;
         }
 
         if (u == 3) return (res);
@@ -459,7 +459,7 @@ int CHESS_CheckState_CastleAvailable(int tile, int index) {
 
         for (u = 0; u < 3; u++) {
             res = MIDDLE_TagToTile(king_castle); king_castle.col -= 1;
-            if (glo_chess_event_layer[res] == true) break;
+            if (glo_chess_event_layer[res] == true || (u != 0 && chess_tile[res].piece != NULL)) break;
         }
 
         if (u == 3) return (res);
@@ -475,7 +475,7 @@ int CHESS_CheckState_KingCastling(CHESS_CORE_TILE *chess_tile, int position_old,
 
     int result = -1;
     for (int n = 0; n < strlen(_glo_chess_king_castling); n++)
-        if ((result = CHESS_CheckState_CastleAvailable(position_old, n)) == position_new) {
+        if ((result = CHESS_CheckState_CastleAvailable(chess_tile, position_old, n)) == position_new) {
 
             CHESS_CORE_TILE_TAG tag;
             if (chess_tile[result].tag.col == 'c') {
