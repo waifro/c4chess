@@ -72,7 +72,7 @@ int FEN_Init(CHESS_CORE_PLAYER *init_player, char *fen_notation) {
 
 int FEN_StrTrunk_TagToTile(char *str) {
 
-    if (str[1] == '\0') return -1;
+    if (str[0] == '-') return -1;
     CHESS_CORE_TILE_TAG tag;
     tag.col = str[0]; tag.row = atoi(&str[1]);
 

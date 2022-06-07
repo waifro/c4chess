@@ -8,6 +8,7 @@
 #include "dot.h"
 
 int _glo_chess_tile_passant = -1;
+char _glo_chess_king_castling[5];
 
 int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER player) {
 
