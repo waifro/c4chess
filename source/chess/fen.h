@@ -5,6 +5,7 @@
 
 int FEN_Init(CHESS_CORE_PLAYER *init_player, char *fen_notation);
 
+int FEN_StrTrunk_TagToTile(char *str);
 void FEN_StrTrunk(char *restrict str, char *restrict a, char *restrict b, char *restrict c, char *restrict d, int *restrict e, int *restrict f);
 int FEN_PlayerTurn(int *init_player, char fen_play);
 

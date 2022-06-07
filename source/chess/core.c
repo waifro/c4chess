@@ -197,7 +197,7 @@ void CORE_Testing(CHESS_CORE_PLAYER player_view) {
     CORE_ResetGlobal_CorePiece();
 
     /* init pieces for main player */
-    FEN_Init(&player, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0");
+    FEN_Init(&player, "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2");
 
     SDL_Texture *background = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_DARK, 255, NULL, 0, 0, glo_screen_w, glo_screen_h);
 

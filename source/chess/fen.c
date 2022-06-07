@@ -10,6 +10,7 @@
 #include "../global.h"
 #include "fen.h"
 #include "chess.h"
+#include "middle.h"
 #include "core.h"
 
 #define TEX_WKING "resources/wking.png"
@@ -64,8 +65,18 @@ int FEN_Init(CHESS_CORE_PLAYER *init_player, char *fen_notation) {
 
     FEN_PlayerTurn((int*)init_player, fen_play[0]);
     FEN_InitBoard(*init_player, fen_board);
+    _glo_chess_tile_passant = FEN_StrTrunk_TagToTile(fen_passant);
 
     return (0);
+}
+
+int FEN_StrTrunk_TagToTile(char *str) {
+
+    if (str[1] == '\0') return -1;
+    CHESS_CORE_TILE_TAG tag;
+    tag.col = str[0]; tag.row = atoi(&str[1]);
+
+    return (MIDDLE_TagToTile(tag));
 }
 
 void FEN_StrTrunk(char *restrict str, char *restrict a, char *restrict b, char *restrict c, char *restrict d, int *restrict e, int *restrict f) {
