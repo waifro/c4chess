@@ -439,7 +439,7 @@ int CHESS_PawnEnPassant_CheckState(CHESS_CORE_TILE *chess_tile, int position_old
 
         if (CHESS_PiecePattern_Pawn(chess_tile, position_old, player) != 2) {
 
-            if (_glo_chess_tile_passant != -1) {
+            if (_glo_chess_tile_passant != -1 && chess_tile[position_old].piece->player != player) {
 
                 if (_glo_chess_tile_passant == position_new) {
                     CHESS_CORE_TILE_TAG tag_pl = chess_tile[position_new].tag;
@@ -459,7 +459,8 @@ int CHESS_PawnEnPassant_CheckState(CHESS_CORE_TILE *chess_tile, int position_old
     } else if (chess_tile[position_old].piece->enum_piece == BPAWN) {
 
         if (CHESS_PiecePattern_BPawn(chess_tile, position_old, player) != 2) {
-            if (_glo_chess_tile_passant != -1) {
+
+            if (_glo_chess_tile_passant != -1 && chess_tile[position_old].piece->player != player) {
 
                 if (_glo_chess_tile_passant == position_new) {
                     CHESS_CORE_TILE_TAG tag_pl = chess_tile[position_new].tag;
