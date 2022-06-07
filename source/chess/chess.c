@@ -433,7 +433,47 @@ int CHESS_PiecePattern_Queen(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_P
     return 0;
 }
 
-int CHESS_PawnEnPassant_CheckState(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player) {
+int CHESS_CheckState_KingCastling(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player) {
+    if (_glo_chess_king_castling[0] == '-') return -1;
+
+    printf("player[%d] %s\n", player, _glo_chess_king_castling);
+
+    if (chess_tile[position_old].piece->enum_piece == KING) {
+
+        for (int n = 0; n < strlen(_glo_chess_king_castling); n++) {
+            if (_glo_chess_king_castling[n] != 'K' && _glo_chess_king_castling[n] != 'Q') {
+                char buf[5];
+                strcpy(buf, &_glo_chess_king_castling[n]);
+                strcpy(_glo_chess_king_castling, buf);
+                break;
+            }
+        }
+
+    } else if (chess_tile[position_old].piece->enum_piece == BKING) {
+
+        for (int n = 0; n < strlen(_glo_chess_king_castling); n++) {
+            if (_glo_chess_king_castling[n] != 'K' && _glo_chess_king_castling[n] != 'Q') {
+                _glo_chess_king_castling[n] = '\0';
+                break;
+            }
+        }
+    }
+
+    if (strlen(_glo_chess_king_castling) == 0) strcpy(_glo_chess_king_castling, "-");
+
+    printf("player[%d] %s\n", player, _glo_chess_king_castling);
+
+    return 0;
+}
+
+int CHESS_CheckState_RookCastling(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player) {
+
+
+
+    return 0;
+}
+
+int CHESS_CheckState_PawnEnPassant(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player) {
 
     CHESS_CORE_TILE_TAG tag = chess_tile[position_old].tag;
     if (chess_tile[position_old].piece->enum_piece == PAWN) {
