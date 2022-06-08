@@ -175,9 +175,9 @@ void CORE_GlobalUpdate_StateRender(void) {
     return;
 }
 
-void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, void *socketNet) {
+void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, void *socket) {
 
-    if (socketNet != NULL) return;
+    (void)socket;
 
     /* preserve player */
     CHESS_CORE_PLAYER player = player_view;
@@ -256,7 +256,7 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, void *so
         CHESS_PiecePattern_UpdateState(glo_chess_core_tile, player);
 
         /* makes the in-game changes during gameplay */
-        MIDDLE_UpdateChangeState(&event, &player);
+        MIDDLE_UpdateChangeState(&event, &player, socket);
 
         SDL_RenderClear(glo_render);
         SDL_RenderCopy(glo_render, background, NULL, NULL);
