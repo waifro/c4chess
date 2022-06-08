@@ -175,9 +175,9 @@ void CORE_GlobalUpdate_StateRender(void) {
     return;
 }
 
-void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, void *server_set) {
+void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, void *netHostId) {
 
-    if (server_set != NULL) return;
+    if (netHostId != NULL) return;
 
     /* preserve player */
     CHESS_CORE_PLAYER player = player_view;
@@ -199,7 +199,7 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, void *server_set) {
     CORE_ResetGlobal_CorePiece();
 
     /* init pieces for main player */
-    FEN_Init(&player, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0");
+    FEN_Init(&player, fen_init);
 
     SDL_Texture *background = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_DARK, 255, NULL, 0, 0, glo_screen_w, glo_screen_h);
 

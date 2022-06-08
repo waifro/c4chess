@@ -26,7 +26,7 @@ int main (int argc, char *argv[]) {
     CFG_BootFile_LoadConfig();
 
     // start offline 2-player game (wip)
-    CORE_InitChess_Play(WHITE_PLAYER, NULL);
+    CORE_InitChess_Play(WHITE_PLAYER, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0", NULL);
 
     //GUI_PopupWindow_Core(100, 50, 1080, 590, "test");
     //GUI_Testing();
