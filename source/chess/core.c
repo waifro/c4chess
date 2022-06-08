@@ -175,7 +175,9 @@ void CORE_GlobalUpdate_StateRender(void) {
     return;
 }
 
-void CORE_Testing(CHESS_CORE_PLAYER player_view) {
+void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, void *server_set) {
+
+    if (server_set != NULL) return;
 
     /* preserve player */
     CHESS_CORE_PLAYER player = player_view;
