@@ -212,6 +212,10 @@ int CHESS_PiecePattern_King(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
 
         if (result == -1) continue;
 
+        if (glo_chess_event_layer[result] == false)
+            core_tile[tile].piece->range[result] = true;
+
+        /*
         if (core_tile[result].piece == NULL) {
             if (glo_chess_event_layer[result] == false)
                 core_tile[tile].piece->range[result] = true;
@@ -221,6 +225,7 @@ int CHESS_PiecePattern_King(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
             if (glo_chess_event_layer[result] == false)
                 core_tile[tile].piece->range[result] = true;
         }
+        */
     }
 
     return 0;
