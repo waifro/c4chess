@@ -175,9 +175,9 @@ void CORE_GlobalUpdate_StateRender(void) {
     return;
 }
 
-void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, void *netHostId) {
+void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, void *socketNet) {
 
-    if (netHostId != NULL) return;
+    if (socketNet != NULL) return;
 
     /* preserve player */
     CHESS_CORE_PLAYER player = player_view;
