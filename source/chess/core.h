@@ -69,7 +69,7 @@ CHESS_CORE_PLAYER CORE_ReversePlayer_State(CHESS_CORE_PLAYER player);
 
 void CORE_GlobalUpdate_StateRender(void);
 
-int CORE_NetTesting(int *socket);
+int CORE_NetTesting(int *socket, int state);
 void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, void *socketNet);
 
 #endif

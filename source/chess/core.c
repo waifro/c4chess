@@ -176,8 +176,12 @@ void CORE_GlobalUpdate_StateRender(void) {
     return;
 }
 
-int CORE_NetTesting(int *socket) {
+int CORE_NetTesting(int *socket, int state) {
     if (socket == NULL) return -1;
+    if (state == -1) {
+        close(socket);
+        return -1;
+    }
 
     char buf[256];
     pp4m_NET_Sockfd_RecvData(socket, buf);
@@ -238,8 +242,6 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, void *so
         deltaTime = pp4m_DeltaFramerate();
         (void)deltaTime;
 
-        CORE_NetTesting(socket);
-
         while(SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) running = -1;
             if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
@@ -289,6 +291,8 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, void *so
         CORE_GlobalUpdate_StateRender();
 
         SDL_RenderPresent(glo_render);
+
+        CORE_NetTesting(socket, running);
     }
 
     SDL_DestroyTexture(background);
