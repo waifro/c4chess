@@ -6,6 +6,7 @@
 #include <SDL2/SDL.h>
 
 #include "../pp4m/pp4m.h"
+#include "../pp4m/pp4m_net.h"
 #include "../pp4m/pp4m_draw.h"
 #include "../pp4m/pp4m_image.h"
 #include "../pp4m/pp4m_input.h"
@@ -175,6 +176,24 @@ void CORE_GlobalUpdate_StateRender(void) {
     return;
 }
 
+int CORE_NetTesting(int *socket) {
+
+    int tile = -1;
+    //socket = pp4m_NET_Init(TCP);
+
+    //char local_addr[256];
+    //pp4m_NET_GetLocalAddress(local_addr);
+
+    //pp4m_NET_ConnectServerByAddress(local_addr, 62443);
+
+    char buf[256];
+    pp4m_NET_RecvData(buf);
+
+    if (strlen(buf) > 0) printf("@server: %s\n", buf);
+
+    return (tile);
+}
+
 void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, void *socket) {
 
     (void)socket;
@@ -207,14 +226,22 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, void *so
 
     SDL_Texture *txr_snapshot = NULL;
 
-    int running = 0;
+    pp4m_NET_Init(TCP);
+
+    char local_addr[256];
+    pp4m_NET_GetLocalAddress(local_addr);
+    printf("[%s] server\n", local_addr);
+
+    pp4m_NET_ConnectServerHostname(local_addr, 62443);
 
     // testing: cap framerate to 30/60 fps
-    float deltaTime;
+    float deltaTime; int running = 0;
 
     while(running == 0) {
         deltaTime = pp4m_DeltaFramerate();
         (void)deltaTime;
+
+        if (CORE_NetTesting(socket) == -1) continue;
 
         while(SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) running = -1;
