@@ -177,21 +177,16 @@ void CORE_GlobalUpdate_StateRender(void) {
 }
 
 int CORE_NetTesting(int *socket) {
-
-    int tile = -1;
-    //socket = pp4m_NET_Init(TCP);
-
-    //char local_addr[256];
-    //pp4m_NET_GetLocalAddress(local_addr);
-
-    //pp4m_NET_ConnectServerByAddress(local_addr, 62443);
+    if (socket == NULL) return -1;
 
     char buf[256];
-    pp4m_NET_RecvData(buf);
+    pp4m_NET_Sockfd_RecvData(socket, buf);
 
-    if (strlen(buf) > 0) printf("@server: %s\n", buf);
+    if (strlen(buf) > 0) {
+        printf("@server: %s\n", buf);
+    }
 
-    return (tile);
+    return (0);
 }
 
 void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, void *socket) {
@@ -226,13 +221,15 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, void *so
 
     SDL_Texture *txr_snapshot = NULL;
 
-    pp4m_NET_Init(TCP);
+    socket = pp4m_NET_Init(TCP);
 
     char local_addr[256];
     pp4m_NET_GetLocalAddress(local_addr);
-    printf("[%s] server\n", local_addr);
 
-    pp4m_NET_ConnectServerHostname(local_addr, 62443);
+    // connect to the server
+    printf("waiting connection to host...\n", local_addr);
+    while(1) if(pp4m_NET_ConnectServerByHostname(local_addr, 62443) == 0) break;
+    printf("connection established to [%s]\n", local_addr);
 
     // testing: cap framerate to 30/60 fps
     float deltaTime; int running = 0;
@@ -241,7 +238,7 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, void *so
         deltaTime = pp4m_DeltaFramerate();
         (void)deltaTime;
 
-        if (CORE_NetTesting(socket) == -1) continue;
+        CORE_NetTesting(socket);
 
         while(SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) running = -1;

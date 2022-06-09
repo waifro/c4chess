@@ -106,7 +106,7 @@ int pp4m_NET_GetLocalAddress(char *destination) {
     return result;
 }
 
-int pp4m_NET_ConnectServerHostname(char *hostname, int port) {
+int pp4m_NET_ConnectServerByHostname(char *hostname, int port) {
     int result = 0;
 
     struct hostent *host;
@@ -168,18 +168,28 @@ int pp4m_NET_RecvData(char *buffer) {
 
     if (pp4m_protocol == TCP) {
         result = recv(pp4m_socket, buffer, sizeof(buffer), 0);
-        if (result == -1) {
-            int error = errno;
-            pp4m_IO_Feedback("feedback.txt", strerror(error));
-        }
+        if (result == -1) pp4m_IO_Feedback("feedback.txt", strerror(errno));
     }
 
     else if (pp4m_protocol == UDP) {
         result = recvfrom(pp4m_socket, buffer, sizeof(buffer), 0, NULL, NULL);
-        if (result == -1) {
-            int error = errno;
-            pp4m_IO_Feedback("feedback.txt", strerror(error));
-        }
+        if (result == -1) pp4m_IO_Feedback("feedback.txt", strerror(errno));
+    }
+
+    return result;
+}
+
+int pp4m_NET_Sockfd_RecvData(void *socket, char *buffer) {
+    int result = 0;
+
+    if (pp4m_protocol == TCP) {
+        result = recv(socket, buffer, sizeof(buffer), 0);
+        if (result == -1) pp4m_IO_Feedback("feedback.txt", strerror(errno));
+    }
+
+    else if (pp4m_protocol == UDP) {
+        result = recvfrom(socket, buffer, sizeof(buffer), 0, NULL, NULL);
+        if (result == -1) pp4m_IO_Feedback("feedback.txt", strerror(errno));
     }
 
     return result;
