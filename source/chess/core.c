@@ -1,6 +1,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 #include <stdbool.h>
 #include <SDL2/SDL.h>
@@ -176,29 +177,60 @@ void CORE_GlobalUpdate_StateRender(void) {
     return;
 }
 
-int CORE_NetTesting(int *socket, int state) {
-    if (socket == NULL) return -1;
-    if (state == -1) {
-        close(socket);
+int CORE_NET_InitGlobal(int *socket, CHESS_CORE_PLAYER *player, char *fen) {
+    int result = -1;
+    char buf[512];
+
+    int buf_rid = -1;
+    //int buf_passant = -1;
+    int buf_halfm = -1;
+    int buf_fullm = -1;
+
+    char buf_plsw[4];
+    char buf_plvl[4];
+    char buf_fen[128];
+    char buf_castle[4];
+
+    result = recv(*socket, buf, 511, MSG_WAITALL);
+    if (result == -1) {
+        printf("CORE_NET_InitGlobal: recv(): %s\n", strerror(errno));
         return -1;
     }
 
-    char buf[256];
-    pp4m_NET_Sockfd_RecvData(socket, buf);
+    printf("socket recieved: [%s]\n", buf);
 
-    if (strlen(buf) > 0) {
-        printf("@server: %s\n", buf);
-    }
+    sscanf(buf, "%d %s %s %s %s %*d %d %d", &buf_rid, buf_plvl, buf_fen, buf_plsw, buf_castle, &buf_halfm, &buf_fullm);
+
+    printf("recieved parsed: [%s] [%s] [%s] [-] [%d] [%d]\n", buf_fen, buf_plsw, buf_castle, buf_halfm, buf_fullm);
+
+    FEN_PlayerTurn((int*)player, buf_plvl[0]);
+    sprintf(fen, "%s %s %s - %d %d", buf_fen, buf_plsw, buf_castle, buf_halfm, buf_fullm);
 
     return (0);
 }
 
-void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, void *socket) {
+int CORE_NET_Testing(int *socket, int running_prg) {
+    if (socket == NULL) return -1;
 
-    (void)socket;
+    if (running_prg == -1) {
+        close(*socket);
+        return -1;
+    }
+
+    //char buf[256];
+    //pp4m_NET_Sockfd_RecvData(socket, buf);
+
+    //if (strlen(buf) > 0) {
+        //printf("@server: %s\n", buf);
+    //}
+
+    return (0);
+}
+
+void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *socket) {
 
     /* preserve player */
-    CHESS_CORE_PLAYER player = player_view;
+    CHESS_CORE_PLAYER player;
     glo_chess_core_player = player_view;
 
     /* init chessboard gfx untagged */
@@ -225,15 +257,7 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, void *so
 
     SDL_Texture *txr_snapshot = NULL;
 
-    socket = pp4m_NET_Init(TCP);
 
-    char local_addr[256];
-    pp4m_NET_GetLocalAddress(local_addr);
-
-    // connect to the server
-    printf("waiting connection to host...\n", local_addr);
-    while(1) if(pp4m_NET_ConnectServerByHostname(local_addr, 62443) == 0) break;
-    printf("connection established to [%s]\n", local_addr);
 
     // testing: cap framerate to 30/60 fps
     float deltaTime; int running = 0;
@@ -292,7 +316,7 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, void *so
 
         SDL_RenderPresent(glo_render);
 
-        CORE_NetTesting(socket, running);
+        CORE_NET_Testing(socket, running);
     }
 
     SDL_DestroyTexture(background);

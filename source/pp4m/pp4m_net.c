@@ -94,11 +94,11 @@ int pp4m_NET_GetLocalAddress(int socket, char *destination) {
     int result = 0;
 
     struct sockaddr_in localAddress;
-    socklen_t addressLength = sizeof(localAddress);
-    result = getsockname(socket, (struct sockaddr*)&localAddress, &size);
+    int addressLength = sizeof(localAddress);
+    result = getsockname(socket, (struct sockaddr*)&localAddress, &addressLength);
     if (result == -1) return -1;
 
-    strcpy(destination, buf);
+    strcpy(destination, inet_ntoa(localAddress.sin_addr));
 
     return result;
 }
@@ -106,7 +106,7 @@ int pp4m_NET_GetLocalAddress(int socket, char *destination) {
 int pp4m_NET_GetLocalHostname(char *destination) {
 
     char buf[256];
-    result = gethostname(buf, sizeof(buf));
+    int result = gethostname(buf, sizeof(buf));
     if (result == -1) {
         int error = errno;
         pp4m_IO_Feedback("feedback.txt", strerror(error));

@@ -25,8 +25,28 @@ int main (int argc, char *argv[]) {
 
     CFG_BootFile_LoadConfig();
 
-    // start offline 2-player game (wip)
-    CORE_InitChess_Play(WHITE_PLAYER, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0", NULL);
+    CHESS_CORE_PLAYER player;
+    char fen_notation[256];
+
+    // start online 2-player game (wip)
+    int socket = pp4m_NET_Init(TCP);
+
+    if (socket != -1) {
+        char local_addr[256];
+        pp4m_NET_GetLocalAddress(socket, local_addr);
+
+        // connect to the server
+        printf("waiting connection to host...\n");
+
+        while(1) if(pp4m_NET_ConnectServerByAddress(local_addr, 62443) == 0) break;
+        printf("connection established to [%s]\n", local_addr);
+
+        CORE_NET_InitGlobal(&socket, &player, fen_notation);
+        printf("configured net chessboard, ready\n");
+
+    } else exit(0);
+
+    CORE_InitChess_Play(player, fen_notation, &socket);
 
     //GUI_PopupWindow_Core(100, 50, 1080, 590, "test");
     //GUI_Testing();

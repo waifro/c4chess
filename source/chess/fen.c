@@ -68,7 +68,7 @@ int FEN_Init(CHESS_CORE_PLAYER *init_player, char *fen_notation) {
     _glo_chess_tile_passant = FEN_StrTrunk_TagToTile(fen_passant);
     strncpy(_glo_chess_king_castling, fen_castle, strlen(fen_castle) -1);
 
-    printf("[%s] [%s] [%s] [%d] [%d] [%d] lol\n", fen_board, fen_play, _glo_chess_king_castling, _glo_chess_tile_passant, fen_halfmove, fen_fullmove);
+    printf("[%s] [%s] [%s] [%d] [%d] [%d]\n", fen_board, fen_play, _glo_chess_king_castling, _glo_chess_tile_passant, fen_halfmove, fen_fullmove);
 
     return (0);
 }

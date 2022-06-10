@@ -3,6 +3,17 @@
 #ifndef _PP4M_NET_H
 #define _PP4M_NET_H
 
+#ifdef _WIN32
+    #include <winsock2.h> //ws2_32
+    #include <windows.h>
+#else // _UNIX
+    #include <netinet/in.h>
+    #include <sys/socket.h>
+    #include <sys/types.h>
+    #include <arpa/inet.h>
+    #include <netdb.h>
+#endif
+
 typedef enum {
     TCP = 1,
     UDP = 2
