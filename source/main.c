@@ -9,6 +9,7 @@
 #include "global.h"
 #include "pp4m/pp4m.h"
 #include "pp4m/pp4m_ttf.h"
+#include "pp4m/pp4m_net.h"
 
 #include "version.h"
 #include "chess/core.h"
