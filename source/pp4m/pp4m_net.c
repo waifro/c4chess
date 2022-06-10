@@ -50,12 +50,11 @@ int pp4m_NET_Init(PP4M_NET_IPPROTO protocol) {
     if (pp4m_socket == -1) {
         int error = errno;
         pp4m_IO_Feedback("feedback.txt", strerror(error));
-        result = -1;
     }
 
-    if (result == 0) pp4m_protocol = protocol;
+    if (pp4m_socket == 0) pp4m_protocol = protocol;
 
-	return result;
+	return pp4m_socket;
 }
 
 int pp4m_NET_Quit(void) {
@@ -91,8 +90,20 @@ int pp4m_NET_ServerStart(int port) {
     return result;
 }
 
-int pp4m_NET_GetLocalAddress(char *destination) {
+int pp4m_NET_GetLocalAddress(int socket, char *destination) {
     int result = 0;
+
+    struct sockaddr_in localAddress;
+    socklen_t addressLength = sizeof(localAddress);
+    result = getsockname(socket, (struct sockaddr*)&localAddress, &size);
+    if (result == -1) return -1;
+
+    strcpy(destination, buf);
+
+    return result;
+}
+
+int pp4m_NET_GetLocalHostname(char *destination) {
 
     char buf[256];
     result = gethostname(buf, sizeof(buf));
@@ -168,28 +179,18 @@ int pp4m_NET_RecvData(char *buffer) {
 
     if (pp4m_protocol == TCP) {
         result = recv(pp4m_socket, buffer, sizeof(buffer), 0);
-        if (result == -1) pp4m_IO_Feedback("feedback.txt", strerror(errno));
+        if (result == -1) {
+            int error = errno;
+            pp4m_IO_Feedback("feedback.txt", strerror(error));
+        }
     }
 
     else if (pp4m_protocol == UDP) {
         result = recvfrom(pp4m_socket, buffer, sizeof(buffer), 0, NULL, NULL);
-        if (result == -1) pp4m_IO_Feedback("feedback.txt", strerror(errno));
-    }
-
-    return result;
-}
-
-int pp4m_NET_Sockfd_RecvData(void *socket, char *buffer) {
-    int result = 0;
-
-    if (pp4m_protocol == TCP) {
-        result = recv(socket, buffer, sizeof(buffer), 0);
-        if (result == -1) pp4m_IO_Feedback("feedback.txt", strerror(errno));
-    }
-
-    else if (pp4m_protocol == UDP) {
-        result = recvfrom(socket, buffer, sizeof(buffer), 0, NULL, NULL);
-        if (result == -1) pp4m_IO_Feedback("feedback.txt", strerror(errno));
+        if (result == -1) {
+            int error = errno;
+            pp4m_IO_Feedback("feedback.txt", strerror(error));
+        }
     }
 
     return result;
