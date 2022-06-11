@@ -39,7 +39,16 @@ int main (int argc, char *argv[]) {
         // connect to the server
         printf("waiting connection to host...\n");
 
-        while(1) if(pp4m_NET_ConnectServerByAddress(local_addr, 62443) == 0) break;
+        while(1) {
+            pp4m_NETSock_ConnectServerByAddress(&socket, local_addr, 62443);
+
+            if (pp4m_NET_RecieveError() == 0) break;
+            else if (pp4m_NET_RecieveError() == -1) {
+                printf("error socket: %d\n", pp4m_NET_RecieveError());
+                exit(0);
+            }
+        }
+
         printf("connection established to [%s]\n", local_addr);
 
         CORE_NET_InitGlobal(&socket, &player, fen_notation);

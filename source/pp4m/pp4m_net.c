@@ -24,6 +24,17 @@ struct sockaddr_in pp4m_server;
 struct sockaddr_in pp4m_client;
 PP4M_NET_IPPROTO pp4m_protocol;
 
+int pp4m_NET_RecieveError(void) {
+    int result;
+    #ifdef _WIN32
+    result = WSAGetLastError();
+    #else
+    result = errno;
+    #endif
+
+    return result;
+}
+
 int pp4m_NET_Init(PP4M_NET_IPPROTO protocol) {
     int result = 0;
 
@@ -144,6 +155,23 @@ int pp4m_NET_ConnectServerByAddress(char *address, int port) {
     pp4m_client.sin_port = htons(port);
 
     result = connect(pp4m_socket, (struct sockaddr*)&pp4m_client, sizeof(pp4m_client));
+    if (result == -1) {
+        int error = errno;
+        pp4m_IO_Feedback("feedback.txt", strerror(error));
+    }
+
+    return result;
+}
+
+int pp4m_NETSock_ConnectServerByAddress(int *socket, char *address, int port) {
+    int result = 0;
+    struct sockaddr_in addr;
+
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = inet_addr(address);
+    addr.sin_port = htons(port);
+
+    result = connect(*socket, (struct sockaddr*)&addr, sizeof(addr));
     if (result == -1) {
         int error = errno;
         pp4m_IO_Feedback("feedback.txt", strerror(error));
