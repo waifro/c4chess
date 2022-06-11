@@ -138,6 +138,7 @@ int FEN_InitBoard(CHESS_CORE_PLAYER init_player, char *fen_board) {
     printf("  length FEN board: %d\n", fen_length);
 
     for (int n = 0; n <= fen_length; n++) {
+        if (tile >= 64) break;
 
         character = fen_board[n];
         printf("  character[%c] - tile[%d]\n", character, tile);

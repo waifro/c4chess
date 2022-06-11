@@ -69,9 +69,14 @@ CHESS_CORE_PLAYER CORE_ReversePlayer_State(CHESS_CORE_PLAYER player);
 
 void CORE_GlobalUpdate_StateRender(void);
 
-int CORE_NET_InitGlobal(int *socket, CHESS_CORE_PLAYER *player, char *fen);
-int CORE_NET_Testing(int *socket, int running_prg);
+int CORE_NET_InitGlobal(int *socket, int *roomId, CHESS_CORE_PLAYER *player, char *fen);
 
-void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *socket);
+int CORE_NET_CheckSocketState(int *socket, int running);
+
+int CORE_NET_SendRoomState(int *socket, int *roomId, int *running, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new);
+int CORE_NET_RecvRoomState(int *socket, int *roomId, int *running, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new);
+int CORE_NET_RoomState(int *socket, int *roomId, int *running, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new);
+
+void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *socket, int roomId);
 
 #endif

@@ -65,3 +65,13 @@ ARCHIVE_NOTATION_PIECE ARCHIVE_Redirect_StateMove(CHESS_CORE_TILE *chess_tile, i
     else if (CHESS_Redirect_EnumPawn(chess_tile, slot) == 0) return PAWN_A;
     else return NONE_A;
 }
+
+void ARCHIVE_UpdateRegister_PieceState(void *tmp_ptr, int position_old, int position_new) {
+
+    glo_chess_archive_tmp_tile[0] = position_old;
+    glo_chess_archive_tmp_tile[1] = position_new;
+    if (glo_chess_core_tile[position_new].piece == NULL) glo_chess_archive_tmp_ptr = NULL;
+    else glo_chess_archive_tmp_ptr = tmp_ptr;
+
+    return;
+}

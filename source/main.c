@@ -31,32 +31,31 @@ int main (int argc, char *argv[]) {
 
     // start online 2-player game (wip)
     int socket = pp4m_NET_Init(TCP);
+    int roomId = 0;
 
     if (socket != -1) {
-        char local_addr[256];
-        pp4m_NET_GetLocalAddress(socket, local_addr);
 
-        // connect to the server
         printf("waiting connection to host...\n");
 
+        int result = -1;
         while(1) {
-            pp4m_NETSock_ConnectServerByAddress(&socket, local_addr, 62443);
+            result = pp4m_NETSock_ConnectServerByAddress(&socket, "127.0.0.1", 62443);
 
-            if (pp4m_NET_RecieveError() == 0) break;
-            else if (pp4m_NET_RecieveError() == -1) {
+            if (result == 0) break;
+            else if (result == -1) {
                 printf("error socket: %d\n", pp4m_NET_RecieveError());
                 exit(0);
             }
         }
 
-        printf("connection established to [%s]\n", local_addr);
+        printf("connection established to [%s]\n", "127.0.0.1");
 
-        CORE_NET_InitGlobal(&socket, &player, fen_notation);
+        CORE_NET_InitGlobal(&socket, &roomId, &player, fen_notation);
         printf("configured net chessboard, ready\n");
 
     } else exit(0);
 
-    CORE_InitChess_Play(player, fen_notation, &socket);
+    CORE_InitChess_Play(player, fen_notation, &socket, roomId);
 
     //GUI_PopupWindow_Core(100, 50, 1080, 590, "test");
     //GUI_Testing();

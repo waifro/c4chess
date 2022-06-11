@@ -106,7 +106,7 @@ void MIDDLE_UnsafePosition_Copy(CHESS_CORE_TILE *restrict src, CHESS_CORE_TILE *
     return;
 }
 
-int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, void *socket) {
+int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *socket, int roomId) {
 
     int result = -1;
     static int position_old = -1;
@@ -114,6 +114,8 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, void *
 
     PP4M_INPUT_POS touch_pos;
     touch_pos = pp4m_INPUT_MouseState(event);
+
+    if (CORE_NET_RoomState(socket, &roomId, &result, player, &position_old, &position_new) == -1) return 0;
 
     // select choosen piece from mem
     if (touch_pos.iner != -1 && position_old == -1) {
@@ -136,12 +138,9 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, void *
                 // if is a valid move, start changing piece state
                 position_new = result;
 
-                glo_chess_archive_tmp_tile[0] = position_old;
-                glo_chess_archive_tmp_tile[1] = position_new;
-                if (glo_chess_core_tile[position_new].piece == NULL) glo_chess_archive_tmp_ptr = NULL;
-                else glo_chess_archive_tmp_ptr = &glo_chess_core_tile[position_new];
-
+                ARCHIVE_UpdateRegister_PieceState(&glo_chess_core_tile[position_new], position_old, position_new);
                 EVENT_UpdateState_ChessEvent(glo_chess_core_tile, position_old, position_new, *player);
+
                 MIDDLE_UpdatePositionPiece(glo_chess_core_tile, position_old, position_new);
 
                 DOT_StateGlobalDotReset();
@@ -169,7 +168,6 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, void *
 
         printf("CORE_Testing:\n  player_turn = %d\n", *player);
     }
-
 
     return (result);
 }

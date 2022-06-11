@@ -18,6 +18,7 @@
 #include "event.h"
 #include "chess.h"
 #include "dot.h"
+#include "archive.h"
 #include "middle.h"
 #include "core.h"
 #include "fen.h"
@@ -177,19 +178,21 @@ void CORE_GlobalUpdate_StateRender(void) {
     return;
 }
 
-int CORE_NET_InitGlobal(int *socket, CHESS_CORE_PLAYER *player, char *fen) {
+int CORE_NET_InitGlobal(int *socket, int *roomId, CHESS_CORE_PLAYER *player, char *fen) {
     int result = -1;
+
+    // client side
     char buf[512];
-
-    int buf_rid = -1;
-    //int buf_passant = -1;
-    int buf_halfm = -1;
-    int buf_fullm = -1;
-
-    char buf_plsw[4];
     char buf_plvl[4];
+
+    // fen notes
     char buf_fen[128];
+    char buf_play[4];
     char buf_castle[4];
+    char buf_passant[4];
+
+    int buf_halfm;
+    int buf_fullm;
 
     result = recv(*socket, buf, 511, MSG_WAITALL);
     if (result == -1) {
@@ -199,35 +202,77 @@ int CORE_NET_InitGlobal(int *socket, CHESS_CORE_PLAYER *player, char *fen) {
 
     printf("socket recieved: [%s]\n", buf);
 
-    sscanf(buf, "%d %s %s %s %s %*d %d %d", &buf_rid, buf_plvl, buf_fen, buf_plsw, buf_castle, &buf_halfm, &buf_fullm);
+    sscanf(buf, "%d %s %*s", roomId, buf_plvl);
+    FEN_StrTrunk(&buf[4], buf_fen, buf_play, buf_castle, buf_passant, &buf_halfm, &buf_fullm);
 
-    printf("recieved parsed: [%s] [%s] [%s] [-] [%d] [%d]\n", buf_fen, buf_plsw, buf_castle, buf_halfm, buf_fullm);
+    //sscanf(buf, "%d %c %s %s %s %*d %d %d", &buf_rid, &buf_plvl[0], buf_fen, buf_play, buf_castle, &buf_halfm, &buf_fullm);
+
+    printf("recieved parsed: [%s] [%s] [%s] [%s] [%d] [%d]\n", buf_fen, buf_play, buf_castle, buf_passant, buf_halfm, buf_fullm);
 
     FEN_PlayerTurn((int*)player, buf_plvl[0]);
-    sprintf(fen, "%s %s %s - %d %d", buf_fen, buf_plsw, buf_castle, buf_halfm, buf_fullm);
+    sprintf(fen, "%s %s %s %s %d %d", buf_fen, buf_play, buf_castle, buf_passant, buf_halfm, buf_fullm);
 
     return (0);
 }
 
-int CORE_NET_Testing(int *socket, int running_prg) {
+int CORE_NET_CheckSocketState(int *socket, int running) {
     if (socket == NULL) return -1;
 
-    if (running_prg == -1) {
+    if (running == -1) {
         close(*socket);
         return -1;
     }
 
-    //char buf[256];
-    //pp4m_NET_Sockfd_RecvData(socket, buf);
-
-    //if (strlen(buf) > 0) {
-        //printf("@server: %s\n", buf);
-    //}
-
     return (0);
 }
 
-void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *socket) {
+int CORE_NET_SendRoomState(int *socket, int *roomId, int *running, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new) {
+
+    // temporary fix
+    if (*running == -2) {
+        char buf[256];
+        sprintf(buf, "%d %d %d", *roomId, *tile_old, *tile_new);
+        send(*socket, buf, strlen(buf), 0);
+    }
+
+    return 0;
+}
+
+int CORE_NET_RecvRoomState(int *socket, int *roomId, int *running, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new) {
+
+    // temporary fix
+    char buf[256];
+
+    if (read(*socket, buf, 255) == -1) {
+        *running = -1;
+        return -1;
+    }
+
+    printf("msg recv: %s\n", buf);
+    sscanf(buf, "%d %d %d", roomId, tile_old, tile_new);
+
+    ARCHIVE_UpdateRegister_PieceState(glo_chess_core_tile, *tile_old, *tile_new);
+    EVENT_UpdateState_ChessEvent(glo_chess_core_tile, *tile_old, *tile_new, *player_turn);
+
+    MIDDLE_UpdatePositionPiece(glo_chess_core_tile, *tile_old, *tile_new);
+
+    *player_turn = CORE_ReversePlayer_State(*player_turn);
+
+    return 0;
+}
+
+int CORE_NET_RoomState(int *socket, int *roomId, int *running, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new) {
+
+    if (*player_turn == glo_chess_core_player)
+        CORE_NET_SendRoomState(socket, roomId, running, player_turn, tile_old, tile_new);
+    else if (*player_turn != glo_chess_core_player)
+        CORE_NET_RecvRoomState(socket, roomId, running, player_turn, tile_old, tile_new);
+
+    return 0;
+
+}
+
+void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *socket, int roomId) {
 
     /* preserve player */
     CHESS_CORE_PLAYER player;
@@ -256,8 +301,6 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
     SDL_Event event;
 
     SDL_Texture *txr_snapshot = NULL;
-
-
 
     // testing: cap framerate to 30/60 fps
     float deltaTime; int running = 0;
@@ -306,7 +349,7 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
         CHESS_PiecePattern_UpdateState(glo_chess_core_tile, player);
 
         /* makes the in-game changes during gameplay */
-        MIDDLE_UpdateChangeState(&event, &player, socket);
+        MIDDLE_UpdateChangeState(&event, &player, socket, roomId);
 
         SDL_RenderClear(glo_render);
         SDL_RenderCopy(glo_render, background, NULL, NULL);
@@ -316,7 +359,7 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
 
         SDL_RenderPresent(glo_render);
 
-        CORE_NET_Testing(socket, running);
+        CORE_NET_CheckSocketState(socket, running);
     }
 
     SDL_DestroyTexture(background);
