@@ -15,19 +15,19 @@
 #include "core.h"
 #include "middle.h"
 
-int MIDDLE_TouchToTile(PP4M_INPUT_POS touch_pos) {
+int MIDDLE_TouchToTile(CHESS_CORE_TILE *chess_tile, PP4M_INPUT_POS touch_pos) {
 
     int result = -1;
 
     for (int n = 0; n < 64; n++) {
 
-        if (touch_pos.x >= glo_chess_core_tile[n].rect.x && touch_pos.x <= (glo_chess_core_tile[n].rect.x + glo_chess_core_tile[n].rect.w)
-        && touch_pos.y >= glo_chess_core_tile[n].rect.y && touch_pos.y <= (glo_chess_core_tile[n].rect.y + glo_chess_core_tile[n].rect.h)) {
+        if (touch_pos.x >= chess_tile[n].rect.x && touch_pos.x <= (chess_tile[n].rect.x + chess_tile[n].rect.w)
+        && touch_pos.y >= chess_tile[n].rect.y && touch_pos.y <= (chess_tile[n].rect.y + chess_tile[n].rect.h)) {
 
-            printf("MIDDLE_TouchToTile:\n  piece = %p\n  tile[%d] tag[%c%d]", glo_chess_core_tile[n].piece, n, glo_chess_core_tile[n].tag.col, glo_chess_core_tile[n].tag.row);
-            if (glo_chess_core_tile[n].piece != NULL)
+            printf("MIDDLE_TouchToTile:\n  piece = %p\n  tile[%d] tag[%c%d]", chess_tile[n].piece, n, chess_tile[n].tag.col, chess_tile[n].tag.row);
+            if (chess_tile[n].piece != NULL)
             {
-                printf(" name[%d] player[%d]\n", glo_chess_core_tile[n].piece->enum_piece, glo_chess_core_tile[n].piece->player);
+                printf(" name[%d] player[%d]\n", chess_tile[n].piece->enum_piece, chess_tile[n].piece->player);
 
             } else printf("\n");
 
@@ -102,7 +102,9 @@ void MIDDLE_Unsafe_UpdatePositionPiece(CHESS_CORE_TILE *chess_tile, int old, int
 void MIDDLE_UnsafePosition_Copy(CHESS_CORE_TILE *restrict src, CHESS_CORE_TILE *restrict dst) {
     if (src == NULL) return;
 
-    memcpy(dst, src, sizeof(glo_chess_core_tile));
+    for (int n = 0; n < 64; n++)
+        memcpy(&dst[n], &src[n], sizeof(src[n]));
+
     return;
 }
 
@@ -119,17 +121,17 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, net_so
 
         // select choosen piece from mem
         if (touch_pos.iner != -1 && position_old == -1) {
-            result = MIDDLE_TouchToTile(touch_pos);
+            result = MIDDLE_TouchToTile(glo_chess_core_tile, touch_pos);
             if (result != -1 && glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player == *player) {
 
-                position_old = result; printf("range %d, %d\n", position_old, position_new);
+                position_old = result;
                 CHESS_PiecePattern_RangeAllowed(glo_chess_core_tile, result, *player);
             }
         }
 
         // deselect choosen piece from mem
         else if (touch_pos.iner != -1 && position_old != -1) {
-            result = MIDDLE_TouchToTile(touch_pos);
+            result = MIDDLE_TouchToTile(glo_chess_core_tile, touch_pos);
 
             if (result != -1) {
 
@@ -140,7 +142,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, net_so
 
                     ARCHIVE_UpdateRegister_PieceState(&glo_chess_core_tile[position_new], position_old, position_new);
                     EVENT_UpdateState_ChessEvent(glo_chess_core_tile, position_old, position_new, *player);
-
+                    CORE_NET_SendRoomState(sockrid, &result, position_old, position_new);
                     MIDDLE_UpdatePositionPiece(glo_chess_core_tile, position_old, position_new);
 
                     DOT_StateGlobalDotReset();
@@ -162,16 +164,16 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, net_so
         }
     } else {
 
-        result = CORE_NET_RecvRoomState(sockrid, &result, player, &position_old, &position_new);
+        result = CORE_NET_RecvRoomState(sockrid, player, &position_old, &position_new);
 
     }
 
     if (result == -2) {
-        position_new = -1; position_old = -1;
 
-        CORE_NET_SendRoomState(sockrid, &result, player, &position_old, &position_new);
+        //CORE_NET_SendRoomState(sockrid, &result, player, &position_old, &position_new);
         *player = CORE_ReversePlayer_State(*player);
 
+        position_new = -1; position_old = -1;
         printf("CORE_Testing:\n  player_turn = %d\n", *player);
     }
 

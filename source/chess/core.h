@@ -75,8 +75,8 @@ int CORE_NET_InitGlobal(net_sockrid_t *sockrid, CHESS_CORE_PLAYER *player, char 
 
 int CORE_NET_CloseSocketState(net_sockrid_t *sockrid, int running);
 
-int CORE_NET_SendRoomState(net_sockrid_t *sockrid, int *running, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new);
-int CORE_NET_RecvRoomState(net_sockrid_t *sockrid, int *running, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new);
+int CORE_NET_SendRoomState(net_sockrid_t *sockrid, int *running, int tile_old, int tile_new);
+int CORE_NET_RecvRoomState(net_sockrid_t *sockrid, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new);
 
 int CORE_NET_SocketRedirect(net_sockrid_t *sockrid, CHESS_CORE_PLAYER *player);
 
