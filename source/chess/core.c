@@ -137,20 +137,14 @@ void CORE_Chessboard_Reverse(CHESS_CORE_TILE *core_tile) {
 
     CHESS_CORE_TILE core_tile_bak[64];
 
-    for (int n = 0; n < 64; n++) {
+    for (int n = 0; n < 64; n++)
         memcpy(&core_tile_bak[n], &core_tile[63 - n], sizeof(core_tile[63 - n]));
-        //printf("cpy core_tile %d->tag[%c%d]\n", 63 - n, core_tile[63 - n].tag.col, core_tile[63 - n].tag.row);
-    }
 
-    for (int n = 0; n < 64; n++) {
+    for (int n = 0; n < 64; n++)
         memcpy(&core_tile[n], &core_tile_bak[n], sizeof(core_tile_bak[n]));
-        //printf("bak core_tile %d->tag[%c%d]\n", n, core_tile[n].tag.col, core_tile[n].tag.row);
-    }
 
-    for (int n = 0; n < 64; n++) {
+    for (int n = 0; n < 64; n++)
         memcpy(&core_tile[n].tag, &core_tile_bak[63 - n].tag, sizeof(CHESS_CORE_TILE_TAG));
-        //printf("bak core_tile %d->tag[%c%d]\n", n, core_tile[n].tag.col, core_tile[n].tag.row);
-    }
 
     return;
 }
@@ -166,7 +160,7 @@ void CORE_GlobalUpdate_StateRender(void) {
     return;
 }
 
-int CORE_NET_InitGlobal(net_sockrid_t *sockrid, CHESS_CORE_PLAYER *player, char *fen) {
+int CORE_NET_ChessboardInit(net_sockrid_t *sockrid, CHESS_CORE_PLAYER *player, char *fen) {
     int result = -1;
 
     // client side
@@ -213,12 +207,12 @@ int CORE_NET_CloseSocketState(net_sockrid_t *sockrid, int running) {
     return (0);
 }
 
-int CORE_NET_SendRoomState(net_sockrid_t *sockrid, int *running, int tile_old, int tile_new) {
+int CORE_NET_SendRoomState(net_sockrid_t *sockrid, int *running, int *restrict tile_old, int *restrict tile_new) {
     if (sockrid->socket == NULL) return -1;
 
     // temporary fix
     char buf[256];
-    sprintf(buf, "%d %d %d", sockrid->roomId, tile_old, tile_new);
+    sprintf(buf, "%d %d - %d", sockrid->roomId, *tile_old, *tile_new);
 
     if (send(*sockrid->socket, buf, strlen(buf), 0) == -1)
         printf("error send: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
@@ -242,7 +236,7 @@ int CORE_NET_RecvRoomState(net_sockrid_t *sockrid, CHESS_CORE_PLAYER *player_tur
     }
 
     printf("msg recv: %s\n", buf);
-    sscanf(buf, "%d %d %d", &sockrid->roomId, tile_old, tile_new);
+    sscanf(buf, "%d %d - %d", &sockrid->roomId, tile_old, tile_new);
 
     ARCHIVE_UpdateRegister_PieceState(glo_chess_core_tile, *tile_old, *tile_new);
     EVENT_UpdateState_ChessEvent(glo_chess_core_tile, *tile_old, *tile_new, *player_turn);

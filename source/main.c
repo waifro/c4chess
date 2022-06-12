@@ -55,7 +55,7 @@ int main (int argc, char *argv[]) {
 
         printf("connection established to [%s]\n", NET_DEFAULT_SERVER);
 
-        CORE_NET_InitGlobal(&sockrid, &player, fen_notation);
+        CORE_NET_ChessboardInit(&sockrid, &player, fen_notation);
         printf("configured net chessboard, ready\n");
 
     } else exit(0);

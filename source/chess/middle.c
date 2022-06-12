@@ -142,7 +142,8 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, net_so
 
                     ARCHIVE_UpdateRegister_PieceState(&glo_chess_core_tile[position_new], position_old, position_new);
                     EVENT_UpdateState_ChessEvent(glo_chess_core_tile, position_old, position_new, *player);
-                    CORE_NET_SendRoomState(sockrid, &result, position_old, position_new);
+                    CORE_NET_SendRoomState(sockrid, &result, &position_old, &position_new);
+
                     MIDDLE_UpdatePositionPiece(glo_chess_core_tile, position_old, position_new);
 
                     DOT_StateGlobalDotReset();

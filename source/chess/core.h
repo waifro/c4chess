@@ -71,11 +71,11 @@ CHESS_CORE_PLAYER CORE_ReversePlayer_State(CHESS_CORE_PLAYER player);
 
 void CORE_GlobalUpdate_StateRender(void);
 
-int CORE_NET_InitGlobal(net_sockrid_t *sockrid, CHESS_CORE_PLAYER *player, char *fen);
+int CORE_NET_ChessboardInit(net_sockrid_t *sockrid, CHESS_CORE_PLAYER *player, char *fen);
 
 int CORE_NET_CloseSocketState(net_sockrid_t *sockrid, int running);
 
-int CORE_NET_SendRoomState(net_sockrid_t *sockrid, int *running, int tile_old, int tile_new);
+int CORE_NET_SendRoomState(net_sockrid_t *sockrid, int *running, int *restrict tile_old, int *restrict tile_new) ;
 int CORE_NET_RecvRoomState(net_sockrid_t *sockrid, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new);
 
 int CORE_NET_SocketRedirect(net_sockrid_t *sockrid, CHESS_CORE_PLAYER *player);
