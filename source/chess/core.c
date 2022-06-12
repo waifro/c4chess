@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <SDL2/SDL.h>
+#include <sys/time.h> // fd_set
 
 #include "../pp4m/pp4m.h"
 #include "../pp4m/pp4m_net.h"
@@ -211,7 +212,7 @@ int CORE_NET_SendRoomState(net_sockrid_t *sockrid, int *running, int *restrict t
     if (sockrid->socket == NULL) return -1;
 
     // temporary fix
-    char buf[256];
+    char buf[10];
     sprintf(buf, "%d %d - %d", sockrid->roomId, *tile_old, *tile_new);
 
     if (send(*sockrid->socket, buf, strlen(buf), 0) == -1)
@@ -225,27 +226,31 @@ int CORE_NET_RecvRoomState(net_sockrid_t *sockrid, CHESS_CORE_PLAYER *player_tur
 
     // temporary fix
     char buf[256];
+    struct timeval timeout = {0, 0};
 
-    printf("waiting packet...\n");
+    fd_set setfd;
+    FD_ZERO(&setfd);
+    FD_SET(*sockrid->socket, &setfd);
 
-    if (recv(*sockrid->socket, buf, 255, 0) < 0) {
+    if (select(*sockrid->socket + 1, &setfd, NULL, NULL, &timeout) == -1) return 0;
 
-        printf("read: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
+    if (FD_ISSET(*sockrid->socket, &setfd)) {
+        if (recv(*sockrid->socket, buf, 255, 0) < 0) {
+            printf("read: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
+            return 0;
+        }
 
-        return 0;
+        printf("msg recv: %s\n", buf);
+        sscanf(buf, "%d %d - %d", &sockrid->roomId, tile_old, tile_new);
+
+        ARCHIVE_UpdateRegister_PieceState(glo_chess_core_tile, *tile_old, *tile_new);
+        EVENT_UpdateState_ChessEvent(glo_chess_core_tile, *tile_old, *tile_new, *player_turn);
+        MIDDLE_UpdatePositionPiece(glo_chess_core_tile, *tile_old, *tile_new);
+
+        return -2;
     }
 
-    printf("msg recv: %s\n", buf);
-    sscanf(buf, "%d %d - %d", &sockrid->roomId, tile_old, tile_new);
-
-    ARCHIVE_UpdateRegister_PieceState(glo_chess_core_tile, *tile_old, *tile_new);
-    EVENT_UpdateState_ChessEvent(glo_chess_core_tile, *tile_old, *tile_new, *player_turn);
-
-    MIDDLE_UpdatePositionPiece(glo_chess_core_tile, *tile_old, *tile_new);
-
-    //*player_turn = CORE_ReversePlayer_State(*player_turn);
-
-    return -2;
+    return 0;
 }
 
 int CORE_NET_SocketRedirect(net_sockrid_t *sockrid, CHESS_CORE_PLAYER *player) {
