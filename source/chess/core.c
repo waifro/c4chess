@@ -12,6 +12,7 @@
 #include "../pp4m/pp4m_image.h"
 #include "../pp4m/pp4m_input.h"
 
+#include "../network/net.h"
 #include "../dashboard/gui.h"
 #include "../dashboard/gui_alias.h"
 #include "../global.h"
@@ -63,42 +64,22 @@ void CORE_Chessboard_Init(void) {
     return;
 }
 
-void CORE_ChessTag_Init(CHESS_CORE_PLAYER player) {
+void CORE_ChessTag_Init(CHESS_CORE_TILE *chess_tile) {
 
-    char colomn[] = "abcdefgh";
+    char alpha[] = "abcdefgh";
+    int col_pos = 0;
+    int row = 8;
 
-    if (player == WHITE_PLAYER) {
+    for (int n = 0; n < 64; n++) {
 
-        int colomn_pos = 0;
-        int row = 8;
+        chess_tile[n].tag.col = alpha[col_pos];
+        chess_tile[n].tag.row = row;
 
-        for (int n = 0; n < 64; n++) {
-
-            glo_chess_core_tile[n].tag.col = colomn[colomn_pos];
-            glo_chess_core_tile[n].tag.row = row;
-
-            colomn_pos++;
-            if (colomn_pos > 7) { colomn_pos = 0; if (row != 1) row--; }
-
+        col_pos++;
+        if (col_pos > 7) {
+            col_pos = 0;
+            if (row != 1) row--;
         }
-
-    }
-
-    else if (player == BLACK_PLAYER) {
-
-        int colomn_pos = 7;
-        int row = 1;
-
-        for (int n = 0; n < 64; n++) {
-
-            glo_chess_core_tile[n].tag.col = colomn[colomn_pos];
-            glo_chess_core_tile[n].tag.row = row;
-
-            colomn_pos--;
-            if (colomn_pos < 0) { colomn_pos = 7; if (row != 8) row++; }
-
-        }
-
     }
 
     return;
@@ -178,7 +159,7 @@ void CORE_GlobalUpdate_StateRender(void) {
     return;
 }
 
-int CORE_NET_InitGlobal(int *socket, int *roomId, CHESS_CORE_PLAYER *player, char *fen) {
+int CORE_NET_InitGlobal(net_sockrid_t *sockrid, CHESS_CORE_PLAYER *player, char *fen) {
     int result = -1;
 
     // client side
@@ -194,7 +175,7 @@ int CORE_NET_InitGlobal(int *socket, int *roomId, CHESS_CORE_PLAYER *player, cha
     int buf_halfm;
     int buf_fullm;
 
-    result = recv(*socket, buf, 511, MSG_WAITALL);
+    result = recv(*sockrid->socket, buf, 511, MSG_WAITALL);
     if (result == -1) {
         printf("CORE_NET_InitGlobal: recv(): %s\n", strerror(errno));
         return -1;
@@ -202,7 +183,7 @@ int CORE_NET_InitGlobal(int *socket, int *roomId, CHESS_CORE_PLAYER *player, cha
 
     printf("socket recieved: [%s]\n", buf);
 
-    sscanf(buf, "%d %s %*s", roomId, buf_plvl);
+    sscanf(buf, "%d %s %*s", &sockrid->roomId, buf_plvl);
     FEN_StrTrunk(&buf[4], buf_fen, buf_play, buf_castle, buf_passant, &buf_halfm, &buf_fullm);
 
     //sscanf(buf, "%d %c %s %s %s %*d %d %d", &buf_rid, &buf_plvl[0], buf_fen, buf_play, buf_castle, &buf_halfm, &buf_fullm);
@@ -215,43 +196,47 @@ int CORE_NET_InitGlobal(int *socket, int *roomId, CHESS_CORE_PLAYER *player, cha
     return (0);
 }
 
-int CORE_NET_CheckSocketState(int *socket, int running) {
-    if (socket == NULL) return -1;
+int CORE_NET_CloseSocketState(net_sockrid_t *sockrid, int running) {
 
-    if (running == -1) {
-        close(*socket);
-        return -1;
-    }
+    if (running == -1)
+        if (sockrid->socket != NULL) {
+            close(*sockrid->socket);
+            sockrid->socket = NULL;
+            sockrid->roomId = 0;
+        }
 
     return (0);
 }
 
-int CORE_NET_SendRoomState(int *socket, int *roomId, int *running, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new) {
+int CORE_NET_SendRoomState(net_sockrid_t *sockrid, int *running, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new) {
+    if (sockrid->socket == NULL) return -1;
+    (void)player_turn;
 
     // temporary fix
     if (*running == -2) {
         char buf[256];
-        sprintf(buf, "%d %d %d", *roomId, *tile_old, *tile_new);
-        send(*socket, buf, strlen(buf), 0);
+        sprintf(buf, "%d %d %d", sockrid->roomId, *tile_old, *tile_new);
+        send(*sockrid->socket, buf, strlen(buf), 0);
     }
 
     return 0;
 }
 
-int CORE_NET_RecvRoomState(int *socket, int *roomId, int *running, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new) {
+int CORE_NET_RecvRoomState(net_sockrid_t *sockrid, int *running, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new) {
+    if (sockrid->socket == NULL) return -1;
 
     // temporary fix
     char buf[256];
 
     printf("waiting packet...\n");
 
-    if (read(*socket, buf, 255) == -1) {
+    if (read(*sockrid->socket, buf, 255) == -1) {
         *running = -1;
         return 0;
     }
 
     printf("msg recv: %s\n", buf);
-    sscanf(buf, "%d %d %d", roomId, tile_old, tile_new);
+    sscanf(buf, "%d %d %d", &sockrid->roomId, tile_old, tile_new);
 
     ARCHIVE_UpdateRegister_PieceState(glo_chess_core_tile, *tile_old, *tile_new);
     EVENT_UpdateState_ChessEvent(glo_chess_core_tile, *tile_old, *tile_new, *player_turn);
@@ -263,11 +248,11 @@ int CORE_NET_RecvRoomState(int *socket, int *roomId, int *running, CHESS_CORE_PL
     return -2;
 }
 
-int CORE_NET_SocketRedirect(int *socket, CHESS_CORE_PLAYER *player) {
-    return (socket != NULL && *player != glo_chess_core_player ? -1 : 0);
+int CORE_NET_SocketRedirect(net_sockrid_t *sockrid, CHESS_CORE_PLAYER *player) {
+    return (sockrid->socket != NULL && *player != glo_chess_core_player ? -1 : 0);
 }
 
-void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *socket, int roomId) {
+void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, net_sockrid_t *sockrid) {
 
     /* preserve player */
     CHESS_CORE_PLAYER player;
@@ -277,7 +262,7 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
     CORE_Chessboard_Init();
 
     /* setup chessboard tagged */
-    CORE_ChessTag_Init(player);
+    CORE_ChessTag_Init(glo_chess_core_tile);
 
     /* reverse chessboard if needed */
     if (player_view == BLACK_PLAYER) CORE_Chessboard_Reverse(glo_chess_core_tile);
@@ -344,18 +329,16 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
         CHESS_PiecePattern_UpdateState(glo_chess_core_tile, player);
 
         /* makes the in-game changes during gameplay */
-
-        MIDDLE_UpdateChangeState(&event, &player, socket, roomId);
+        MIDDLE_UpdateChangeState(&event, &player, sockrid);
 
         SDL_RenderClear(glo_render);
         SDL_RenderCopy(glo_render, background, NULL, NULL);
 
         /* renders everything chessboard releated */
         CORE_GlobalUpdate_StateRender();
-
         SDL_RenderPresent(glo_render);
 
-        CORE_NET_CheckSocketState(socket, running);
+        CORE_NET_CloseSocketState(sockrid, running);
     }
 
     SDL_DestroyTexture(background);

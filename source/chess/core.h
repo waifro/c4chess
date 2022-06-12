@@ -5,6 +5,8 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 
+#include "../network/net.h"
+
 /* structs & enums */
 typedef enum {
     WHITE_PLAYER = 0,
@@ -57,7 +59,7 @@ extern CHESS_CORE_TILE_TAG glo_chess_core_passant;
 
 /* prototypes */
 void CORE_Chessboard_Init(void);
-void CORE_ChessInitTag(CHESS_CORE_PLAYER player);
+void CORE_ChessTag_Init(CHESS_CORE_TILE *chess_tile);
 
 void CORE_GlobalDestroyPiece(CHESS_CORE_PIECE *piece);
 void CORE_GlobalClearCorePiece(void);
@@ -69,14 +71,15 @@ CHESS_CORE_PLAYER CORE_ReversePlayer_State(CHESS_CORE_PLAYER player);
 
 void CORE_GlobalUpdate_StateRender(void);
 
-int CORE_NET_InitGlobal(int *socket, int *roomId, CHESS_CORE_PLAYER *player, char *fen);
+int CORE_NET_InitGlobal(net_sockrid_t *sockrid, CHESS_CORE_PLAYER *player, char *fen);
 
-int CORE_NET_CheckSocketState(int *socket, int running);
+int CORE_NET_CloseSocketState(net_sockrid_t *sockrid, int running);
 
-int CORE_NET_SendRoomState(int *socket, int *roomId, int *running, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new);
-int CORE_NET_RecvRoomState(int *socket, int *roomId, int *running, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new);
-int CORE_NET_SocketRedirect(int *socket, CHESS_CORE_PLAYER *player);
+int CORE_NET_SendRoomState(net_sockrid_t *sockrid, int *running, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new);
+int CORE_NET_RecvRoomState(net_sockrid_t *sockrid, int *running, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new);
 
-void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *socket, int roomId);
+int CORE_NET_SocketRedirect(net_sockrid_t *sockrid, CHESS_CORE_PLAYER *player);
+
+void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, net_sockrid_t *sockrid);
 
 #endif

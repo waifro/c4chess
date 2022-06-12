@@ -4,13 +4,6 @@
 #include "../chess/core.h"
 #include "net.h"
 
-int NET_SocketRedirect_ReversePlayer(CHESS_CORE_PLAYER *player, void *socket) {
-
-    if (socket == NULL) return (CORE_ReversePlayer_State(*player));
-
-    return 0;
-}
-
 /*
 int NET_CreateBroadcastServer(void) {
 
