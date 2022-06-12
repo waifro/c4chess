@@ -6,6 +6,7 @@
 #ifdef _WIN32
     #include <winsock2.h> //ws2_32
     #include <windows.h>
+    #define socklen_t int
 #else // _UNIX
     #include <netinet/in.h>
     #include <sys/socket.h>

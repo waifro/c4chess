@@ -1,16 +1,5 @@
 /* Private Project Four Me */
 
-#ifdef _WIN32
-    #include <winsock2.h> //ws2_32
-    #include <windows.h>
-#else // _UNIX
-    #include <netinet/in.h>
-    #include <sys/socket.h>
-    #include <sys/types.h>
-    #include <arpa/inet.h>
-    #include <netdb.h>
-#endif
-
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
@@ -105,7 +94,7 @@ int pp4m_NET_GetLocalAddress(int socket, char *destination) {
     int result = 0;
 
     struct sockaddr_in localAddress;
-    int addressLength = sizeof(localAddress);
+    socklen_t addressLength = sizeof(localAddress);
     result = getsockname(socket, (struct sockaddr*)&localAddress, &addressLength);
     if (result == -1) return -1;
 
