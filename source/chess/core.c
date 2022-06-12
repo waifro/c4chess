@@ -232,7 +232,10 @@ int CORE_NET_RecvRoomState(net_sockrid_t *sockrid, CHESS_CORE_PLAYER *player_tur
     FD_ZERO(&setfd);
     FD_SET(*sockrid->socket, &setfd);
 
-    if (select(*sockrid->socket + 1, &setfd, NULL, NULL, &timeout) == -1) return 0;
+    if (select(*sockrid->socket + 1, &setfd, NULL, NULL, &timeout) == -1) {
+        printf("error select: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
+        return 0;
+    }
 
     if (FD_ISSET(*sockrid->socket, &setfd)) {
         if (recv(*sockrid->socket, buf, 255, 0) < 0) {
