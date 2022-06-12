@@ -216,7 +216,7 @@ int CORE_NET_SendRoomState(net_sockrid_t *sockrid, int *running, CHESS_CORE_PLAY
     if (*running == -2) {
         char buf[256];
         sprintf(buf, "%d %d %d", sockrid->roomId, *tile_old, *tile_new);
-        send(*sockrid->socket, buf, strlen(buf), 0);
+        write(*sockrid->socket, buf, strlen(buf));
     }
 
     return 0;
