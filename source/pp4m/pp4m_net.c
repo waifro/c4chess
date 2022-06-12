@@ -25,9 +25,9 @@ int pp4m_NET_RecieveError(void) {
 }
 
 int pp4m_NET_Init(PP4M_NET_IPPROTO protocol) {
-    int result = 0;
 
     #ifdef _WIN32
+        int result = 0;
         // initializing windows socket
         WSADATA WsaData;
         result = WSAStartup(MAKEWORD(2,2), &WsaData);
