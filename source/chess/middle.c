@@ -115,59 +115,66 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
     PP4M_INPUT_POS touch_pos;
     touch_pos = pp4m_INPUT_MouseState(event);
 
-    if (CORE_NET_RoomState(socket, &roomId, &result, player, &position_old, &position_new) == -1) return 0;
+    if (CORE_NET_SocketRedirect(socket, player) == 0) {
 
-    // select choosen piece from mem
-    if (touch_pos.iner != -1 && position_old == -1) {
-        result = MIDDLE_TouchToTile(touch_pos);
-        if (result != -1 && glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player == *player) {
+        // select choosen piece from mem
+        if (touch_pos.iner != -1 && position_old == -1) {
+            result = MIDDLE_TouchToTile(touch_pos);
+            if (result != -1 && glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[result].piece->player == *player) {
 
-            position_old = result;
-            CHESS_PiecePattern_RangeAllowed(glo_chess_core_tile, result, *player);
-        }
-    }
-
-    // deselect choosen piece from mem
-    else if (touch_pos.iner != -1 && position_old != -1) {
-        result = MIDDLE_TouchToTile(touch_pos);
-
-        if (result != -1) {
-
-            if (glo_chess_dot[result].state == true) {
-
-                // if is a valid move, start changing piece state
-                position_new = result;
-
-                ARCHIVE_UpdateRegister_PieceState(&glo_chess_core_tile[position_new], position_old, position_new);
-                EVENT_UpdateState_ChessEvent(glo_chess_core_tile, position_old, position_new, *player);
-
-                MIDDLE_UpdatePositionPiece(glo_chess_core_tile, position_old, position_new);
-
-                DOT_StateGlobalDotReset();
-                result = -2;
-
-            } else if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[position_old].piece->player == glo_chess_core_tile[result].piece->player) {
-
-                DOT_StateGlobalDotReset();
                 position_old = result;
                 CHESS_PiecePattern_RangeAllowed(glo_chess_core_tile, result, *player);
-
-            } else if ((glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[position_old].piece->player != glo_chess_core_tile[result].piece->player) || glo_chess_core_tile[result].piece == NULL) {
-
-                DOT_StateGlobalDotReset();
-                position_old = -1;
-
             }
         }
+
+        // deselect choosen piece from mem
+        else if (touch_pos.iner != -1 && position_old != -1) {
+            result = MIDDLE_TouchToTile(touch_pos);
+
+            if (result != -1) {
+
+                if (glo_chess_dot[result].state == true) {
+
+                    // if is a valid move, start changing piece state
+                    position_new = result;
+
+                    ARCHIVE_UpdateRegister_PieceState(&glo_chess_core_tile[position_new], position_old, position_new);
+                    EVENT_UpdateState_ChessEvent(glo_chess_core_tile, position_old, position_new, *player);
+
+                    MIDDLE_UpdatePositionPiece(glo_chess_core_tile, position_old, position_new);
+
+                    DOT_StateGlobalDotReset();
+                    result = -2;
+
+                } else if (glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[position_old].piece->player == glo_chess_core_tile[result].piece->player) {
+
+                    DOT_StateGlobalDotReset();
+                    position_old = result;
+                    CHESS_PiecePattern_RangeAllowed(glo_chess_core_tile, result, *player);
+
+                } else if ((glo_chess_core_tile[result].piece != NULL && glo_chess_core_tile[position_old].piece->player != glo_chess_core_tile[result].piece->player) || glo_chess_core_tile[result].piece == NULL) {
+
+                    DOT_StateGlobalDotReset();
+                    position_old = -1;
+
+                }
+            }
+        }
+    } else {
+
+        result = CORE_NET_RecvRoomState(socket, &roomId, &result, player, &position_old, &position_new);
+
     }
 
     if (result == -2) {
         position_new = -1; position_old = -1;
 
+        if (socket != NULL) CORE_NET_SendRoomState(socket, &roomId, &result, player, &position_old, &position_new);
         *player = NET_SocketRedirect_ReversePlayer(player, socket);
 
         printf("CORE_Testing:\n  player_turn = %d\n", *player);
     }
+
 
     return (result);
 }

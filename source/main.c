@@ -26,12 +26,15 @@ int main (int argc, char *argv[]) {
 
     CFG_BootFile_LoadConfig();
 
-    CHESS_CORE_PLAYER player;
-    char fen_notation[256];
+    CHESS_CORE_PLAYER player = WHITE_PLAYER;
 
+
+    char fen_notation[256] = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0";
+    int roomId = 0;
+    /*
     // start online 2-player game (wip)
     int socket = pp4m_NET_Init(TCP);
-    int roomId = 0;
+
 
     if (socket != -1) {
 
@@ -54,8 +57,8 @@ int main (int argc, char *argv[]) {
         printf("configured net chessboard, ready\n");
 
     } else exit(0);
-
-    CORE_InitChess_Play(player, fen_notation, &socket, roomId);
+    */
+    CORE_InitChess_Play(player, fen_notation, NULL, roomId);
 
     //GUI_PopupWindow_Core(100, 50, 1080, 590, "test");
     //GUI_Testing();

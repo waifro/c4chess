@@ -243,9 +243,11 @@ int CORE_NET_RecvRoomState(int *socket, int *roomId, int *running, CHESS_CORE_PL
     // temporary fix
     char buf[256];
 
+    printf("waiting packet...\n");
+
     if (read(*socket, buf, 255) == -1) {
         *running = -1;
-        return -1;
+        return 0;
     }
 
     printf("msg recv: %s\n", buf);
@@ -258,18 +260,11 @@ int CORE_NET_RecvRoomState(int *socket, int *roomId, int *running, CHESS_CORE_PL
 
     *player_turn = CORE_ReversePlayer_State(*player_turn);
 
-    return 0;
+    return -2;
 }
 
-int CORE_NET_RoomState(int *socket, int *roomId, int *running, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new) {
-
-    if (*player_turn == glo_chess_core_player)
-        CORE_NET_SendRoomState(socket, roomId, running, player_turn, tile_old, tile_new);
-    else if (*player_turn != glo_chess_core_player)
-        CORE_NET_RecvRoomState(socket, roomId, running, player_turn, tile_old, tile_new);
-
-    return 0;
-
+int CORE_NET_SocketRedirect(int *socket, CHESS_CORE_PLAYER *player) {
+    return (socket != NULL && *player != glo_chess_core_player ? -1 : 0);
 }
 
 void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *socket, int roomId) {
@@ -349,6 +344,7 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
         CHESS_PiecePattern_UpdateState(glo_chess_core_tile, player);
 
         /* makes the in-game changes during gameplay */
+
         MIDDLE_UpdateChangeState(&event, &player, socket, roomId);
 
         SDL_RenderClear(glo_render);
