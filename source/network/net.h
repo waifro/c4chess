@@ -4,11 +4,6 @@
 #define NET_DEFAULT_SERVER "195.58.38.13"
 #define NET_DEFAULT_PORT 62443
 
-typedef struct {
-    int *socket;
-    int roomId;
-} net_sockrid_t;
-
 /*
 int NET_CreateBroadcastServer(void);
 int NET_ConnectToServer(char *server);

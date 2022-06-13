@@ -29,38 +29,40 @@ int main (int argc, char *argv[]) {
 
     CHESS_CORE_PLAYER player = WHITE_PLAYER;
 
-    int sock = 0;
-    net_sockrid_t sockrid = {&sock, 0};
+    int socket = 0;
     char fen_notation[256] = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0";
 
     // start online 2-player game (wip)
-    *sockrid.socket = pp4m_NET_Init(TCP);
+    socket = pp4m_NET_Init(TCP);
 
 
 
-    if (*sockrid.socket != -1) {
+    if (socket != -1) {
 
         printf("waiting connection to host...\n");
 
         int result = -1;
         while(1) {
-            result = pp4m_NETSock_ConnectServerByAddress(sockrid.socket, NET_DEFAULT_SERVER, NET_DEFAULT_PORT);
+
+            char buf[16];
+            pp4m_NET_GetLocalHostname(buf);
+            result = pp4m_NETSock_ConnectServerByHostname(&socket, buf, NET_DEFAULT_PORT);
 
             if (result == 0) break;
-            else if (result == -1) {
-                printf("error socket: %d\n", pp4m_NET_RecieveError());
-                exit(0);
-            }
+            //else if (result == -1) {
+                //printf("error socket: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
+               // exit(0);
+            //}
         }
 
-        printf("connection established to [%s]\n", NET_DEFAULT_SERVER);
+        printf("connection established to [%s]\n", "0.0.0.0");
 
-        CORE_NET_ChessboardInit(&sockrid, &player, fen_notation);
+        CORE_NET_ChessboardInit(&socket, &player, fen_notation);
         printf("configured net chessboard, ready\n");
 
     } else exit(0);
 
-    CORE_InitChess_Play(player, fen_notation, &sockrid);
+    CORE_InitChess_Play(player, fen_notation, &socket);
 
     //GUI_PopupWindow_Core(100, 50, 1080, 590, "test");
     //GUI_Testing();
