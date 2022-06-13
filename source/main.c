@@ -30,7 +30,7 @@ int main (int argc, char *argv[]) {
     CHESS_CORE_PLAYER player = WHITE_PLAYER;
 
     int socket = 0;
-    char fen_notation[256] = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0";
+    char fen_notation[256]; // = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0";
 
     // start online 2-player game (wip)
     socket = pp4m_NET_Init(TCP);
@@ -40,19 +40,21 @@ int main (int argc, char *argv[]) {
     if (socket != -1) {
 
         printf("waiting connection to host...\n");
+        char buf[32];// = "0.0.0.0";
+        pp4m_NET_GetLocalHostname(buf);
 
         int result = -1;
         while(1) {
 
-            char buf[16];
-            pp4m_NET_GetLocalHostname(buf);
-            result = pp4m_NETSock_ConnectServerByHostname(&socket, buf, NET_DEFAULT_PORT);
+            result = pp4m_NET_ConnectServerByHostname(buf, NET_DEFAULT_PORT);
+
+            //result = pp4m_NETSock_ConnectServerByAddress(socket, buf, NET_DEFAULT_PORT);
 
             if (result == 0) break;
-            //else if (result == -1) {
-                //printf("error socket: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
-               // exit(0);
-            //}
+            else if (result == -1) {
+                printf("error socket: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
+                exit(0);
+            }
         }
 
         printf("connection established to [%s]\n", "0.0.0.0");

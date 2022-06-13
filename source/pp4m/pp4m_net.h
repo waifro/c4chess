@@ -36,7 +36,7 @@ int pp4m_NET_GetLocalAddress(int socket, char *destination);
 int pp4m_NET_GetLocalHostname(char *destination);
 
 int pp4m_NET_ConnectServerByAddress(char *address, int port);
-int pp4m_NETSock_ConnectServerByAddress(int *socket, char *address, int port);
+int pp4m_NETSock_ConnectServerByAddress(int socket, char *address, int port);
 int pp4m_NET_ConnectServerByHostname(char *hostname, int port);
 
 int pp4m_NET_SendData(char *buffer);
