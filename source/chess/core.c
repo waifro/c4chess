@@ -161,6 +161,18 @@ void CORE_GlobalUpdate_StateRender(void) {
     return;
 }
 
+int CORE_NET_DetectSignal(int socket) {
+
+    fd_set setfd;
+    FD_ZERO(&setfd);
+    FD_SET(socket, &setfd);
+    struct timeval timeout = {0, 0};
+
+    if (select(socket + 1, &setfd, NULL, NULL, &timeout) == -1) return -2;
+    if (FD_ISSET(socket, &setfd)) return socket;
+    else return -1;
+}
+
 int CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *fen) {
     int result = -1;
 
@@ -177,16 +189,28 @@ int CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *fen) {
     int buf_halfm;
     int buf_fullm;
 
-    result = recv(*socket, buf, 511, MSG_WAITALL);
-    if (result == -1) {
-        printf("CORE_NET_InitGlobal: recv(): %s\n", strerror(errno));
-        return -1;
+    printf("waiting server response...\n");
+
+    while(1) {
+
+        result = CORE_NET_DetectSignal(*socket);
+        if (result > 0) break;
+        if (result == -1) continue;
+        else if (result == -2) {
+            printf("read: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
+            return 0;
+        }
     }
 
-    printf("socket recieved: [%s]\n", buf);
+    if (recv(*socket, buf, 255, 0) < 0) {
+        printf("read: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
+        return 0;
+    }
+
+    printf("lobby recieved: [%s]\n", buf);
 
     sscanf(buf, "%s %*s", buf_plvl);
-    FEN_StrTrunk(&buf[4], buf_fen, buf_play, buf_castle, buf_passant, &buf_halfm, &buf_fullm);
+    FEN_StrTrunk(&buf[2], buf_fen, buf_play, buf_castle, buf_passant, &buf_halfm, &buf_fullm);
 
     printf("recieved parsed: [%s] [%s] [%s] [%s] [%d] [%d]\n", buf_fen, buf_play, buf_castle, buf_passant, buf_halfm, buf_fullm);
 
@@ -226,18 +250,8 @@ int CORE_NET_RecvRoomState(int *socket, CHESS_CORE_PLAYER *player_turn, int *til
 
     // temporary fix
     char buf[256];
-    struct timeval timeout = {0, 0};
 
-    fd_set setfd;
-    FD_ZERO(&setfd);
-    FD_SET(*socket, &setfd);
-
-    if (select(*socket + 1, &setfd, NULL, NULL, &timeout) == -1) {
-        printf("error select: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
-        return 0;
-    }
-
-    if (FD_ISSET(*socket, &setfd)) {
+    if (CORE_NET_DetectSignal(*socket) > 0) {
         if (recv(*socket, buf, 255, 0) < 0) {
             printf("read: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
             return 0;

@@ -93,10 +93,9 @@ int pp4m_NET_ServerStart(int port) {
 int pp4m_NET_GetLocalAddress(int socket, char *destination) {
     int result = 0;
 
-    int sock = 0;
     struct sockaddr_in localAddress;
     socklen_t addressLength = sizeof(localAddress);
-    result = getsockname(sock, (struct sockaddr*)&localAddress, &addressLength);
+    result = getsockname(socket, (struct sockaddr*)&localAddress, &addressLength);
     if (result == -1) return -1;
 
     sprintf(destination, "%s", inet_ntoa(localAddress.sin_addr));

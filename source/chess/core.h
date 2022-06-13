@@ -71,6 +71,7 @@ CHESS_CORE_PLAYER CORE_ReversePlayer_State(CHESS_CORE_PLAYER player);
 
 void CORE_GlobalUpdate_StateRender(void);
 
+int CORE_NET_DetectSignal(int socket);
 int CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *fen);
 
 int CORE_NET_CloseSocketState(int *socket, int running);
