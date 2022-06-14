@@ -40,15 +40,15 @@ int main (int argc, char *argv[]) {
     if (socket != -1) {
 
         printf("waiting connection to host...\n");
-        char buf[32];// = "0.0.0.0";
-        pp4m_NET_GetLocalHostname(buf);
+        //char buf[32];// = "0.0.0.0";
+        //pp4m_NET_GetLocalHostname(buf);
 
         int result = -1;
         while(1) {
 
-            result = pp4m_NET_ConnectServerByHostname(buf, NET_DEFAULT_PORT);
+            //result = pp4m_NET_ConnectServerByHostname(buf, NET_DEFAULT_PORT);
 
-            //result = pp4m_NETSock_ConnectServerByAddress(socket, NET_DEFAULT_SERVER, NET_DEFAULT_PORT);
+            result = pp4m_NETSock_ConnectServerByAddress(socket, NET_DEFAULT_SERVER, NET_DEFAULT_PORT);
 
             if (result == 0) break;
             else if (result == -1) {

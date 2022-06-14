@@ -238,8 +238,9 @@ int CORE_NET_SendRoomState(int *socket, int *running, int *restrict tile_old, in
     // temporary fix
     char buf[10];
     sprintf(buf, "%d - %d", *tile_old, *tile_new);
+    printf("buf sent: %s\n", buf);
 
-    if (send(*socket, buf, strlen(buf), 0) == -1)
+    if (send(*socket, buf, strlen(buf) + 1, 0) == -1)
         printf("error send: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
 
     return 0;
