@@ -1,56 +1,47 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "lang.h"
 #include "config.h"
 #include "global.h"
 
-char *_cfg_boot_set[] = {
+
+char *cfg_boot_set[] = {
     "lang",
     "style",
     "background"
 };
 
-char *_cfg_boot_set_lang[] = {
+char *cfg_boot_set_lang[] = {
     "it",
-    "en"
+    "en",
+	"nl"
 };
 
-char *_cfg_boot_set_style[] = {
+char *cfg_boot_set_style[] = {
     "boxed",
     "rounded"
 };
 
+char *CFG_BootFile_BoxRedirect(CFG_LANG lang) {
+    switch(lang) {
+    case LANG_DEFAULT:
+        return (lang_boot_en);
+    case LANG_EN:
+        return (lang_boot_en);
+    case LANG_IT:
+        return (lang_boot_it);
+    case LANG_NL:
+        return (lang_boot_nl);
+    default:
+        return (lang_boot_en);
+    }
+}
 
-char *_cfg_boot_msg = {
-    "# # # # # # # # # # # # # # GENERAL CONFIGURATION # # # # # # # # # # # #\n"
-    "# This file was generated on first time boot.				 #\n"
-    "#									 #\n"
-    "# Here you can configure the game dinamics as you wish, 		 #\n"
-    "# Every change's applied on the game will be saved here for next boot.	 #\n"
-    "# Any applicable changes are set during boot				 #\n"
-    "#									 #\n"
-    "# For more information visit https://github.com/waifro/c4chess		 #\n"
-    "# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #"
-};
-
-char *_lang_cfg_it[] = {
-    "Errore", "Attenzione", "C'� qualcosa che non va", "Riprova", "Si", "No", "Okay", "Torna nel gioco", "Esci", "Continua",
-    "Gioca", "Info", "Impostazioni", "Statistiche", "Prossimamente", "Sei Sicuro?", "Premi",
-    "stile", "personalizza", "immetti", "sfondo immagine", "suoni", "musica", "locale", "globale", "giocatori",
-    "lobby trovate", "indirizzo Ip", "per uscire", "per entrare", "in chat"
-};
-
-char *_lang_cfg_en[] = {
-    "Error", "Attention", "There is something wrong", "Retry", "Yes", "No", "Okay", "Back to the game", "Exit", "Continue",
-    "Play", "Info", "Settings", "Statistics", "Coming soon", "Are you sure?", "Press",
-    "style", "personalize", "insert", "background", "sounds", "music", "local", "global", "players",
-    "lobby found", "address Ip", "to exit", "to enter", "in chat"
-};
-
-FILE* CFG_BootFile_Init(void) {
+FILE* CFG_BootFile_Init(CFG_LANG lang) {
     FILE *fd = fopen(CONFIG_BOOT_FILE, "w");
 
-    fprintf(fd, "%s\n\n", _cfg_boot_msg);
+    fprintf(fd, "%s\n\n", CFG_BootFile_BoxRedirect(lang));
 
     FILE *nfd = freopen(CONFIG_BOOT_FILE, "r", fd);
     fclose(fd);
@@ -58,10 +49,10 @@ FILE* CFG_BootFile_Init(void) {
     return (nfd);
 }
 
-FILE *CFG_BootFile_LoadConfig(void) {
+FILE *CFG_BootFile_LoadConfig(CFG_LANG lang) {
 
     FILE *fd = fopen(CONFIG_BOOT_FILE, "r");
-    if (fd == NULL) fd = CFG_BootFile_Init();
+    if (fd == NULL) fd = CFG_BootFile_Init(lang);
 
     char buffer[256];
     for (int n = 0; n < 256; n++) {
@@ -137,9 +128,9 @@ int CFG_BootFile_ConfigRule(char *set, char *value) {
 
     printf("CFG_BootFile_ConfigRule:\n");
 
-    if (strncmp(set, _cfg_boot_set[0], strlen(_cfg_boot_set[1])) == 0) {
+    if (strncmp(set, cfg_boot_set[0], strlen(cfg_boot_set[1])) == 0) {
         printf("  language set as: %s\n", value);
-    } else if (strncmp(set, _cfg_boot_set[1], strlen(_cfg_boot_set[1])) == 0) {
+    } else if (strncmp(set, cfg_boot_set[1], strlen(cfg_boot_set[1])) == 0) {
         printf("  style set as: %s\n", value);
     }
 

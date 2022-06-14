@@ -25,7 +25,7 @@ int main (int argc, char *argv[]) {
     glo_render = pp4m_Init(glo_window, title_ver, glo_screen_w, glo_screen_h, WINDOW);
     pp4m_TTF_Init();
 
-    CFG_BootFile_LoadConfig();
+    CFG_BootFile_LoadConfig(LANG_DEFAULT);
 
     CHESS_CORE_PLAYER player = WHITE_PLAYER;
 

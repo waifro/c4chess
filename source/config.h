@@ -3,8 +3,17 @@
 
 #define CONFIG_BOOT_FILE "./config_boot.ini"
 
-FILE *CFG_BootFile_Init(void);
-FILE *CFG_BootFile_LoadConfig(void);
+typedef enum {
+    LANG_DEFAULT,
+    LANG_EN = 1,
+    LANG_IT = 2,
+    LANG_NL = 3
+} CFG_LANG;
+
+char *CFG_BootFile_BoxRedirect(CFG_LANG lang);
+
+FILE *CFG_BootFile_Init(CFG_LANG lang);
+FILE *CFG_BootFile_LoadConfig(CFG_LANG lang);
 
 int CFG_BootFile_ReadLine(FILE *fd, char *buffer);
 
