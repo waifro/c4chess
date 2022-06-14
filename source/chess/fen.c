@@ -104,8 +104,8 @@ void FEN_StrTrunk(char *restrict str, char *restrict a, char *restrict b, char *
         if (i == 1) strncpy(&b[ind], &str[n], 1);
         if (i == 2) strncpy(&c[ind], &str[n], 1);
         if (i == 3) strncpy(&d[ind], &str[n], 1);
-        if (i == 4) if (!*e) *e = atoi(&str[n]);
-        if (i == 5) if (!*e) *f = atoi(&str[n]);
+        if (i == 4) *e = atoi(&str[n]);
+        if (i == 5) *f = atoi(&str[n]);
 
         ind++;
     }

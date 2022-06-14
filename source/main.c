@@ -48,7 +48,7 @@ int main (int argc, char *argv[]) {
 
             result = pp4m_NET_ConnectServerByHostname(buf, NET_DEFAULT_PORT);
 
-            //result = pp4m_NETSock_ConnectServerByAddress(socket, buf, NET_DEFAULT_PORT);
+            //result = pp4m_NETSock_ConnectServerByAddress(socket, NET_DEFAULT_SERVER, NET_DEFAULT_PORT);
 
             if (result == 0) break;
             else if (result == -1) {
