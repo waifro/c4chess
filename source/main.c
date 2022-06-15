@@ -38,7 +38,7 @@ int main (int argc, char *argv[]) {
 
     if (socket != -1) {
 
-        if (DEBUG_LEVEL > 0) printf("waiting connection to host...\n");
+        if (DEBUG_LEVEL > 0) DEBUG_PrintBox("waiting connection to host...\n");
 
         int result = -1;
         while(1) {
@@ -47,15 +47,15 @@ int main (int argc, char *argv[]) {
 
             if (result == 0) break;
             else if (result == -1) {
-                if (DEBUG_LEVEL > 0) printf("error socket: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
+                if (DEBUG_LEVEL > 0) DEBUG_PrintBox("error socket: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
                 exit(0);
             }
         }
 
-        if (DEBUG_LEVEL > 0) printf("connection established to [%s]\n", "0.0.0.0");
+        if (DEBUG_LEVEL > 0) DEBUG_PrintBox("connection established to [%s]\n", "0.0.0.0");
 
         CORE_NET_ChessboardInit(&socket, &player, fen_notation);
-        if (DEBUG_LEVEL > 0) printf("configured net chessboard, ready\n");
+        if (DEBUG_LEVEL > 0) DEBUG_PrintBox("configured net chessboard, ready\n");
 
     } else exit(0);
 
@@ -65,6 +65,7 @@ int main (int argc, char *argv[]) {
     //GUI_Testing();
 
     // Exiting from game
+    DEBUG_QuitBox();
     pp4m_TTF_Quit();
     pp4m_Quit(glo_window, glo_render);
 
