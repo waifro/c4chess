@@ -84,7 +84,8 @@ PP4M_HOOK *GUI_PopupWindow_Init(int w, int h) {
     popupWindow->obj = 0;
     popupWindow->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_HEAVY, 255, &popupWindow->rect, x, y, w, h);
 
-    PP4M_HOOK *head = pp4m_HOOK_Init();
+    PP4M_HOOK *head = NULL;
+    head = pp4m_HOOK_Init();
 
     pp4m_HOOK_Next(head, background);
     pp4m_HOOK_Next(head, popupWindow);

@@ -38,7 +38,7 @@ int main (int argc, char *argv[]) {
 
     if (socket != -1) {
 
-        //DEBUG_PrintBox(1, "waiting connection to host...\n");
+        DEBUG_PrintBox(1, "waiting connection to host...");
 
         int result = -1;
         while(1) {
@@ -47,15 +47,15 @@ int main (int argc, char *argv[]) {
 
             if (result == 0) break;
             else if (result == -1) {
-                //DEBUG_PrintBox(1, "error socket: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
+                DEBUG_PrintBox(1, "error socket: %s, %d", strerror(errno), pp4m_NET_RecieveError());
                 exit(0);
             }
         }
 
-        //DEBUG_PrintBox(1, "connection established to [%s]\n", "0.0.0.0");
+        DEBUG_PrintBox(1, "connection established to [%s]", "0.0.0.0");
 
         CORE_NET_ChessboardInit(&socket, &player, fen_notation);
-        //DEBUG_PrintBox(1, "configured net chessboard, ready\n");
+        DEBUG_PrintBox(1, "configured net chessboard, ready");
 
     } else exit(0);
 

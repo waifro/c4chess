@@ -1,7 +1,7 @@
 # Makefile
 
 # uncomment this line if your on windows
-LIBMMAN := "-L. -lmman" -lws2_32 # -mwindows
+LIBMMAN := "-L. -lmman" -lws2_32 -mwindows
 
 # uncomment this line if you want to sanitize
 # SANITIZE := -fsanitize=address -static-libasan -Og -ggdb3

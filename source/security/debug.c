@@ -20,88 +20,57 @@ int DEBUG_PrintBox(int level, const char *format, ...) {
 
         va_list arg;
         va_start(arg, format);
-        vsprintf(buffer, format, arg);
+        vsnprintf(buffer, 256, format, arg);
         va_end(arg);
 
-        int val = pp4m_HOOK_Size(glo_debug_list);
-        printf("%d\n", val);
-        PP4M_HOOK *current;
+        int val = 0;
+        val = pp4m_HOOK_Size(glo_debug_list);
+        PP4M_HOOK *current = NULL;
+        GUI_TextureAlias *alias_ttr = NULL;
 
-        if (val > 10) {
+        if (val > 19) {
 
-            PP4M_HOOK *bak = pp4m_HOOK_Init();
+            PP4M_HOOK *bak = NULL;
+            bak = pp4m_HOOK_Init();
 
-            current = glo_debug_list->next;
-            for (int i = 0; i < val-1; i++) {
-                pp4m_HOOK_Next(bak, current->ptr);
+            current = glo_debug_list;
+            for (int i = 0; i <= val; i++) {
+                if (i != 1) pp4m_HOOK_Next(bak, current->ptr);
                 current = current->next;
             }
 
-            printf("hello\n");
-
+            val = pp4m_HOOK_Size(bak);
             current = glo_debug_list;
-            for (int i = 0; i < val-1; i++) {
+
+            for (int i = 0; i <=  val; i++) {
                 current->ptr = bak->ptr;
+
+                if (i != 0)
+                {
+                    alias_ttr = current->ptr;
+                    alias_ttr->rect.y -= 15;
+                }
+
                 bak = bak->next;
                 current = current->next;
             }
-
-            printf("hello\n");
 
             pp4m_HOOK_Remove(glo_debug_list);
-            val = pp4m_HOOK_Size(glo_debug_list);
 
-            printf("hello\n");
-            /*
-            PP4M_HOOK *bak = pp4m_HOOK_Init();
-
-            for (int i = 0; i < val; i++) {
-                if (current->ptr == NULL) break;
-                pp4m_HOOK_Next(bak, current);
-                current = current->next;
-            }
-
-            printf("test\n");
-
-            for (int i = 0; i < val; i++)
-                pp4m_HOOK_Remove(glo_debug_list);
-
-            glo_debug_list = NULL;
-            glo_debug_list = pp4m_HOOK_Init();
-
-            printf("test\n");
-
-            // new length of chain
-            val = pp4m_HOOK_Size(bak);
-            for (int i = 0; i < val; i++) {
-                pp4m_HOOK_Next(glo_debug_list, bak);
-                if (bak->next == NULL) break;
-                bak = bak->next;
-            }
-
-            current = glo_debug_list;
-            */
-
-
-            printf(" -> %d\n", val);
         }
 
         current = glo_debug_list;
-        for (; val > 0; val--) {
+        for (int i = 0; i < val; i++)
             current = current->next;
-        }
-
-        printf("current -> %p\n", current);
 
         GUI_TextureAlias *buf = current->ptr;
 
         GUI_TextureAlias *buf_txt = calloc(1, sizeof(GUI_TextureAlias));
         buf_txt->obj = 0;
         buf_txt->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_WHITE, 12, &buf_txt->rect, buf->rect.x, buf->rect.y + 15, buffer);
+        if (val == 0) buf_txt->rect.x += 15;
 
         pp4m_HOOK_Next(glo_debug_list, buf_txt);
-
-        printf("exit\n");
     }
     #endif // DEBUG_LEVEL
 
@@ -114,7 +83,7 @@ int DEBUG_InitBox(void) {
 
     GUI_TextureAlias *box = calloc(1, sizeof(GUI_TextureAlias));
     box->obj = 0;
-    box->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_BLACK, 150, &box->rect, 50, 50, 300, 300);
+    box->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_BLACK, 100, &box->rect, 15, 15, 500, 330);
 
     pp4m_HOOK_Next(glo_debug_list, box);
 

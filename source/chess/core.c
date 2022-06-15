@@ -90,7 +90,8 @@ void CORE_ChessTag_Init(CHESS_CORE_TILE *chess_tile) {
 void CORE_GlobalDestroyPiece(CHESS_CORE_PIECE *piece) {
 
     if (piece != NULL) {
-        DEBUG_PrintBox(2, "CORE_GlobalDestroyPiece:\n  destroy piece = %p\n", piece);
+        DEBUG_PrintBox(2, "CORE_GlobalDestroyPiece:");
+        DEBUG_PrintBox(2, "  destroy piece = %p", piece);
         SDL_DestroyTexture(piece->texture);
         piece->enum_piece = NONE;
     }
@@ -154,18 +155,18 @@ void CORE_Chessboard_Reverse(CHESS_CORE_TILE *core_tile) {
 void CORE_GlobalUpdate_StateRender(void) {
 
     PP4M_HOOK *current = glo_debug_list;
-    GUI_TextureAlias *alias_ttr;
+    GUI_TextureAlias *alias_ttr = NULL;
 
     for (int n = 0; n < 64; n++) {
         SDL_RenderCopy(glo_render, glo_chess_core_tile[n].texture, NULL, &glo_chess_core_tile[n].rect);
         if (glo_chess_core_tile[n].piece != NULL) SDL_RenderCopy(glo_render, glo_chess_core_tile[n].piece->texture, NULL, &glo_chess_core_tile[n].piece->rect);
         DOT_StateGlobalDot(n);
+    }
 
-        if (current->next != NULL) {
-            alias_ttr = current->ptr;
-            current = current->next;
-            SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
-        }
+    for (int i = pp4m_HOOK_Size(glo_debug_list); i >= 0; i--) {
+        alias_ttr = current->ptr;
+        SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
+        current = current->next;
     }
 
     return;
@@ -199,7 +200,7 @@ int CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *fen) {
     int buf_halfm;
     int buf_fullm;
 
-    DEBUG_PrintBox(1, "waiting server response...\n");
+    DEBUG_PrintBox(1, "waiting server response...");
 
     while(1) {
 
@@ -207,22 +208,22 @@ int CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *fen) {
         if (result > 0) break;
         if (result == -1) continue;
         else if (result == -2) {
-            DEBUG_PrintBox(2, "read: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
+            DEBUG_PrintBox(2, "read: %s, %d", strerror(errno), pp4m_NET_RecieveError());
             return 0;
         }
     }
 
     if (recv(*socket, buf, 255, 0) < 0) {
-        DEBUG_PrintBox(2, "read: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
+        DEBUG_PrintBox(2, "read: %s, %d", strerror(errno), pp4m_NET_RecieveError());
         return 0;
     }
 
-    DEBUG_PrintBox(1, "lobby recieved: [%s]\n", buf);
+    DEBUG_PrintBox(1, "lobby recieved: [%s]", buf);
 
     sscanf(buf, "%s %*s", buf_plvl);
     FEN_StrTrunk(&buf[2], buf_fen, buf_play, buf_castle, buf_passant, &buf_halfm, &buf_fullm);
 
-    DEBUG_PrintBox(2, "recieved parsed: [%s] [%s] [%s] [%s] [%d] [%d]\n", buf_fen, buf_play, buf_castle, buf_passant, buf_halfm, buf_fullm);
+    DEBUG_PrintBox(2, "recieved parsed: [%s] [%s] [%s] [%s] [%d] [%d]", buf_fen, buf_play, buf_castle, buf_passant, buf_halfm, buf_fullm);
 
     FEN_PlayerTurn((int*)player, buf_plvl[0]);
     sprintf(fen, "%s %s %s %s %d %d", buf_fen, buf_play, buf_castle, buf_passant, buf_halfm, buf_fullm);
@@ -248,10 +249,10 @@ int CORE_NET_SendRoomState(int *socket, int *running, int *restrict tile_old, in
     // temporary fix
     char buf[10];
     sprintf(buf, "%d - %d", *tile_old, *tile_new);
-    DEBUG_PrintBox(2, "buf sent: %s\n", buf);
+    DEBUG_PrintBox(2, "buf sent: %s", buf);
 
     if (send(*socket, buf, strlen(buf) + 1, 0) == -1)
-        DEBUG_PrintBox(2, "error send: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
+        DEBUG_PrintBox(2, "error send: %s, %d", strerror(errno), pp4m_NET_RecieveError());
 
     return 0;
 }
@@ -264,11 +265,11 @@ int CORE_NET_RecvRoomState(int *socket, CHESS_CORE_PLAYER *player_turn, int *til
 
     if (CORE_NET_DetectSignal(*socket) > 0) {
         if (recv(*socket, buf, 255, 0) < 0) {
-            DEBUG_PrintBox(2, "read: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
+            DEBUG_PrintBox(2, "read: %s, %d", strerror(errno), pp4m_NET_RecieveError());
             return 0;
         }
 
-        DEBUG_PrintBox(2, "msg recv: %s\n", buf);
+        DEBUG_PrintBox(2, "msg recv: %s", buf);
         sscanf(buf, "%d - %d", tile_old, tile_new);
 
         ARCHIVE_UpdateRegister_PieceState(glo_chess_core_tile, *tile_old, *tile_new);

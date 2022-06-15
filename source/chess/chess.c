@@ -24,7 +24,8 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
 
     if (pl_bak != player) {
 
-        DEBUG_PrintBox(1, "CHESS_PiecePattern_UpdateState:\n  updating state pieces... ");
+        DEBUG_PrintBox(1, "CHESS_PiecePattern_UpdateState:");
+        DEBUG_PrintBox(1, "  updating state pieces... ");
 
         // create copy of tile
         CHESS_CORE_TILE unsafe_tile[64];
@@ -101,7 +102,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
 
         ARCHIVE_Notation_RecordMove(core_tile, glo_chess_event_king_uatk, glo_chess_archive_tmp_ptr, glo_chess_archive_tmp_tile[0], glo_chess_archive_tmp_tile[1]);
         pl_bak = player;
-        DEBUG_PrintBox(1, "done\n");
+        DEBUG_PrintBox(1, "done");
     }
 
     return 0;
