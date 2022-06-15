@@ -1,7 +1,10 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
-// implement a printf type func
-//void DEBUG_Print(char *data);
+#include <stdio.h>
+
+int DEBUG_PrintBox(const char *format, ...);
+int DEBUG_InitBox(void);
+int DEBUG_QuitBox(void);
 
 #endif

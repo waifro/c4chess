@@ -84,6 +84,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="source/animation/animation.h" />
+		<Unit filename="source/chess/archive.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/chess/archive.h" />
 		<Unit filename="source/chess/chess.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -120,13 +124,25 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="source/dashboard/gui_alias.h" />
+		<Unit filename="source/dashboard/menu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/dashboard/menu.h" />
 		<Unit filename="source/global.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="source/global.h" />
+		<Unit filename="source/lang.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/lang.h" />
 		<Unit filename="source/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="source/mman.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/mman.h" />
 		<Unit filename="source/network/net.c">
 			<Option compilerVar="CC" />
 		</Unit>
