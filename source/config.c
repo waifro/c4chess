@@ -5,7 +5,6 @@
 #include "config.h"
 #include "global.h"
 
-
 char *cfg_boot_set[] = {
     "lang",
     "style",
@@ -126,12 +125,12 @@ int CFG_BootFile_ReadValue(char *buffer, char *dest) {
 
 int CFG_BootFile_ConfigRule(char *set, char *value) {
 
-    printf("CFG_BootFile_ConfigRule:\n");
+    if (DEBUG_LEVEL > 0) printf("CFG_BootFile_ConfigRule:\n");
 
     if (strncmp(set, cfg_boot_set[0], strlen(cfg_boot_set[1])) == 0) {
-        printf("  language set as: %s\n", value);
+        if (DEBUG_LEVEL > 0) printf("  language set as: %s\n", value);
     } else if (strncmp(set, cfg_boot_set[1], strlen(cfg_boot_set[1])) == 0) {
-        printf("  style set as: %s\n", value);
+        if (DEBUG_LEVEL > 0) printf("  style set as: %s\n", value);
     }
 
     return (0);

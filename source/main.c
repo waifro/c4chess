@@ -15,6 +15,7 @@
 #include "chess/core.h"
 #include "dashboard/gui.h"
 #include "network/net.h"
+#include "security/debug.h"
 
 int main (int argc, char *argv[]) {
     (void)argc; (void)argv;
@@ -30,37 +31,31 @@ int main (int argc, char *argv[]) {
     CHESS_CORE_PLAYER player = WHITE_PLAYER;
 
     int socket = 0;
-    char fen_notation[256]; // = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0";
+    char fen_notation[256];
 
     // start online 2-player game (wip)
     socket = pp4m_NET_Init(TCP);
 
-
-
     if (socket != -1) {
 
-        printf("waiting connection to host...\n");
-        //char buf[32];// = "0.0.0.0";
-        //pp4m_NET_GetLocalHostname(buf);
+        if (DEBUG_LEVEL > 0) printf("waiting connection to host...\n");
 
         int result = -1;
         while(1) {
-
-            //result = pp4m_NET_ConnectServerByHostname(buf, NET_DEFAULT_PORT);
 
             result = pp4m_NETSock_ConnectServerByAddress(socket, NET_DEFAULT_SERVER, NET_DEFAULT_PORT);
 
             if (result == 0) break;
             else if (result == -1) {
-                printf("error socket: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
+                if (DEBUG_LEVEL > 0) printf("error socket: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
                 exit(0);
             }
         }
 
-        printf("connection established to [%s]\n", "0.0.0.0");
+        if (DEBUG_LEVEL > 0) printf("connection established to [%s]\n", "0.0.0.0");
 
         CORE_NET_ChessboardInit(&socket, &player, fen_notation);
-        printf("configured net chessboard, ready\n");
+        if (DEBUG_LEVEL > 0) printf("configured net chessboard, ready\n");
 
     } else exit(0);
 

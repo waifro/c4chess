@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../global.h"
 #include "core.h"
 #include "chess.h"
 #include "archive.h"
@@ -43,12 +44,12 @@ void ARCHIVE_Notation_RecordMove(CHESS_CORE_TILE *chess_tile, bool king_uatk, vo
     strcat(buf, tag);
 
     if (king_uatk == true) strcat(buf, "+");
-    else { /*buf[strlen(buf)] = ' ';*/ buf[strlen(buf)] = '\0'; }
+    else buf[strlen(buf)] = '\0';
 
     if (!glo_chess_record_move) glo_chess_record_move = malloc(strlen(buf) + 1);
     strcpy(glo_chess_record_move, buf);
 
-    printf("[%s]\n", glo_chess_record_move);
+    if (DEBUG_LEVEL > 0) printf("[%s]\n", glo_chess_record_move);
 
     return;
 }

@@ -58,8 +58,8 @@ int FEN_Init(CHESS_CORE_PLAYER *init_player, char *fen_notation) {
     int fen_halfmove;       // [+1] if no capture of pieces or pawn advance, else resets (draw on 100 moves)
     int fen_fullmove;       // [+1] a complete cycle by both players
 
-    printf("FEN_Init:\n");
-    printf("  notation: ");
+    if (DEBUG_LEVEL > 0) printf("FEN_Init:\n");
+    if (DEBUG_LEVEL > 0) printf("  notation: ");
 
     FEN_StrTrunk(fen_notation, fen_board, fen_play, fen_castle, fen_passant, &fen_halfmove, &fen_fullmove);
 
@@ -68,7 +68,7 @@ int FEN_Init(CHESS_CORE_PLAYER *init_player, char *fen_notation) {
     _glo_chess_tile_passant = FEN_StrTrunk_TagToTile(fen_passant);
     strncpy(_glo_chess_king_castling, fen_castle, strlen(fen_castle) -1);
 
-    printf("[%s] [%s] [%s] [%d] [%d] [%d]\n", fen_board, fen_play, _glo_chess_king_castling, _glo_chess_tile_passant, fen_halfmove, fen_fullmove);
+    if (DEBUG_LEVEL > 0) printf("[%s] [%s] [%s] [%d] [%d] [%d]\n", fen_board, fen_play, _glo_chess_king_castling, _glo_chess_tile_passant, fen_halfmove, fen_fullmove);
 
     return (0);
 }
@@ -135,13 +135,13 @@ int FEN_InitBoard(CHESS_CORE_PLAYER init_player, char *fen_board) {
     short int tile = 0;
     short int index = 0;
 
-    printf("  length FEN board: %d\n", fen_length);
+    if (DEBUG_LEVEL > 1) printf("  length FEN board: %d\n", fen_length);
 
     for (int n = 0; n <= fen_length; n++) {
         if (tile >= 64) break;
 
         character = fen_board[n];
-        printf("  character[%c] - tile[%d]\n", character, tile);
+        if (DEBUG_LEVEL > 1) printf("  character[%c] - tile[%d]\n", character, tile);
 
         if (isalpha(character) != 0)
         {
@@ -177,7 +177,7 @@ int FEN_InitBoard(CHESS_CORE_PLAYER init_player, char *fen_board) {
 
 int FEN_InitPiece(CHESS_CORE_PLAYER player, CHESS_CORE_PIECE *piece, CHESS_CORE_ENUM_PIECE name, int tile) {
 
-    printf("FEN_InitPiece:\n");
+    if (DEBUG_LEVEL > 1) printf("FEN_InitPiece:\n");
 
     switch(name)
     {
@@ -219,18 +219,18 @@ int FEN_InitPiece(CHESS_CORE_PLAYER player, CHESS_CORE_PIECE *piece, CHESS_CORE_
         break;
 
         default:
-            printf(" error NONE case\n");
+            if (DEBUG_LEVEL > 1) printf(" error NONE case\n");
             exit(1);
         break;
     }
 
     if (piece->texture == NULL)
     {
-        printf("  piece->texture not initialized\n");
+        if (DEBUG_LEVEL > 1) printf("  piece->texture not initialized\n");
         return (EXIT_FAILURE);
     }
 
-    printf("  piece->texture = %p\n", &piece->texture);
+    if (DEBUG_LEVEL > 1) printf("  piece->texture = %p\n", &piece->texture);
 
     glo_chess_core_tile[tile].piece = piece;
     glo_chess_core_tile[tile].piece->player = player;

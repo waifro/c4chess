@@ -24,10 +24,10 @@ int MIDDLE_TouchToTile(CHESS_CORE_TILE *chess_tile, PP4M_INPUT_POS touch_pos) {
         if (touch_pos.x >= chess_tile[n].rect.x && touch_pos.x <= (chess_tile[n].rect.x + chess_tile[n].rect.w)
         && touch_pos.y >= chess_tile[n].rect.y && touch_pos.y <= (chess_tile[n].rect.y + chess_tile[n].rect.h)) {
 
-            printf("MIDDLE_TouchToTile:\n  piece = %p\n  tile[%d] tag[%c%d]", chess_tile[n].piece, n, chess_tile[n].tag.col, chess_tile[n].tag.row);
+            if (DEBUG_LEVEL > 1) printf("MIDDLE_TouchToTile:\n  piece = %p\n  tile[%d] tag[%c%d]", chess_tile[n].piece, n, chess_tile[n].tag.col, chess_tile[n].tag.row);
             if (chess_tile[n].piece != NULL)
             {
-                printf(" name[%d] player[%d]\n", chess_tile[n].piece->enum_piece, chess_tile[n].piece->player);
+                if (DEBUG_LEVEL > 1) printf(" name[%d] player[%d]\n", chess_tile[n].piece->enum_piece, chess_tile[n].piece->player);
 
             } else printf("\n");
 
@@ -75,7 +75,7 @@ void MIDDLE_UpdatePositionPiece(CHESS_CORE_TILE *chess_tile, int old, int new) {
     if ((old < 0 || old > 63) || (new < 0 || old > 63)) return;
     if (chess_tile[old].piece == NULL) return;
 
-    printf("MIDDLE_UpdatePositionPiece:\n  chess_tile[old] = %p, %c%d\n  chess_tile[new] = %p, %c%d\n", chess_tile[old].piece, chess_tile[old].tag.col, chess_tile[old].tag.row, chess_tile[new].piece, chess_tile[new].tag.col, chess_tile[new].tag.row);
+    if (DEBUG_LEVEL > 1) printf("MIDDLE_UpdatePositionPiece:\n  chess_tile[old] = %p, %c%d\n  chess_tile[new] = %p, %c%d\n", chess_tile[old].piece, chess_tile[old].tag.col, chess_tile[old].tag.row, chess_tile[new].piece, chess_tile[new].tag.col, chess_tile[new].tag.row);
 
     if (chess_tile[new].piece != NULL) CORE_GlobalDestroyPiece(chess_tile[new].piece);
 
@@ -175,7 +175,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
         *player = CORE_ReversePlayer_State(*player);
 
         position_new = -1; position_old = -1;
-        printf("CORE_Testing:\n  player_turn = %d\n", *player);
+        if (DEBUG_LEVEL > 0) printf("CORE_Testing:\n  player_turn = %d\n", *player);
     }
 
 

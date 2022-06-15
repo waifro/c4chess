@@ -89,7 +89,7 @@ void CORE_ChessTag_Init(CHESS_CORE_TILE *chess_tile) {
 void CORE_GlobalDestroyPiece(CHESS_CORE_PIECE *piece) {
 
     if (piece != NULL) {
-        printf("CORE_GlobalDestroyPiece:\n  destroy piece = %p\n", piece);
+        if (DEBUG_LEVEL > 1) printf("CORE_GlobalDestroyPiece:\n  destroy piece = %p\n", piece);
         SDL_DestroyTexture(piece->texture);
         piece->enum_piece = NONE;
     }
@@ -189,7 +189,7 @@ int CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *fen) {
     int buf_halfm;
     int buf_fullm;
 
-    printf("waiting server response...\n");
+    if (DEBUG_LEVEL > 0) printf("waiting server response...\n");
 
     while(1) {
 
@@ -197,22 +197,22 @@ int CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *fen) {
         if (result > 0) break;
         if (result == -1) continue;
         else if (result == -2) {
-            printf("read: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
+            if (DEBUG_LEVEL > 1) printf("read: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
             return 0;
         }
     }
 
     if (recv(*socket, buf, 255, 0) < 0) {
-        printf("read: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
+        if (DEBUG_LEVEL > 1) printf("read: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
         return 0;
     }
 
-    printf("lobby recieved: [%s]\n", buf);
+    if (DEBUG_LEVEL > 0) printf("lobby recieved: [%s]\n", buf);
 
     sscanf(buf, "%s %*s", buf_plvl);
     FEN_StrTrunk(&buf[2], buf_fen, buf_play, buf_castle, buf_passant, &buf_halfm, &buf_fullm);
 
-    printf("recieved parsed: [%s] [%s] [%s] [%s] [%d] [%d]\n", buf_fen, buf_play, buf_castle, buf_passant, buf_halfm, buf_fullm);
+    if (DEBUG_LEVEL > 1) printf("recieved parsed: [%s] [%s] [%s] [%s] [%d] [%d]\n", buf_fen, buf_play, buf_castle, buf_passant, buf_halfm, buf_fullm);
 
     FEN_PlayerTurn((int*)player, buf_plvl[0]);
     sprintf(fen, "%s %s %s %s %d %d", buf_fen, buf_play, buf_castle, buf_passant, buf_halfm, buf_fullm);
@@ -238,10 +238,10 @@ int CORE_NET_SendRoomState(int *socket, int *running, int *restrict tile_old, in
     // temporary fix
     char buf[10];
     sprintf(buf, "%d - %d", *tile_old, *tile_new);
-    printf("buf sent: %s\n", buf);
+    if (DEBUG_LEVEL > 1) printf("buf sent: %s\n", buf);
 
     if (send(*socket, buf, strlen(buf) + 1, 0) == -1)
-        printf("error send: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
+        if (DEBUG_LEVEL > 1) printf("error send: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
 
     return 0;
 }
@@ -254,11 +254,11 @@ int CORE_NET_RecvRoomState(int *socket, CHESS_CORE_PLAYER *player_turn, int *til
 
     if (CORE_NET_DetectSignal(*socket) > 0) {
         if (recv(*socket, buf, 255, 0) < 0) {
-            printf("read: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
+            if (DEBUG_LEVEL > 1) printf("read: %s, %d\n", strerror(errno), pp4m_NET_RecieveError());
             return 0;
         }
 
-        printf("msg recv: %s\n", buf);
+        if (DEBUG_LEVEL > 1) printf("msg recv: %s\n", buf);
         sscanf(buf, "%d - %d", tile_old, tile_new);
 
         ARCHIVE_UpdateRegister_PieceState(glo_chess_core_tile, *tile_old, *tile_new);
