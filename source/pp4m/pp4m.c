@@ -182,7 +182,6 @@ void pp4m_HOOK_Remove(PP4M_HOOK *head) {
 
     if (head->next == NULL) {
         free(head);
-        head = NULL;
         return;
     }
 

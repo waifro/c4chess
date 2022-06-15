@@ -153,10 +153,19 @@ void CORE_Chessboard_Reverse(CHESS_CORE_TILE *core_tile) {
 
 void CORE_GlobalUpdate_StateRender(void) {
 
+    PP4M_HOOK *current = glo_debug_list;
+    GUI_TextureAlias *alias_ttr;
+
     for (int n = 0; n < 64; n++) {
         SDL_RenderCopy(glo_render, glo_chess_core_tile[n].texture, NULL, &glo_chess_core_tile[n].rect);
         if (glo_chess_core_tile[n].piece != NULL) SDL_RenderCopy(glo_render, glo_chess_core_tile[n].piece->texture, NULL, &glo_chess_core_tile[n].piece->rect);
         DOT_StateGlobalDot(n);
+
+        if (current->next != NULL) {
+            alias_ttr = current->ptr;
+            current = current->next;
+            SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
+        }
     }
 
     return;
