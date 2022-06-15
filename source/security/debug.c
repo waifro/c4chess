@@ -11,54 +11,59 @@
 
 PP4M_HOOK *glo_debug_list;
 
-int DEBUG_PrintBox(const char *format, ...) {
-    if (!glo_debug_list) DEBUG_InitBox();
-    char buffer[256];
+int DEBUG_PrintBox(int level, const char *format, ...) {
+    #if DEBUG_LEVEL > 0
 
-    va_list arg;
-    va_start(arg, format);
-    vsprintf(buffer, format, arg);
-    va_end(arg);
+    if (level == DEBUG_LEVEL) {
+        if (!glo_debug_list) DEBUG_InitBox();
+        char buffer[256];
 
-    int val = pp4m_HOOK_Size(glo_debug_list);
+        va_list arg;
+        va_start(arg, format);
+        vsprintf(buffer, format, arg);
+        va_end(arg);
 
-    PP4M_HOOK *current = glo_debug_list;
+        int val = pp4m_HOOK_Size(glo_debug_list);
 
-    if (val > 10) {
+        PP4M_HOOK *current = glo_debug_list;
 
-        free(current->ptr);
-        PP4M_HOOK *bak = pp4m_HOOK_Init();
+        if (val > 10) {
 
-        current = current->next;
-        for (int i = 0; i < val; i++) {
-            pp4m_HOOK_Next(bak, current);
-            if (current->next == NULL) break;
+            free(current->ptr);
+            PP4M_HOOK *bak = pp4m_HOOK_Init();
+
             current = current->next;
+            for (int i = 0; i < val; i++) {
+                pp4m_HOOK_Next(bak, current);
+                if (current->next == NULL) break;
+                current = current->next;
+            }
+
+            val = pp4m_HOOK_Size(bak);
+            for (int i = 0; i < val; i++) {
+                pp4m_HOOK_Next(glo_debug_list, bak);
+                if (bak->next == NULL) break;
+                bak = bak->next;
+            }
+
+            for (int i = 0; i < val; i++)
+                pp4m_HOOK_Remove(bak);
+
+            current = glo_debug_list;
         }
 
-        val = pp4m_HOOK_Size(bak);
-        for (int i = 0; i < val; i++) {
-            pp4m_HOOK_Next(glo_debug_list, bak);
-            if (bak->next == NULL) break;
-            bak = bak->next;
-        }
+        for (; val > 0; val--)
+            current = current->next;
 
-        for (int i = 0; i < val; i++)
-            pp4m_HOOK_Remove(bak);
+        GUI_TextureAlias *foo = current->ptr;
 
-        current = glo_debug_list;
+        GUI_TextureAlias *buf_txt = calloc(1, sizeof(GUI_TextureAlias));
+        buf_txt->obj = 0;
+        buf_txt->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_WHITE, 12, &buf_txt->rect, foo->rect.x + 10, foo->rect.y, buffer);
+
+        pp4m_HOOK_Next(glo_debug_list, buf_txt);
     }
-
-    for (; val > 0; val--)
-        current = current->next;
-
-    GUI_TextureAlias *foo = current->ptr;
-
-    GUI_TextureAlias *buf_txt = calloc(1, sizeof(GUI_TextureAlias));
-    buf_txt->obj = 0;
-    buf_txt->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_WHITE, 12, &buf_txt->rect, foo->rect.x + 10, foo->rect.y, buffer);
-
-    pp4m_HOOK_Next(glo_debug_list, buf_txt);
+    #endif // DEBUG_LEVEL
 
     return 0;
 }

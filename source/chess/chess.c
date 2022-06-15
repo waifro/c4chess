@@ -24,7 +24,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
 
     if (pl_bak != player) {
 
-        if (DEBUG_LEVEL > 0) DEBUG_PrintBox("CHESS_PiecePattern_UpdateState:\n  updating state pieces... ");
+        DEBUG_PrintBox(1, "CHESS_PiecePattern_UpdateState:\n  updating state pieces... ");
 
         // create copy of tile
         CHESS_CORE_TILE unsafe_tile[64];
@@ -101,7 +101,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
 
         ARCHIVE_Notation_RecordMove(core_tile, glo_chess_event_king_uatk, glo_chess_archive_tmp_ptr, glo_chess_archive_tmp_tile[0], glo_chess_archive_tmp_tile[1]);
         pl_bak = player;
-        if (DEBUG_LEVEL > 0) DEBUG_PrintBox("done\n");
+        DEBUG_PrintBox(1, "done\n");
     }
 
     return 0;
@@ -467,7 +467,7 @@ int CHESS_CheckState_CastleAvailable(CHESS_CORE_TILE *chess_tile, int tile, int 
 int CHESS_CheckState_KingCastling(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player) {
     if (_glo_chess_king_castling[0] == '-') return -1;
 
-    if (DEBUG_LEVEL > 1) DEBUG_PrintBox("before player[%d] %s\n", player, _glo_chess_king_castling);
+    DEBUG_PrintBox(2, "before player[%d] %s\n", player, _glo_chess_king_castling);
 
     int result = -1;
     for (int n = 0; n < strlen(_glo_chess_king_castling); n++)
@@ -510,7 +510,7 @@ int CHESS_CheckState_KingCastling(CHESS_CORE_TILE *chess_tile, int position_old,
 
     if (strlen(_glo_chess_king_castling) == 0) strcpy(_glo_chess_king_castling, "-");
 
-    if (DEBUG_LEVEL > 1) DEBUG_PrintBox("after player[%d] %s\n", player, _glo_chess_king_castling);
+    DEBUG_PrintBox(2, "after player[%d] %s\n", player, _glo_chess_king_castling);
 
     return 0;
 }
@@ -518,7 +518,7 @@ int CHESS_CheckState_KingCastling(CHESS_CORE_TILE *chess_tile, int position_old,
 int CHESS_CheckState_RookCastling(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player) {
     if (_glo_chess_king_castling[0] == '-') return -1;
 
-    if (DEBUG_LEVEL > 1) DEBUG_PrintBox("before player[%d] %s\n", player, _glo_chess_king_castling);
+    DEBUG_PrintBox(2, "before player[%d] %s\n", player, _glo_chess_king_castling);
     char buf[5];
 
     CHESS_CORE_TILE_TAG tag = MIDDLE_TileToTag(position_old);
@@ -640,7 +640,7 @@ int CHESS_CheckState_RookCastling(CHESS_CORE_TILE *chess_tile, int position_old,
 
     if (strlen(_glo_chess_king_castling) == 0) strcpy(_glo_chess_king_castling, "-");
 
-    if (DEBUG_LEVEL > 1) DEBUG_PrintBox("after player[%d] %s\n", player, _glo_chess_king_castling);
+    DEBUG_PrintBox(2, "after player[%d] %s\n", player, _glo_chess_king_castling);
 
     return 0;
 }

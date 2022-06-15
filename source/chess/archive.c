@@ -50,7 +50,7 @@ void ARCHIVE_Notation_RecordMove(CHESS_CORE_TILE *chess_tile, bool king_uatk, vo
     if (!glo_chess_record_move) glo_chess_record_move = malloc(strlen(buf) + 1);
     strcpy(glo_chess_record_move, buf);
 
-    if (DEBUG_LEVEL > 0) DEBUG_PrintBox("[%s]\n", glo_chess_record_move);
+    DEBUG_PrintBox(1, "[%s]\n", glo_chess_record_move);
 
     return;
 }

@@ -126,12 +126,12 @@ int CFG_BootFile_ReadValue(char *buffer, char *dest) {
 
 int CFG_BootFile_ConfigRule(char *set, char *value) {
 
-    if (DEBUG_LEVEL > 0) DEBUG_PrintBox("CFG_BootFile_ConfigRule:\n");
+    DEBUG_PrintBox(2, "CFG_BootFile_ConfigRule:\n");
 
     if (strncmp(set, cfg_boot_set[0], strlen(cfg_boot_set[1])) == 0) {
-        if (DEBUG_LEVEL > 0) DEBUG_PrintBox("  language set as: %s\n", value);
+        DEBUG_PrintBox(2, "  language set as: %s\n", value);
     } else if (strncmp(set, cfg_boot_set[1], strlen(cfg_boot_set[1])) == 0) {
-        if (DEBUG_LEVEL > 0) DEBUG_PrintBox("  style set as: %s\n", value);
+        DEBUG_PrintBox(2, "  style set as: %s\n", value);
     }
 
     return (0);
