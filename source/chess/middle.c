@@ -30,7 +30,7 @@ int MIDDLE_TouchToTile(CHESS_CORE_TILE *chess_tile, PP4M_INPUT_POS touch_pos) {
             {
                 if (DEBUG_LEVEL > 1) DEBUG_PrintBox(" name[%d] player[%d]\n", chess_tile[n].piece->enum_piece, chess_tile[n].piece->player);
 
-            } else DEBUG_PrintBox("\n");
+            } else if (DEBUG_LEVEL > 1) DEBUG_PrintBox("\n");
 
             result = n; break;
         }
