@@ -12,8 +12,8 @@
 PP4M_HOOK *glo_debug_list = NULL;
 
 int DEBUG_PrintBox(int level, const char *format, ...) {
-    #if DEBUG_LEVEL > 0
 
+    #if DEBUG_LEVEL > 0
     if (level <= DEBUG_LEVEL) {
         if (glo_debug_list == NULL) DEBUG_InitBox();
         char buffer[256];
@@ -23,56 +23,65 @@ int DEBUG_PrintBox(int level, const char *format, ...) {
         vsnprintf(buffer, 256, format, arg);
         va_end(arg);
 
-        int val = 0;
-        val = pp4m_HOOK_Size(glo_debug_list);
-        PP4M_HOOK *current = NULL;
-        GUI_TextureAlias *alias_ttr = NULL;
+        int line = pp4m_HOOK_Size(glo_debug_list);
+        if (line > 19) DEBUG_UpdateBox_ClearLine(&line);
 
-        if (val > 19) {
-
-            PP4M_HOOK *bak = NULL;
-            bak = pp4m_HOOK_Init();
-
-            current = glo_debug_list;
-            for (int i = 0; i <= val; i++) {
-                if (i != 1) pp4m_HOOK_Next(bak, current->ptr);
-                current = current->next;
-            }
-
-            val = pp4m_HOOK_Size(bak);
-            current = glo_debug_list;
-
-            for (int i = 0; i <=  val; i++) {
-                current->ptr = bak->ptr;
-
-                if (i != 0)
-                {
-                    alias_ttr = current->ptr;
-                    alias_ttr->rect.y -= 15;
-                }
-
-                bak = bak->next;
-                current = current->next;
-            }
-
-            pp4m_HOOK_Remove(glo_debug_list);
-
-        }
-
-        current = glo_debug_list;
-        for (int i = 0; i < val; i++)
-            current = current->next;
-
-        GUI_TextureAlias *buf = current->ptr;
-
-        GUI_TextureAlias *buf_txt = calloc(1, sizeof(GUI_TextureAlias));
-        buf_txt->obj = 0;
-        buf_txt->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_WHITE, 12, &buf_txt->rect, buf->rect.x, buf->rect.y + 15, buffer);
-        if (val == 0) buf_txt->rect.x += 15;
-
-        pp4m_HOOK_Next(glo_debug_list, buf_txt);
+        DEBUG_UpdateBox_WriteLine(line, buffer);
     }
     #endif // DEBUG_LEVEL
+
+    return 0;
+}
+
+int DEBUG_UpdateBox_WriteLine(int val, char *string) {
+
+    PP4M_HOOK *current = glo_debug_list;
+    for (int i = 0; i < val; i++)
+        current = current->next;
+
+    GUI_TextureAlias *buf = current->ptr;
+
+    GUI_TextureAlias *buf_txt = calloc(1, sizeof(GUI_TextureAlias));
+    buf_txt->obj = 0;
+    buf_txt->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_WHITE, 12, &buf_txt->rect, buf->rect.x, buf->rect.y + 15, string);
+    if (val == 0) buf_txt->rect.x += 15;
+
+    pp4m_HOOK_Next(glo_debug_list, buf_txt);
+
+    return 0;
+}
+
+int DEBUG_UpdateBox_ClearLine(int *val) {
+
+    PP4M_HOOK *tail = NULL;
+    GUI_TextureAlias *alias_ttr = NULL;
+
+    PP4M_HOOK *bak = NULL;
+    bak = pp4m_HOOK_Init();
+
+    tail = glo_debug_list;
+    for (int i = 0; i <= *val; i++) {
+        if (i != 1) pp4m_HOOK_Next(bak, tail->ptr);
+        tail = tail->next;
+    }
+
+    *val = pp4m_HOOK_Size(bak);
+    tail = glo_debug_list;
+
+    for (int i = 0; i <= *val; i++) {
+        tail->ptr = bak->ptr;
+
+        if (i != 0)
+        {
+            alias_ttr = tail->ptr;
+            alias_ttr->rect.y -= 15;
+        }
+
+        bak = bak->next;
+        tail = tail->next;
+    }
+
+    pp4m_HOOK_Remove(glo_debug_list);
 
     return 0;
 }
