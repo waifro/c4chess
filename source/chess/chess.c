@@ -241,7 +241,7 @@ int CHESS_PiecePattern_Pawn(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
     for (int n = 0; n < 2; n++) {
 
         tag.row += 1;
-        if (tag.row > 7) break;
+        if (tag.row > 8) break;
         result = MIDDLE_TagToTile(tag);
 
         if (result == -1) break;

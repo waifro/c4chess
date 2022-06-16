@@ -68,6 +68,8 @@ void CORE_GlobalClearChessTile(void);
 void CORE_UpdateState_PieceStruct(int tile, CHESS_CORE_PIECE *piece, CHESS_CORE_PLAYER player, int enum_piece);
 
 void CORE_ResetGlobal_CorePiece(void);
+void CORE_ResetGlobal_CorePiece(void);
+
 void CORE_Chessboard_Reverse(CHESS_CORE_TILE *core_tile);
 CHESS_CORE_PLAYER CORE_ReversePlayer_State(CHESS_CORE_PLAYER player);
 
