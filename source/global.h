@@ -9,7 +9,7 @@
 #define _SIZEOFARRAY(a) sizeof(a)/sizeof(*a)
 #define BUF_MAX 0x10000 /* 65536 bytes */
 
-#define DEBUG_LEVEL 1
+#define DEBUG_LEVEL 2
 
 // declared extern variables
 extern SDL_Window *glo_window;

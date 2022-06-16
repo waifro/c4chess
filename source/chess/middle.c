@@ -179,6 +179,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
         //CORE_NET_SendRoomState(socket, &result, player, &position_old, &position_new);
         *player = CORE_ReversePlayer_State(*player);
 
+        _glo_chess_tile_promotn = -1;
         position_new = -1; position_old = -1;
         DEBUG_PrintBox(1, "CORE_Testing:");
         DEBUG_PrintBox(1, "  player_turn = %d", *player);

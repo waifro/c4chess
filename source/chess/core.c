@@ -114,6 +114,17 @@ void CORE_GlobalClearChessTile(void) {
     return;
 }
 
+void CORE_UpdateState_PieceStruct(int tile, CHESS_CORE_PIECE *piece, CHESS_CORE_PLAYER player, int enum_piece) {
+
+    SDL_DestroyTexture(piece->texture);
+    FEN_InitPiece(player, piece, enum_piece, tile);
+
+    for (int n = 0; n < 64; n++)
+        piece->range[n] = false;
+
+    return;
+}
+
 void CORE_ResetGlobal_CorePiece(void) {
 
     for (int n = 0; n < 32; n++)
@@ -248,7 +259,7 @@ int CORE_NET_SendRoomState(int *socket, int *running, int *restrict tile_old, in
 
     // temporary fix
     char buf[10];
-    sprintf(buf, "%d - %d", *tile_old, *tile_new);
+    sprintf(buf, "%d - %d - %d", *tile_old, *tile_new, _glo_chess_tile_promotn);
     DEBUG_PrintBox(2, "buf sent: %s", buf);
 
     if (send(*socket, buf, strlen(buf) + 1, 0) == -1)
@@ -270,7 +281,7 @@ int CORE_NET_RecvRoomState(int *socket, CHESS_CORE_PLAYER *player_turn, int *til
         }
 
         DEBUG_PrintBox(2, "msg recv: %s", buf);
-        sscanf(buf, "%d - %d", tile_old, tile_new);
+        sscanf(buf, "%d - %d - %d", tile_old, tile_new, &_glo_chess_tile_promotn);
 
         ARCHIVE_UpdateRegister_PieceState(glo_chess_core_tile, *tile_old, *tile_new);
         EVENT_UpdateState_ChessEvent(glo_chess_core_tile, *tile_old, *tile_new, *player_turn);
@@ -314,8 +325,6 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
 
     SDL_Event event;
 
-    SDL_Texture *txr_snapshot = NULL;
-
     // testing: cap framerate to 30/60 fps
     float deltaTime; int running = 0;
 
@@ -328,7 +337,7 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
             if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 
                 int result = 0;
-                txr_snapshot = GUI_Alias_CreateSnapshot(glo_render, glo_screen_w, glo_screen_h);
+                SDL_Texture *txr_snapshot = GUI_Alias_CreateSnapshot(glo_render, glo_screen_w, glo_screen_h);
 
                 while (1) {
 

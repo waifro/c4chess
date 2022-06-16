@@ -2,6 +2,7 @@
 #define GUI_H
 
 #include "gui_alias.h"
+#include "../pp4m/pp4m.h"
 
 #define OPENSANS_REGULAR "./resources/OpenSans-Regular.ttf"
 

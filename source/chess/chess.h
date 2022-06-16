@@ -6,6 +6,7 @@
 #include "core.h"
 
 extern int _glo_chess_tile_passant;
+extern int _glo_chess_tile_promotn;
 extern char _glo_chess_king_castling[5];
 
 int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER player);
@@ -33,6 +34,7 @@ int CHESS_CheckState_CastleAvailable(CHESS_CORE_TILE *chess_tile, int tile, int 
 
 int CHESS_CheckState_KingCastling(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player);
 int CHESS_CheckState_RookCastling(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player);
+int CHESS_CheckState_PawnPromotion(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player);
 int CHESS_CheckState_PawnEnPassant(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player);
 
 int CHESS_PiecePattern_PawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player, int king_check);

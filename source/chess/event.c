@@ -27,9 +27,10 @@ void EVENT_BlankLayer_Piece(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER playe
 
 void EVENT_UpdateState_ChessEvent(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player) {
 
-    if (CHESS_Redirect_EnumPawn(chess_tile, position_old) == 0)
+    if (CHESS_Redirect_EnumPawn(chess_tile, position_old) == 0) {
         CHESS_CheckState_PawnEnPassant(chess_tile, position_old, position_new, player);
-    else if (CHESS_Redirect_EnumKing(chess_tile, position_old) == 0)
+        CHESS_CheckState_PawnPromotion(chess_tile, position_old, position_new, player);
+    } else if (CHESS_Redirect_EnumKing(chess_tile, position_old) == 0)
         CHESS_CheckState_KingCastling(chess_tile, position_old, position_new, player);
     else if (CHESS_Redirect_EnumRook(chess_tile, position_old) == 0)
         CHESS_CheckState_RookCastling(chess_tile, position_old, position_new, player);

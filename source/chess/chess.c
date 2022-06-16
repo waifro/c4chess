@@ -1,5 +1,6 @@
 #include <stdbool.h>
 
+#include "../dashboard/gui.h"
 #include "../security/debug.h"
 #include "../global.h"
 #include "archive.h"
@@ -10,6 +11,7 @@
 #include "dot.h"
 
 int _glo_chess_tile_passant = -1;
+int _glo_chess_tile_promotn = -1;
 char _glo_chess_king_castling[5];
 
 int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER player) {
@@ -642,6 +644,76 @@ int CHESS_CheckState_RookCastling(CHESS_CORE_TILE *chess_tile, int position_old,
     if (strlen(_glo_chess_king_castling) == 0) strcpy(_glo_chess_king_castling, "-");
 
     DEBUG_PrintBox(2, "after player[%d] %s\n", player, _glo_chess_king_castling);
+
+    return 0;
+}
+
+int CHESS_CheckState_PawnPromotion(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player) {
+
+    if (_glo_chess_tile_promotn != -1) {
+        CORE_UpdateState_PieceStruct(position_old, chess_tile[position_old].piece, player, _glo_chess_tile_promotn);
+        return 0;
+    }
+
+    if (MIDDLE_ReturnRowTile(position_new) == 8 || MIDDLE_ReturnRowTile(position_new) == 1) {
+
+        if (chess_tile[position_old].piece->enum_piece == PAWN) {
+
+            PP4M_HOOK *list_hook = GUI_PopupWindow_Init(525, 525);
+
+            GUI_PopupWindow_Button(list_hook, OPENSANS_REGULAR, BISHOP, "Fante", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 10, 10, 250, 250);
+            GUI_PopupWindow_Button(list_hook, OPENSANS_REGULAR, KNIGHT, "Cavallo", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 265, 10, 250, 250);
+            GUI_PopupWindow_Button(list_hook, OPENSANS_REGULAR, ROOK, "Torre", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 10, 265, 250, 250);
+            GUI_PopupWindow_Button(list_hook, OPENSANS_REGULAR, QUEEN, "Regina", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 265, 265, 250, 250);
+
+            int result = 0;
+            SDL_Texture *txr_snapshot = GUI_Alias_CreateSnapshot(glo_render, glo_screen_w, glo_screen_h);
+
+            result = GUI_PopupWindow_Core(list_hook, txr_snapshot);
+
+            if (result == BISHOP) {
+                CORE_UpdateState_PieceStruct(position_old, chess_tile[position_old].piece, player, BISHOP);
+            } else if (result == KNIGHT) {
+                CORE_UpdateState_PieceStruct(position_old, chess_tile[position_old].piece, player, KNIGHT);
+            } else if (result == ROOK) {
+                CORE_UpdateState_PieceStruct(position_old, chess_tile[position_old].piece, player, ROOK);
+            } else if (result == QUEEN) {
+                CORE_UpdateState_PieceStruct(position_old, chess_tile[position_old].piece, player, QUEEN);
+            }
+
+            for (int n = pp4m_HOOK_Size(list_hook); n > 0; n--)
+                pp4m_HOOK_Remove(list_hook);
+        } else if (chess_tile[position_old].piece->enum_piece == BPAWN) {
+
+            PP4M_HOOK *list_hook = GUI_PopupWindow_Init(525, 525);
+
+            GUI_PopupWindow_Button(list_hook, OPENSANS_REGULAR, BBISHOP, "Fante", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 10, 10, 250, 250);
+            GUI_PopupWindow_Button(list_hook, OPENSANS_REGULAR, BKNIGHT, "Cavallo", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 265, 10, 250, 250);
+            GUI_PopupWindow_Button(list_hook, OPENSANS_REGULAR, BROOK, "Torre", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 10, 265, 250, 250);
+            GUI_PopupWindow_Button(list_hook, OPENSANS_REGULAR, BQUEEN, "Regina", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 265, 265, 250, 250);
+
+            int result = 0;
+            SDL_Texture *txr_snapshot = GUI_Alias_CreateSnapshot(glo_render, glo_screen_w, glo_screen_h);
+
+            result = GUI_PopupWindow_Core(list_hook, txr_snapshot);
+
+            if (result == BBISHOP) {
+                CORE_UpdateState_PieceStruct(position_old, chess_tile[position_old].piece, player, BBISHOP);
+            } else if (result == BKNIGHT) {
+                CORE_UpdateState_PieceStruct(position_old, chess_tile[position_old].piece, player, BKNIGHT);
+            } else if (result == BROOK) {
+                CORE_UpdateState_PieceStruct(position_old, chess_tile[position_old].piece, player, BROOK);
+            } else if (result == BQUEEN) {
+                CORE_UpdateState_PieceStruct(position_old, chess_tile[position_old].piece, player, BQUEEN);
+            }
+
+            for (int n = pp4m_HOOK_Size(list_hook); n > 0; n--)
+                pp4m_HOOK_Remove(list_hook);
+        }
+
+        DEBUG_PrintBox(1, "CHESS_CheckState_PawnPromotion: Updated pawn[%d] -> %d", position_old, chess_tile[position_old].piece->enum_piece);
+        _glo_chess_tile_promotn = chess_tile[position_old].piece->enum_piece;
+    }
 
     return 0;
 }
