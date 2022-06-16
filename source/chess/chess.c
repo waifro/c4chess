@@ -31,7 +31,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
         DEBUG_PrintBox(1, "  updating state pieces... ");
 
         // create copy of tile
-        _glo_chess_tile_availmo = -1;
+        _glo_chess_tile_availmo = 0;
 
         CHESS_CORE_TILE unsafe_tile[64];
         MIDDLE_UnsafePosition_Copy(core_tile, unsafe_tile);
@@ -55,7 +55,6 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
                 {
                     if (unsafe_tile[n].piece->range[i] == true)
                     {
-                        _glo_chess_tile_availmo += 1;
                         glo_chess_event_king_uatk = false;
                         MIDDLE_Unsafe_UpdatePositionPiece(unsafe_tile, n, i);
 
@@ -74,10 +73,8 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
 
                         EVENT_CheckKing_UnderAttack(unsafe_tile, player);
 
-                        if (glo_chess_event_king_uatk == true) {
+                        if (glo_chess_event_king_uatk == true)
                             core_tile[n].piece->range[i] = false;
-                            _glo_chess_tile_availmo -= 1;
-                        }
 
                         // reset
                         EVENT_BlankLayer_Global();
@@ -111,8 +108,21 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
         ARCHIVE_Notation_RecordMove(core_tile, glo_chess_event_king_uatk, glo_chess_archive_tmp_ptr, glo_chess_archive_tmp_tile[0], glo_chess_archive_tmp_tile[1]);
         pl_bak = player;
 
-        DEBUG_PrintBox(2, "Possible moves: %d", _glo_chess_tile_availmo);
         DEBUG_PrintBox(1, "done");
+
+        for (int n = 0; n < 64; n++)
+            if (core_tile[n].piece != NULL && core_tile[n].piece->player == player)
+                for (int i = 0; i < 64; i++)
+                    if (core_tile[n].piece->range[i] == true)
+                        if (core_tile[i].piece == NULL || core_tile[i].piece->player != player)
+                            _glo_chess_tile_availmo += 1;
+
+        if (_glo_chess_tile_availmo == 0)
+            for (int n = 0; n < 64; n++)
+                if (core_tile[n].piece != NULL && core_tile[n].piece->player == player)
+                    if (CHESS_Redirect_EnumKing(core_tile, n) == 0)
+                        if (glo_chess_event_layer[n] == true) DEBUG_PrintBox(1, "Checkmate");
+                        else DEBUG_PrintBox(1, "Stalemate");
     }
 
     return 0;
