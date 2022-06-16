@@ -343,38 +343,8 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
 
         while(SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) running = -1;
-            if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
-
-                int result = 0;
-                SDL_Texture *txr_snapshot = GUI_Alias_CreateSnapshot(glo_render, glo_screen_w, glo_screen_h);
-
-                while (1) {
-
-                    if (running == -1) break;
-
-                    PP4M_HOOK *hook_list_pw = GUI_PopupWindow_Init(440, 180);
-
-                    GUI_PopupWindow_Button(hook_list_pw, OPENSANS_REGULAR, -1, "Continua", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 15, 15, 410, 70);
-                    GUI_PopupWindow_Button(hook_list_pw, OPENSANS_REGULAR, -2, "Esci dal gioco", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 15, 95, 410, 70);
-
-                    result = GUI_PopupWindow_Core(hook_list_pw, txr_snapshot);
-
-                    if (result == -1) break;
-                    if (result == -3) { running = -1; break; }
-
-                    SDL_Texture *txr_snapshot2 = GUI_Alias_CreateSnapshot(glo_render, glo_screen_w, glo_screen_h);
-                    PP4M_HOOK *hook_list_pw_exit = GUI_PopupWindow_Init(400, 165);
-
-                    GUI_PopupWindow_Title(hook_list_pw_exit, OPENSANS_REGULAR, "Sei sicuro?", PP4M_WHITE, 32);
-                    GUI_PopupWindow_Button(hook_list_pw_exit, OPENSANS_REGULAR, -1, "Annulla", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 10, 85, 185, 70);
-                    GUI_PopupWindow_Button(hook_list_pw_exit, OPENSANS_REGULAR, -2, "Okay", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 205, 85, 185, 70);
-
-                    if (GUI_PopupWindow_Core(hook_list_pw_exit, txr_snapshot2) == -2) running = -1;
-
-                    hook_list_pw_exit = NULL;
-
-                }
-            }
+            if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
+                EVENT_HandlePopup_Pause(&running);
         }
 
         /* checks if king under attack */

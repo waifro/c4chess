@@ -6,7 +6,6 @@
 #include "core.h"
 
 extern int _glo_chess_tile_passant;
-extern int _glo_chess_tile_availmo;
 extern int _glo_chess_tile_promotn;
 extern char _glo_chess_king_castling[5];
 

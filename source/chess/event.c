@@ -1,8 +1,17 @@
 #include <stdio.h>
 
+#include <SDL2/SDL.h>
+
+#include "../pp4m/pp4m.h"
+#include "../dashboard/gui.h"
+#include "../dashboard/gui_alias.h"
+#include "../global.h"
+
 #include "event.h"
 #include "core.h"
 #include "chess.h"
+
+int glo_chess_event_availmo = -1;
 
 bool glo_chess_event_layer[64];
 bool glo_chess_event_king_uatk;
@@ -99,4 +108,91 @@ int EVENT_CheckPieceLayer(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player)
 
     if (glo_chess_event_king_uatk == true) return 2;
     return 0;
+}
+
+int EVENT_HandlePopup_Pause(int *running) {
+
+    int result = 0;
+    SDL_Texture *txr_snapshot = GUI_Alias_CreateSnapshot(glo_render, glo_screen_w, glo_screen_h);
+
+    while (1) {
+
+        if (*running == -1) break;
+
+        PP4M_HOOK *hook_list_pw = GUI_PopupWindow_Init(440, 180);
+
+        GUI_PopupWindow_Button(hook_list_pw, OPENSANS_REGULAR, -1, "Continua", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 15, 15, 410, 70);
+        GUI_PopupWindow_Button(hook_list_pw, OPENSANS_REGULAR, -2, "Esci dal gioco", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 15, 95, 410, 70);
+
+        result = GUI_PopupWindow_Core(hook_list_pw, txr_snapshot);
+
+        if (result == -1) break;
+        if (result == -3) { *running = -1; break; }
+
+        SDL_Texture *txr_snapshot2 = GUI_Alias_CreateSnapshot(glo_render, glo_screen_w, glo_screen_h);
+        PP4M_HOOK *hook_list_pw_exit = GUI_PopupWindow_Init(400, 165);
+
+        GUI_PopupWindow_Title(hook_list_pw_exit, OPENSANS_REGULAR, "Sei sicuro?", PP4M_WHITE, 32);
+        GUI_PopupWindow_Button(hook_list_pw_exit, OPENSANS_REGULAR, -1, "Annulla", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 10, 85, 185, 70);
+        GUI_PopupWindow_Button(hook_list_pw_exit, OPENSANS_REGULAR, -2, "Okay", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 205, 85, 185, 70);
+
+        if (GUI_PopupWindow_Core(hook_list_pw_exit, txr_snapshot2) == -2) *running = -1;
+
+        hook_list_pw_exit = NULL;
+    }
+
+    return running;
+}
+
+int EVENT_HandleKingState(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player) {
+    int result = -1;
+    glo_chess_event_availmo = 0;
+
+    for (int n = 0; n < 64; n++)
+        if (chess_tile[n].piece != NULL && chess_tile[n].piece->player == player)
+            for (int i = 0; i < 64; i++)
+                if (chess_tile[n].piece->range[i] == true)
+                    if (chess_tile[i].piece == NULL || chess_tile[i].piece->player != player)
+                        glo_chess_event_availmo += 1;
+
+    if (glo_chess_event_availmo == 0)
+        for (int n = 0; n < 64; n++)
+            if (chess_tile[n].piece != NULL && chess_tile[n].piece->player == player)
+                if (CHESS_Redirect_EnumKing(chess_tile, n) == 0)
+                    if (glo_chess_event_layer[n] == true) result = EVENT_HandlePopup_Checkmate(NULL, player);
+                    else result = EVENT_HandlePopup_Stalemate(NULL);
+
+    return result;
+}
+
+int EVENT_HandlePopup_Stalemate(char *comment) {
+    int result = -1;
+
+    SDL_Texture *txr_snapshot = GUI_Alias_CreateSnapshot(glo_render, glo_screen_w, glo_screen_h);
+    PP4M_HOOK *hook_list = GUI_PopupWindow_Init(450, 150);
+
+    GUI_PopupWindow_Title(hook_list, OPENSANS_REGULAR, "Stalemate", PP4M_WHITE, 32);
+
+    // leaving this for now
+    if (comment != NULL) GUI_PopupWindow_Title(hook_list, OPENSANS_REGULAR, comment, PP4M_WHITE, 32);
+    GUI_PopupWindow_Button(hook_list, OPENSANS_REGULAR, -1, "Continua", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 10, 90, 430, 50);
+
+    result = GUI_PopupWindow_Core(hook_list, txr_snapshot);
+    return result;
+}
+
+int EVENT_HandlePopup_Checkmate(char *comment, CHESS_CORE_PLAYER player) {
+    int result = -1;
+
+    SDL_Texture *txr_snapshot = GUI_Alias_CreateSnapshot(glo_render, glo_screen_w, glo_screen_h);
+    PP4M_HOOK *hook_list = GUI_PopupWindow_Init(450, 150);
+
+    GUI_PopupWindow_Title(hook_list, OPENSANS_REGULAR, "Checkmate", PP4M_WHITE, 32);
+
+    // leaving this for now
+    if (comment != NULL) GUI_PopupWindow_Title(hook_list, OPENSANS_REGULAR, comment, PP4M_WHITE, 32);
+    GUI_PopupWindow_Button(hook_list, OPENSANS_REGULAR, -1, "Continua", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 10, 90, 430, 50);
+
+    result = GUI_PopupWindow_Core(hook_list, txr_snapshot);
+    return result;
 }

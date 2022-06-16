@@ -10,13 +10,13 @@
 #include "core.h"
 #include "dot.h"
 
-int _glo_chess_tile_availmo = -1;
 int _glo_chess_tile_passant = -1;
 int _glo_chess_tile_promotn = -1;
 char _glo_chess_king_castling[5];
 
 int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER player) {
 
+    int result = 0;
     static CHESS_CORE_PLAYER pl_bak;
 
     static bool check_state_once;
@@ -31,8 +31,6 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
         DEBUG_PrintBox(1, "  updating state pieces... ");
 
         // create copy of tile
-        _glo_chess_tile_availmo = 0;
-
         CHESS_CORE_TILE unsafe_tile[64];
         MIDDLE_UnsafePosition_Copy(core_tile, unsafe_tile);
         EVENT_BlankLayer_Global();
@@ -106,26 +104,14 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
                     CHESS_Redirect_PiecePattern(core_tile, n, player);
 
         ARCHIVE_Notation_RecordMove(core_tile, glo_chess_event_king_uatk, glo_chess_archive_tmp_ptr, glo_chess_archive_tmp_tile[0], glo_chess_archive_tmp_tile[1]);
+
+        result = EVENT_HandleKingState(core_tile, player);
+
         pl_bak = player;
-
         DEBUG_PrintBox(1, "done");
-
-        for (int n = 0; n < 64; n++)
-            if (core_tile[n].piece != NULL && core_tile[n].piece->player == player)
-                for (int i = 0; i < 64; i++)
-                    if (core_tile[n].piece->range[i] == true)
-                        if (core_tile[i].piece == NULL || core_tile[i].piece->player != player)
-                            _glo_chess_tile_availmo += 1;
-
-        if (_glo_chess_tile_availmo == 0)
-            for (int n = 0; n < 64; n++)
-                if (core_tile[n].piece != NULL && core_tile[n].piece->player == player)
-                    if (CHESS_Redirect_EnumKing(core_tile, n) == 0)
-                        if (glo_chess_event_layer[n] == true) DEBUG_PrintBox(1, "Checkmate");
-                        else DEBUG_PrintBox(1, "Stalemate");
     }
 
-    return 0;
+    return result;
 }
 
 int CHESS_PiecePattern_RangeReset(CHESS_CORE_TILE *core_tile, int tile) {
