@@ -57,12 +57,8 @@ void EVENT_CheckKing_UnderAttack(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER 
         if (chess_tile[n].piece != NULL && chess_tile[n].piece->player == player) {
             if (chess_tile[n].piece->enum_piece == KING || chess_tile[n].piece->enum_piece == BKING) {
 
-                if (glo_chess_event_layer[n] == true) {
-                    glo_chess_event_king_uatk = true;
-                    return;
-                }
-
-                glo_chess_event_king_uatk = false;
+                if (glo_chess_event_layer[n] == true) glo_chess_event_king_uatk = true;
+                else glo_chess_event_king_uatk = false;
                 return;
             }
         }
