@@ -43,6 +43,8 @@ void CORE_Chessboard_Init(void) {
 
     for(int n = 0; n < 64; n++) {
 
+        glo_chess_core_tile[n].piece = NULL;
+
         if (colomn > 8) {
             y_b += size_tile;
             x_b = glo_screen_w / 2 - (size_tile * 4);

@@ -460,12 +460,12 @@ int CHESS_CheckState_CastleAvailable(CHESS_CORE_TILE *chess_tile, int tile, int 
         CHESS_CORE_TILE_TAG king_castle = MIDDLE_TileToTag(tile);
         int res = -1; int u;
 
-        for (u = 0; u < 3; u++) {
+        for (u = 0; u < 4; u++) {
             res = MIDDLE_TagToTile(king_castle); king_castle.col -= 1;
-            if (glo_chess_event_layer[res] == true || (u != 0 && chess_tile[res].piece != NULL)) break;
+            if ((u != 4 && glo_chess_event_layer[res] == true) || (u != 0 && chess_tile[res].piece != NULL)) break;
         }
 
-        if (u == 3) return (res);
+        if (u == 4) return (res);
     }
 
     return (-1);
