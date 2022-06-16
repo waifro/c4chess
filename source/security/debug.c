@@ -14,7 +14,7 @@ PP4M_HOOK *glo_debug_list = NULL;
 int DEBUG_PrintBox(int level, const char *format, ...) {
     #if DEBUG_LEVEL > 0
 
-    if (level >= DEBUG_LEVEL) {
+    if (level <= DEBUG_LEVEL) {
         if (glo_debug_list == NULL) DEBUG_InitBox();
         char buffer[256];
 
