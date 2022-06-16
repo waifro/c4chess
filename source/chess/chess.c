@@ -263,7 +263,7 @@ int CHESS_PiecePattern_BPawn(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PL
     for (int n = 0; n < 2; n++) {
 
         tag.row -= 1;
-        if (tag.row < 2) break;
+        if (tag.row < 1) break;
         result = MIDDLE_TagToTile(tag);
 
         if (result == -1) break;
