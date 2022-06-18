@@ -4,7 +4,6 @@
 #include "../chess/core.h"
 #include "net.h"
 
-/*
 int NET_CreateBroadcastServer(void) {
 
     int result = 0;
@@ -15,16 +14,16 @@ int NET_CreateBroadcastServer(void) {
     return (result);
 }
 
-int NET_ConnectToServer(char *server) {
+int NET_ConnectToServer(char *server, int port) {
 
     int result = 0;
 
     pp4m_NET_Init(TCP);
 
-    if (server == NULL) result = pp4m_NET_ConnectServerByAddress(NET_DEFAULT_SERVER, NET_DEFAULT_PORT);
-    else result = pp4m_NET_ConnectServerByAddress(server, NET_DEFAULT_PORT);
+    if (server == NULL) result = pp4m_NET_ConnectServerByAddress(NET_DEFAULT_SERVER, port);
+    else result = pp4m_NET_ConnectServerByAddress(server, port);
 
-    return (server);
+    return (result);
 }
 
 void NET_CloseConnection(void) {
@@ -35,4 +34,3 @@ void NET_CloseConnection(void) {
 
     return;
 }
-*/

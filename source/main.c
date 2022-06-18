@@ -30,40 +30,29 @@ int main (int argc, char *argv[]) {
 
     CHESS_CORE_PLAYER player = WHITE_PLAYER;
 
-    int socket = 0;
-    char fen_notation[256]; // = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0";
+    char fen_notation[256];
     char *server_addr = NET_DEFAULT_SERVER;
 
-    // start online 2-player game (wip)
-    socket = pp4m_NET_Init(TCP);
+    DEBUG_PrintBox(1, "waiting connection to host...");
 
-    if (socket != -1) {
+    if (NET_ConnectToServer(server_addr, NET_PORT_TESTNET) < 0) {
+        DEBUG_PrintBox(1, "error socket: %s, %d", strerror(errno), pp4m_NET_RecieveError());
+        exit(0);
+    }
 
-        DEBUG_PrintBox(1, "waiting connection to host...");
+    DEBUG_PrintBox(1, "connection established to [%s]", server_addr);
 
-        int result = -1;
-        while(1) {
+    // make CL_REQ_ASSIGN_LOBBY in network/
 
-            result = pp4m_NETSock_ConnectServerByAddress(socket, server_addr, NET_PORT_TESTNET);
-
-            if (result == 0) break;
-            else if (result == -1) {
-                DEBUG_PrintBox(1, "error socket: %s, %d", strerror(errno), pp4m_NET_RecieveError());
-                exit(0);
-            }
-        }
-
-        DEBUG_PrintBox(1, "connection established to [%s]", server_addr);
-
-        CORE_NET_ChessboardInit(&socket, &player, fen_notation);
-        DEBUG_PrintBox(1, "configured net chessboard, ready");
-
-    } else exit(0);
+    CORE_NET_ChessboardInit(&socket, &player, fen_notation);
+    DEBUG_PrintBox(1, "configured net chessboard, ready");
 
     CORE_InitChess_Play(player, fen_notation, &socket);
 
-    //GUI_PopupWindow_Core(100, 50, 1080, 590, "test");
-    //GUI_Testing();
+    /*
+    GUI_PopupWindow_Core(100, 50, 1080, 590, "test");
+    GUI_Testing();
+    */
 
     // Exiting from game
     DEBUG_QuitBox();
