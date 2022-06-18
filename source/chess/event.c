@@ -154,9 +154,12 @@ int EVENT_HandleKingState(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player)
     if (glo_chess_event_availmo == 0)
         for (int n = 0; n < 64; n++)
             if (chess_tile[n].piece != NULL && chess_tile[n].piece->player == player)
-                if (CHESS_Redirect_EnumKing(chess_tile, n) == 0)
+                if (CHESS_Redirect_EnumKing(chess_tile, n) == 0) {
                     if (glo_chess_event_layer[n] == true) result = EVENT_HandlePopup_Checkmate(NULL, player);
                     else result = EVENT_HandlePopup_Stalemate(NULL);
+
+                    break;
+                }
 
     return result;
 }
