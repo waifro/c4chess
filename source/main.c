@@ -44,7 +44,7 @@ int main (int argc, char *argv[]) {
         int result = -1;
         while(1) {
 
-            result = pp4m_NETSock_ConnectServerByAddress(socket, server_addr, NET_DEFAULT_PORT);
+            result = pp4m_NETSock_ConnectServerByAddress(socket, server_addr, NET_PORT_TESTNET);
 
             if (result == 0) break;
             else if (result == -1) {

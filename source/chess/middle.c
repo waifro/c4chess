@@ -107,8 +107,9 @@ void MIDDLE_Unsafe_UpdatePositionPiece(CHESS_CORE_TILE *chess_tile, int old, int
 void MIDDLE_UnsafePosition_Copy(CHESS_CORE_TILE *restrict src, CHESS_CORE_TILE *restrict dst) {
     if (src == NULL) return;
 
+
     for (int n = 0; n < 64; n++)
-        memcpy(&dst[n], &src[n], sizeof(src[n]));
+        dst[n] = src[n];
 
     return;
 }
