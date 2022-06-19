@@ -68,3 +68,23 @@ int svcode_redirect(int code, cli_t *client, int room, char *buffer) {
 
     return result;
 }
+
+int SV_HandleCli_Packet(cli_t *client, char *buffer) {
+
+    if (recv(*client, buffer, 255, 0) < 0) {
+        //client_disconnect(client);
+        memset(buffer, 0x00, 255);
+        return -1;
+    }
+
+    int result = 0;
+    result = verify_mesg_recv(buffer);
+    if (result < 0) return -1;
+
+    result = retrieve_code(buffer);
+    if (result < 0) return -1;
+
+    //clcode_redirect(result, client, room, buffer);
+
+    return result;
+}

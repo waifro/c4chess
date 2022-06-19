@@ -49,4 +49,6 @@ int clcode_LOBBY_POST_redirect(int code, cli_t *client, int room, char *buffer);
 
 int clcode_redirect(int code, cli_t *client, int room, char *buffer);
 
+int CL_HandleSrv_Packet(cli_t *client, char *buffer); // client -> handle server packets
+
 #endif
