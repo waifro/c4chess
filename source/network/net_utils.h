@@ -25,7 +25,6 @@ typedef struct {
     LOBBY_STATUS status;
 } net_lobby;
 
-int handle_client(cli_t *client, char *buffer);
 int retrieve_code(char *mesg);
 int verify_mesg_recv(char *mesg);
 int generate_val(int max);

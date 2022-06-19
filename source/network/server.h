@@ -41,6 +41,6 @@ int svcode_REQ_redirect(int code, cli_t *client, int room, char *buffer);
 int svcode_POST_redirect(int code, cli_t *client, int room, char *buffer);
 
 int svcode_redirect(int code, cli_t *client, int room, char *buffer);
-
+int SV_HandleCli_Packet(cli_t *client, char *buffer);
 
 #endif

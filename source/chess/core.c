@@ -252,18 +252,6 @@ int CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *fen) {
     return (0);
 }
 
-int CORE_NET_CloseSocketState(int *socket, int running) {
-
-    if (running == -1)
-        if (socket != NULL) {
-            close(*socket);
-            *socket = 0;
-            socket = NULL;
-        }
-
-    return (0);
-}
-
 int CORE_NET_SendRoomState(int *socket, int *running, int *restrict tile_old, int *restrict tile_new) {
     if (socket == NULL) return -1;
 
