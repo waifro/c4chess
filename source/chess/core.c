@@ -189,22 +189,21 @@ void CORE_GlobalUpdate_StateRender(void) {
     return;
 }
 
-int CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *buffer) {
+char *CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *buffer) {
     int result = -1;
 
     // client side
+    char *fen = malloc(sizeof(char) * 256);
     char buf_plvl[4];
 
     // fen notes
     char buf_fen[128];
-    char buf_play[4];
-    char buf_castle[4];
-    char buf_passant[4];
+    char buf_play[5];
+    char buf_castle[5];
+    char buf_passant[5];
 
     int buf_halfm;
     int buf_fullm;
-
-    DEBUG_PrintBox(1, "lobby recieved: [%s]", buffer);
 
     sscanf(buffer, "%*d %s %s %s %s %s %d %d", buf_plvl, buf_fen, buf_play, buf_castle, buf_passant, &buf_halfm, &buf_fullm);
     //FEN_StrTrunk(&buf[5], buf_fen, buf_play, buf_castle, buf_passant, &buf_halfm, &buf_fullm);
@@ -214,7 +213,7 @@ int CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *buffer
     FEN_PlayerTurn((int*)player, buf_plvl[0]);
     sprintf(fen, "%s %s %s %s %d %d", buf_fen, buf_play, buf_castle, buf_passant, buf_halfm, buf_fullm);
 
-    return (0);
+    return fen;
 }
 
 int CORE_NET_SendRoomState(int *socket, int *running, int *restrict tile_old, int *restrict tile_new) {
