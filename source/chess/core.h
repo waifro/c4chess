@@ -75,7 +75,7 @@ CHESS_CORE_PLAYER CORE_ReversePlayer_State(CHESS_CORE_PLAYER player);
 
 void CORE_GlobalUpdate_StateRender(void);
 
-int CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *buffer);
+char *CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *buffer);
 
 int CORE_NET_SendRoomState(int *socket, int *running, int *restrict tile_old, int *restrict tile_new) ;
 int CORE_NET_RecvRoomState(int *socket, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new);

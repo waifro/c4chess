@@ -71,7 +71,7 @@ int main (int argc, char *argv[]) {
         SDL_RenderPresent(glo_render);
     }
 
-    CORE_NET_ChessboardInit(&socket, &player, buf_1);
+    char *fen_notation = CORE_NET_ChessboardInit(&socket, &player, buf_1);
     DEBUG_PrintBox(1, "configured chessboard, ready");
 
     CORE_InitChess_Play(player, fen_notation, &socket);
