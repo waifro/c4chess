@@ -462,7 +462,7 @@ int CHESS_CheckState_CastleAvailable(CHESS_CORE_TILE *chess_tile, int tile, int 
 
         for (u = 0; u < 4; u++) {
             res = MIDDLE_TagToTile(king_castle); king_castle.col -= 1;
-            if ((u != 4 && glo_chess_event_layer[res] == true) || (u != 0 && chess_tile[res].piece != NULL)) break;
+            if ((u != 3 && glo_chess_event_layer[res] == true) || (u != 0 && chess_tile[res].piece != NULL)) break;
         }
 
         if (u == 4) return (res);
