@@ -2,6 +2,7 @@
 #define NET_UTILS_H
 
 #define cli_t int
+#include "../pp4m/pp4m_net.h"
 
 #define MAX_CLIENTS 2
 #define MAX_LOBBY MAX_CLIENTS/2
@@ -30,7 +31,7 @@ int generate_val(int max);
 void init_client_list(cli_t *client_list, int max);
 void init_lobby_list(net_lobby *lobby_list, int max);
 
-cli_t client_accept(int master_socket, struct sockaddr_in *addr);
+int client_accept(int master_socket, struct sockaddr_in *addr);
 void client_disconnect(cli_t *client);
 
 #endif

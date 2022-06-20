@@ -137,7 +137,7 @@ int EVENT_HandlePopup_Pause(int *running) {
         hook_list_pw_exit = NULL;
     }
 
-    return running;
+    return *running;
 }
 
 int EVENT_HandleKingState(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player) {
@@ -181,6 +181,8 @@ int EVENT_HandlePopup_Stalemate(char *comment) {
 }
 
 int EVENT_HandlePopup_Checkmate(char *comment, CHESS_CORE_PLAYER player) {
+    (void)player;
+
     int result = -1;
 
     SDL_Texture *txr_snapshot = GUI_Alias_CreateSnapshot(glo_render, glo_screen_w, glo_screen_h);

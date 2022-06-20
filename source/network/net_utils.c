@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "net_utils.h"
+#include "client.h"
 #include "../pp4m/pp4m_net.h"
 
 int retrieve_code(char *mesg) {
@@ -40,7 +40,7 @@ void init_lobby_list(net_lobby *lobby_list, int max) {
     }
 }
 
-cli_t client_accept(int master_socket, struct sockaddr_in *addr) {
+int client_accept(int master_socket, struct sockaddr_in *addr) {
     cli_t new_client = -1;
     socklen_t addr_size = sizeof(struct sockaddr);
     new_client = accept(master_socket, (struct sockaddr*)addr, &addr_size);

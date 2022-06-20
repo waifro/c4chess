@@ -49,7 +49,7 @@ int svcode_POST_redirect(int code, cli_t *client, int room, char *buffer) {
 
     switch(code) {
         case SV_POST_LOBBY_START:
-            result = lobby_random_start(room, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0");
+            //result = lobby_random_start(NULL, room, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0");
             break;
 
         default:
@@ -66,7 +66,7 @@ int clcode_REQ_redirect(int code, cli_t *client, int room, char *buffer) {
 
     switch(code) {
         case CL_REQ_ASSIGN_LOBBY:
-            result = lobby_assign_cli(client);
+            //result = lobby_assign_cli(client);
             break;
 
         default:
@@ -115,11 +115,11 @@ int clcode_LOBBY_POST_redirect(int code, cli_t *client, int room, char *buffer) 
             break;
 
         case CL_POST_LOBBY_MOVE:
-            result = lobby_redirect_buf(client, room, buffer);
+            //result = lobby_redirect_buf(client, room, buffer);
             break;
 
         case CL_POST_LOBBY_MESG:
-            result = lobby_redirect_buf(client, room, buffer);
+            //result = lobby_redirect_buf(client, room, buffer);
             break;
 
         default:

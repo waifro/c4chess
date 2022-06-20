@@ -68,12 +68,12 @@ char *cli2srv_craftPacket(int code) {
     return buffer;
 }
 
-int cli2srv_redirect(int code, cli_t *socket, char *buffer) {
+int cli2srv_redirect(int code, char *buffer) {
     int result = 0;
 
     if (clcode_status_STATE(code) == 0) result = 0; // im not sure what to do with this and cli_t.status
     else if (clcode_status_REQ(code) == 0) result = cli2srv_REQ_redirect(code, buffer);
-    else if (clcode_status_POST(code) == 0) //result = clcode_POST_redirect(code, socket, buffer);
+    else if (clcode_status_POST(code) == 0) ;//result = clcode_POST_redirect(code, socket, buffer);
 
     return result;
 }

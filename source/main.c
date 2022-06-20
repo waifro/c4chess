@@ -41,7 +41,12 @@ int main (int argc, char *argv[]) {
 
     if (NET_ConnectSocketToServer(&socket, server_addr, NET_PORT_TESTNET) < 0) {
         DEBUG_PrintBox(1, "error socket: %s, %d", strerror(errno), pp4m_NET_RecieveError());
-        exit(0);
+
+        while(1) {
+            SDL_RenderClear(glo_render);
+            DEBUG_UpdateBox_Render();
+            SDL_RenderPresent(glo_render);
+        }
     }
 
     DEBUG_PrintBox(1, "connection established to [%s]", server_addr);
@@ -54,7 +59,7 @@ int main (int argc, char *argv[]) {
 
     while(1) {
 
-        if (NET_DetectSignal(socket) > 0) {
+        if (NET_DetectSignal(&socket) > 0) {
             srv2cli_handlePacket(&socket, buf_1);
             DEBUG_PrintBox(2, "recieved buf_1: [%s]", buf_1);
             break;
@@ -62,13 +67,15 @@ int main (int argc, char *argv[]) {
 
         SDL_RenderClear(glo_render);
         DEBUG_UpdateBox_Render();
-        SDL_RenderePresent(glo_render);
+        SDL_RenderPresent(glo_render);
     }
 
     CORE_NET_ChessboardInit(&socket, &player, fen_notation);
     DEBUG_PrintBox(1, "configured net chessboard, ready");
 
     CORE_InitChess_Play(player, fen_notation, &socket);
+
+    NET_CloseSocket(&socket);
 
     /*
     GUI_PopupWindow_Core(100, 50, 1080, 590, "test");

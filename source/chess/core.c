@@ -14,6 +14,9 @@
 #include "../pp4m/pp4m_input.h"
 
 #include "../network/net.h"
+#include "../network/client.h"
+#include "../network/server.h"
+
 #include "../dashboard/gui.h"
 #include "../dashboard/gui_alias.h"
 #include "../security/debug.h"
@@ -206,7 +209,7 @@ int CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *fen) {
 
     while(1) {
 
-        result = CORE_NET_DetectSignal(*socket);
+        result = NET_DetectSignal(*socket);
         if (result > 0) break;
         if (result == -1) continue;
         else if (result == -2) {
@@ -238,7 +241,7 @@ int CORE_NET_SendRoomState(int *socket, int *running, int *restrict tile_old, in
 
     // temporary fix
     char buf[10];
-    sprintf(buf, "%d - %d - %d", *tile_old, *tile_new, _glo_chess_tile_promotn);
+    sprintf(buf, "%d %d %d %d", CL_POST_LOBBY_MOVE, *tile_old, *tile_new, _glo_chess_tile_promotn);
     DEBUG_PrintBox(2, "buf sent: %s", buf);
 
     if (send(*socket, buf, strlen(buf) + 1, 0) == -1)
@@ -253,14 +256,14 @@ int CORE_NET_RecvRoomState(int *socket, CHESS_CORE_PLAYER *player_turn, int *til
     // temporary fix
     char buf[256];
 
-    if (CORE_NET_DetectSignal(*socket) > 0) {
+    if (NET_DetectSignal(*socket) > 0) {
         if (recv(*socket, buf, 255, 0) < 0) {
             DEBUG_PrintBox(2, "read: %s, %d", strerror(errno), pp4m_NET_RecieveError());
             return 0;
         }
 
         DEBUG_PrintBox(2, "msg recv: %s", buf);
-        sscanf(buf, "%d - %d - %d", tile_old, tile_new, &_glo_chess_tile_promotn);
+        sscanf(buf, "%*d %d %d %d", tile_old, tile_new, &_glo_chess_tile_promotn);
 
         ARCHIVE_UpdateRegister_PieceState(glo_chess_core_tile, *tile_old, *tile_new);
         EVENT_UpdateState_ChessEvent(glo_chess_core_tile, *tile_old, *tile_new, *player_turn);
@@ -330,8 +333,6 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
         /* renders everything chessboard releated */
         CORE_GlobalUpdate_StateRender();
         SDL_RenderPresent(glo_render);
-
-        CORE_NET_CloseSocketState(socket, running);
     }
 
     SDL_DestroyTexture(background);
