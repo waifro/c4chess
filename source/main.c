@@ -35,7 +35,7 @@ int main (int argc, char *argv[]) {
 
     char fen_notation[256];
     char *server_addr = NET_DEFAULT_SERVER;
-    cli_t socket = 0;
+    cli_t socket = pp4m_NET_Init(TCP);
 
     DEBUG_PrintBox(1, "waiting connection to host...");
 
