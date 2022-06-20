@@ -33,7 +33,6 @@ int main (int argc, char *argv[]) {
 
     CHESS_CORE_PLAYER player = WHITE_PLAYER;
 
-    char fen_notation[256];
     char *server_addr = NET_DEFAULT_SERVER;
     cli_t socket = pp4m_NET_Init(TCP);
 
@@ -72,7 +71,7 @@ int main (int argc, char *argv[]) {
         SDL_RenderPresent(glo_render);
     }
 
-    CORE_NET_ChessboardInit(&socket, &player, fen_notation);
+    CORE_NET_ChessboardInit(&socket, &player, buf_1);
     DEBUG_PrintBox(1, "configured chessboard, ready");
 
     CORE_InitChess_Play(player, fen_notation, &socket);

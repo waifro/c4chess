@@ -189,11 +189,10 @@ void CORE_GlobalUpdate_StateRender(void) {
     return;
 }
 
-int CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *fen) {
+int CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *buffer) {
     int result = -1;
 
     // client side
-    char buf[512];
     char buf_plvl[4];
 
     // fen notes
@@ -205,27 +204,9 @@ int CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *fen) {
     int buf_halfm;
     int buf_fullm;
 
-    DEBUG_PrintBox(1, "waiting server response...");
+    DEBUG_PrintBox(1, "lobby recieved: [%s]", buffer);
 
-    while(1) {
-
-        result = NET_DetectSignal(socket);
-        if (result > 0) break;
-        if (result == -1) continue;
-        else if (result == -2) {
-            DEBUG_PrintBox(2, "read: %s, %d", strerror(errno), pp4m_NET_RecieveError());
-            return 0;
-        }
-    }
-
-    if (recv(*socket, buf, 255, 0) < 0) {
-        DEBUG_PrintBox(2, "read: %s, %d", strerror(errno), pp4m_NET_RecieveError());
-        return 0;
-    }
-
-    DEBUG_PrintBox(1, "lobby recieved: [%s]", buf);
-
-    sscanf(buf, "%*d %s %s %s %s %s %d %d", buf_plvl, buf_fen, buf_play, buf_castle, buf_passant, &buf_halfm, &buf_fullm);
+    sscanf(buffer, "%*d %s %s %s %s %s %d %d", buf_plvl, buf_fen, buf_play, buf_castle, buf_passant, &buf_halfm, &buf_fullm);
     //FEN_StrTrunk(&buf[5], buf_fen, buf_play, buf_castle, buf_passant, &buf_halfm, &buf_fullm);
 
     DEBUG_PrintBox(2, "recieved parsed: [%s] [%s] [%s] [%s] [%d] [%d]", buf_fen, buf_play, buf_castle, buf_passant, buf_halfm, buf_fullm);
