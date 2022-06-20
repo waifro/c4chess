@@ -56,12 +56,14 @@ int main (int argc, char *argv[]) {
     char *buf_2 = cli2srv_craftPacket(CL_REQ_ASSIGN_LOBBY);
     NET_SendPacketToServer(&socket, buf_2, strlen(buf_2)+1);
     DEBUG_PrintBox(2, "crafted buf_2: [%s]", buf_2);
+    DEBUG_PrintBox(2, "REQ sent, waiting for fillup of lobby...");
 
     while(1) {
 
         if (NET_DetectSignal(&socket) > 0) {
             srv2cli_handlePacket(&socket, buf_1);
             DEBUG_PrintBox(2, "recieved buf_1: [%s]", buf_1);
+            DEBUG_PrintBox(2, "Initialized room, ready");
             break;
         }
 
@@ -71,7 +73,7 @@ int main (int argc, char *argv[]) {
     }
 
     CORE_NET_ChessboardInit(&socket, &player, fen_notation);
-    DEBUG_PrintBox(1, "configured net chessboard, ready");
+    DEBUG_PrintBox(1, "configured chessboard, ready");
 
     CORE_InitChess_Play(player, fen_notation, &socket);
 
