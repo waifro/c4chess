@@ -44,7 +44,7 @@ int lobby_assign_cli(net_lobby *lobby, cli_t *client) {
     int result = -1;
 
     for (int i = 0; i < MAX_LOBBY; i++) {
-        //result = lobby_checkroom_avail(i);
+        result = lobby_checkroom_avail(lobby, i);
         if (result == -1) continue;
 
         // assign the lobby
@@ -52,7 +52,7 @@ int lobby_assign_cli(net_lobby *lobby, cli_t *client) {
         else if (result == 2) lobby[i].pair.cli_b = client;
 
         // target the lobby
-        //if (lobby_checkroom_isfull(i) == 1) lobby[i].status = LB_FULL;
+        if (lobby_checkroom_isfull(lobby, i) == 1) lobby[i].status = LB_FULL;
         break;
     }
 
@@ -89,7 +89,7 @@ int lobby_updateroom_cli_left(net_lobby *lobby, cli_t *client) {
     int room = -1;
 
     for (room = 0; room < MAX_LOBBY; room++) {
-        //result = lobby_checkroom_cli(client, room);
+        result = lobby_checkroom_cli(lobby, client, room);
         if (result == -1) continue;
 
         if (result == 1) lobby[room].pair.cli_a = NULL;
@@ -110,7 +110,7 @@ int lobby_updateroom_cli_left(net_lobby *lobby, cli_t *client) {
 int lobby_redirect_buf(net_lobby *lobby, cli_t *client, int room, char *buffer) {
     int result = -1;
 
-    //result = lobby_checkroom_cli(client, room);
+    result = lobby_checkroom_cli(lobby, client, room);
     if (result == -1) return -2;
     else if (result == 1) result = send(*lobby[room].pair.cli_b, buffer, strlen(buffer) + 1, 0);
     else if (result == 2) result = send(*lobby[room].pair.cli_a, buffer, strlen(buffer) + 1, 0);

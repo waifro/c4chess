@@ -209,7 +209,7 @@ int CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *fen) {
 
     while(1) {
 
-        result = NET_DetectSignal(*socket);
+        result = NET_DetectSignal(socket);
         if (result > 0) break;
         if (result == -1) continue;
         else if (result == -2) {
@@ -256,7 +256,7 @@ int CORE_NET_RecvRoomState(int *socket, CHESS_CORE_PLAYER *player_turn, int *til
     // temporary fix
     char buf[256];
 
-    if (NET_DetectSignal(*socket) > 0) {
+    if (NET_DetectSignal(socket) > 0) {
         if (recv(*socket, buf, 255, 0) < 0) {
             DEBUG_PrintBox(2, "read: %s, %d", strerror(errno), pp4m_NET_RecieveError());
             return 0;

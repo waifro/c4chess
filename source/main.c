@@ -49,7 +49,7 @@ int main (int argc, char *argv[]) {
         }
     }
 
-    DEBUG_PrintBox(1, "connection established to [%s]", server_addr);
+    DEBUG_PrintBox(1, "connection established to [%s:%d]", server_addr, NET_PORT_TESTNET);
 
     // make CL_REQ_ASSIGN_LOBBY in network/
     char buf_1[256];
