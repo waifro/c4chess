@@ -1,8 +1,7 @@
 #ifndef NET_UTILS_H
 #define NET_UTILS_H
 
-#include "client.h"
-#include "../pp4m/pp4m_net.h"
+#define cli_t int
 
 #define MAX_CLIENTS 2
 #define MAX_LOBBY MAX_CLIENTS/2

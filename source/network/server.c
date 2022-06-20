@@ -59,6 +59,76 @@ int svcode_POST_redirect(int code, cli_t *client, int room, char *buffer) {
     return result;
 }
 
+
+int clcode_REQ_redirect(int code, cli_t *client, int room, char *buffer) {
+    (void)code; (void)client; (void)room; (void)buffer;
+    int result = -1;
+
+    switch(code) {
+        case CL_REQ_ASSIGN_LOBBY:
+            result = lobby_assign_cli(client);
+            break;
+
+        default:
+            break;
+    }
+
+    return result;
+}
+
+int clcode_POST_redirect(int code, cli_t *client, int room, char *buffer) {
+    (void)code; (void)client; (void)room; (void)buffer;
+    int result = -1;
+
+    switch(code) {
+
+        default:
+            break;
+    }
+
+    return result;
+}
+
+int clcode_LOBBY_REQ_redirect(int code, cli_t *client, int room, char *buffer) {
+    (void)code; (void)client; (void)room; (void)buffer;
+    int result = -1;
+
+    switch(code) {
+
+        case CL_REQ_LOBBY_NICKNAME:
+            break;
+
+        default:
+            break;
+    }
+
+    return result;
+}
+
+int clcode_LOBBY_POST_redirect(int code, cli_t *client, int room, char *buffer) {
+    (void)code; (void)client; (void)room; (void)buffer;
+    int result = -1;
+
+    switch(code) {
+        case CL_POST_LOBBY_LEAVE:
+            //result = lobby_assign_cli(client);
+            break;
+
+        case CL_POST_LOBBY_MOVE:
+            result = lobby_redirect_buf(client, room, buffer);
+            break;
+
+        case CL_POST_LOBBY_MESG:
+            result = lobby_redirect_buf(client, room, buffer);
+            break;
+
+        default:
+            break;
+    }
+
+    return result;
+}
+
 int svcode_redirect(int code, cli_t *client, int room, char *buffer) {
     int result = 0;
 
@@ -69,7 +139,17 @@ int svcode_redirect(int code, cli_t *client, int room, char *buffer) {
     return result;
 }
 
-int SV_HandleCli_Packet(cli_t *client, char *buffer) {
+int clcode_redirect(int code, cli_t *client, int room, char *buffer) {
+    int result = 0;
+
+    if (clcode_status_STATE(code) == 0) result = 0; // im not sure what to do with this and cli_t.status
+    else if (clcode_status_REQ(code) == 0) result = clcode_REQ_redirect(code, client, room, buffer);
+    else if (clcode_status_POST(code) == 0) result = clcode_POST_redirect(code, client, room, buffer);
+
+    return result;
+}
+
+int cli2srv_handlePacket(cli_t *client, char *buffer) {
 
     if (recv(*client, buffer, 255, 0) < 0) {
         //client_disconnect(client);

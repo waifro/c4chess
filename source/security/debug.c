@@ -33,6 +33,20 @@ int DEBUG_PrintBox(int level, const char *format, ...) {
     return 0;
 }
 
+int DEBUG_UpdateBox_Render(void) {
+
+    PP4M_HOOK *current = glo_debug_list;
+    GUI_TextureAlias *alias_ttr = NULL;
+
+    for (int i = pp4m_HOOK_Size(glo_debug_list); i >= 0; i--) {
+        alias_ttr = current->ptr;
+        SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
+        current = current->next;
+    }
+
+    return 0;
+}
+
 int DEBUG_UpdateBox_WriteLine(int val, char *string) {
 
     PP4M_HOOK *current = glo_debug_list;

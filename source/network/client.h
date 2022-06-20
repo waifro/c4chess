@@ -42,13 +42,11 @@ int clcode_status_POST(int code);
 int clcode_status_LOBBY_POST(int code);
 int clcode_status_LOBBY(int code);
 
-int clcode_REQ_redirect(int code, cli_t *client, int room, char *buffer);
-int clcode_POST_redirect(int code, cli_t *client, int room, char *buffer);
-int clcode_LOBBY_REQ_redirect(int code, cli_t *client, int room, char *buffer);
-int clcode_LOBBY_POST_redirect(int code, cli_t *client, int room, char *buffer);
+int cli2srv_REQ_redirect(int code, char *buffer);
 
-int clcode_redirect(int code, cli_t *client, int room, char *buffer);
+int cli2srv_redirect(int code, char *buffer);
+char *cli2srv_craftPacket(int code);
 
-int CL_HandleSrv_Packet(cli_t *client, char *buffer); // client -> handle server packets
+int srv2cli_handlePacket(cli_t *socket, char *buffer); // client -> handle server packets
 
 #endif

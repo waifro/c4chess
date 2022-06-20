@@ -175,34 +175,15 @@ void CORE_Chessboard_Reverse(CHESS_CORE_TILE *core_tile) {
 
 void CORE_GlobalUpdate_StateRender(void) {
 
-    PP4M_HOOK *current = glo_debug_list;
-    GUI_TextureAlias *alias_ttr = NULL;
-
     for (int n = 0; n < 64; n++) {
         SDL_RenderCopy(glo_render, glo_chess_core_tile[n].texture, NULL, &glo_chess_core_tile[n].rect);
         if (glo_chess_core_tile[n].piece != NULL) SDL_RenderCopy(glo_render, glo_chess_core_tile[n].piece->texture, NULL, &glo_chess_core_tile[n].piece->rect);
         DOT_StateGlobalDot(n);
     }
 
-    for (int i = pp4m_HOOK_Size(glo_debug_list); i >= 0; i--) {
-        alias_ttr = current->ptr;
-        SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
-        current = current->next;
-    }
+    DEBUG_UpdateBox_Render();
 
     return;
-}
-
-int CORE_NET_DetectSignal(int socket) {
-
-    fd_set setfd;
-    FD_ZERO(&setfd);
-    FD_SET(socket, &setfd);
-    struct timeval timeout = {0, 0};
-
-    if (select(socket + 1, &setfd, NULL, NULL, &timeout) == -1) return -2;
-    if (FD_ISSET(socket, &setfd)) return socket;
-    else return -1;
 }
 
 int CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *fen) {

@@ -14,8 +14,11 @@
 #include "version.h"
 #include "chess/core.h"
 #include "dashboard/gui.h"
-#include "network/net.h"
 #include "security/debug.h"
+
+#include "network/net.h"
+#include "network/client.h"
+#include "network/server.h"
 
 int main (int argc, char *argv[]) {
     (void)argc; (void)argv;
@@ -32,10 +35,11 @@ int main (int argc, char *argv[]) {
 
     char fen_notation[256];
     char *server_addr = NET_DEFAULT_SERVER;
+    cli_t socket = 0;
 
     DEBUG_PrintBox(1, "waiting connection to host...");
 
-    if (NET_ConnectToServer(server_addr, NET_PORT_TESTNET) < 0) {
+    if (NET_ConnectSocketToServer(&socket, server_addr, NET_PORT_TESTNET) < 0) {
         DEBUG_PrintBox(1, "error socket: %s, %d", strerror(errno), pp4m_NET_RecieveError());
         exit(0);
     }
@@ -43,6 +47,23 @@ int main (int argc, char *argv[]) {
     DEBUG_PrintBox(1, "connection established to [%s]", server_addr);
 
     // make CL_REQ_ASSIGN_LOBBY in network/
+    char buf_1[256];
+    char *buf_2 = cli2srv_craftPacket(CL_REQ_ASSIGN_LOBBY);
+    NET_SendPacketToServer(&socket, buf_2, strlen(buf_2)+1);
+    DEBUG_PrintBox(2, "crafted buf_2: [%s]", buf_2);
+
+    while(1) {
+
+        if (NET_DetectSignal(socket) > 0) {
+            srv2cli_handlePacket(&socket, buf_1);
+            DEBUG_PrintBox(2, "recieved buf_1: [%s]", buf_1);
+            break;
+        }
+
+        SDL_RenderClear(glo_render);
+        DEBUG_UpdateBox_Render();
+        SDL_RenderePresent(glo_render);
+    }
 
     CORE_NET_ChessboardInit(&socket, &player, fen_notation);
     DEBUG_PrintBox(1, "configured net chessboard, ready");

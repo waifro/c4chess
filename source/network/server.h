@@ -40,7 +40,14 @@ int svcode_status_LOBBY_POST(int code);
 int svcode_REQ_redirect(int code, cli_t *client, int room, char *buffer);
 int svcode_POST_redirect(int code, cli_t *client, int room, char *buffer);
 
+int clcode_REQ_redirect(int code, cli_t *client, int room, char *buffer);
+int clcode_POST_redirect(int code, cli_t *client, int room, char *buffer);
+int clcode_LOBBY_REQ_redirect(int code, cli_t *client, int room, char *buffer);
+int clcode_LOBBY_POST_redirect(int code, cli_t *client, int room, char *buffer);
+
 int svcode_redirect(int code, cli_t *client, int room, char *buffer);
-int SV_HandleCli_Packet(cli_t *client, char *buffer);
+int clcode_redirect(int code, cli_t *client, int room, char *buffer);
+
+int cli2srv_handlePacket(cli_t *client, char *buffer); // server -> handle client packets
 
 #endif

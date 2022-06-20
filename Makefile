@@ -10,7 +10,7 @@ SOURCE_MAIN := 			source/main.c source/global.c source/config.c source/mman.c so
 SOURCE_ANIMATION := 	source/animation/animation.c
 SOURCE_CHESS := 		source/chess/core.c source/chess/middle.c source/chess/chess.c source/chess/dot.c source/chess/event.c source/chess/fen.c source/chess/archive.c
 SOURCE_DASHBOARD := 	source/dashboard/gui.c source/dashboard/gui_alias.c source/dashboard/menu.c
-SOURCE_NETWORK	:=		source/network/net.c source/network/send.c source/network/recv.c
+SOURCE_NETWORK	:=		source/network/net.c source/network/net_utils.c source/network/send.c source/network/recv.c source/network/client.c source/network/server.c source/network/lobby.c
 SOURCE_SECURITY	:=		source/security/sec.c source/security/debug.c
 
 SOURCE_PROJECT := $(SOURCE_MAIN) $(SOURCE_ANIMATION) $(SOURCE_CHESS) $(SOURCE_DASHBOARD) $(SOURCE_NETWORK) $(SOURCE_SECURITY)

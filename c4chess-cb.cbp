@@ -143,10 +143,22 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="source/mman.h" />
+		<Unit filename="source/network/client.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/network/client.h" />
+		<Unit filename="source/network/lobby.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/network/lobby.h" />
 		<Unit filename="source/network/net.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="source/network/net.h" />
+		<Unit filename="source/network/net_utils.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/network/net_utils.h" />
 		<Unit filename="source/network/recv.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -155,6 +167,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="source/network/send.h" />
+		<Unit filename="source/network/server.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/network/server.h" />
 		<Unit filename="source/pp4m/pp4m.c">
 			<Option compilerVar="CC" />
 		</Unit>
