@@ -107,6 +107,15 @@ int lobby_updateroom_cli_left(net_lobby *lobby, cli_t *client) {
     return room;
 }
 
+int lobby_CL_POST_LOBBY_MOVE(cli_t *socket, int room, char *buffer) {
+
+    char buf[256];
+    sscanf(buffer, "%*d %s", buf);
+
+
+    return 0;
+}
+
 int lobby_redirect_buf(net_lobby *lobby, cli_t *client, int room, char *buffer) {
     int result = -1;
 

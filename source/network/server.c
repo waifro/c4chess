@@ -115,7 +115,7 @@ int clcode_LOBBY_POST_redirect(int code, cli_t *client, int room, char *buffer) 
             break;
 
         case CL_POST_LOBBY_MOVE:
-            //result = lobby_redirect_buf(client, room, buffer);
+            result = lobby_CL_POST_LOBBY_MOVE(client, room, buffer);
             break;
 
         case CL_POST_LOBBY_MESG:
