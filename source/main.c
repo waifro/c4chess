@@ -55,7 +55,7 @@ int main (int argc, char *argv[]) {
     char *buf_2 = cli2srv_craftPacket(CL_REQ_ASSIGN_LOBBY);
     NET_SendPacketToServer(&socket, buf_2, strlen(buf_2)+1);
     DEBUG_PrintBox(2, "crafted buf_2: [%s]", buf_2);
-    DEBUG_PrintBox(2, "REQ sent, waiting for fillup of lobby...");
+    DEBUG_PrintBox(2, "REQ sended, waiting for lobby...");
 
     while(1) {
 

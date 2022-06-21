@@ -7,6 +7,7 @@
 #include "../dashboard/gui_alias.h"
 #include "../global.h"
 
+#include "middle.h"
 #include "event.h"
 #include "core.h"
 #include "chess.h"
@@ -35,6 +36,7 @@ void EVENT_BlankLayer_Piece(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER playe
 }
 
 void EVENT_UpdateState_ChessEvent(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player) {
+    if (MIDDLE_CheckTilePos(position_old, position_new) == -1) return;
 
     if (CHESS_Redirect_EnumPawn(chess_tile, position_old) == 0) {
         CHESS_CheckState_PawnEnPassant(chess_tile, position_old, position_new, player);

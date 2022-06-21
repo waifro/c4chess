@@ -206,7 +206,6 @@ char *CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *buff
     int buf_fullm;
 
     sscanf(buffer, "%*d %s %s %s %s %s %d %d", buf_plvl, buf_fen, buf_play, buf_castle, buf_passant, &buf_halfm, &buf_fullm);
-    //FEN_StrTrunk(&buf[5], buf_fen, buf_play, buf_castle, buf_passant, &buf_halfm, &buf_fullm);
 
     DEBUG_PrintBox(2, "recieved parsed: [%s] [%s] [%s] [%s] [%d] [%d]", buf_fen, buf_play, buf_castle, buf_passant, buf_halfm, buf_fullm);
 

@@ -4,6 +4,8 @@
 
 #include "../security/debug.h"
 #include "../global.h"
+
+#include "middle.h"
 #include "core.h"
 #include "chess.h"
 #include "archive.h"
@@ -69,6 +71,7 @@ ARCHIVE_NOTATION_PIECE ARCHIVE_Redirect_StateMove(CHESS_CORE_TILE *chess_tile, i
 }
 
 void ARCHIVE_UpdateRegister_PieceState(void *tmp_ptr, int position_old, int position_new) {
+    if (MIDDLE_CheckTilePos(position_old, position_new) == -1) return;
 
     glo_chess_archive_tmp_tile[0] = position_old;
     glo_chess_archive_tmp_tile[1] = position_new;
