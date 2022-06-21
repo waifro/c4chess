@@ -8,7 +8,9 @@
 int retrieve_code(char *mesg) {
 
     int code = 0;
-    sscanf(mesg, "%d %*s", &code);
+    sscanf(mesg, "%d", &code);
+
+    printf("code recieved: %d\n", code);
 
     return code;
 }

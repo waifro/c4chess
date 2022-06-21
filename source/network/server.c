@@ -4,7 +4,6 @@
 #include "server.h"
 #include "lobby.h"
 
-#include "net.h"
 #include "net_utils.h"
 #include "../pp4m/pp4m_net.h"
 
@@ -28,8 +27,8 @@ int svcode_status_LOBBY_POST(int code) {
     return (code > SV_POST_LOBBY_START && code < SV_POST_LOBBY_END ? 0 : -1);
 }
 
-int svcode_REQ_redirect(int code, cli_t *client, int room, char *buffer) {
-    (void)code; (void)client; (void)room; (void)buffer;
+int svcode_REQ_redirect(int code, net_lobby *lobby, cli_t *client, int room, char *buffer) {
+    (void)code; (void)client; (void)room; (void)buffer; (void)lobby;
     int result = -1;
 
     switch(code) {
@@ -43,13 +42,13 @@ int svcode_REQ_redirect(int code, cli_t *client, int room, char *buffer) {
     return result;
 }
 
-int svcode_POST_redirect(int code, cli_t *client, int room, char *buffer) {
-    (void)code; (void)client; (void)room; (void)buffer;
+int svcode_POST_redirect(int code, net_lobby *lobby, cli_t *client, int room, char *buffer) {
+    (void)code; (void)client; (void)room; (void)buffer; (void)lobby;
     int result = -1;
 
     switch(code) {
         case SV_POST_LOBBY_START:
-            //result = lobby_random_start(NULL, room, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0");
+            result = lobby_random_start(lobby, room, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0");
             break;
 
         default:
@@ -60,13 +59,13 @@ int svcode_POST_redirect(int code, cli_t *client, int room, char *buffer) {
 }
 
 
-int clcode_REQ_redirect(int code, cli_t *client, int room, char *buffer) {
-    (void)code; (void)client; (void)room; (void)buffer;
+int clcode_REQ_redirect(int code, net_lobby *lobby, cli_t *client, int room, char *buffer) {
+    (void)code; (void)client; (void)room; (void)buffer; (void)lobby;
     int result = -1;
 
     switch(code) {
         case CL_REQ_ASSIGN_LOBBY:
-            //result = lobby_assign_cli(client);
+            result = lobby_assign_cli(lobby, client);
             break;
 
         default:
@@ -76,8 +75,8 @@ int clcode_REQ_redirect(int code, cli_t *client, int room, char *buffer) {
     return result;
 }
 
-int clcode_POST_redirect(int code, cli_t *client, int room, char *buffer) {
-    (void)code; (void)client; (void)room; (void)buffer;
+int clcode_POST_redirect(int code, net_lobby *lobby, cli_t *client, int room, char *buffer) {
+    (void)code; (void)client; (void)room; (void)buffer; (void)lobby;
     int result = -1;
 
     switch(code) {
@@ -89,8 +88,8 @@ int clcode_POST_redirect(int code, cli_t *client, int room, char *buffer) {
     return result;
 }
 
-int clcode_LOBBY_REQ_redirect(int code, cli_t *client, int room, char *buffer) {
-    (void)code; (void)client; (void)room; (void)buffer;
+int clcode_LOBBY_REQ_redirect(int code, net_lobby *lobby, cli_t *client, int room, char *buffer) {
+    (void)code; (void)client; (void)room; (void)buffer; (void)lobby;
     int result = -1;
 
     switch(code) {
@@ -105,8 +104,8 @@ int clcode_LOBBY_REQ_redirect(int code, cli_t *client, int room, char *buffer) {
     return result;
 }
 
-int clcode_LOBBY_POST_redirect(int code, cli_t *client, int room, char *buffer) {
-    (void)code; (void)client; (void)room; (void)buffer;
+int clcode_LOBBY_POST_redirect(int code, net_lobby *lobby, cli_t *client, int room, char *buffer) {
+    (void)code; (void)client; (void)room; (void)buffer; (void)lobby;
     int result = -1;
 
     switch(code) {
@@ -115,11 +114,11 @@ int clcode_LOBBY_POST_redirect(int code, cli_t *client, int room, char *buffer) 
             break;
 
         case CL_POST_LOBBY_MOVE:
-            result = lobby_CL_POST_LOBBY_MOVE(client, room, buffer);
+            result = lobby_SV_POST_LOBBY_MOVE(lobby, client, room, buffer);
             break;
 
         case CL_POST_LOBBY_MESG:
-            //result = lobby_redirect_buf(client, room, buffer);
+            result = lobby_SV_POST_LOBBY_MESG(lobby, client, room, buffer);
             break;
 
         default:
@@ -129,22 +128,22 @@ int clcode_LOBBY_POST_redirect(int code, cli_t *client, int room, char *buffer) 
     return result;
 }
 
-int svcode_redirect(int code, cli_t *client, int room, char *buffer) {
+int svcode_redirect(int code, net_lobby *lobby, cli_t *client, int room, char *buffer) {
     int result = 0;
 
     if (svcode_status_STATE(code) == 0) result = 0; // im not sure what to do with this and cli_t.status
-    else if (svcode_status_REQ(code) == 0) result = svcode_REQ_redirect(code, client, room, buffer);
-    else if (svcode_status_POST(code) == 0) result = svcode_POST_redirect(code, client, room, buffer);
+    else if (svcode_status_REQ(code) == 0) result = svcode_REQ_redirect(code, lobby, client, room, buffer);
+    else if (svcode_status_POST(code) == 0) result = svcode_POST_redirect(code, lobby, client, room, buffer);
 
     return result;
 }
 
-int clcode_redirect(int code, cli_t *client, int room, char *buffer) {
+int clcode_redirect(int code, net_lobby *lobby, cli_t *client, int room, char *buffer) {
     int result = 0;
 
     if (clcode_status_STATE(code) == 0) result = 0; // im not sure what to do with this and cli_t.status
-    else if (clcode_status_REQ(code) == 0) result = clcode_REQ_redirect(code, client, room, buffer);
-    else if (clcode_status_POST(code) == 0) result = clcode_POST_redirect(code, client, room, buffer);
+    else if (clcode_status_REQ(code) == 0) result = clcode_REQ_redirect(code, lobby, client, room, buffer);
+    else if (clcode_status_POST(code) == 0) result = clcode_POST_redirect(code, lobby, client, room, buffer);
 
     return result;
 }

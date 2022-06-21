@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "lobby.h"
 #include "server.h"
 #include "client.h"
 #include "net.h"
 #include "net_utils.h"
+
+#include "../pp4m/pp4m.h"
 #include "../pp4m/pp4m_net.h"
 
 int lobby_checkroom_avail(net_lobby *lobby, int room) {
@@ -107,13 +110,30 @@ int lobby_updateroom_cli_left(net_lobby *lobby, cli_t *client) {
     return room;
 }
 
-int lobby_CL_POST_LOBBY_MOVE(cli_t *socket, int room, char *buffer) {
+int lobby_SV_POST_LOBBY_MOVE(net_lobby *lobby, cli_t *client, int room, char *buffer) {
+    int result = -1;
 
-    char buf[256];
-    sscanf(buffer, "%*d %s", buf);
+    // overwrite old code
+    for (int i = 0; i < 3; i++)
+        buffer[i] = pp4m_p_int_index(SV_POST_LOBBY_MOVE, i);
 
+    // send new message
+    result = lobby_redirect_buf(lobby, client, room, buffer);
 
-    return 0;
+    return result;
+}
+
+int lobby_SV_POST_LOBBY_MESG(net_lobby *lobby, cli_t *client, int room, char *buffer) {
+    int result = -1;
+
+    // overwrite old code
+    for (int i = 0; i < 3; i++)
+        buffer[i] = pp4m_p_int_index(SV_POST_LOBBY_MESG, i);
+
+    // send new message
+    result = lobby_redirect_buf(lobby, client, room, buffer);
+
+    return result;
 }
 
 int lobby_redirect_buf(net_lobby *lobby, cli_t *client, int room, char *buffer) {
