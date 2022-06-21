@@ -17,7 +17,7 @@ int NET_ConnectSocketToServer(cli_t *socket, char *server, int port) {
     return (result);
 }
 
-int NET_DetectSignal(cli_t *socket) {
+int NET_DetectSignal(cli_t *restrict socket) {
 
     fd_set setfd;
     FD_ZERO(&setfd);
@@ -25,7 +25,7 @@ int NET_DetectSignal(cli_t *socket) {
     struct timeval timeout = {0, 0};
 
     if (select(*socket + 1, &setfd, NULL, NULL, &timeout) == -1) return -2;
-    if (FD_ISSET(*socket, &setfd)) return *socket;
+    if (FD_ISSET(*socket, &setfd) != 0) return 1;
     else return -1;
 }
 

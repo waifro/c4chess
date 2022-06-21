@@ -111,7 +111,6 @@ void MIDDLE_Unsafe_UpdatePositionPiece(CHESS_CORE_TILE *chess_tile, int old, int
 void MIDDLE_UnsafePosition_Copy(CHESS_CORE_TILE *restrict src, CHESS_CORE_TILE *restrict dst) {
     if (src == NULL) return;
 
-
     for (int n = 0; n < 64; n++)
         dst[n] = src[n];
 
@@ -120,6 +119,7 @@ void MIDDLE_UnsafePosition_Copy(CHESS_CORE_TILE *restrict src, CHESS_CORE_TILE *
 
 int MIDDLE_InputChessboardState(int *socket, PP4M_INPUT_POS touch, CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER *player, int *position_old, int *position_new) {
     if (touch.iner == -1) return -1;
+    if (*position_old != -1 && *position_new != -1) return -1;
 
     int tile = MIDDLE_TouchToTile(chess_tile, touch);
     if (tile == -1) {
@@ -191,14 +191,14 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
     // updating chessboard
     MIDDLE_InputChessboardState(socket, touch_pos, glo_chess_core_tile, player, &position_old, &position_new);
 
+    // needs a brand new updates of sockets
+    CORE_NET_UpdateLobby(socket, &position_old, &position_new, &_glo_chess_tile_promotn);
+
     // record notation
     ARCHIVE_UpdateRegister_PieceState(&glo_chess_core_tile[position_new], position_old, position_new);
 
     // en passant/checkmate/castling
     EVENT_UpdateState_ChessEvent(glo_chess_core_tile, position_old, position_new, *player);
-
-    // needs a brand new updates of sockets
-    CORE_NET_UpdateLobby(socket, &position_old, &position_new, &_glo_chess_tile_promotn);
 
     // update move the piece
     MIDDLE_UpdatePositionPiece(glo_chess_core_tile, position_old, position_new);

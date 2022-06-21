@@ -218,13 +218,13 @@ int CORE_NET_UpdateLobby(int *socket, int *position_old, int *position_new, int 
     int result = -1;
     char buf_1[256];
 
-    if (*position_old != 1 && *position_new != -1) {
+    if (*position_old != -1 && *position_new != -1) {
         cl_redirect_clcode_LOBBY_POST(CL_LOBBY_POST_MOVE, buf_1, position_old, position_new, promotn);
         NET_SendPacketToServer(socket, buf_1, strlen(buf_1)+1);
         DEBUG_PrintBox(2, "sended buf: [%s]", buf_1);
     }
 
-    if (NET_DetectSignal(socket) > 0) {
+    else if (NET_DetectSignal(socket) > 0) {
         cl_GrabPacket(socket, buf_1);
         DEBUG_PrintBox(2, "recieved buf: [%s]", buf_1);
         sscanf(buf_1, "%*d %d %d %d", position_old, position_new, promotn);
