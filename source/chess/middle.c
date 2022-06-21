@@ -181,6 +181,7 @@ int MIDDLE_InputChessboardState(int *socket, PP4M_INPUT_POS touch, CHESS_CORE_TI
 int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *socket) {
 
     int result = -1;
+    //int code = -1;
     static int position_old = -1;
     static int position_new = -1;
 
@@ -197,7 +198,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
     EVENT_UpdateState_ChessEvent(glo_chess_core_tile, position_old, position_new, *player);
 
     // needs a brand new updates of sockets
-    //CORE_NET_SendRoomState(socket, &result, &position_old, &position_new);
+    CORE_NET_UpdateLobby(socket, &position_old, &position_new, &_glo_chess_tile_promotn);
 
     // update move the piece
     MIDDLE_UpdatePositionPiece(glo_chess_core_tile, position_old, position_new);

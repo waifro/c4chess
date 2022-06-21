@@ -20,15 +20,15 @@ int sv_status_POST(int code) {
 }
 
 int sv_status_LOBBY(int code) {
-    return ((code > SV_REQ_LOBBY_START && code < SV_REQ_LOBBY_END) || (code > SV_POST_LOBBY_START && code < SV_POST_LOBBY_END) ? 0 : -1);
+    return ((code > SV_LOBBY_REQ_START && code < SV_LOBBY_REQ_END) || (code > SV_LOBBY_POST_START && code < SV_LOBBY_POST_END) ? 0 : -1);
 }
 
 int sv_status_LOBBY_REQ(int code) {
-    return (code > SV_REQ_LOBBY_START && code < SV_REQ_LOBBY_END ? 0 : -1);
+    return (code > SV_LOBBY_REQ_START && code < SV_LOBBY_REQ_END ? 0 : -1);
 }
 
 int sv_status_LOBBY_POST(int code) {
-    return (code > SV_POST_LOBBY_START && code < SV_POST_LOBBY_END ? 0 : -1);
+    return (code > SV_LOBBY_POST_START && code < SV_LOBBY_POST_END ? 0 : -1);
 }
 
 
@@ -67,7 +67,7 @@ int sv_redirect_svcode_POST(int code, net_lobby *lobby, cli_t *client, int room,
     int result = -1;
 
     switch(code) {
-        case SV_POST_LOBBY_START:
+        case SV_LOBBY_POST_START:
             result = lobby_random_start(lobby, room, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0");
             break;
 
@@ -113,9 +113,6 @@ int sv_redirect_clcode_STATE(int code, net_lobby *lobby, cli_t *client, int room
     int result = -1;
 
     switch(code) {
-        case CL_REQ_ASSIGN_LOBBY:
-            result = lobby_assign_cli(lobby, client);
-            break;
 
         default:
             break;
@@ -159,7 +156,7 @@ int sv_redirect_clcode_LOBBY_REQ(int code, net_lobby *lobby, cli_t *client, int 
 
     switch(code) {
 
-        case CL_REQ_LOBBY_NICKNAME:
+        case CL_LOBBY_REQ_NICKNAME:
             break;
 
         default:
@@ -174,15 +171,15 @@ int sv_redirect_clcode_LOBBY_POST(int code, net_lobby *lobby, cli_t *client, int
     int result = -1;
 
     switch(code) {
-        case CL_POST_LOBBY_LEAVE:
+        case CL_LOBBY_POST_LEAVE:
             //result = lobby_assign_cli(client);
             break;
 
-        case CL_POST_LOBBY_MOVE:
+        case CL_LOBBY_POST_MOVE:
             result = lobby_SV_POST_LOBBY_MOVE(lobby, client, room, buffer);
             break;
 
-        case CL_POST_LOBBY_MESG:
+        case CL_LOBBY_POST_MESG:
             result = lobby_SV_POST_LOBBY_MESG(lobby, client, room, buffer);
             break;
 

@@ -189,8 +189,7 @@ void CORE_GlobalUpdate_StateRender(void) {
     return;
 }
 
-char *CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *buffer) {
-    int result = -1;
+char *CORE_NET_ChessboardInit(CHESS_CORE_PLAYER *player, char *buffer) {
 
     // client side
     char *fen = malloc(sizeof(char) * 256);
@@ -215,39 +214,23 @@ char *CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *buff
     return fen;
 }
 
-int CORE_NET_UpdateLobby(int *socket, int code, char *buffer, int *position_old, int *position_new) {
+int CORE_NET_UpdateLobby(int *socket, int *position_old, int *position_new, int *promotn) {
     int result = -1;
+    char buf_1[256];
 
-    if (code != -1) {
-        char *buf_1 = cli2srv_craftPacket(code, buffer, position_old, position_new);
+    if (*position_old != 1 && *position_new != -1) {
+        cl_redirect_clcode_LOBBY_POST(CL_LOBBY_POST_MOVE, buf_1, position_old, position_new, promotn);
         NET_SendPacketToServer(socket, buf_1, strlen(buf_1)+1);
-        DEBUG_PrintBox("sended buf: [%s]", buf_1);s
+        DEBUG_PrintBox(2, "sended buf: [%s]", buf_1);
     }
-
-    if (NET_DetectSignal(socket) > 0) {} ;//clcode_redirect(code, )
-
-    return result;
-}
-
-int CORE_NET_RecvRoomState(int *socket, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new) {
-    if (socket == NULL) return -1;
-
-    // temporary fix
-    char buf[256];
 
     if (NET_DetectSignal(socket) > 0) {
-        if (recv(*socket, buf, 255, 0) < 0) {
-            DEBUG_PrintBox(2, "read: %s, %d", strerror(errno), pp4m_NET_RecieveError());
-            return 0;
-        }
-
-        DEBUG_PrintBox(2, "msg recv: [%s]", buf);
-        sscanf(buf, "%*d %d %d %d", tile_old, tile_new, &_glo_chess_tile_promotn);
-
-        return -2;
+        cl_GrabPacket(socket, buf_1);
+        DEBUG_PrintBox(2, "recieved buf: [%s]", buf_1);
+        sscanf(buf_1, "%*d %d %d %d", position_old, position_new, promotn);
     }
 
-    return 0;
+    return result;
 }
 
 int CORE_NET_SocketRedirect(int *socket, CHESS_CORE_PLAYER *player) {

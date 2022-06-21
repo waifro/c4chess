@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "server.h"
 #include "client.h"
 #include "lobby.h"
 
@@ -38,6 +39,7 @@ int cl_status_LOBBY_POST(int code) {
 
 
 int cl_redirect_svcode_STATE(int code, char *buffer) {
+    (void)code; (void)buffer;
     int result = -1;
 
     switch(code) {
@@ -49,6 +51,7 @@ int cl_redirect_svcode_STATE(int code, char *buffer) {
 }
 
 int cl_redirect_svcode_REQ(int code, char *buffer) {
+    (void)code; (void)buffer;
     int result = -1;
 
     switch(code) {
@@ -60,6 +63,7 @@ int cl_redirect_svcode_REQ(int code, char *buffer) {
 }
 
 int cl_redirect_svcode_POST(int code, char *buffer) {
+    (void)code; (void)buffer;
     int result = -1;
 
     switch(code) {
@@ -69,7 +73,9 @@ int cl_redirect_svcode_POST(int code, char *buffer) {
 
     return result;
 }
-int cl_redirect_svcode_LOBBY_REQ(int code, char *buffer) {
+
+int cl_redirect_svcode_LOBBY_REQ(int code, char *buffer, int *position_old, int *position_new, int *promotn) {
+    (void)code; (void)buffer; (void)position_old; (void)position_new; (void)promotn;
     int result = -1;
 
     switch(code) {
@@ -79,7 +85,9 @@ int cl_redirect_svcode_LOBBY_REQ(int code, char *buffer) {
 
     return result;
 }
-int cl_redirect_svcode_LOBBY_POST(int code, char *buffer) {
+
+int cl_redirect_svcode_LOBBY_POST(int code, char *buffer, int *position_old, int *position_new, int *promotn) {
+    (void)code; (void)buffer; (void)position_old; (void)position_new; (void)promotn;
     int result = -1;
 
     switch(code) {
@@ -102,6 +110,7 @@ int cl_redirect_svcode_LOBBY_POST(int code, char *buffer) {
 
 
 int cl_redirect_clcode_STATE(int code, char *buffer) {
+    (void)code; (void)buffer;
     int result = -1;
 
     switch(code) {
@@ -113,6 +122,7 @@ int cl_redirect_clcode_STATE(int code, char *buffer) {
 }
 
 int cl_redirect_clcode_REQ(int code, char *buffer) {
+    (void)code; (void)buffer;
     int result = -1;
 
     switch(code) {
@@ -128,6 +138,7 @@ int cl_redirect_clcode_REQ(int code, char *buffer) {
 }
 
 int cl_redirect_clcode_POST(int code, char *buffer) {
+    (void)code; (void)buffer;
     int result = -1;
 
     switch(code) {
@@ -138,11 +149,12 @@ int cl_redirect_clcode_POST(int code, char *buffer) {
     return result;
 }
 
-int cl_redirect_clcode_LOBBY_REQ(int code, char *buffer) {
+int cl_redirect_clcode_LOBBY_REQ(int code, char *buffer, int *position_old, int *position_new, int *promotn) {
+    (void)code; (void)buffer; (void)position_old; (void)position_new; (void)promotn;
     int result = -1;
 
     switch(code) {
-    case CL_REQ_LOBBY_NICKNAME:
+    case CL_LOBBY_REQ_NICKNAME:
         break;
 
     default:
@@ -152,17 +164,19 @@ int cl_redirect_clcode_LOBBY_REQ(int code, char *buffer) {
     return result;
 }
 
-int cl_redirect_clcode_LOBBY_POST(int code, char *buffer) {
+int cl_redirect_clcode_LOBBY_POST(int code, char *buffer, int *position_old, int *position_new, int *promotn) {
+    (void)code; (void)buffer; (void)position_old; (void)position_new; (void)promotn;
     int result = -1;
 
     switch(code) {
-    case CL_POST_LOBBY_LEAVE:
+    case CL_LOBBY_POST_LEAVE:
         break;
 
-    case CL_POST_LOBBY_MOVE:
+    case CL_LOBBY_POST_MOVE:
+        result = cl_POST_LOBBY_MOVE(buffer, position_old, position_new, promotn);
         break;
 
-    case CL_POST_LOBBY_MESG:
+    case CL_LOBBY_POST_MESG:
         break;
 
     default:
@@ -175,7 +189,16 @@ int cl_redirect_clcode_LOBBY_POST(int code, char *buffer) {
 
 
 
+int cl_POST_LOBBY_MOVE(char *buffer, int *position_old, int *position_new, int *promotn) {
+    int result = -1;
 
+    if (buffer != NULL) {
+        result = sprintf(buffer, "%d %d %d %d", CL_LOBBY_POST_MOVE, *position_old, *position_new, *promotn);
+        if (result > 0) result = 0;
+    }
+
+    return result;
+}
 
 int cl_REQ_ASSIGN_LOBBY(char *buffer) {
     int result = -1;
@@ -189,35 +212,34 @@ int cl_REQ_ASSIGN_LOBBY(char *buffer) {
 }
 
 // client: server sent a packet
-int cl_svcode_redirect(int code, char *buffer, int *position_old, int *position_new) {
+int cl_svcode_redirect(int code, char *buffer, int *position_old, int *position_new, int *promotn) {
     int result = 0;
 
     if (sv_status_STATE(code) == 0) result = 0; // im not sure what to do with this and cli_t.status
-    else if (sv_status_REQ(code) == 0) result = cl_redirect_svcode_REQ(code, lobby, client, room, buffer);
-    else if (sv_status_POST(code) == 0) result = cl_redirect_svcode_POST(code, lobby, client, room, buffer);
-    else if (sv_status_LOBBY_REQ(code) == 0) result = cl_redirect_svcode_LOBBY_REQ(code, lobby, client, room, buffer);
-    else if (sv_status_LOBBY_POST(code) == 0) result = cl_redirect_svcode_LOBBY_POST(code, lobby, client, room, buffer);
+    else if (sv_status_REQ(code) == 0) result = cl_redirect_svcode_REQ(code, buffer);
+    else if (sv_status_POST(code) == 0) result = cl_redirect_svcode_POST(code, buffer);
+    else if (sv_status_LOBBY_REQ(code) == 0) result = cl_redirect_svcode_LOBBY_REQ(code, buffer, position_old, position_new, promotn);
+    else if (sv_status_LOBBY_POST(code) == 0) result = cl_redirect_svcode_LOBBY_POST(code, buffer, position_old, position_new, promotn);
 
     return result;
 }
 
 // client: client about to create a crafted packet to send
-int cl_clcode_redirect(int code, char *buffer, int *position_old, int *position_new) {
+int cl_clcode_redirect(int code, char *buffer, int *position_old, int *position_new, int *promotn) {
     int result = 0;
 
     if (cl_status_STATE(code) == 0) result = 0; // im not sure what to do with this and cli_t.status
     else if (cl_status_REQ(code) == 0) result = cl_redirect_clcode_REQ(code, buffer);
     else if (cl_status_POST(code) == 0) result = cl_redirect_clcode_POST(code, buffer);
-    else if (cl_status_LOBBY_REQ(code) == 0) result = cl_redirect_clcode_LOBBY_REQ(code, buffer, position_old, position_new);
-    else if (cl_status_LOBBY_POST(code) == 0) result = cl_redirect_clcode_LOBBY_POST(code, buffer, position_old, position_new);
+    else if (cl_status_LOBBY_REQ(code) == 0) result = cl_redirect_clcode_LOBBY_REQ(code, buffer, position_old, position_new, promotn);
+    else if (cl_status_LOBBY_POST(code) == 0) result = cl_redirect_clcode_LOBBY_POST(code, buffer, position_old, position_new, promotn);
 
     return result;
 }
 
-int cl_handlePacket(cli_t *client, char *buffer) {
+int cl_GrabPacket(cli_t *client, char *buffer) {
 
     if (recv(*client, buffer, 255, 0) < 0) {
-        //client_disconnect(client);
         memset(buffer, 0x00, 255);
         return -1;
     }

@@ -51,16 +51,16 @@ int main (int argc, char *argv[]) {
     DEBUG_PrintBox(1, "connection established to [%s:%d]", server_addr, NET_PORT_TESTNET);
 
     // make CL_REQ_ASSIGN_LOBBY in network/
-    char buf_1[256];
-    char *buf_2 = cli2srv_craftPacket(CL_REQ_ASSIGN_LOBBY);
+    char buf_1[256]; char buf_2[256];
+    cl_redirect_clcode_REQ(CL_REQ_ASSIGN_LOBBY, buf_2);
     NET_SendPacketToServer(&socket, buf_2, strlen(buf_2)+1);
     DEBUG_PrintBox(2, "crafted buf_2: [%s]", buf_2);
-    DEBUG_PrintBox(2, "REQ sended, waiting for lobby...");
+    DEBUG_PrintBox(2, "REQ sended, waiting for lobby confirm...");
 
     while(1) {
 
         if (NET_DetectSignal(&socket) > 0) {
-            srv2cli_handlePacket(&socket, buf_1);
+            cl_GrabPacket(&socket, buf_1);
             DEBUG_PrintBox(2, "recieved buf_1: [%s]", buf_1);
             DEBUG_PrintBox(2, "Initialized room, ready");
             break;
@@ -71,7 +71,7 @@ int main (int argc, char *argv[]) {
         SDL_RenderPresent(glo_render);
     }
 
-    char *fen_notation = CORE_NET_ChessboardInit(&socket, &player, buf_1);
+    char *fen_notation = CORE_NET_ChessboardInit(&player, buf_1);
     DEBUG_PrintBox(1, "configured chessboard, ready");
 
     CORE_InitChess_Play(player, fen_notation, &socket);

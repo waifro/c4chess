@@ -45,20 +45,21 @@ int cl_status_LOBBY_POST(int code);
 int cl_redirect_svcode_STATE(int code, char *buffer);
 int cl_redirect_svcode_REQ(int code, char *buffer);
 int cl_redirect_svcode_POST(int code, char *buffer);
-int cl_redirect_svcode_LOBBY_REQ(int code, char *buffer);
-int cl_redirect_svcode_LOBBY_POST(int code, char *buffer);
+int cl_redirect_svcode_LOBBY_REQ(int code, char *buffer, int *position_old, int *position_new, int *promotn);
+int cl_redirect_svcode_LOBBY_POST(int code, char *buffer, int *position_old, int *position_new, int *promotn);
 
 int cl_redirect_clcode_STATE(int code, char *buffer);
 int cl_redirect_clcode_REQ(int code, char *buffer);
 int cl_redirect_clcode_POST(int code, char *buffer);
-int cl_redirect_clcode_LOBBY_REQ(int code, char *buffer);
-int cl_redirect_clcode_LOBBY_POST(int code, char *buffer);
+int cl_redirect_clcode_LOBBY_REQ(int code, char *buffer, int *position_old, int *position_new, int *promotn);
+int cl_redirect_clcode_LOBBY_POST(int code, char *buffer, int *position_old, int *position_new, int *promotn);
 
+int cl_POST_LOBBY_MOVE(char *buffer, int *position_old, int *position_new, int *promotn);
 int cl_REQ_ASSIGN_LOBBY(char *buffer);
 
-int cl_svcode_redirect(int code, char *buffer, int *position_old, int *position_new);
-int cl_clcode_redirect(int code, char *buffer, int *position_old, int *position_new);
+int cl_svcode_redirect(int code, char *buffer, int *position_old, int *position_new, int *promotn);
+int cl_clcode_redirect(int code, char *buffer, int *position_old, int *position_new, int *promotn);
 
-int cl_handlePacket(cli_t *client, char *buffer);
+int cl_GrabPacket(cli_t *client, char *buffer);
 
 #endif
