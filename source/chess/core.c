@@ -215,18 +215,18 @@ char *CORE_NET_ChessboardInit(int *socket, CHESS_CORE_PLAYER *player, char *buff
     return fen;
 }
 
-int CORE_NET_SendRoomState(int *socket, int *running, int *restrict tile_old, int *restrict tile_new) {
-    if (socket == NULL) return -1;
+int CORE_NET_UpdateLobby(int *socket, int code, char *buffer, int *position_old, int *position_new) {
+    int result = -1;
 
-    // temporary fix
-    char buf[10];
-    sprintf(buf, "%d %d %d %d", CL_POST_LOBBY_MOVE, *tile_old, *tile_new, _glo_chess_tile_promotn);
-    DEBUG_PrintBox(2, "buf sent: %s", buf);
+    if (code != -1) {
+        char *buf_1 = cli2srv_craftPacket(code, buffer, position_old, position_new);
+        NET_SendPacketToServer(socket, buf_1, strlen(buf_1)+1);
+        DEBUG_PrintBox("sended buf: [%s]", buf_1);s
+    }
 
-    if (send(*socket, buf, strlen(buf) + 1, 0) == -1)
-        DEBUG_PrintBox(2, "error send: %s, %d", strerror(errno), pp4m_NET_RecieveError());
+    if (NET_DetectSignal(socket) > 0) {} ;//clcode_redirect(code, )
 
-    return 0;
+    return result;
 }
 
 int CORE_NET_RecvRoomState(int *socket, CHESS_CORE_PLAYER *player_turn, int *tile_old, int *tile_new) {
@@ -241,12 +241,8 @@ int CORE_NET_RecvRoomState(int *socket, CHESS_CORE_PLAYER *player_turn, int *til
             return 0;
         }
 
-        DEBUG_PrintBox(2, "msg recv: %s", buf);
+        DEBUG_PrintBox(2, "msg recv: [%s]", buf);
         sscanf(buf, "%*d %d %d %d", tile_old, tile_new, &_glo_chess_tile_promotn);
-
-        ARCHIVE_UpdateRegister_PieceState(glo_chess_core_tile, *tile_old, *tile_new);
-        EVENT_UpdateState_ChessEvent(glo_chess_core_tile, *tile_old, *tile_new, *player_turn);
-        MIDDLE_UpdatePositionPiece(glo_chess_core_tile, *tile_old, *tile_new);
 
         return -2;
     }
