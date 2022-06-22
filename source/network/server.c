@@ -206,7 +206,6 @@ int sv_clcode_redirect(int code, net_lobby *lobby, cli_t *client, int room, char
 int sv_handlePacket(cli_t *client, char *buffer) {
 
     if (recv(*client, buffer, 255, 0) < 0) {
-        //client_disconnect(client);
         memset(buffer, 0x00, 255);
         return -1;
     }
@@ -217,8 +216,6 @@ int sv_handlePacket(cli_t *client, char *buffer) {
 
     result = retrieve_code(buffer);
     if (result < 0) return -1;
-
-    //clcode_redirect(result, client, room, buffer);
 
     return result;
 }
