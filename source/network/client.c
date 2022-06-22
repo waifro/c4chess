@@ -93,6 +93,7 @@ int cl_redirect_svcode_LOBBY_POST(int code, char *buffer, int *position_old, int
     switch(code) {
 
     case SV_LOBBY_POST_MOVE:
+        result = cl_SV_LOBBY_POST_MOVE(buffer, position_old, position_new, promotn);
         break;
 
     case SV_LOBBY_POST_MESG:
@@ -104,6 +105,24 @@ int cl_redirect_svcode_LOBBY_POST(int code, char *buffer, int *position_old, int
 
     return result;
 }
+
+
+
+
+
+
+int cl_SV_LOBBY_POST_MOVE(char *buffer, int *position_old, int *position_new, int *promotn) {
+    int result = -1;
+
+    if (buffer != NULL) {
+        result = sscanf(buffer, "%*d %d %d %d", position_old, position_new, promotn);
+        if (result > 0) result = 0;
+    }
+
+    return result;
+}
+
+
 
 
 
@@ -189,6 +208,9 @@ int cl_redirect_clcode_LOBBY_POST(int code, char *buffer, int *position_old, int
 
 
 
+
+
+
 int cl_POST_LOBBY_MOVE(char *buffer, int *position_old, int *position_new, int *promotn) {
     int result = -1;
 
@@ -251,7 +273,7 @@ int cl_GrabPacket(cli_t *client, char *buffer) {
     result = retrieve_code(buffer);
     if (result < 0) return -1;
 
-    //clcode_redirect(result, client, room, buffer);
+    //cl_svcode_redirect(result, buffer, position_old, position_new, promotn);
 
     return result;
 }

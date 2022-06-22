@@ -225,9 +225,8 @@ int CORE_NET_UpdateLobby(int *socket, int *position_old, int *position_new, int 
     }
 
     else if (NET_DetectSignal(socket) > 0) {
-        cl_GrabPacket(socket, buf_1);
+        cl_svcode_redirect(cl_GrabPacket(socket, buf_1), buf_1, position_old, position_new, promotn);
         DEBUG_PrintBox(2, "recieved buf: [%s]", buf_1);
-        sscanf(buf_1, "%*d %d %d %d", position_old, position_new, promotn);
     }
 
     return result;

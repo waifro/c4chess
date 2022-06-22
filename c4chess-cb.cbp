@@ -52,6 +52,7 @@
 		<Unit filename="output/SDL2_ttf.dll" />
 		<Unit filename="output/c4chess.exe" />
 		<Unit filename="output/config_boot.ini" />
+		<Unit filename="output/feedback.txt" />
 		<Unit filename="output/libatomic-1.dll" />
 		<Unit filename="output/libfreetype-6.dll" />
 		<Unit filename="output/libgcc_s_dw2-1.dll" />
@@ -73,6 +74,9 @@
 		<Unit filename="output/resources/bqueen.png" />
 		<Unit filename="output/resources/brook.png" />
 		<Unit filename="output/resources/gnu_logo.png" />
+		<Unit filename="output/resources/logo.png" />
+		<Unit filename="output/resources/logo_direct.png" />
+		<Unit filename="output/resources/logo_mesg.png" />
 		<Unit filename="output/resources/wbishop.png" />
 		<Unit filename="output/resources/wking.png" />
 		<Unit filename="output/resources/wknight.png" />

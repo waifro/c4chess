@@ -194,7 +194,7 @@ int sv_redirect_clcode_LOBBY_POST(int code, net_lobby *lobby, cli_t *client, int
 int sv_clcode_redirect(int code, net_lobby *lobby, cli_t *client, int room, char *buffer) {
     int result = 0;
 
-         if (cl_status_STATE(code) == 0) result = 0; // im not sure what to do with this and cli_t.status
+    if (cl_status_STATE(code) == 0) result = 0; // im not sure what to do with this and cli_t.status
     else if (cl_status_REQ(code) == 0) result = sv_redirect_clcode_REQ(code, lobby, client, room, buffer);
     else if (cl_status_POST(code) == 0) result = sv_redirect_clcode_POST(code, lobby, client, room, buffer);
     else if (cl_status_LOBBY_REQ(code) == 0) result = sv_redirect_clcode_LOBBY_REQ(code, lobby, client, room, buffer);

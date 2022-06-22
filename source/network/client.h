@@ -48,6 +48,8 @@ int cl_redirect_svcode_POST(int code, char *buffer);
 int cl_redirect_svcode_LOBBY_REQ(int code, char *buffer, int *position_old, int *position_new, int *promotn);
 int cl_redirect_svcode_LOBBY_POST(int code, char *buffer, int *position_old, int *position_new, int *promotn);
 
+int cl_SV_LOBBY_POST_MOVE(char *buffer, int *position_old, int *position_new, int *promotn);
+
 int cl_redirect_clcode_STATE(int code, char *buffer);
 int cl_redirect_clcode_REQ(int code, char *buffer);
 int cl_redirect_clcode_POST(int code, char *buffer);
