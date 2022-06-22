@@ -3,6 +3,7 @@
 
 // third-party libraries
 #include <stdlib.h>
+#include <errno.h>
 #include <SDL2/SDL.h>
 
 // definitions
