@@ -25,6 +25,7 @@ typedef enum {
     CL_LOBBY_REQ_END,                   // REQ LOBBY_END                                    ||
 
     CL_POST_START = 300,                // POST START                                       ||
+        CL_STATE_RAW,                   // post raw data to server ........................ || "3xx ...", code, data
     CL_POST_END,                        // POST END                                         ||
 
     CL_LOBBY_POST_START,                // POST LOBBY_START                                 ||
