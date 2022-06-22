@@ -1,8 +1,11 @@
 #include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
 
 #include <SDL2/SDL.h>
 
 #include "../pp4m/pp4m.h"
+#include "../pp4m/pp4m_input.h"
 #include "../dashboard/gui.h"
 #include "../dashboard/gui_alias.h"
 #include "../global.h"
@@ -162,6 +165,31 @@ int EVENT_HandleKingState(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player)
 
                     break;
                 }
+
+    return result;
+}
+
+int EVENT_HandleKeyboard(SDL_Event *event, char *dest) {
+    int result = 0;
+
+    // temporary stationed buffer
+    static int ind = 0;
+    static char buffer[256];
+
+    result = pp4m_INPUT_SdlKeyboard(event);
+    if (result == -1 || result == 0) return result;
+
+    if (result == -3 || ind == 256) // enter key
+    {
+        strncpy(dest, buffer, strlen(buffer) + 1); // save buffer to dest (temporary)
+        memset(buffer, 0x00, 255); ind = 0; result = 1;
+    }
+
+    else if (result == -6) // escape key
+        EVENT_HandlePopup_Pause(&result);
+
+    else if (isprint(result))
+        if (ind < 256) buffer[ind++] = result;
 
     return result;
 }

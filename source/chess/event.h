@@ -20,6 +20,9 @@ int EVENT_CheckPieceLayer(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player)
 int EVENT_HandlePopup_Pause(int *running);
 
 int EVENT_HandleKingState(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player);
+
+int EVENT_HandleKeyboard(SDL_Event *event, char *dest);
+
 int EVENT_HandlePopup_Stalemate(char *comment);
 int EVENT_HandlePopup_Checkmate(char *comment, CHESS_CORE_PLAYER player);
 
