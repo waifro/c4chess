@@ -80,14 +80,14 @@ PP4M_INPUT_POS pp4m_INPUT_MouseState(SDL_Event *event) {
 
     if (once == false && event->type == SDL_MOUSEBUTTONDOWN) {
 
-        //printf("TOUCH_MouseState:\n  touch detected\n");
+        DEBUG_PrintBox(2, "TOUCH_MouseState:  touch detected");
         SDL_GetMouseState(&foo.x, &foo.y);
         foo.iner = 1;
         once = true;
 
     } else if (once == true && event->type == SDL_MOUSEBUTTONUP) {
 
-        //printf("TOUCH_MouseState:\n  touch undetected\n");
+        DEBUG_PrintBox(2, "TOUCH_MouseState:  touch undetected");
         foo.iner = -1;
         once = false;
 

@@ -186,7 +186,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
     static int position_new = -1;
 
     PP4M_INPUT_POS touch_pos;
-    touch_pos = pp4m_INPUT_MouseState(event);
+    pp4m_INPUT_GetMouseState(event, &touch_pos);
 
     // updating chessboard
     MIDDLE_InputChessboardState(socket, touch_pos, glo_chess_core_tile, player, &position_old, &position_new);
