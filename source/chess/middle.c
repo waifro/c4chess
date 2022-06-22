@@ -117,7 +117,7 @@ void MIDDLE_UnsafePosition_Copy(CHESS_CORE_TILE *restrict src, CHESS_CORE_TILE *
     return;
 }
 
-int MIDDLE_InputChessboardState(int *socket, PP4M_INPUT_POS touch, CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER *player, int *position_old, int *position_new) {
+int MIDDLE_InputChessboardState(int *socket, PP4M_INPUT_POS touch, CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER *player, int *position_old, int *position_new, int *code) {
     if (touch.iner == -1) return -1;
     if (*position_old != -1 && *position_new != -1) return -1;
 
@@ -146,6 +146,7 @@ int MIDDLE_InputChessboardState(int *socket, PP4M_INPUT_POS touch, CHESS_CORE_TI
 
                 // if is a valid move, start changing piece state
                 *position_new = tile;
+                *code = CL_LOBBY_POST_MOVE;
 
                 DOT_StateGlobalDotReset();
                 tile = -2;
@@ -181,7 +182,8 @@ int MIDDLE_InputChessboardState(int *socket, PP4M_INPUT_POS touch, CHESS_CORE_TI
 int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *socket) {
 
     int result = -1;
-    //int code = -1;
+    int code = -1;
+
     static int position_old = -1;
     static int position_new = -1;
 
@@ -189,10 +191,10 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
     pp4m_INPUT_GetMouseState(event, &touch_pos);
 
     // updating chessboard
-    MIDDLE_InputChessboardState(socket, touch_pos, glo_chess_core_tile, player, &position_old, &position_new);
+    MIDDLE_InputChessboardState(socket, touch_pos, glo_chess_core_tile, player, &position_old, &position_new, &code);
 
     // needs a brand new updates of sockets
-    CORE_NET_UpdateLobby(socket, &position_old, &position_new, &_glo_chess_tile_promotn);
+    CORE_NET_UpdateLobby(code, socket, &position_old, &position_new, &_glo_chess_tile_promotn);
 
     // record notation
     ARCHIVE_UpdateRegister_PieceState(&glo_chess_core_tile[position_new], position_old, position_new);

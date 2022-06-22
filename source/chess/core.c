@@ -214,19 +214,17 @@ char *CORE_NET_ChessboardInit(CHESS_CORE_PLAYER *player, char *buffer) {
     return fen;
 }
 
-int CORE_NET_UpdateLobby(int *socket, int *position_old, int *position_new, int *promotn) {
+int CORE_NET_UpdateLobby(int code, int *socket, int *position_old, int *position_new, int *promotn) {
+    if (socket == NULL) return -1;
     int result = -1;
     char buf_1[256];
 
-    if (*position_old != -1 && *position_new != -1) {
-        cl_redirect_clcode_LOBBY_POST(CL_LOBBY_POST_MOVE, buf_1, position_old, position_new, promotn);
-        NET_SendPacketToServer(socket, buf_1, strlen(buf_1)+1);
-        DEBUG_PrintBox(2, "sended buf: [%s]", buf_1);
-    }
+    result = cl_clcode_redirect(code, socket, buf_1, position_old, position_new, promotn);
+    if (result > -1) DEBUG_PrintBox(2, "sended buf: [%s]", buf_1);
 
-    else if (NET_DetectSignal(socket) > 0) {
+    if (NET_DetectSignal(socket) > 0) {
         cl_svcode_redirect(cl_GrabPacket(socket, buf_1), buf_1, position_old, position_new, promotn);
-        DEBUG_PrintBox(2, "recieved buf: [%s]", buf_1);
+        DEBUG_PrintBox(2, "recieved buf: [%s] [%d] [%d] [%d]", buf_1, *position_old, *position_new, *promotn);
     }
 
     return result;
