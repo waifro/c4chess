@@ -66,6 +66,9 @@ int pp4m_INPUT_ConvertSdlKey_letter(int sdlk) {
     default:
         break;
 
+    case SDLK_SPACE:
+        result = ' ';
+        break;
     case SDLK_a:
         result = 'a';
         break;
@@ -200,9 +203,6 @@ int pp4m_INPUT_SdlSpecialKey(int sdlk) {
         break;
     case SDLK_DELETE: // backspace key (macOS)
         result = -7;
-        break;
-    case SDLK_SPACE: // spacebar key
-        result = -8;
         break;
     }
 
