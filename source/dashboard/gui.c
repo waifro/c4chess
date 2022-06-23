@@ -12,6 +12,8 @@
 #include "../global.h"
 #include "gui.h"
 
+#define TEXTURE_LOBBYCHAT "resources/logo_mesg.png"
+
 int GUI_PopupWindow_Title(PP4M_HOOK *head, char *path, char *title, SDL_Color color, int point) {
 
     GUI_TextureAlias *rect_pw = head->next->ptr;
@@ -213,4 +215,21 @@ void GUI_Testing(void) {
     }
 
     return;
+}
+
+PP4M_HOOK *GUI_RenderWindow_Chat_Init(void) {
+    PP4M_HOOK *hook_list = pp4m_HOOK_Init();
+
+    GUI_TextureAlias *alias_button_chat; alias_button_chat->obj = 1;
+    alias_button_chat->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEXTURE_LOBBYCHAT, &alias_button_chat->rect, 850, 700, 30, 30);
+
+    GUI_TextureAlias *alias_window;
+
+    GUI_TextureAlias *alias_inner_w;
+
+    GUI_TextureAlias *alias_buf;
+
+    GUI_TextureAlias *alias_button_send;
+
+    return 0;
 }

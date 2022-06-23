@@ -20,6 +20,9 @@ int glo_chess_event_availmo = -1;
 bool glo_chess_event_layer[64];
 bool glo_chess_event_king_uatk;
 
+PP4M_HOOK *glohook_chess_event_chat = NULL;
+
+
 void EVENT_BlankLayer_Global(void) {
     for (int n = 0; n < 64; n++) {
         glo_chess_event_layer[n] = false;
@@ -226,4 +229,12 @@ int EVENT_HandlePopup_Checkmate(char *comment, CHESS_CORE_PLAYER player) {
 
     result = GUI_PopupWindow_Core(hook_list, txr_snapshot);
     return result;
+}
+
+int EVENT_HandleWindow_Chat(PP4M_INPUT_POS touch) {
+
+    if (glohook_chess_event_chat == NULL)
+        glohook_chess_event_chat = GUI_RenderWindow_Chat_Init();
+
+    return 0;
 }
