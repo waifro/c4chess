@@ -185,6 +185,7 @@ void CORE_GlobalUpdate_StateRender(void) {
     }
 
     DEBUG_UpdateBox_Render();
+    EVENT_HookList_Render();
 
     return;
 }

@@ -7,7 +7,7 @@
 
 typedef struct {
     int obj;
-    char *buf;
+    char *data;
     SDL_Rect rect;
     SDL_Texture *texture;
 } GUI_TextureAlias;
