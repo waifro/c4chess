@@ -7,20 +7,6 @@
 
 ### The project is still under development, no roadmap or release date available publicly. Check [here](https://github.com/waifro/c4chess/projects/2) for the work to be done.
 
-## Clone & Build & Run
-
-(todo better)
-
-### CLONE AND BUILD
-
-visit https://git-scm.com/book/en/v2/Git-Tools-Submodules for more info
-- Windows: run `make`
-- Linux: comment the line inside the Makefile where it asks it. (first few lines), then run `make`
-- MacOS: same thing, then run `make`
-
-### RUN
-at the moment, theres a problem with the handling of the resources.
-To workaround this, change directory to `output` and run the build.
 
 ## in depth info about my current development
 
