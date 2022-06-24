@@ -232,6 +232,24 @@ int EVENT_HandlePopup_Checkmate(char *comment, CHESS_CORE_PLAYER player) {
     return result;
 }
 
+int EVENT_HookLink_OnRender(PP4M_HOOK *head) {
+
+    PP4M_HOOK *current = head;
+    GUI_TextureAlias *alias_ttr = NULL;
+    int val = pp4m_HOOK_Size(head);
+
+    for (int i = 0; i <= val; i++) {
+        if (current == NULL) continue;
+        alias_ttr = current->ptr;
+        current = current->next;
+
+        SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
+        if (alias_ttr->obj == OBJ_BUTTON_LINK_ON) EVENT_HookLink_OnRender(alias_ttr->link);
+    }
+
+    return 0;
+}
+
 int EVENT_HookList_Render(void) {
     int val = pp4m_HOOK_Size(glo_chess_event_hooklist);
 
@@ -252,6 +270,8 @@ int EVENT_HookList_Render(void) {
             curr_ptr = curr_ptr->next;
 
             SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
+
+            if (alias_ttr->obj == OBJ_BUTTON_LINK_ON) EVENT_HookLink_OnRender(alias_ttr->link);
         }
 
 
@@ -287,7 +307,7 @@ int EVENT_HookList_Update(PP4M_INPUT_POS input) {
                 else if (alias_ttr->obj == OBJ_BUTTON_RETURN) result = -2;
                 else if (alias_ttr->obj == OBJ_BUTTON_EXIT) result = -3;
             } else {
-                // reset button presses
+                // reset on button presses
                 if (alias_ttr->obj == OBJ_BUTTON_LINK_ON) alias_ttr->obj = OBJ_BUTTON_LINK_OFF;
             }
         }
@@ -307,4 +327,36 @@ PP4M_HOOK *EVENT_HookList_Init(void) {
     GUI_RenderWindow_Chat_Init(hook_list);
 
     return hook_list;
+}
+
+void EVENT_HookList_Quit(void) {
+
+    PP4M_HOOK *current = glo_chess_event_hooklist;
+    PP4M_HOOK *curr_nxt = NULL;
+    PP4M_HOOK *ptr_list = NULL;
+
+    // take total main loop
+    int val = pp4m_HOOK_Size(glo_chess_event_hooklist);
+
+    for (int i = 0; i < val; i++) {
+        curr_nxt = current;
+
+        // grab last ptr of tail
+        int ras = pp4m_HOOK_Size(curr_nxt);
+
+        for (int n = 0; n < ras; n++)
+            curr_nxt = curr_nxt->next;
+
+        ptr_list = curr_nxt->ptr;
+        int res = pp4m_HOOK_Size(ptr_list);
+
+        // remove all last ptr -> hook
+        for (int n = 0; n < res; n++)
+            pp4m_HOOK_Remove(ptr_list);
+
+        // remove tail
+        pp4m_HOOK_Remove(current);
+    }
+
+    return;
 }

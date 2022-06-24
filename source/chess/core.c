@@ -296,6 +296,7 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
     }
 
     SDL_DestroyTexture(background);
-
+    EVENT_HookList_Quit();
+    
     return;
 }

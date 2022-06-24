@@ -30,8 +30,11 @@ int EVENT_HandleKeyboard(SDL_Event *event, char *dest);
 int EVENT_HandlePopup_Stalemate(char *comment);
 int EVENT_HandlePopup_Checkmate(char *comment, CHESS_CORE_PLAYER player);
 
+int EVENT_HookLink_OnRender(PP4M_HOOK *head);
 int EVENT_HookList_Render(void);
+
 int EVENT_HookList_Update(PP4M_INPUT_POS input);
 PP4M_HOOK *EVENT_HookList_Init(void);
+void EVENT_HookList_Quit(void);
 
 #endif
