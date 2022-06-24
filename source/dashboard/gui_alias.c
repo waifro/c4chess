@@ -1,8 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "../pp4m/pp4m_input.h"
 #include "gui_alias.h"
 
+int GUI_Alias_InputOnObj(PP4M_INPUT_POS input, SDL_Rect rect) {
+    if (input.x >= rect.x && input.x <= (rect.x + rect.w) &&
+        input.y >= rect.y && input.y <= (rect.y + rect.h)) return 1;
+    else return -1;
+}
 
 SDL_Texture *GUI_Alias_CreateSnapshot(SDL_Renderer *renderer, int width, int height) {
 

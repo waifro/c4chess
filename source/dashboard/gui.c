@@ -129,14 +129,18 @@ int GUI_PopupWindow_Core(PP4M_HOOK *head, SDL_Texture *background) {
             SDL_GetTextureColorMod(txr_alias->texture, &color_btn_bak.r, &color_btn_bak.g, &color_btn_bak.b);
 
             if (input.iner == 1) {
-                if (txr_alias->obj != 0 && input.x >= txr_alias->rect.x && input.x <= (txr_alias->rect.x + txr_alias->rect.w) &&
-                    input.y >= txr_alias->rect.y && input.y <= (txr_alias->rect.y + txr_alias->rect.h)) {
-                    result = txr_alias->obj;
+                if (GUI_Alias_InputOnObj(input, txr_alias->rect) == 1)
+                {
+                    if (txr_alias->obj == OBJ_BUTTON_LINK_OFF) txr_alias->obj = OBJ_BUTTON_LINK_ON;
+                    else if (txr_alias->obj == OBJ_BUTTON_RETURN) result = -1;
+                    else if (txr_alias->obj == OBJ_BUTTON_EXIT) result = -2;
+                } else {
+                    // reset button presses
+                    if (txr_alias->obj == OBJ_BUTTON_LINK_ON) txr_alias->obj = OBJ_BUTTON_LINK_OFF;
                 }
             }
 
-            if (txr_alias->obj != 0 && input.x >= txr_alias->rect.x && input.x <= (txr_alias->rect.x + txr_alias->rect.w) &&
-                input.y >= txr_alias->rect.y && input.y <= (txr_alias->rect.y + txr_alias->rect.h)) {
+            if (txr_alias->obj != OBJ_NONE && GUI_Alias_InputOnObj(input, txr_alias->rect) == 1) {
                 SDL_SetTextureColorMod(txr_alias->texture, 220, 220, 220);
             }
 
@@ -224,32 +228,32 @@ PP4M_HOOK *GUI_RenderWindow_Chat_Init(PP4M_HOOK *hook_list) {
     PP4M_HOOK *chat_ttr_list = pp4m_HOOK_Init();
 
     GUI_TextureAlias *alias_button_chat = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
-    alias_button_chat->obj = 12;
+    alias_button_chat->obj = OBJ_BUTTON_LINK_OFF;
     alias_button_chat->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEXTURE_LOBBYCHAT, &alias_button_chat->rect, 850, 600, 30, 30);
 
     GUI_TextureAlias *alias_window = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
-    alias_window->obj = 0;
+    alias_window->obj = OBJ_NONE;
     alias_window->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_NORMAL, &alias_window->rect, alias_button_chat->rect.x + 20, alias_button_chat->rect.y - 440, 300, 450);
 
     GUI_TextureAlias *alias_inner_w = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
-    alias_inner_w->obj = 3;
+    alias_inner_w->obj = OBJ_SCROLL_VERTICAL;
     alias_inner_w->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_LIGHT, &alias_inner_w->rect, alias_window->rect.x + 10, alias_window->rect.y + 10, alias_window->rect.w - 20, alias_window->rect.h - 50);
 
-    GUI_TextureAlias *alias_buf = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
-    alias_buf->obj = 4;
-    alias_buf->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_LIGHT, 255, &alias_buf->rect, alias_inner_w->rect.x, alias_inner_w->rect.y + alias_inner_w->rect.h + 5, alias_inner_w->rect.w - 30, 30);
+    GUI_TextureAlias *alias_textbox = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
+    alias_textbox->obj = OBJ_TEXTBOX_INPUT;
+    alias_textbox->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_LIGHT, 255, &alias_textbox->rect, alias_inner_w->rect.x, alias_inner_w->rect.y + alias_inner_w->rect.h + 5, alias_inner_w->rect.w - 30, 30);
 
     GUI_TextureAlias *alias_button_send = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
-    alias_button_send->obj = 5;
-    alias_button_send->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEXTURE_LOBBYCHAT_SEND, &alias_button_send->rect, alias_buf->rect.x + alias_buf->rect.w + 5, alias_buf->rect.y, 30, 30);
+    alias_button_send->obj = OBJ_BUTTON_TXTBOX;
+    alias_button_send->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEXTURE_LOBBYCHAT_SEND, &alias_button_send->rect, alias_textbox->rect.x + alias_textbox->rect.w + 5, alias_textbox->rect.y, 30, 30);
 
     GUI_TextureAlias *alias_chat = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
-    alias_chat->obj = 2;
+    alias_chat->obj = OBJ_LINK_PTR;
 
     pp4m_HOOK_Next(chat_ttr_list, alias_button_chat);
     pp4m_HOOK_Next(chat_ttr_list, alias_window);
     pp4m_HOOK_Next(chat_ttr_list, alias_inner_w);
-    pp4m_HOOK_Next(chat_ttr_list, alias_buf);
+    pp4m_HOOK_Next(chat_ttr_list, alias_textbox);
     pp4m_HOOK_Next(chat_ttr_list, alias_button_send);
     pp4m_HOOK_Next(chat_ttr_list, alias_chat);
 

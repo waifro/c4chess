@@ -126,8 +126,8 @@ int EVENT_HandlePopup_Pause(int *running) {
 
         PP4M_HOOK *hook_list_pw = GUI_PopupWindow_Init(440, 180);
 
-        GUI_PopupWindow_Button(hook_list_pw, OPENSANS_REGULAR, -1, "Continua", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 15, 15, 410, 70);
-        GUI_PopupWindow_Button(hook_list_pw, OPENSANS_REGULAR, -2, "Esci dal gioco", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 15, 95, 410, 70);
+        GUI_PopupWindow_Button(hook_list_pw, OPENSANS_REGULAR, OBJ_BUTTON_RETURN, "Continua", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 15, 15, 410, 70);
+        GUI_PopupWindow_Button(hook_list_pw, OPENSANS_REGULAR, OBJ_BUTTON_EXIT, "Esci dal gioco", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 15, 95, 410, 70);
 
         result = GUI_PopupWindow_Core(hook_list_pw, txr_snapshot);
 
@@ -138,8 +138,8 @@ int EVENT_HandlePopup_Pause(int *running) {
         PP4M_HOOK *hook_list_pw_exit = GUI_PopupWindow_Init(400, 165);
 
         GUI_PopupWindow_Title(hook_list_pw_exit, OPENSANS_REGULAR, "Sei sicuro?", PP4M_WHITE, 32);
-        GUI_PopupWindow_Button(hook_list_pw_exit, OPENSANS_REGULAR, -1, "Annulla", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 10, 85, 185, 70);
-        GUI_PopupWindow_Button(hook_list_pw_exit, OPENSANS_REGULAR, -2, "Okay", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 205, 85, 185, 70);
+        GUI_PopupWindow_Button(hook_list_pw_exit, OPENSANS_REGULAR, OBJ_BUTTON_RETURN, "Annulla", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 10, 85, 185, 70);
+        GUI_PopupWindow_Button(hook_list_pw_exit, OPENSANS_REGULAR, OBJ_BUTTON_EXIT, "Okay", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 205, 85, 185, 70);
 
         if (GUI_PopupWindow_Core(hook_list_pw_exit, txr_snapshot2) == -2) *running = -1;
 
@@ -269,7 +269,6 @@ int EVENT_HookList_Update(PP4M_INPUT_POS input) {
     GUI_TextureAlias *alias_ttr = NULL;
 
     PP4M_HOOK *current = glo_chess_event_hooklist;
-    PP4M_HOOK *curr_ptr = NULL;
 
     static SDL_Color color_btn_bak;
 
@@ -277,32 +276,26 @@ int EVENT_HookList_Update(PP4M_INPUT_POS input) {
 
     for (int n = 0; n <= val; n++) {
 
-        curr_ptr = current->ptr;
+        alias_ttr = current->ptr;
         current = current->next;
-        int res = pp4m_HOOK_Size(curr_ptr);
+        SDL_GetTextureColorMod(alias_ttr->texture, &color_btn_bak.r, &color_btn_bak.g, &color_btn_bak.b);
 
-        for (int i = 0; i < res; i++) {
-            if (curr_ptr == NULL) break;
+        if (input.iner == 1) {
+            if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) {
 
-            alias_ttr = curr_ptr->ptr;
-            curr_ptr = curr_ptr->next;
-
-            SDL_GetTextureColorMod(alias_ttr->texture, &color_btn_bak.r, &color_btn_bak.g, &color_btn_bak.b);
-
-            if (input.iner == 1) {
-                if (alias_ttr->obj != 0 && input.x >= alias_ttr->rect.x && input.x <= (alias_ttr->rect.x + alias_ttr->rect.w) &&
-                    input.y >= alias_ttr->rect.y && input.y <= (alias_ttr->rect.y + alias_ttr->rect.h)) {
-                    result = alias_ttr->obj;
-                }
+                if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF) alias_ttr->obj = OBJ_BUTTON_LINK_ON;
+                else if (alias_ttr->obj == OBJ_BUTTON_RETURN) result = -2;
+                else if (alias_ttr->obj == OBJ_BUTTON_EXIT) result = -3;
+            } else {
+                // reset button presses
+                if (alias_ttr->obj == OBJ_BUTTON_LINK_ON) alias_ttr->obj = OBJ_BUTTON_LINK_OFF;
             }
-
-            if (alias_ttr->obj != 0 && input.x >= alias_ttr->rect.x && input.x <= (alias_ttr->rect.x + alias_ttr->rect.w) &&
-                input.y >= alias_ttr->rect.y && input.y <= (alias_ttr->rect.y + alias_ttr->rect.h)) {
-                SDL_SetTextureColorMod(alias_ttr->texture, 220, 220, 220);
-            }
-
-            SDL_SetTextureColorMod(alias_ttr->texture, color_btn_bak.r, color_btn_bak.g, color_btn_bak.b);
         }
+
+        if (alias_ttr->obj != OBJ_NONE && GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) {
+            SDL_SetTextureColorMod(alias_ttr->texture, 220, 220, 220);
+        } else SDL_SetTextureColorMod(alias_ttr->texture, color_btn_bak.r, color_btn_bak.g, color_btn_bak.b);
+
     }
 
     return result;
