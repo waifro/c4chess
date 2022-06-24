@@ -226,6 +226,7 @@ void GUI_Testing(void) {
 PP4M_HOOK *GUI_RenderWindow_Chat_Init(PP4M_HOOK *hook_list) {
 
     PP4M_HOOK *chat_ttr_list = pp4m_HOOK_Init();
+    PP4M_HOOK *chat_init_list = pp4m_HOOK_Init();
 
     GUI_TextureAlias *alias_button_chat = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
     alias_button_chat->obj = OBJ_BUTTON_LINK_OFF;
@@ -250,14 +251,18 @@ PP4M_HOOK *GUI_RenderWindow_Chat_Init(PP4M_HOOK *hook_list) {
     GUI_TextureAlias *alias_chat = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
     alias_chat->obj = OBJ_LINK_PTR;
 
-    pp4m_HOOK_Next(chat_ttr_list, alias_button_chat);
+    pp4m_HOOK_Next(chat_init_list, alias_button_chat);
+
     pp4m_HOOK_Next(chat_ttr_list, alias_window);
     pp4m_HOOK_Next(chat_ttr_list, alias_inner_w);
     pp4m_HOOK_Next(chat_ttr_list, alias_textbox);
     pp4m_HOOK_Next(chat_ttr_list, alias_button_send);
     pp4m_HOOK_Next(chat_ttr_list, alias_chat);
 
-    pp4m_HOOK_Next(hook_list, chat_ttr_list);
+    // save pointer of hooked list (unrendered)
+    alias_button_chat->link = chat_ttr_list;
+
+    pp4m_HOOK_Next(hook_list, chat_init_list);
 
     return chat_ttr_list;
 }

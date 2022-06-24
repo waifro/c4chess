@@ -259,22 +259,18 @@ int EVENT_HookList_Render(void) {
     GUI_TextureAlias *alias_ttr = NULL;
 
     for (int i = 0; i <= val; i++) {
-
         curr_ptr = current->ptr;
         current = current->next;
         int res = pp4m_HOOK_Size(curr_ptr);
 
-        for (int n = 0; n < res; n++) {
-            if (curr_ptr == NULL) break;
+        for (int n = 0; n <= res; n++) {
+            if (curr_ptr == NULL) continue;
             alias_ttr = curr_ptr->ptr;
             curr_ptr = curr_ptr->next;
 
             SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
-
             if (alias_ttr->obj == OBJ_BUTTON_LINK_ON) EVENT_HookLink_OnRender(alias_ttr->link);
         }
-
-
     }
 
     return 0;
@@ -286,11 +282,55 @@ int EVENT_HookList_Update(PP4M_INPUT_POS input) {
     if (glo_chess_event_hooklist == NULL)
         glo_chess_event_hooklist = EVENT_HookList_Init();
 
+    int val = pp4m_HOOK_Size(glo_chess_event_hooklist);
+
+    SDL_Color color_btn_bak;
+    PP4M_HOOK *current = glo_chess_event_hooklist;
+    PP4M_HOOK *curr_ptr = NULL;
+
+    GUI_TextureAlias *alias_ttr = NULL;
+
+    for (int i = 0; i <= val; i++) {
+        curr_ptr = current->ptr;
+        current = current->next;
+        int res = pp4m_HOOK_Size(curr_ptr);
+
+        for (int n = 0; n <= res; n++) {
+            if (curr_ptr == NULL) continue;
+
+            alias_ttr = curr_ptr->ptr;
+            curr_ptr = curr_ptr->next;
+
+            SDL_GetTextureColorMod(alias_ttr->texture, &color_btn_bak.r, &color_btn_bak.g, &color_btn_bak.b);
+
+            if (input.iner == 1) {
+                if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) {
+
+                    if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF) {
+                        alias_ttr->obj = OBJ_BUTTON_LINK_ON;
+                    }
+
+                    else if (alias_ttr->obj == OBJ_BUTTON_RETURN) result = -1;
+                    else if (alias_ttr->obj == OBJ_BUTTON_EXIT) result = -2;
+                } else {
+                    if (alias_ttr->obj == OBJ_BUTTON_LINK_ON) {
+                        alias_ttr->obj = OBJ_BUTTON_LINK_OFF;
+                    }
+                }
+            }
+
+            else if (alias_ttr->obj != OBJ_NONE && GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) {
+                SDL_SetTextureColorMod(alias_ttr->texture, 220, 220, 220);
+            } //else SDL_SetTextureColorMod(alias_ttr->texture, color_btn_bak.r, color_btn_bak.g, color_btn_bak.b);
+        }
+    }
+
+    /*
     GUI_TextureAlias *alias_ttr = NULL;
 
     PP4M_HOOK *current = glo_chess_event_hooklist;
 
-    static SDL_Color color_btn_bak;
+
 
     int val = pp4m_HOOK_Size(current);
 
@@ -298,25 +338,10 @@ int EVENT_HookList_Update(PP4M_INPUT_POS input) {
 
         alias_ttr = current->ptr;
         current = current->next;
-        SDL_GetTextureColorMod(alias_ttr->texture, &color_btn_bak.r, &color_btn_bak.g, &color_btn_bak.b);
 
-        if (input.iner == 1) {
-            if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) {
-
-                if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF) alias_ttr->obj = OBJ_BUTTON_LINK_ON;
-                else if (alias_ttr->obj == OBJ_BUTTON_RETURN) result = -2;
-                else if (alias_ttr->obj == OBJ_BUTTON_EXIT) result = -3;
-            } else {
-                // reset on button presses
-                if (alias_ttr->obj == OBJ_BUTTON_LINK_ON) alias_ttr->obj = OBJ_BUTTON_LINK_OFF;
-            }
-        }
-
-        if (alias_ttr->obj != OBJ_NONE && GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) {
-            SDL_SetTextureColorMod(alias_ttr->texture, 220, 220, 220);
-        } else SDL_SetTextureColorMod(alias_ttr->texture, color_btn_bak.r, color_btn_bak.g, color_btn_bak.b);
 
     }
+    */
 
     return result;
 }
