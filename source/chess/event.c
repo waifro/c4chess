@@ -4,7 +4,6 @@
 
 #include <SDL2/SDL.h>
 
-#include "../security/debug.h"
 #include "../pp4m/pp4m.h"
 #include "../pp4m/pp4m_input.h"
 #include "../dashboard/gui.h"
@@ -21,7 +20,7 @@ int glo_chess_event_availmo = -1;
 bool glo_chess_event_layer[64];
 bool glo_chess_event_king_uatk;
 
-PP4M_HOOK *glo_chess_event_hooklist = NULL;
+PP4M_HOOK *glohook_chess_event_chat = NULL;
 
 
 void EVENT_BlankLayer_Global(void) {
@@ -232,86 +231,10 @@ int EVENT_HandlePopup_Checkmate(char *comment, CHESS_CORE_PLAYER player) {
     return result;
 }
 
-int EVENT_HookList_Render(void) {
-    int val = pp4m_HOOK_Size(glo_chess_event_hooklist);
+int EVENT_HandleWindow_Chat(PP4M_INPUT_POS touch) {
 
-    PP4M_HOOK *current = glo_chess_event_hooklist;
-    PP4M_HOOK *curr_ptr = NULL;
-
-    GUI_TextureAlias *alias_ttr = NULL;
-
-    for (int i = 0; i <= val; i++) {
-
-        curr_ptr = current->ptr;
-        current = current->next;
-        int res = pp4m_HOOK_Size(curr_ptr);
-
-        for (int n = 0; n < res; n++) {
-            if (curr_ptr == NULL) break;
-            alias_ttr = curr_ptr->ptr;
-            curr_ptr = curr_ptr->next;
-
-            SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
-        }
-
-
-    }
+    if (glohook_chess_event_chat == NULL)
+        glohook_chess_event_chat = GUI_RenderWindow_Chat_Init();
 
     return 0;
-}
-
-int EVENT_HookList_Update(PP4M_INPUT_POS input) {
-    int result = 0;
-
-    if (glo_chess_event_hooklist == NULL)
-        glo_chess_event_hooklist = EVENT_HookList_Init();
-
-    GUI_TextureAlias *alias_ttr = NULL;
-
-    PP4M_HOOK *current = glo_chess_event_hooklist;
-    PP4M_HOOK *curr_ptr = NULL;
-
-    static SDL_Color color_btn_bak;
-
-    int val = pp4m_HOOK_Size(current);
-
-    for (int n = 0; n <= val; n++) {
-
-        curr_ptr = current->ptr;
-        current = current->next;
-        int res = pp4m_HOOK_Size(curr_ptr);
-
-        for (int i = 0; i < res; i++) {
-            if (curr_ptr == NULL) break;
-
-            alias_ttr = curr_ptr->ptr;
-            curr_ptr = curr_ptr->next;
-
-            SDL_GetTextureColorMod(alias_ttr->texture, &color_btn_bak.r, &color_btn_bak.g, &color_btn_bak.b);
-
-            if (input.iner == 1) {
-                if (alias_ttr->obj != 0 && input.x >= alias_ttr->rect.x && input.x <= (alias_ttr->rect.x + alias_ttr->rect.w) &&
-                    input.y >= alias_ttr->rect.y && input.y <= (alias_ttr->rect.y + alias_ttr->rect.h)) {
-                    result = alias_ttr->obj;
-                }
-            }
-
-            if (alias_ttr->obj != 0 && input.x >= alias_ttr->rect.x && input.x <= (alias_ttr->rect.x + alias_ttr->rect.w) &&
-                input.y >= alias_ttr->rect.y && input.y <= (alias_ttr->rect.y + alias_ttr->rect.h)) {
-                SDL_SetTextureColorMod(alias_ttr->texture, 220, 220, 220);
-            }
-
-            SDL_SetTextureColorMod(alias_ttr->texture, color_btn_bak.r, color_btn_bak.g, color_btn_bak.b);
-        }
-    }
-
-    return result;
-}
-
-PP4M_HOOK *EVENT_HookList_Init(void) {
-
-    PP4M_HOOK *hook_list = pp4m_HOOK_Init();
-    GUI_RenderWindow_Chat_Init(hook_list);
-
-    return hook_list;
 }

@@ -2,16 +2,14 @@
 #define EVENT_H
 
 #include <stdbool.h>
-
 #include "core.h"
-#include "../pp4m/pp4m_input.h"
 
 extern int glo_chess_event_availmo;
 
 extern bool glo_chess_event_layer[64];
 extern bool glo_chess_event_king_uatk;
 
-extern PP4M_HOOK *glo_chess_event_hooklist;
+extern PP4M_HOOK *glohook_chess_event_chat;
 
 void EVENT_BlankLayer_Global(void);
 void EVENT_BlankLayer_Piece(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player);
@@ -30,8 +28,6 @@ int EVENT_HandleKeyboard(SDL_Event *event, char *dest);
 int EVENT_HandlePopup_Stalemate(char *comment);
 int EVENT_HandlePopup_Checkmate(char *comment, CHESS_CORE_PLAYER player);
 
-int EVENT_HookList_Render(void);
-int EVENT_HookList_Update(PP4M_INPUT_POS input);
-PP4M_HOOK *EVENT_HookList_Init(void);
+int EVENT_HandleWindow_Chat(PP4M_INPUT_POS touch);
 
 #endif
