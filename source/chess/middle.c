@@ -190,7 +190,8 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
     PP4M_INPUT_POS touch_pos;
     pp4m_INPUT_GetMouseState(event, &touch_pos);
 
-    //result = MIDDLE_UpdateEvent_Keyboard(event);
+    // update objects // todo enum of objects
+    EVENT_HookList_Update(touch_pos);
 
     // updating chessboard
     MIDDLE_InputChessboardState(socket, touch_pos, glo_chess_core_tile, player, &position_old, &position_new, &code);

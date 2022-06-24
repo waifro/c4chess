@@ -15,4 +15,6 @@ int GUI_PopupWindow_Core(PP4M_HOOK *head, SDL_Texture *background);
 
 void GUI_Testing(void);
 
+PP4M_HOOK *GUI_RenderWindow_Chat_Init(PP4M_HOOK *hook_list);
+
 #endif
