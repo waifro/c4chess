@@ -11,6 +11,7 @@
 #include "../global.h"
 #include "fen.h"
 #include "chess.h"
+#include "event.h"
 #include "middle.h"
 #include "core.h"
 
@@ -66,10 +67,10 @@ int FEN_Init(CHESS_CORE_PLAYER *init_player, char *fen_notation) {
 
     FEN_PlayerTurn((int*)init_player, fen_play[0]);
     FEN_InitBoard(*init_player, fen_board);
-    _glo_chess_tile_passant = FEN_StrTrunk_TagToTile(fen_passant);
-    strncpy(_glo_chess_king_castling, fen_castle, strlen(fen_castle) -1);
+    glo_chess_event_tile_passant = FEN_StrTrunk_TagToTile(fen_passant);
+    strncpy(glo_chess_event_king_castle, fen_castle, strlen(fen_castle) -1);
 
-    DEBUG_PrintBox(1, "[%s] [%s] [%s] [%d] [%d] [%d]", fen_board, fen_play, _glo_chess_king_castling, _glo_chess_tile_passant, fen_halfmove, fen_fullmove);
+    DEBUG_PrintBox(1, "[%s] [%s] [%s] [%d] [%d] [%d]", fen_board, fen_play, glo_chess_event_king_castle, glo_chess_event_tile_passant, fen_halfmove, fen_fullmove);
 
     return (0);
 }

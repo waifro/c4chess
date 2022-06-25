@@ -17,10 +17,12 @@
 #include "core.h"
 #include "chess.h"
 
-int glo_chess_event_availmo = -1;
-
-bool glo_chess_event_layer[64];
-bool glo_chess_event_king_uatk;
+bool    glo_chess_event_layer[64];
+bool    glo_chess_event_king_uatk;
+int     glo_chess_event_availmo = -1;
+int     glo_chess_event_tile_passant = -1;
+int     glo_chess_event_pawn_promotn = -1;
+char    glo_chess_event_king_castle[5];
 
 PP4M_HOOK *glo_chess_event_hooklist = NULL;
 
@@ -55,7 +57,7 @@ void EVENT_UpdateState_ChessEvent(CHESS_CORE_TILE *chess_tile, int position_old,
         CHESS_CheckState_RookCastling(chess_tile, position_old, position_new, player);
 
     if (CHESS_Redirect_EnumPawn(chess_tile, position_old) != 0)
-        _glo_chess_tile_passant = -1;
+        glo_chess_event_tile_passant = -1;
 
     return;
 }

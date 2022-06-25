@@ -32,7 +32,6 @@
 CHESS_CORE_PLAYER glo_chess_core_player;
 CHESS_CORE_TILE glo_chess_core_tile[64];
 CHESS_CORE_PIECE glo_chess_core_piece[32];
-char glo_chess_core_castle[4];
 
 void CORE_Chessboard_Init(void) {
 

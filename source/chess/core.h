@@ -54,9 +54,6 @@ extern CHESS_CORE_PLAYER glo_chess_core_player;
 extern CHESS_CORE_TILE glo_chess_core_tile[64];
 extern CHESS_CORE_PIECE glo_chess_core_piece[32];
 
-extern bool glo_chess_event_king_uatk;
-extern CHESS_CORE_TILE_TAG glo_chess_core_passant;
-
 /* prototypes */
 void CORE_Chessboard_Init(void);
 void CORE_ChessTag_Init(CHESS_CORE_TILE *chess_tile);

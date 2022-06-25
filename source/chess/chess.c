@@ -11,10 +11,6 @@
 #include "core.h"
 #include "dot.h"
 
-int _glo_chess_tile_passant = -1;
-int _glo_chess_tile_promotn = -1;
-char _glo_chess_king_castling[5];
-
 int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER player) {
 
     int result = 0;
@@ -85,7 +81,6 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
 
         for (int n = 0; n < 64; n++)
             if (core_tile[n].piece != NULL && core_tile[n].piece->player != player)
-                //if (CHESS_Redirect_EnumKing(core_tile, n) == -1)
                 {
                     CHESS_PiecePattern_RangeReset(core_tile, n);
 
@@ -201,7 +196,7 @@ int CHESS_PiecePattern_King(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
 
     int result = -1;
 
-    for (int n = 0; n < strlen(_glo_chess_king_castling); n++)
+    for (int n = 0; n < strlen(glo_chess_event_king_castle); n++)
         if ((result = CHESS_CheckState_CastleAvailable(core_tile, tile, n)) != -1)
             core_tile[tile].piece->range[result] = true;
 
@@ -444,7 +439,7 @@ int CHESS_PiecePattern_Queen(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_P
 
 int CHESS_CheckState_CastleAvailable(CHESS_CORE_TILE *chess_tile, int tile, int index) {
 
-    if (_glo_chess_king_castling[index] == 'K' || _glo_chess_king_castling[index] == 'k') {
+    if (glo_chess_event_king_castle[index] == 'K' || glo_chess_event_king_castle[index] == 'k') {
 
         CHESS_CORE_TILE_TAG king_castle = MIDDLE_TileToTag(tile);
         int res = -1; int u;
@@ -456,7 +451,7 @@ int CHESS_CheckState_CastleAvailable(CHESS_CORE_TILE *chess_tile, int tile, int 
 
         if (u == 3) return (res);
 
-    } else if (_glo_chess_king_castling[index] == 'Q' || _glo_chess_king_castling[index] == 'q') {
+    } else if (glo_chess_event_king_castle[index] == 'Q' || glo_chess_event_king_castle[index] == 'q') {
 
         CHESS_CORE_TILE_TAG king_castle = MIDDLE_TileToTag(tile);
         int res = -1; int u;
@@ -473,12 +468,12 @@ int CHESS_CheckState_CastleAvailable(CHESS_CORE_TILE *chess_tile, int tile, int 
 }
 
 int CHESS_CheckState_KingCastling(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player) {
-    if (_glo_chess_king_castling[0] == '-') return -1;
+    if (glo_chess_event_king_castle[0] == '-') return -1;
 
-    DEBUG_PrintBox(2, "before player[%d] %s\n", player, _glo_chess_king_castling);
+    DEBUG_PrintBox(2, "before player[%d] %s\n", player, glo_chess_event_king_castle);
 
     int result = -1;
-    for (int n = 0; n < strlen(_glo_chess_king_castling); n++)
+    for (int n = 0; n < strlen(glo_chess_event_king_castle); n++)
         if ((result = CHESS_CheckState_CastleAvailable(chess_tile, position_old, n)) == position_new) {
 
             CHESS_CORE_TILE_TAG tag;
@@ -497,36 +492,36 @@ int CHESS_CheckState_KingCastling(CHESS_CORE_TILE *chess_tile, int position_old,
 
     if (chess_tile[position_old].piece->enum_piece == KING) {
 
-        for (int n = 0; n < strlen(_glo_chess_king_castling); n++) {
-            if (_glo_chess_king_castling[n] != 'K' && _glo_chess_king_castling[n] != 'Q') {
+        for (int n = 0; n < strlen(glo_chess_event_king_castle); n++) {
+            if (glo_chess_event_king_castle[n] != 'K' && glo_chess_event_king_castle[n] != 'Q') {
                 char buf[5];
-                strcpy(buf, &_glo_chess_king_castling[n]);
-                strcpy(_glo_chess_king_castling, buf);
+                strcpy(buf, &glo_chess_event_king_castle[n]);
+                strcpy(glo_chess_event_king_castle, buf);
                 break;
             }
         }
 
     } else if (chess_tile[position_old].piece->enum_piece == BKING) {
 
-        for (int n = 0; n < strlen(_glo_chess_king_castling); n++) {
-            if (_glo_chess_king_castling[n] != 'K' && _glo_chess_king_castling[n] != 'Q') {
-                _glo_chess_king_castling[n] = '\0';
+        for (int n = 0; n < strlen(glo_chess_event_king_castle); n++) {
+            if (glo_chess_event_king_castle[n] != 'K' && glo_chess_event_king_castle[n] != 'Q') {
+                glo_chess_event_king_castle[n] = '\0';
                 break;
             }
         }
     }
 
-    if (strlen(_glo_chess_king_castling) == 0) strcpy(_glo_chess_king_castling, "-");
+    if (strlen(glo_chess_event_king_castle) == 0) strcpy(glo_chess_event_king_castle, "-");
 
-    DEBUG_PrintBox(2, "after player[%d] %s\n", player, _glo_chess_king_castling);
+    DEBUG_PrintBox(2, "after player[%d] %s\n", player, glo_chess_event_king_castle);
 
     return 0;
 }
 
 int CHESS_CheckState_RookCastling(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player) {
-    if (_glo_chess_king_castling[0] == '-') return -1;
+    if (glo_chess_event_king_castle[0] == '-') return -1;
 
-    DEBUG_PrintBox(2, "before player[%d] %s\n", player, _glo_chess_king_castling);
+    DEBUG_PrintBox(2, "before player[%d] %s\n", player, glo_chess_event_king_castle);
     char buf[5];
 
     CHESS_CORE_TILE_TAG tag = MIDDLE_TileToTag(position_old);
@@ -535,56 +530,52 @@ int CHESS_CheckState_RookCastling(CHESS_CORE_TILE *chess_tile, int position_old,
 
         if (tag.col == 'a') {
 
-            for (int n = 0; n < strlen(_glo_chess_king_castling); n++)
-                if (_glo_chess_king_castling[n] == 'Q') {
+            for (int n = 0; n < strlen(glo_chess_event_king_castle); n++)
+                if (glo_chess_event_king_castle[n] == 'Q') {
 
-                    for (int n = 0; n < strlen(_glo_chess_king_castling); n++) {
-                        if (_glo_chess_king_castling[n] != 'Q')
+                    for (int n = 0; n < strlen(glo_chess_event_king_castle); n++) {
+                        if (glo_chess_event_king_castle[n] != 'Q')
                             continue;
 
                     // remove char from _glo_chess_king_castling using buf
-
-
-                    for (int i = 0; i < strlen(_glo_chess_king_castling); i++) {
+                    for (int i = 0; i < strlen(glo_chess_event_king_castle); i++) {
                         if (i < n) {
 
-                            buf[i] = _glo_chess_king_castling[i];
+                            buf[i] = glo_chess_event_king_castle[i];
                             continue;
                         }
 
-                        buf[i] = _glo_chess_king_castling[i+1];
-                        if (_glo_chess_king_castling[i+1] == '\0') break;
+                        buf[i] = glo_chess_event_king_castle[i+1];
+                        if (glo_chess_event_king_castle[i+1] == '\0') break;
                     }
                 }
 
-                strcpy(_glo_chess_king_castling, buf);
+                strcpy(glo_chess_event_king_castle, buf);
             }
         }
 
         else if (tag.col == 'h') {
-            for (int n = 0; n < strlen(_glo_chess_king_castling); n++)
-                if (_glo_chess_king_castling[n] == 'K') {
+            for (int n = 0; n < strlen(glo_chess_event_king_castle); n++)
+                if (glo_chess_event_king_castle[n] == 'K') {
 
-                    for (int n = 0; n < strlen(_glo_chess_king_castling); n++) {
-                        if (_glo_chess_king_castling[n] != 'K')
+                    for (int n = 0; n < strlen(glo_chess_event_king_castle); n++) {
+                        if (glo_chess_event_king_castle[n] != 'K')
                             continue;
 
                     // remove char from _glo_chess_king_castling using buf
-
-
-                    for (int i = 0; i < strlen(_glo_chess_king_castling); i++) {
+                    for (int i = 0; i < strlen(glo_chess_event_king_castle); i++) {
                         if (i < n) {
 
-                            buf[i] = _glo_chess_king_castling[i];
+                            buf[i] = glo_chess_event_king_castle[i];
                             continue;
                         }
 
-                        buf[i] = _glo_chess_king_castling[i+1];
-                        if (_glo_chess_king_castling[i+1] == '\0') break;
+                        buf[i] = glo_chess_event_king_castle[i+1];
+                        if (glo_chess_event_king_castle[i+1] == '\0') break;
                     }
                 }
 
-                strcpy(_glo_chess_king_castling, buf);
+                strcpy(glo_chess_event_king_castle, buf);
             }
         }
 
@@ -592,71 +583,71 @@ int CHESS_CheckState_RookCastling(CHESS_CORE_TILE *chess_tile, int position_old,
 
         if (tag.col == 'a') {
 
-            for (int n = 0; n < strlen(_glo_chess_king_castling); n++)
-                if (_glo_chess_king_castling[n] == 'q') {
+            for (int n = 0; n < strlen(glo_chess_event_king_castle); n++)
+                if (glo_chess_event_king_castle[n] == 'q') {
 
-                    for (int n = 0; n < strlen(_glo_chess_king_castling); n++) {
-                        if (_glo_chess_king_castling[n] != 'q')
+                    for (int n = 0; n < strlen(glo_chess_event_king_castle); n++) {
+                        if (glo_chess_event_king_castle[n] != 'q')
                             continue;
 
                     // remove char from _glo_chess_king_castling using buf
 
 
-                    for (int i = 0; i < strlen(_glo_chess_king_castling); i++) {
+                    for (int i = 0; i < strlen(glo_chess_event_king_castle); i++) {
                         if (i < n) {
 
-                            buf[i] = _glo_chess_king_castling[i];
+                            buf[i] = glo_chess_event_king_castle[i];
                             continue;
                         }
 
-                        buf[i] = _glo_chess_king_castling[i+1];
-                        if (_glo_chess_king_castling[i+1] == '\0') break;
+                        buf[i] = glo_chess_event_king_castle[i+1];
+                        if (glo_chess_event_king_castle[i+1] == '\0') break;
                     }
                 }
 
-                strcpy(_glo_chess_king_castling, buf);
+                strcpy(glo_chess_event_king_castle, buf);
             }
         }
 
         else if (tag.col == 'h') {
-            for (int n = 0; n < strlen(_glo_chess_king_castling); n++)
-                if (_glo_chess_king_castling[n] == 'k') {
+            for (int n = 0; n < strlen(glo_chess_event_king_castle); n++)
+                if (glo_chess_event_king_castle[n] == 'k') {
 
-                    for (int n = 0; n < strlen(_glo_chess_king_castling); n++) {
-                        if (_glo_chess_king_castling[n] != 'k')
+                    for (int n = 0; n < strlen(glo_chess_event_king_castle); n++) {
+                        if (glo_chess_event_king_castle[n] != 'k')
                             continue;
 
                     // remove char from _glo_chess_king_castling using buf
 
 
-                    for (int i = 0; i < strlen(_glo_chess_king_castling); i++) {
+                    for (int i = 0; i < strlen(glo_chess_event_king_castle); i++) {
                         if (i < n) {
 
-                            buf[i] = _glo_chess_king_castling[i];
+                            buf[i] = glo_chess_event_king_castle[i];
                             continue;
                         }
 
-                        buf[i] = _glo_chess_king_castling[i+1];
-                        if (_glo_chess_king_castling[i+1] == '\0') break;
+                        buf[i] = glo_chess_event_king_castle[i+1];
+                        if (glo_chess_event_king_castle[i+1] == '\0') break;
                     }
                 }
 
-                strcpy(_glo_chess_king_castling, buf);
+                strcpy(glo_chess_event_king_castle, buf);
             }
         }
     }
 
-    if (strlen(_glo_chess_king_castling) == 0) strcpy(_glo_chess_king_castling, "-");
+    if (strlen(glo_chess_event_king_castle) == 0) strcpy(glo_chess_event_king_castle, "-");
 
-    DEBUG_PrintBox(2, "after player[%d] %s\n", player, _glo_chess_king_castling);
+    DEBUG_PrintBox(2, "after player[%d] %s\n", player, glo_chess_event_king_castle);
 
     return 0;
 }
 
 int CHESS_CheckState_PawnPromotion(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player) {
 
-    if (_glo_chess_tile_promotn != -1) {
-        CORE_UpdateState_PieceStruct(position_old, chess_tile[position_old].piece, player, _glo_chess_tile_promotn);
+    if (glo_chess_event_pawn_promotn != -1) {
+        CORE_UpdateState_PieceStruct(position_old, chess_tile[position_old].piece, player, glo_chess_event_pawn_promotn);
         return 0;
     }
 
@@ -717,7 +708,7 @@ int CHESS_CheckState_PawnPromotion(CHESS_CORE_TILE *chess_tile, int position_old
         }
 
         DEBUG_PrintBox(1, "CHESS_CheckState_PawnPromotion: Updated pawn[%d] -> %d", position_old, chess_tile[position_old].piece->enum_piece);
-        _glo_chess_tile_promotn = chess_tile[position_old].piece->enum_piece;
+        glo_chess_event_pawn_promotn = chess_tile[position_old].piece->enum_piece;
     }
 
     return 0;
@@ -730,9 +721,9 @@ int CHESS_CheckState_PawnEnPassant(CHESS_CORE_TILE *chess_tile, int position_old
 
         if (CHESS_PiecePattern_Pawn(chess_tile, position_old, player) != 2) {
 
-            if (_glo_chess_tile_passant != -1) {
+            if (glo_chess_event_tile_passant != -1) {
 
-                if (_glo_chess_tile_passant == position_new) {
+                if (glo_chess_event_tile_passant == position_new) {
                     CHESS_CORE_TILE_TAG tag_pl = chess_tile[position_new].tag;
                     tag_pl.row -= 1;
 
@@ -740,20 +731,20 @@ int CHESS_CheckState_PawnEnPassant(CHESS_CORE_TILE *chess_tile, int position_old
                 }
             }
 
-            _glo_chess_tile_passant = -1;
+            glo_chess_event_tile_passant = -1;
             return (-1);
         }
 
         tag.row += 1;
-        _glo_chess_tile_passant = MIDDLE_TagToTile(tag);
+        glo_chess_event_tile_passant = MIDDLE_TagToTile(tag);
 
     } else if (chess_tile[position_old].piece->enum_piece == BPAWN) {
 
         if (CHESS_PiecePattern_BPawn(chess_tile, position_old, player) != 2) {
 
-            if (_glo_chess_tile_passant != -1) {
+            if (glo_chess_event_tile_passant != -1) {
 
-                if (_glo_chess_tile_passant == position_new) {
+                if (glo_chess_event_tile_passant == position_new) {
                     CHESS_CORE_TILE_TAG tag_pl = chess_tile[position_new].tag;
                     tag_pl.row -= 1;
 
@@ -761,12 +752,12 @@ int CHESS_CheckState_PawnEnPassant(CHESS_CORE_TILE *chess_tile, int position_old
                 }
             }
 
-            _glo_chess_tile_passant = -1;
+            glo_chess_event_tile_passant = -1;
             return (-1);
         }
 
         tag.row -= 1;
-        _glo_chess_tile_passant = MIDDLE_TagToTile(tag);
+        glo_chess_event_tile_passant = MIDDLE_TagToTile(tag);
     }
 
     return (0);
@@ -794,7 +785,7 @@ int CHESS_PiecePattern_PawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_CO
             continue;
         }
 
-        if (_glo_chess_tile_passant == result)
+        if (glo_chess_event_tile_passant == result)
             core_tile[tile].piece->range[result] = true;
 
         else if (core_tile[result].piece != NULL && core_tile[result].piece->player != player)
@@ -826,7 +817,7 @@ int CHESS_PiecePattern_BPawnAttack(CHESS_CORE_TILE *core_tile, int tile, CHESS_C
             continue;
         }
 
-        if (_glo_chess_tile_passant == result)
+        if (glo_chess_event_tile_passant == result)
             core_tile[tile].piece->range[result] = true;
 
         else if (core_tile[result].piece != NULL && core_tile[result].piece->player != player)

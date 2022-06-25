@@ -202,7 +202,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
     MIDDLE_InputChessboardState(socket, touch_pos, glo_chess_core_tile, player, &position_old, &position_new, &code);
 
     // needs a brand new updates of sockets
-    CORE_NET_UpdateLobby(code, socket, &position_old, &position_new, &_glo_chess_tile_promotn);
+    CORE_NET_UpdateLobby(code, socket, &position_old, &position_new, &glo_chess_event_pawn_promotn);
 
     // record notation
     ARCHIVE_UpdateRegister_PieceState(&glo_chess_core_tile[position_new], position_old, position_new);
@@ -217,7 +217,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
 
         *player = CORE_ReversePlayer_State(*player);
 
-        _glo_chess_tile_promotn = -1;
+        glo_chess_event_pawn_promotn = -1;
         position_new = -1; position_old = -1;
         DEBUG_PrintBox(1, "CORE_Testing:");
         DEBUG_PrintBox(1, "  player_turn = %d", *player);

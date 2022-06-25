@@ -7,6 +7,9 @@
 #include "../pp4m/pp4m_input.h"
 
 extern int glo_chess_event_availmo;
+extern int glo_chess_event_tile_passant;
+extern int glo_chess_event_pawn_promotn;
+extern char glo_chess_event_king_castle[5];
 
 extern bool glo_chess_event_layer[64];
 extern bool glo_chess_event_king_uatk;
