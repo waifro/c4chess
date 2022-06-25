@@ -285,6 +285,8 @@ int EVENT_HookList_Update(PP4M_INPUT_POS input) {
     int val = pp4m_HOOK_Size(glo_chess_event_hooklist);
 
     SDL_Color color_btn_bak;
+    GUI_Alias_ResetColor(&color_btn_bak);
+
     PP4M_HOOK *current = glo_chess_event_hooklist;
     PP4M_HOOK *curr_ptr = NULL;
 
@@ -300,8 +302,6 @@ int EVENT_HookList_Update(PP4M_INPUT_POS input) {
 
             alias_ttr = curr_ptr->ptr;
             curr_ptr = curr_ptr->next;
-
-            SDL_GetTextureColorMod(alias_ttr->texture, &color_btn_bak.r, &color_btn_bak.g, &color_btn_bak.b);
 
             if (input.iner == 1) {
                 if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) {
@@ -319,29 +319,24 @@ int EVENT_HookList_Update(PP4M_INPUT_POS input) {
                 }
             }
 
-            else if (alias_ttr->obj != OBJ_NONE && GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) {
-                SDL_SetTextureColorMod(alias_ttr->texture, 220, 220, 220);
-            } //else SDL_SetTextureColorMod(alias_ttr->texture, color_btn_bak.r, color_btn_bak.g, color_btn_bak.b);
+            else if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) {
+
+                // mouse on top of object highlights it
+                if (alias_ttr->obj != OBJ_NONE) {
+                    if (GUI_Alias_IsColor(&color_btn_bak) == -1) SDL_GetTextureColorMod(alias_ttr->texture, &color_btn_bak.r, &color_btn_bak.g, &color_btn_bak.b);
+                    SDL_SetTextureColorMod(alias_ttr->texture, 220, 220, 220);
+                }
+
+            } else if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == -1) {
+
+                // restores the object to original color
+                if (GUI_Alias_IsColor(&color_btn_bak) == 1) {
+                    SDL_SetTextureColorMod(alias_ttr->texture, color_btn_bak.r, color_btn_bak.g, color_btn_bak.b);
+                    GUI_Alias_ResetColor(&color_btn_bak);
+                }
+            }
         }
     }
-
-    /*
-    GUI_TextureAlias *alias_ttr = NULL;
-
-    PP4M_HOOK *current = glo_chess_event_hooklist;
-
-
-
-    int val = pp4m_HOOK_Size(current);
-
-    for (int n = 0; n <= val; n++) {
-
-        alias_ttr = current->ptr;
-        current = current->next;
-
-
-    }
-    */
 
     return result;
 }

@@ -34,6 +34,10 @@ typedef struct {
 
 /* prototypes */
 int GUI_Alias_InputOnObj(PP4M_INPUT_POS input, SDL_Rect rect);
+
+int GUI_Alias_IsColor(SDL_Color *color);
+int GUI_Alias_ResetColor(SDL_Color *color);
+
 SDL_Texture *GUI_Alias_CreateSnapshot(SDL_Renderer *renderer, int width, int height);
 
 #endif

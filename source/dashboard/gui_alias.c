@@ -10,6 +10,16 @@ int GUI_Alias_InputOnObj(PP4M_INPUT_POS input, SDL_Rect rect) {
     else return -1;
 }
 
+int GUI_Alias_IsColor(SDL_Color *color) {
+    if (color->r == 0 && color->g == 0 && color->b == 0 && color->a == 0) return 1;
+    else return -1;
+}
+
+int GUI_Alias_ResetColor(SDL_Color *color) {
+    color->r = 0; color->g = 0; color->b = 0; color->a = 0;
+    return 0;
+}
+
 SDL_Texture *GUI_Alias_CreateSnapshot(SDL_Renderer *renderer, int width, int height) {
 
     SDL_Surface *snap = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
