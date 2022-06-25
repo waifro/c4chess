@@ -54,9 +54,9 @@ fullmoves:  [2]
 int FEN_Init(CHESS_CORE_PLAYER *init_player, char *fen_notation) {
 
     char fen_board[128];    // chess board pieces
-    char fen_play[4];       // player turn [w] or [b]
-    char fen_castle[4];     // [-] none | [QKq]castling available for king both ends, black king only queen
-    char fen_passant[4];    // [-] none | ex. [f6] is signed for en passant
+    char fen_play[5];       // player turn [w] or [b]
+    char fen_castle[5];     // [-] none | [QKq]castling available for king both ends, black king only queen
+    char fen_passant[5];    // [-] none | ex. [f6] is signed for en passant
     int fen_halfmove;       // [+1] if no capture of pieces or pawn advance, else resets (draw on 100 moves)
     int fen_fullmove;       // [+1] a complete cycle by both players
 
@@ -68,7 +68,7 @@ int FEN_Init(CHESS_CORE_PLAYER *init_player, char *fen_notation) {
     FEN_PlayerTurn((int*)init_player, fen_play[0]);
     FEN_InitBoard(*init_player, fen_board);
     glo_chess_event_tile_passant = FEN_StrTrunk_TagToTile(fen_passant);
-    strncpy(glo_chess_event_king_castle, fen_castle, strlen(fen_castle) -1);
+    strncpy(glo_chess_event_king_castle, fen_castle, strlen(fen_castle));
 
     DEBUG_PrintBox(1, "[%s] [%s] [%s] [%d] [%d] [%d]", fen_board, fen_play, glo_chess_event_king_castle, glo_chess_event_tile_passant, fen_halfmove, fen_fullmove);
 
@@ -91,10 +91,10 @@ void FEN_StrTrunk(char *restrict str, char *restrict a, char *restrict b, char *
 
         if (str[n] == ' ') {
 
-            if (i == 0) a[++ind] = '\0';
-            if (i == 1) b[++ind] = '\0';
-            if (i == 2) c[++ind] = '\0';
-            if (i == 3) d[++ind] = '\0';
+            if (i == 0) a[ind] = '\0';
+            else if (i == 1) b[ind] = '\0';
+            else if (i == 2) c[ind] = '\0';
+            else if (i == 3) d[ind] = '\0';
 
             ind = 0;
             i++;
@@ -102,12 +102,12 @@ void FEN_StrTrunk(char *restrict str, char *restrict a, char *restrict b, char *
             continue;
         }
 
-        if (i == 0) strncpy(&a[ind], &str[n], 1);
-        if (i == 1) strncpy(&b[ind], &str[n], 1);
-        if (i == 2) strncpy(&c[ind], &str[n], 1);
-        if (i == 3) strncpy(&d[ind], &str[n], 1);
-        if (i == 4) *e = atoi(&str[n]);
-        if (i == 5) *f = atoi(&str[n]);
+        if (i == 0) a[ind] = str[n];
+        else if (i == 1) b[ind] = str[n];
+        else if (i == 2) c[ind] = str[n];
+        else if (i == 3) d[ind] = str[n];
+        else if (i == 4) *e = atoi(&str[n]);
+        else if (i == 5) *f = atoi(&str[n]);
 
         ind++;
     }
