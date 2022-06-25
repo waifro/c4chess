@@ -21,7 +21,7 @@ typedef enum {
 
     OBJ_TEXTBOX_INPUT,
 
-    OBJ_LINK_PTR // it automatically runs a new run of *link
+    OBJ_LINK_PTR // it automatically runs *link
 
 } GUI_ALIAS_OBJ;
 

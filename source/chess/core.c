@@ -185,7 +185,7 @@ void CORE_GlobalUpdate_StateRender(void) {
     }
 
     DEBUG_UpdateBox_Render();
-    EVENT_HookList_Render();
+    GUI_HookList_Render(glo_chess_event_hooklist);
 
     return;
 }
@@ -296,7 +296,7 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
     }
 
     SDL_DestroyTexture(background);
-    EVENT_HookList_Quit();
-    
+    GUI_HookList_Quit(glo_chess_event_hooklist);
+
     return;
 }

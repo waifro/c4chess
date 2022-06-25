@@ -266,3 +266,148 @@ PP4M_HOOK *GUI_RenderWindow_Chat_Init(PP4M_HOOK *hook_list) {
 
     return chat_ttr_list;
 }
+
+int GUI_HookLink_Render(PP4M_HOOK *link) {
+
+    PP4M_HOOK *current = link;
+    GUI_TextureAlias *alias_ttr = NULL;
+    int val = pp4m_HOOK_Size(link);
+
+    for (int i = 0; i <= val; i++) {
+        if (current == NULL) continue;
+        alias_ttr = current->ptr;
+        current = current->next;
+
+        SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
+
+        if (alias_ttr->obj == OBJ_BUTTON_LINK_ON ||
+            alias_ttr->obj == OBJ_LINK_PTR) GUI_HookLink_Render(alias_ttr->link);
+    }
+
+    return 0;
+}
+
+int GUI_HookList_Render(PP4M_HOOK *hook_list) {
+    int val = pp4m_HOOK_Size(hook_list);
+
+    PP4M_HOOK *current = hook_list;
+    PP4M_HOOK *curr_ptr = NULL;
+
+    GUI_TextureAlias *alias_ttr = NULL;
+
+    for (int i = 0; i <= val; i++) {
+        curr_ptr = current->ptr;
+        current = current->next;
+        int res = pp4m_HOOK_Size(curr_ptr);
+
+        for (int n = 0; n <= res; n++) {
+            if (curr_ptr == NULL) continue;
+            alias_ttr = curr_ptr->ptr;
+            curr_ptr = curr_ptr->next;
+
+            SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
+
+            if (alias_ttr->obj == OBJ_BUTTON_LINK_ON ||
+                alias_ttr->obj == OBJ_LINK_PTR) GUI_HookLink_Render(alias_ttr->link);
+        }
+    }
+
+    return 0;
+}
+
+void GUI_HookList_Quit(PP4M_HOOK *hook_list) {
+
+    PP4M_HOOK *current = hook_list;
+    PP4M_HOOK *curr_nxt = NULL;
+    PP4M_HOOK *ptr_list = NULL;
+
+    // take total main loop
+    int val = pp4m_HOOK_Size(hook_list);
+
+    for (int i = 0; i < val; i++) {
+        curr_nxt = current;
+
+        // grab last ptr of tail
+        int ras = pp4m_HOOK_Size(curr_nxt);
+
+        for (int n = 0; n < ras; n++)
+            curr_nxt = curr_nxt->next;
+
+        ptr_list = curr_nxt->ptr;
+        int res = pp4m_HOOK_Size(ptr_list);
+
+        // remove all last ptr -> hook
+        for (int n = 0; n < res; n++)
+            pp4m_HOOK_Remove(ptr_list);
+
+        // remove tail
+        pp4m_HOOK_Remove(current);
+    }
+
+    return;
+}
+
+int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input) {
+    int result = 0;
+
+    int val = pp4m_HOOK_Size(hook_list);
+
+    SDL_Color color_btn_bak;
+    GUI_Alias_ResetColor(&color_btn_bak);
+
+    PP4M_HOOK *current = hook_list;
+    PP4M_HOOK *curr_ptr = NULL;
+
+    GUI_TextureAlias *alias_ttr = NULL;
+
+    for (int i = 0; i <= val; i++) {
+        curr_ptr = current->ptr;
+        current = current->next;
+        int res = pp4m_HOOK_Size(curr_ptr);
+
+        for (int n = 0; n <= res; n++) {
+            if (curr_ptr == NULL) continue;
+
+            alias_ttr = curr_ptr->ptr;
+            curr_ptr = curr_ptr->next;
+
+            if (input.iner == 1) {
+                if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) {
+
+                    if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF) {
+                        alias_ttr->obj = OBJ_BUTTON_LINK_ON;
+                    }
+
+                    else if (alias_ttr->obj == OBJ_BUTTON_RETURN) result = -1;
+                    else if (alias_ttr->obj == OBJ_BUTTON_EXIT) result = -2;
+                } else {
+                    if (alias_ttr->obj == OBJ_BUTTON_LINK_ON) {
+                        alias_ttr->obj = OBJ_BUTTON_LINK_OFF;
+                    }
+                }
+            }
+
+            /* attempt on highlighting objects failed :(
+
+            else if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) {
+
+                // mouse on top of object highlights it
+                if (alias_ttr->obj != OBJ_NONE) {
+                    if (GUI_Alias_IsColor(&color_btn_bak) == -1) SDL_GetTextureColorMod(alias_ttr->texture, &color_btn_bak.r, &color_btn_bak.g, &color_btn_bak.b);
+                    SDL_SetTextureColorMod(alias_ttr->texture, 220, 220, 220);
+                }
+
+            } else if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == -1) {
+
+                // restores the object to original color
+                if (GUI_Alias_IsColor(&color_btn_bak) == 1) {
+                    SDL_SetTextureColorMod(alias_ttr->texture, color_btn_bak.r, color_btn_bak.g, color_btn_bak.b);
+                    GUI_Alias_ResetColor(&color_btn_bak);
+                }
+            }
+            */
+        }
+    }
+
+    return result;
+}

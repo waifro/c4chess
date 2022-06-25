@@ -8,6 +8,8 @@
 #include "../animation/animation.h"
 #include "../network/net.h"
 #include "../security/debug.h"
+#include "../dashboard/gui.h"
+
 #include "../global.h"
 #include "archive.h"
 #include "event.h"
@@ -181,6 +183,9 @@ int MIDDLE_InputChessboardState(int *socket, PP4M_INPUT_POS touch, CHESS_CORE_TI
 
 int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *socket) {
 
+    if (glo_chess_event_hooklist == NULL)
+        glo_chess_event_hooklist = EVENT_HookList_Init();
+
     int result = -1;
     int code = -1;
 
@@ -191,7 +196,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
     pp4m_INPUT_GetMouseState(event, &touch_pos);
 
     // update objects
-    EVENT_HookList_Update(touch_pos);
+    GUI_HookList_Update(glo_chess_event_hooklist, touch_pos);
 
     // updating chessboard
     MIDDLE_InputChessboardState(socket, touch_pos, glo_chess_core_tile, player, &position_old, &position_new, &code);
