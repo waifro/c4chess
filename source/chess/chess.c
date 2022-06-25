@@ -196,9 +196,11 @@ int CHESS_PiecePattern_King(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
 
     int result = -1;
 
-    for (int n = 0; n < strlen(glo_chess_event_king_castle); n++)
-        if ((result = CHESS_CheckState_CastleAvailable(core_tile, glo_chess_event_king_castle, tile, n)) != -1)
-            core_tile[tile].piece->range[result] = true;
+    if (EVENT_CheckPlayerCastling(glo_chess_event_king_castle, player) == 1) {
+        for (int n = 0; n < (int)strlen(glo_chess_event_king_castle); n++)
+            if ((result = CHESS_CheckState_CastleAvailable(core_tile, glo_chess_event_king_castle, tile, n)) != -1)
+                core_tile[tile].piece->range[result] = true;
+    }
 
     for (int n = 0; n < 9; n++) {
 

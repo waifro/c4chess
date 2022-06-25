@@ -118,6 +118,23 @@ int EVENT_CheckPieceLayer(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player)
     return 0;
 }
 
+int EVENT_CheckPlayerCastling(char *fen_castle, CHESS_CORE_PLAYER player) {
+    if (strcmp(fen_castle, "-") == 0) return -1;
+
+    int result = 0;
+    for (int i = 0; i < (int)strlen(fen_castle); i++) {
+        if (player == WHITE_PLAYER) {
+            if (fen_castle[i] == 'K' || fen_castle[i] == 'Q') result++;
+        }
+
+        else if (player == BLACK_PLAYER) {
+            if (fen_castle[i] == 'k' || fen_castle[i] == 'q') result++;
+        }
+    }
+
+    if (result != 0) return 1;
+    else return -1;
+}
 int EVENT_UpdateFenCastling_Trim(char *fen_src, CHESS_CORE_PLAYER player) {
 
     int n = 0;
