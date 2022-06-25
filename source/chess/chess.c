@@ -1,6 +1,7 @@
 #include <stdbool.h>
 
 #include "../dashboard/gui.h"
+#include "../dashboard/popup.h"
 #include "../security/debug.h"
 #include "../global.h"
 #include "archive.h"

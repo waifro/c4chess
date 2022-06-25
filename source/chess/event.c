@@ -9,6 +9,7 @@
 #include "../pp4m/pp4m_input.h"
 #include "../dashboard/gui.h"
 #include "../dashboard/gui_alias.h"
+#include "../dashboard/popup.h"
 #include "../global.h"
 
 #include "middle.h"
