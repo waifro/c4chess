@@ -54,7 +54,7 @@ void EVENT_UpdateState_ChessEvent(CHESS_CORE_TILE *chess_tile, int position_old,
     } else if (CHESS_Redirect_EnumKing(chess_tile, position_old) == 0)
         CHESS_CheckState_KingCastling(chess_tile, position_old, position_new, player);
     else if (CHESS_Redirect_EnumRook(chess_tile, position_old) == 0)
-        CHESS_CheckState_RookCastling(chess_tile, position_old, position_new, player);
+        CHESS_CheckState_RookCastling(position_old, player);
 
     if (CHESS_Redirect_EnumPawn(chess_tile, position_old) != 0)
         glo_chess_event_tile_passant = -1;
@@ -135,7 +135,51 @@ int EVENT_CheckPlayerCastling(char *fen_castle, CHESS_CORE_PLAYER player) {
     if (result != 0) return 1;
     else return -1;
 }
-int EVENT_UpdateFenCastling_Trim(char *fen_src, CHESS_CORE_PLAYER player) {
+
+int EVENT_CheckPlayerCastling_Rook(int tile, CHESS_CORE_PLAYER player) {
+    int result = -1;
+
+    CHESS_CORE_TILE_TAG tag = MIDDLE_TileToTag(tile);
+    switch(tag.col) {
+        case 'a':
+            if (player == WHITE_PLAYER) result = 'Q';
+            else result = 'q';
+            break;
+
+        case 'h':
+            if (player == WHITE_PLAYER) result = 'K';
+            else result = 'k';
+            break;
+    }
+
+    return result;
+}
+
+int EVENT_UpdateFenCastling_Rook(char *fen_src, int tile, CHESS_CORE_PLAYER player) {
+    if (EVENT_CheckPlayerCastling(fen_src, player) == -1) return -1;
+    int result = EVENT_CheckPlayerCastling_Rook(tile, player);
+
+    int i = 0;
+    for (i = 0; i < (int)strlen(fen_src); i++) {
+
+        if (fen_src[i] == result) {
+
+            for (int n = 0; n < (int)strlen(fen_src) + 1; n++) {
+                if (n <= i) continue;
+
+                fen_src[i++] = fen_src[n];
+            }
+
+            break;
+        }
+    }
+
+    if (i == 0) strcpy(fen_src, "-");
+    return 0;
+}
+
+int EVENT_UpdateFenCastling_King(char *fen_src, CHESS_CORE_PLAYER player) {
+    if (EVENT_CheckPlayerCastling(fen_src, player) == -1) return -1;
 
     int n = 0;
     for (n = 0; n < (int)strlen(fen_src); n++) {

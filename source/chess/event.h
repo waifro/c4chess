@@ -25,7 +25,10 @@ void EVENT_CheckKing_UnderAttack(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER 
 int EVENT_CheckPieceLayer(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player);
 
 int EVENT_CheckPlayerCastling(char *fen_castle, CHESS_CORE_PLAYER player);
-int EVENT_UpdateFenCastling_Trim(char *fen_src, CHESS_CORE_PLAYER player);
+int EVENT_CheckPlayerCastling_Rook(int tile, CHESS_CORE_PLAYER player);
+
+int EVENT_UpdateFenCastling_Rook(char *fen_src, int tile, CHESS_CORE_PLAYER player);
+int EVENT_UpdateFenCastling_King(char *fen_src, CHESS_CORE_PLAYER player);
 
 int EVENT_HandlePopup_Pause(int *running);
 
