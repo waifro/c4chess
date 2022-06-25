@@ -571,8 +571,6 @@ int CHESS_CheckState_RookCastling(CHESS_CORE_TILE *chess_tile, int position_old,
                             continue;
 
                     // remove char from _glo_chess_king_castling using buf
-
-
                     for (int i = 0; i < strlen(glo_chess_event_king_castle); i++) {
                         if (i < n) {
 
