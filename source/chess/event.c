@@ -118,6 +118,26 @@ int EVENT_CheckPieceLayer(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player)
     return 0;
 }
 
+int EVENT_UpdateFenCastling_Trim(char *fen_src, CHESS_CORE_PLAYER player) {
+
+    int n = 0;
+    for (n = 0; n < (int)strlen(fen_src); n++) {
+
+        if (fen_src[n] != 'K' && fen_src[n] != 'Q') {
+
+            for (int i = 0; i < n; i++)
+                fen_src[i] = fen_src[(n + i)];
+
+            fen_src[n] = '\0';
+
+            break;
+        }
+    }
+
+    if (n == 0) strcpy(fen_src, "-");
+    return 0;
+}
+
 int EVENT_HandlePopup_Pause(int *running) {
 
     int result = 0;

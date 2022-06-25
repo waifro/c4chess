@@ -26,7 +26,7 @@ int CHESS_PiecePattern_Rook(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PL
 int CHESS_PiecePattern_Queen(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PLAYER player);
 
 // pawns have special attacks, separated moves
-int CHESS_CheckState_CastleAvailable(CHESS_CORE_TILE *chess_tile, int tile, int index);
+int CHESS_CheckState_CastleAvailable(CHESS_CORE_TILE *chess_tile, char *fen_castle, int tile, int index);
 
 int CHESS_CheckState_KingCastling(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player);
 int CHESS_CheckState_RookCastling(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player);

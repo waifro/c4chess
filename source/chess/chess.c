@@ -197,7 +197,7 @@ int CHESS_PiecePattern_King(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLA
     int result = -1;
 
     for (int n = 0; n < strlen(glo_chess_event_king_castle); n++)
-        if ((result = CHESS_CheckState_CastleAvailable(core_tile, tile, n)) != -1)
+        if ((result = CHESS_CheckState_CastleAvailable(core_tile, glo_chess_event_king_castle, tile, n)) != -1)
             core_tile[tile].piece->range[result] = true;
 
     for (int n = 0; n < 9; n++) {
@@ -437,11 +437,12 @@ int CHESS_PiecePattern_Queen(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_P
     return 0;
 }
 
-int CHESS_CheckState_CastleAvailable(CHESS_CORE_TILE *chess_tile, int tile, int index) {
+int CHESS_CheckState_CastleAvailable(CHESS_CORE_TILE *chess_tile, char *fen_castle, int tile, int index) {
 
-    if (glo_chess_event_king_castle[index] == 'K' || glo_chess_event_king_castle[index] == 'k') {
+    CHESS_CORE_TILE_TAG king_castle;
+    if (fen_castle[index] == 'K' || fen_castle[index] == 'k') {
 
-        CHESS_CORE_TILE_TAG king_castle = MIDDLE_TileToTag(tile);
+        king_castle = MIDDLE_TileToTag(tile);
         int res = -1; int u;
 
         for (u = 0; u < 3; u++) {
@@ -451,16 +452,17 @@ int CHESS_CheckState_CastleAvailable(CHESS_CORE_TILE *chess_tile, int tile, int 
 
         if (u == 3) return (res);
 
-    } else if (glo_chess_event_king_castle[index] == 'Q' || glo_chess_event_king_castle[index] == 'q') {
+    } else if (fen_castle[index] == 'Q' || fen_castle[index] == 'q') {
 
-        CHESS_CORE_TILE_TAG king_castle = MIDDLE_TileToTag(tile);
+        king_castle = MIDDLE_TileToTag(tile);
         int res = -1; int u;
 
         for (u = 0; u < 4; u++) {
             res = MIDDLE_TagToTile(king_castle); king_castle.col -= 1;
-            if ((u != 3 && glo_chess_event_layer[res] == true) || (u != 0 && chess_tile[res].piece != NULL)) break;
+            if ((u < 3 && glo_chess_event_layer[res] == true) || (u != 0 && chess_tile[res].piece != NULL)) break;
         }
 
+        king_castle.col += 2; res = MIDDLE_TagToTile(king_castle);
         if (u == 4) return (res);
     }
 
@@ -468,52 +470,28 @@ int CHESS_CheckState_CastleAvailable(CHESS_CORE_TILE *chess_tile, int tile, int 
 }
 
 int CHESS_CheckState_KingCastling(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player) {
-    if (glo_chess_event_king_castle[0] == '-') return -1;
+    if (strcmp(glo_chess_event_king_castle, "-") == 0) return -1;
 
-    DEBUG_PrintBox(2, "before player[%d] %s\n", player, glo_chess_event_king_castle);
+    DEBUG_PrintBox(2, "before player[%d] %s", player, glo_chess_event_king_castle);
 
     int result = -1;
-    for (int n = 0; n < strlen(glo_chess_event_king_castle); n++)
-        if ((result = CHESS_CheckState_CastleAvailable(chess_tile, position_old, n)) == position_new) {
+    for (int n = 0; n < (int)strlen(glo_chess_event_king_castle); n++)
+        if ((result = CHESS_CheckState_CastleAvailable(chess_tile, glo_chess_event_king_castle, position_old, n)) == position_new) {
 
-            CHESS_CORE_TILE_TAG tag;
+            //CHESS_CORE_TILE_TAG tag;
             if (chess_tile[result].tag.col == 'c') {
-                tag = MIDDLE_TileToTag(result - 2);
-
-                result = MIDDLE_TagToTile(tag);
+                result -= 2;
                 MIDDLE_UpdatePositionPiece(chess_tile, result, result + 3);
             } else if (chess_tile[result].tag.col == 'g') {
-                tag = MIDDLE_TileToTag(result + 1);
-
-                result = MIDDLE_TagToTile(tag);
+                result += 1;
                 MIDDLE_UpdatePositionPiece(chess_tile, result, result - 2);
             }
         }
 
-    if (chess_tile[position_old].piece->enum_piece == KING) {
+    // update fen castle by trimming
+    EVENT_UpdateFenCastling_Trim(glo_chess_event_king_castle, player);
 
-        for (int n = 0; n < strlen(glo_chess_event_king_castle); n++) {
-            if (glo_chess_event_king_castle[n] != 'K' && glo_chess_event_king_castle[n] != 'Q') {
-                char buf[5];
-                strcpy(buf, &glo_chess_event_king_castle[n]);
-                strcpy(glo_chess_event_king_castle, buf);
-                break;
-            }
-        }
-
-    } else if (chess_tile[position_old].piece->enum_piece == BKING) {
-
-        for (int n = 0; n < strlen(glo_chess_event_king_castle); n++) {
-            if (glo_chess_event_king_castle[n] != 'K' && glo_chess_event_king_castle[n] != 'Q') {
-                glo_chess_event_king_castle[n] = '\0';
-                break;
-            }
-        }
-    }
-
-    if (strlen(glo_chess_event_king_castle) == 0) strcpy(glo_chess_event_king_castle, "-");
-
-    DEBUG_PrintBox(2, "after player[%d] %s\n", player, glo_chess_event_king_castle);
+    DEBUG_PrintBox(2, "after player[%d] %s", player, glo_chess_event_king_castle);
 
     return 0;
 }
