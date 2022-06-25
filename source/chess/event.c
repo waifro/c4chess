@@ -17,15 +17,14 @@
 #include "core.h"
 #include "chess.h"
 
-bool    glo_chess_event_layer[64];
-bool    glo_chess_event_king_uatk;
-int     glo_chess_event_availmo = -1;
-int     glo_chess_event_tile_passant = -1;
-int     glo_chess_event_pawn_promotn = -1;
-char    glo_chess_event_king_castle[5];
+bool glo_chess_event_layer[64];
+bool glo_chess_event_king_uatk;
+int glo_chess_event_availmo = -1;
+int glo_chess_event_tile_passant = -1;
+int glo_chess_event_pawn_promotn = -1;
+char glo_chess_event_king_castle[5];
 
 PP4M_HOOK *glo_chess_event_hooklist = NULL;
-
 
 void EVENT_BlankLayer_Global(void) {
     for (int n = 0; n < 64; n++) {
