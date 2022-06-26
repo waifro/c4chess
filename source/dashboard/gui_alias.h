@@ -8,6 +8,7 @@
 
 typedef enum {
     OBJ_NONE,
+    OBJ_NULL,
 
     OBJ_BUTTON_TXTBOX, // textbox
     OBJ_BUTTON_LINK_OFF, // indicates usage of *link
