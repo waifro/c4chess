@@ -24,7 +24,7 @@ int DEBUG_PrintBox(int level, const char *format, ...) {
         va_end(arg);
 
         int line = pp4m_HOOK_Size(glo_debug_list);
-        if (line > 19) DEBUG_UpdateBox_ClearLine(&line);
+        if (line > 20) DEBUG_UpdateBox_ClearLine(&line);
 
         DEBUG_UpdateBox_WriteLine(line, buffer);
     }
@@ -38,7 +38,7 @@ int DEBUG_UpdateBox_Render(void) {
     PP4M_HOOK *current = glo_debug_list;
     GUI_TextureAlias *alias_ttr = NULL;
 
-    for (int i = pp4m_HOOK_Size(glo_debug_list); i >= 0; i--) {
+    for (int i = pp4m_HOOK_Size(glo_debug_list); i > 0; i--) {
         alias_ttr = current->ptr;
         SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
         current = current->next;
@@ -49,11 +49,12 @@ int DEBUG_UpdateBox_Render(void) {
 
 int DEBUG_UpdateBox_WriteLine(int val, char *string) {
 
+    GUI_TextureAlias *buf = NULL;
     PP4M_HOOK *current = glo_debug_list;
-    for (int i = 0; i < val; i++)
+    for (int i = 0; i < val; i++) {
+        buf = current->ptr;
         current = current->next;
-
-    GUI_TextureAlias *buf = current->ptr;
+    }
 
     GUI_TextureAlias *buf_txt = calloc(1, sizeof(GUI_TextureAlias));
     buf_txt->obj = 0;
@@ -74,7 +75,7 @@ int DEBUG_UpdateBox_ClearLine(int *val) {
     bak = pp4m_HOOK_Init();
 
     tail = glo_debug_list;
-    for (int i = 0; i <= *val; i++) {
+    for (int i = 0; i < *val; i++) {
         if (i != 1) pp4m_HOOK_Next(bak, tail->ptr);
         tail = tail->next;
     }
@@ -82,7 +83,7 @@ int DEBUG_UpdateBox_ClearLine(int *val) {
     *val = pp4m_HOOK_Size(bak);
     tail = glo_debug_list;
 
-    for (int i = 0; i <= *val; i++) {
+    for (int i = 0; i < *val; i++) {
         tail->ptr = bak->ptr;
 
         if (i != 0)

@@ -107,7 +107,7 @@ PP4M_HOOK *GUI_RenderWindow_Chat_Init(PP4M_HOOK *hook_list) {
     alias_button_send->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEXTURE_LOBBYCHAT_SEND, &alias_button_send->rect, alias_textbox->rect.x + alias_textbox->rect.w + 5, alias_textbox->rect.y, 30, 30);
 
     GUI_TextureAlias *alias_chat = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
-    alias_chat->obj = OBJ_LINK_PTR;
+    alias_chat->obj = OBJ_NULL;
 
     pp4m_HOOK_Next(chat_init_list, alias_button_chat);
 
@@ -131,10 +131,11 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
     GUI_TextureAlias *alias_ttr = NULL;
     int val = pp4m_HOOK_Size(link);
 
-    for (int i = 0; i <= val; i++) {
-        if (current == NULL) continue;
+    for (int i = 0; i < val; i++) {
         alias_ttr = current->ptr;
         current = current->next;
+
+        if (alias_ttr->obj == OBJ_NULL) continue;
 
         SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
 
@@ -153,16 +154,16 @@ int GUI_HookList_Render(PP4M_HOOK *hook_list) {
 
     GUI_TextureAlias *alias_ttr = NULL;
 
-    for (int i = 0; i <= val; i++) {
+    for (int i = 0; i < val; i++) {
         curr_ptr = current->ptr;
         current = current->next;
         int res = pp4m_HOOK_Size(curr_ptr);
 
-        for (int n = 0; n <= res; n++) {
-            if (curr_ptr == NULL) continue;
+        for (int n = 0; n < res; n++) {
             alias_ttr = curr_ptr->ptr;
             curr_ptr = curr_ptr->next;
 
+            if (alias_ttr->obj == OBJ_NULL) continue;
             SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
 
             if (alias_ttr->obj == OBJ_BUTTON_LINK_ON ||
@@ -188,10 +189,11 @@ void GUI_HookList_Quit(PP4M_HOOK *hook_list) {
         // grab last ptr of tail
         int ras = pp4m_HOOK_Size(curr_nxt);
 
-        for (int n = 0; n < ras; n++)
+        for (int n = 0; n < ras; n++) {
+            ptr_list = curr_nxt->ptr;
             curr_nxt = curr_nxt->next;
+        }
 
-        ptr_list = curr_nxt->ptr;
         int res = pp4m_HOOK_Size(ptr_list);
 
         // remove all last ptr -> hook
@@ -218,12 +220,12 @@ int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input) {
 
     GUI_TextureAlias *alias_ttr = NULL;
 
-    for (int i = 0; i <= val; i++) {
+    for (int i = 0; i < val; i++) {
         curr_ptr = current->ptr;
         current = current->next;
         int res = pp4m_HOOK_Size(curr_ptr);
 
-        for (int n = 0; n <= res; n++) {
+        for (int n = 0; n < res; n++) {
             if (curr_ptr == NULL) continue;
 
             alias_ttr = curr_ptr->ptr;

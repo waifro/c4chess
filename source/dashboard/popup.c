@@ -117,7 +117,7 @@ int GUI_PopupWindow_Core(PP4M_HOOK *head, SDL_Texture *background) {
         SDL_RenderClear(glo_render);
         SDL_RenderCopy(glo_render, background, NULL, NULL);
 
-        for (int n = 0; n <= val; n++) {
+        for (int n = 0; n < val; n++) {
 
             txr_alias = current->ptr;
             current = current->next;
@@ -147,7 +147,7 @@ int GUI_PopupWindow_Core(PP4M_HOOK *head, SDL_Texture *background) {
     }
 
     // missing exiting animation
-    for (int n = 0; n <= val; n++)
+    for (int n = 0; n < val; n++)
         pp4m_HOOK_Remove(head);
 
     return (result);
