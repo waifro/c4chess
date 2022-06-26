@@ -149,8 +149,9 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
         SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
 
         if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
-            alias_ptr = alias_ttr->link;
-            SDL_RenderCopy(glo_render, alias_ptr->texture, &alias_ptr->rect, &alias_ttr->rect);
+            alias_ptr = alias_ttr->link; SDL_Rect rect;
+            GUI_Alias_Textbox_UpdateRect(alias_ttr, &rect);
+            SDL_RenderCopy(glo_render, alias_ptr->texture, &alias_ptr->rect, &rect);
         }
 
         if (alias_ttr->obj == OBJ_BUTTON_LINK_ON ||
@@ -167,6 +168,7 @@ int GUI_HookList_Render(PP4M_HOOK *hook_list) {
     PP4M_HOOK *curr_ptr = NULL;
 
     GUI_TextureAlias *alias_ttr = NULL;
+    GUI_TextureAlias *alias_ptr = NULL;
 
     for (int i = 0; i < val; i++) {
         curr_ptr = current->ptr;
@@ -181,8 +183,9 @@ int GUI_HookList_Render(PP4M_HOOK *hook_list) {
             SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
 
             if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
-                alias_ptr = alias_ttr->link;
-                SDL_RenderCopy(glo_render, alias_ptr->texture, &alias_ptr->rect, &alias_ttr->rect);
+                alias_ptr = alias_ttr->link; SDL_Rect rect;
+                GUI_Alias_Textbox_UpdateRect(alias_ttr, &rect);
+                SDL_RenderCopy(glo_render, alias_ptr->texture, &alias_ptr->rect, &rect);
             }
 
             if (alias_ttr->obj == OBJ_BUTTON_LINK_ON ||

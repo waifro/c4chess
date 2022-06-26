@@ -50,6 +50,20 @@ int GUI_Alias_Textbox_DestrAlias(GUI_TextureAlias *alias_ptr) {
     return 0;
 }
 
+int GUI_Alias_Textbox_UpdateRect(GUI_TextureAlias *alias_ttr, SDL_Rect *rect) {
+    GUI_TextureAlias *alias_ptr = alias_ttr->link;
+
+    rect->x = alias_ttr->rect.x;
+    rect->y = alias_ttr->rect.y;
+
+    if (alias_ptr->rect.w > alias_ttr->rect.w) rect->w = alias_ttr->rect.w;
+    else rect->w = alias_ptr->rect.w;
+
+    rect->h = alias_ptr->rect.h;
+
+    return 0;
+}
+
 int GUI_Alias_Textbox_Init(GUI_TextureAlias *alias_ttr, char *buffer) {
 
     int buf_size = strlen(buffer) + 1;
