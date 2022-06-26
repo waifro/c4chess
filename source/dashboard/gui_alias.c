@@ -64,7 +64,7 @@ int GUI_Alias_Textbox_Init(GUI_TextureAlias *alias_ttr, char *buffer) {
 
     //GUI_Alias_UpdateTextbox_Alias(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 18, buffer);
 
-    alias_ptr->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_GREY_NORMAL, 18, &alias_ptr->rect, alias_ttr->rect.x, alias_ttr->rect.y, link_ptr);
+    alias_ptr->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_GREY_NORMAL, 18, &alias_ptr->rect, 0, 0, link_ptr);
 
     return 0;
 }
@@ -99,7 +99,6 @@ int GUI_Alias_UpdateTextbox_Alias(GUI_TextureAlias *alias_ttr, char *pathname, S
 
     if (rect.w > alias_ttr->rect.w) {
         alias_ptr->rect.x = rect.w - alias_ttr->rect.w;
-        //alias_ptr->rect.w = alias_ttr->rect.w;
     }
 
     return 0;

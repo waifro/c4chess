@@ -3,6 +3,7 @@
 #include <string.h>
 #include <SDL2/SDL.h>
 
+#include "../security/debug.h"
 #include "../chess/core.h"
 #include "../pp4m/pp4m.h"
 #include "../pp4m/pp4m_ttf.h"
@@ -136,6 +137,8 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
 
     PP4M_HOOK *current = link;
     GUI_TextureAlias *alias_ttr = NULL;
+    GUI_TextureAlias *alias_ptr = NULL;
+
     int val = pp4m_HOOK_Size(link);
 
     for (int i = 0; i < val; i++) {
@@ -143,8 +146,12 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
         current = current->next;
 
         if (alias_ttr->obj == OBJ_NULL) continue;
-
         SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
+
+        if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
+            alias_ptr = alias_ttr->link;
+            SDL_RenderCopy(glo_render, alias_ptr->texture, &alias_ptr->rect, &alias_ttr->rect);
+        }
 
         if (alias_ttr->obj == OBJ_BUTTON_LINK_ON ||
             alias_ttr->obj == OBJ_LINK_PTR) GUI_HookLink_Render(alias_ttr->link);
@@ -160,7 +167,6 @@ int GUI_HookList_Render(PP4M_HOOK *hook_list) {
     PP4M_HOOK *curr_ptr = NULL;
 
     GUI_TextureAlias *alias_ttr = NULL;
-    GUI_TextureAlias *alias_ptr = NULL;
 
     for (int i = 0; i < val; i++) {
         curr_ptr = current->ptr;
