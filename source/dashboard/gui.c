@@ -107,7 +107,7 @@ PP4M_HOOK *GUI_RenderWindow_Chat_Init(PP4M_HOOK *hook_list) {
     // save pointer of hooked Alias
     alias_textbox->link = alias_text;
     alias_text->obj = OBJ_TEXTBOX_INPUT;
-    GUI_Alias_Textbox_Init(alias_text, "Input text here");
+    GUI_Alias_Textbox_Init(alias_textbox, "Input text here");
 
     GUI_TextureAlias *alias_button_send = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
     alias_button_send->obj = OBJ_BUTTON_TXTBOX;
