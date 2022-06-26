@@ -181,7 +181,7 @@ int MIDDLE_InputChessboardState(int *socket, PP4M_INPUT_POS touch, CHESS_CORE_TI
     return tile;
 }
 
-int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *socket) {
+int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *socket, char *keyb_buffer) {
 
     if (glo_chess_event_hooklist == NULL)
         glo_chess_event_hooklist = EVENT_HookList_Init();
@@ -196,7 +196,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
     pp4m_INPUT_GetMouseState(event, &touch_pos);
 
     // update objects
-    GUI_HookList_Update(glo_chess_event_hooklist, touch_pos);
+    GUI_HookList_Update(glo_chess_event_hooklist, touch_pos, keyb_buffer);
 
     // updating chessboard
     MIDDLE_InputChessboardState(socket, touch_pos, glo_chess_core_tile, player, &position_old, &position_new, &code);

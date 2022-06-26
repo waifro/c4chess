@@ -263,22 +263,22 @@ int EVENT_HandleKeyboard(SDL_Event *event, char *dest) {
 
     // temporary stationed buffer
     static int ind = 0;
-    static char buffer[256];
+    //static char buffer[256];
 
     result = pp4m_INPUT_SdlKeyboard(event);
     if (result == -1 || result == 0) return result;
 
     if (result == -3 || ind == 256) // enter key
     {
-        strncpy(dest, buffer, strlen(buffer) + 1); // save buffer to dest (temporary)
-        memset(buffer, 0x00, 255); ind = 0; result = 1;
+        //strncpy(dest, buffer, strlen(buffer) + 1); // save buffer to dest (temporary)
+        memset(dest, 0x00, 255); ind = 0; result = 1;
     }
 
     else if (result == -6) // escape key
         EVENT_HandlePopup_Pause(&result);
 
     else if (isprint(result))
-        if (ind < 256) buffer[ind++] = result;
+        if (ind < 256) dest[ind++] = result;
 
     return result;
 }

@@ -7,22 +7,26 @@
 /* structures & variables */
 
 typedef enum {
-    OBJ_NONE,
-    OBJ_NULL,
+    OBJ_NONE,                   // ignore object
+    OBJ_NULL,                   // drop itineration
 
-    OBJ_BUTTON_TXTBOX, // textbox
-    OBJ_BUTTON_LINK_OFF, // indicates usage of *link
-    OBJ_BUTTON_LINK_ON,
+    OBJ_BUTTON_TXTBOX,          // object to toggle OBJ_TEXTBOX_INPUT usage
 
-    OBJ_BUTTON_RETURN,
-    OBJ_BUTTON_EXIT,
+    OBJ_BUTTON_LINK_OFF,        // indicates *link as linked list toggled off
+    OBJ_BUTTON_LINK_ON,         // indicates *link as linked list toggled on
 
-    OBJ_SCROLL_VERTICAL,
-    OBJ_SCROLL_HORIZONTAL,
+    OBJ_BUTTON_RETURN,          // go back
+    OBJ_BUTTON_EXIT,            // terminate any loop
 
-    OBJ_TEXTBOX_INPUT,
+    OBJ_SCROLL_VERTICAL,        // with input, scroll up and down
+    OBJ_SCROLL_HORIZONTAL,      // with input, scroll left or right
 
-    OBJ_LINK_PTR // it automatically runs *link
+    OBJ_TEXTBOX_LINK,           // texture behind OBJ_TEXTBOX_INPUT + *link as linked list
+    OBJ_TEXTBOX_ALIAS,          // texture behind OBJ_TEXTBOX_INPUT + *link as GUI_TextureAlias
+
+    OBJ_TEXTBOX_INPUT,          // init, reset, update and modify texture's input
+
+    OBJ_LINK_PTR                // treat object as linked list
 
 } GUI_ALIAS_OBJ;
 
@@ -40,5 +44,10 @@ int GUI_Alias_IsColor(SDL_Color *color);
 int GUI_Alias_ResetColor(SDL_Color *color);
 
 SDL_Texture *GUI_Alias_CreateSnapshot(SDL_Renderer *renderer, int width, int height);
+
+int GUI_Alias_Textbox_DestrAlias(GUI_TextureAlias *alias_ptr);
+
+int GUI_Alias_Textbox_Init(GUI_TextureAlias *alias_ptr, char *buffer);
+int GUI_Alias_UpdateTextbox_Alias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, char *keyb_buffer);
 
 #endif

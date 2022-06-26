@@ -96,11 +96,18 @@ PP4M_HOOK *GUI_RenderWindow_Chat_Init(PP4M_HOOK *hook_list) {
 
     GUI_TextureAlias *alias_inner_w = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
     alias_inner_w->obj = OBJ_SCROLL_VERTICAL;
-    alias_inner_w->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_LIGHT, &alias_inner_w->rect, alias_window->rect.x + 10, alias_window->rect.y + 10, alias_window->rect.w - 20, alias_window->rect.h - 50);
+    alias_inner_w->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_WHITE, &alias_inner_w->rect, alias_window->rect.x + 10, alias_window->rect.y + 10, alias_window->rect.w - 20, alias_window->rect.h - 50);
 
     GUI_TextureAlias *alias_textbox = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
-    alias_textbox->obj = OBJ_TEXTBOX_INPUT;
-    alias_textbox->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_LIGHT, 255, &alias_textbox->rect, alias_inner_w->rect.x, alias_inner_w->rect.y + alias_inner_w->rect.h + 5, alias_inner_w->rect.w - 30, 30);
+    alias_textbox->obj = OBJ_TEXTBOX_ALIAS;
+    alias_textbox->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_WHITE, 255, &alias_textbox->rect, alias_inner_w->rect.x, alias_inner_w->rect.y + alias_inner_w->rect.h + 5, alias_inner_w->rect.w - 30, 30);
+
+    GUI_TextureAlias *alias_text = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
+
+    // save pointer of hooked Alias
+    alias_textbox->link = alias_text;
+    alias_text->obj = OBJ_TEXTBOX_INPUT;
+    GUI_Alias_Textbox_Init(alias_text, "Input text here");
 
     GUI_TextureAlias *alias_button_send = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
     alias_button_send->obj = OBJ_BUTTON_TXTBOX;
@@ -153,6 +160,7 @@ int GUI_HookList_Render(PP4M_HOOK *hook_list) {
     PP4M_HOOK *curr_ptr = NULL;
 
     GUI_TextureAlias *alias_ttr = NULL;
+    GUI_TextureAlias *alias_ptr = NULL;
 
     for (int i = 0; i < val; i++) {
         curr_ptr = current->ptr;
@@ -165,6 +173,11 @@ int GUI_HookList_Render(PP4M_HOOK *hook_list) {
 
             if (alias_ttr->obj == OBJ_NULL) continue;
             SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
+
+            if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
+                alias_ptr = alias_ttr->link;
+                SDL_RenderCopy(glo_render, alias_ptr->texture, &alias_ptr->rect, &alias_ttr->rect);
+            }
 
             if (alias_ttr->obj == OBJ_BUTTON_LINK_ON ||
                 alias_ttr->obj == OBJ_LINK_PTR) GUI_HookLink_Render(alias_ttr->link);
@@ -207,7 +220,27 @@ void GUI_HookList_Quit(PP4M_HOOK *hook_list) {
     return;
 }
 
-int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input) {
+int GUI_HookLink_Update(PP4M_HOOK *link, char *keyb_buffer) {
+
+    PP4M_HOOK *current = link;
+    GUI_TextureAlias *alias_ttr = NULL;
+    int val = pp4m_HOOK_Size(link);
+
+    for (int i = 0; i < val; i++) {
+        alias_ttr = current->ptr;
+        current = current->next;
+
+        if (alias_ttr->obj == OBJ_NULL) continue;
+
+        if (strlen(keyb_buffer) > 0 && alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
+            GUI_Alias_UpdateTextbox_Alias(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 18, keyb_buffer);
+        }
+    }
+
+    return 0;
+}
+
+int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, char *keyb_buffer) {
     int result = 0;
 
     int val = pp4m_HOOK_Size(hook_list);
@@ -230,6 +263,9 @@ int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input) {
 
             alias_ttr = curr_ptr->ptr;
             curr_ptr = curr_ptr->next;
+
+            if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF || alias_ttr->obj == OBJ_BUTTON_LINK_ON)
+                GUI_HookLink_Update(alias_ttr->link, keyb_buffer);
 
             if (input.iner == 1) {
                 if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) {
