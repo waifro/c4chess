@@ -258,29 +258,25 @@ int EVENT_HandleKingState(CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER player)
     return result;
 }
 
-int EVENT_HandleKeyboard(SDL_Event *event, char *dest) {
-    int result = 0;
+int EVENT_HandleKeyboard(SDL_Event *event) {
+    int key = -1;
 
-    // temporary stationed buffer
-    static int ind = 0;
-    //static char buffer[256];
+    key = pp4m_INPUT_SdlKeyboard(event);
+    if (key == -1 || key == 0) return key;
 
-    result = pp4m_INPUT_SdlKeyboard(event);
-    if (result == -1 || result == 0) return result;
+    else if (key == -2) // backspace key
+        return key;
 
-    if (result == -3 || ind == 256) // enter key
-    {
-        //strncpy(dest, buffer, strlen(buffer) + 1); // save buffer to dest (temporary)
-        memset(dest, 0x00, 255); ind = 0; result = 1;
-    }
+    else if (key == -3) // enter key
+        return key;
 
-    else if (result == -6) // escape key
-        EVENT_HandlePopup_Pause(&result);
+    else if (key == -6) // escape key
+        EVENT_HandlePopup_Pause(&key);
 
-    else if (isprint(result))
-        if (ind < 256) dest[ind++] = result;
+    else if (isprint(key))
+        return key;
 
-    return result;
+    return key;
 }
 
 int EVENT_HandlePopup_Stalemate(char *comment) {

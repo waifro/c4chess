@@ -275,12 +275,9 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
         deltaTime = pp4m_DeltaFramerate();
         (void)deltaTime;
 
-        result = EVENT_HandleKeyboard(&event, keyb_buffer);
+        result = EVENT_HandleKeyboard(&event);
         if (result == -1) running = -1;
-
-        if (result == 1) {
-            DEBUG_PrintBox(1, "raw mesg: [%s]", keyb_buffer);
-        }
+        else if (result != 0) DEBUG_PrintBox(1, "raw mesg: [%c]", result);
 
         /* checks if king under attack */
         CHESS_PiecePattern_UpdateState(glo_chess_core_tile, player);
