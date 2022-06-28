@@ -108,7 +108,7 @@ PP4M_HOOK *GUI_RenderWindow_Chat_Init(PP4M_HOOK *hook_list) {
     // save pointer of hooked Alias
     alias_textbox->link = alias_text;
     alias_text->obj = OBJ_TEXTBOX_INPUT;
-    GUI_Alias_Textbox_Init(alias_textbox, "Input text here");
+    GUI_Alias_Textbox_InitAlias(alias_textbox, OPENSANS_REGULAR, PP4M_GREY_NORMAL, 18, "Input text here");
 
     GUI_TextureAlias *alias_button_send = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
     alias_button_send->obj = OBJ_BUTTON_TXTBOX;
@@ -229,7 +229,7 @@ void GUI_HookList_Quit(PP4M_HOOK *hook_list) {
     return;
 }
 
-int GUI_HookLink_Update(PP4M_HOOK *link, char *keyb_buffer) {
+int GUI_HookLink_Update(PP4M_HOOK *link, int key) {
 
     PP4M_HOOK *current = link;
     GUI_TextureAlias *alias_ttr = NULL;
@@ -241,15 +241,15 @@ int GUI_HookLink_Update(PP4M_HOOK *link, char *keyb_buffer) {
 
         if (alias_ttr->obj == OBJ_NULL) continue;
 
-        if (strlen(keyb_buffer) > 0 && alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
-            GUI_Alias_UpdateTextbox_Alias(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 18, keyb_buffer);
+        if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
+            GUI_Alias_Textbox_UpdateAlias(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 18, key);
         }
     }
 
     return 0;
 }
 
-int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, char *keyb_buffer) {
+int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, int key) {
     int result = 0;
 
     int val = pp4m_HOOK_Size(hook_list);
@@ -273,8 +273,9 @@ int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, char *keyb_b
             alias_ttr = curr_ptr->ptr;
             curr_ptr = curr_ptr->next;
 
+            // hooked list update
             if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF || alias_ttr->obj == OBJ_BUTTON_LINK_ON)
-                GUI_HookLink_Update(alias_ttr->link, keyb_buffer);
+                GUI_HookLink_Update(alias_ttr->link, key);
 
             if (input.iner == 1) {
                 if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) {

@@ -259,11 +259,6 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
     /* init pieces for main player */
     FEN_Init(&player, fen_init);
 
-    int result = -1;
-
-    char keyb_buffer[256];
-    memset(keyb_buffer, 0x00, 255);
-
     SDL_Texture *background = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_DARK, 255, NULL, 0, 0, glo_screen_w, glo_screen_h);
 
     SDL_Event event;
@@ -275,15 +270,11 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
         deltaTime = pp4m_DeltaFramerate();
         (void)deltaTime;
 
-        result = EVENT_HandleKeyboard(&event);
-        if (result == -1) running = -1;
-        else if (result != 0) DEBUG_PrintBox(1, "raw mesg: [%c]", result);
-
         /* checks if king under attack */
         CHESS_PiecePattern_UpdateState(glo_chess_core_tile, player);
 
         /* makes the in-game changes during gameplay */
-        MIDDLE_UpdateChangeState(&event, &player, socket, keyb_buffer);
+        MIDDLE_UpdateChangeState(&event, &player, socket);
 
         SDL_RenderClear(glo_render);
         SDL_RenderCopy(glo_render, background, NULL, NULL);
