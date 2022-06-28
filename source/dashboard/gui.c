@@ -259,8 +259,10 @@ int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, int key) {
 
     PP4M_HOOK *current = hook_list;
     PP4M_HOOK *curr_ptr = NULL;
+    PP4M_HOOK *link_ptr = NULL;
 
     GUI_TextureAlias *alias_ttr = NULL;
+    GUI_TextureAlias *alias_ptr = NULL;
 
     for (int i = 0; i < val; i++) {
         curr_ptr = current->ptr;
@@ -288,7 +290,11 @@ int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, int key) {
                     else if (alias_ttr->obj == OBJ_BUTTON_EXIT) result = -2;
                 } else {
                     if (alias_ttr->obj == OBJ_BUTTON_LINK_ON) {
-                        alias_ttr->obj = OBJ_BUTTON_LINK_OFF;
+                        link_ptr = alias_ttr->link;
+                        alias_ptr = link_ptr->ptr;
+
+                        if (GUI_Alias_InputOnObj(input, alias_ptr->rect) != 1)
+                            alias_ttr->obj = OBJ_BUTTON_LINK_OFF;
                     }
                 }
             }
