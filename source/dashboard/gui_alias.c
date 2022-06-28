@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "../global.h"
 #include "../pp4m/pp4m.h"
@@ -37,6 +38,23 @@ SDL_Texture *GUI_Alias_CreateSnapshot(SDL_Renderer *renderer, int width, int hei
     return (texture);
 }
 
+int GUI_Alias_Textbox_Empty(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, char *buffer) {
+    GUI_TextureAlias *alias_ptr = alias_ttr->link;
+    SDL_Rect rect;
+
+    alias_ptr->texture = pp4m_TTF_TextureFont(glo_render, pathname, color, point, &rect, 0, 0, buffer);
+
+    alias_ptr->rect.x = 0;
+    alias_ptr->rect.y = 0;
+    alias_ptr->rect.w = rect.w;
+    alias_ptr->rect.h = rect.h;
+
+    if (rect.w > alias_ttr->rect.w)
+        alias_ptr->rect.x = rect.w - alias_ttr->rect.w;
+
+    return 0;
+}
+
 int GUI_Alias_Textbox_UpdateTexture(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point) {
     GUI_TextureAlias *alias_ptr = alias_ttr->link;
     char *buffer = alias_ptr->link;
@@ -49,9 +67,8 @@ int GUI_Alias_Textbox_UpdateTexture(GUI_TextureAlias *alias_ttr, char *pathname,
     alias_ptr->rect.w = rect.w;
     alias_ptr->rect.h = rect.h;
 
-    if (rect.w > alias_ttr->rect.w) {
+    if (rect.w > alias_ttr->rect.w)
         alias_ptr->rect.x = rect.w - alias_ttr->rect.w;
-    }
 
     return 0;
 }
@@ -70,22 +87,26 @@ int GUI_Alias_Textbox_UpdateRect(GUI_TextureAlias *alias_ttr, SDL_Rect *rect) {
     return 0;
 }
 
+int GUI_Alias_Textbox_Backspace(char *buf) {
+
+    int buf_len = strlen(buf);
+    if (buf_len == 0) return 0;
+
+    buf[buf_len-1] = '\0';
+
+    return 1;
+}
+
 int GUI_Alias_Textbox_InitAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, char *buffer) {
     GUI_TextureAlias *alias_ptr = alias_ttr->link;
 
-    int buf_size = strlen(buffer) + 1;
-
     // allocate space for buffer
     char *link_ptr = malloc(sizeof(char) * 255);
-
-    // write into buffer
-    for (int i = 0; i < buf_size; i++)
-        link_ptr[i] = buffer[i];
-
+    memset(link_ptr, 0x00, 255);
     alias_ptr->link = link_ptr;
 
     // create texture
-    GUI_Alias_Textbox_UpdateTexture(alias_ttr, pathname, color, point);
+    GUI_Alias_Textbox_Empty(alias_ttr, pathname, color, point, buffer);
 
     return 0;
 }
@@ -93,21 +114,27 @@ int GUI_Alias_Textbox_InitAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL
 int GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, int key) {
     GUI_TextureAlias *alias_ptr = alias_ttr->link;
     char *link_ptr = alias_ptr->link;
+    int link_len = strlen(link_ptr) - 1;
+    int result = 0;
 
-    if (key == 0) return -1;
+    if (link_len == -1 && key == 0) {
+        GUI_Alias_Textbox_Empty(alias_ttr, pathname, PP4M_GREY_NORMAL, point, "Input text here");
+        return 0;
+    } else if (link_len >= 255) return -1;
 
-    // create a key func
+    // create a better key func
+    if (key == 0 && link_len > -1) return -2;
+    if (key == -2 && link_len > -1) result += GUI_Alias_Textbox_Backspace(link_ptr);
 
-    int link_len = strlen(link_ptr);
-    if (link_len >= 255) return -2;
+    result += isprint(key);
 
-    for (int i = 0; i < 2; i++) {
-        if (i == 0) link_ptr[link_len++] = key;
-        link_ptr[link_len] = '\0';
+    if (result != 0) {
+        link_ptr[++link_len] = key;
+        link_ptr[++link_len] = '\0';
+
+        SDL_DestroyTexture(alias_ptr->texture);
+        GUI_Alias_Textbox_UpdateTexture(alias_ttr, pathname, color, point);
     }
-
-    SDL_DestroyTexture(alias_ptr->texture);
-    GUI_Alias_Textbox_UpdateTexture(alias_ttr, pathname, color, point);
 
     return 0;
 }
