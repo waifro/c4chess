@@ -229,7 +229,7 @@ void GUI_HookList_Quit(PP4M_HOOK *hook_list) {
     return;
 }
 
-int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, int key) {
+int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char *buffer, int key) {
 
     PP4M_HOOK *current = link;
 
@@ -237,7 +237,6 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, int key) {
     GUI_TextureAlias *alias_ptr = NULL;
 
     int val = pp4m_HOOK_Size(link);
-    char *buf_ptr = NULL;
 
     for (int i = 0; i < val; i++) {
         alias_ttr = current->ptr;
@@ -256,18 +255,18 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, int key) {
             }
         }
 
-        if (buf_ptr != NULL) {
-            DEBUG_PrintBox(2, "buf_ptr: %s", buf_ptr);
+        if (buffer != NULL) {
+            DEBUG_PrintBox(2, "buffer: %s", buffer);
 
-            free(buf_ptr);
-            buf_ptr = NULL;
+            free(buffer);
+            buffer = NULL;
         }
 
         if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
             alias_ptr = alias_ttr->link;
 
             if (alias_ptr->obj == OBJ_TEXTBOX_INPUT_ON)
-                buf_ptr = GUI_Alias_Textbox_UpdateAlias(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 18, key);
+                buffer = GUI_Alias_Textbox_UpdateAlias(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 18, key);
         }
     }
 
@@ -302,7 +301,7 @@ int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, int key) {
 
             // hooked list update
             if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF || alias_ttr->obj == OBJ_BUTTON_LINK_ON)
-                GUI_HookLink_Update(alias_ttr->link, input, key);
+                GUI_HookLink_Update(alias_ttr->link, input, NULL, key);
 
             if (input.iner == 1) {
                 if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) {
