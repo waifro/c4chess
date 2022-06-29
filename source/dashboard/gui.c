@@ -267,7 +267,7 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char *buffer, int
         if (alias_ttr->obj == OBJ_SCROLL_VERTICAL) {
             if (buf_ptr != NULL) {
                 printf("hello\n");
-                GUI_Alias_InnerWindow_Add(alias_ttr,  OPENSANS_REGULAR, PP4M_BLACK, 14, buffer); printf("finish\n");
+                GUI_Alias_InnerWindow_Add(alias_ttr,  OPENSANS_REGULAR, PP4M_BLACK, 14, buf_ptr); printf("finish\n");
             }
         }
 
