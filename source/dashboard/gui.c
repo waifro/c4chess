@@ -234,6 +234,7 @@ int GUI_HookLink_Update(PP4M_HOOK *link, int key) {
     PP4M_HOOK *current = link;
     GUI_TextureAlias *alias_ttr = NULL;
     int val = pp4m_HOOK_Size(link);
+    char *buf_ptr = NULL;
 
     for (int i = 0; i < val; i++) {
         alias_ttr = current->ptr;
@@ -241,8 +242,15 @@ int GUI_HookLink_Update(PP4M_HOOK *link, int key) {
 
         if (alias_ttr->obj == OBJ_NULL) continue;
 
+        if (buf_ptr != NULL) {
+            DEBUG_PrintBox(2, "buf_ptr: %s", buf_ptr);
+
+            free(buf_ptr);
+            buf_ptr = NULL;
+        }
+
         if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
-            GUI_Alias_Textbox_UpdateAlias(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 18, key);
+            buf_ptr = GUI_Alias_Textbox_UpdateAlias(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 18, key);
         }
     }
 

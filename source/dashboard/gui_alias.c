@@ -111,7 +111,7 @@ int GUI_Alias_Textbox_InitAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL
     return 0;
 }
 
-int GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, int key) {
+char *GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, int key) {
     GUI_TextureAlias *alias_ptr = alias_ttr->link;
     char *link_ptr = alias_ptr->link;
     int link_len = strlen(link_ptr) - 1;
@@ -119,12 +119,20 @@ int GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, S
 
     if (link_len == -1 && key == 0) {
         GUI_Alias_Textbox_Empty(alias_ttr, pathname, PP4M_GREY_NORMAL, point, "Input text here");
-        return 0;
-    } else if (link_len >= 255) return -1;
+        return NULL;
+    } else if (link_len >= 255) return NULL;
 
     // create a better key func
-    if (key == 0 && link_len > -1) return -2;
-    if (key == -2 && link_len > -1) result += GUI_Alias_Textbox_Backspace(link_ptr);
+    if (key == 0 && link_len > -1) return NULL;
+    else if (key == -2 && link_len > -1) result += GUI_Alias_Textbox_Backspace(link_ptr);
+    else if (key == -3 && link_len > -1) {
+
+        char *buf_ptr = malloc(sizeof(char) * strlen(link_ptr));
+        memcpy(buf_ptr, link_ptr, strlen(link_ptr));
+        memset(link_ptr, 0x00, 255);
+
+        return buf_ptr;
+    }
 
     result += isprint(key);
 
@@ -136,7 +144,7 @@ int GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, S
         GUI_Alias_Textbox_UpdateTexture(alias_ttr, pathname, color, point);
     }
 
-    return 0;
+    return NULL;
 }
 
 int GUI_Alias_Textbox_DestrAlias(GUI_TextureAlias *alias_ptr) {
