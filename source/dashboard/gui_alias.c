@@ -127,9 +127,12 @@ char *GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname,
     else if (key == -2 && link_len > -1) result += GUI_Alias_Textbox_Backspace(link_ptr);
     else if (key == -3 && link_len > -1) {
 
-        char *buf_ptr = malloc(sizeof(char) * strlen(link_ptr));
-        memcpy(buf_ptr, link_ptr, strlen(link_ptr));
-        memset(link_ptr, 0x00, 255);
+        int len = strlen(link_ptr);
+        char *buf_ptr = malloc(sizeof(char) * len + 1);
+
+        memset(buf_ptr, 0x00, len + 1);
+        memcpy(buf_ptr, link_ptr, len);
+        memset(link_ptr, 0x00, len);
 
         return buf_ptr;
     }
