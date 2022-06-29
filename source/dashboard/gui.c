@@ -107,7 +107,7 @@ PP4M_HOOK *GUI_RenderWindow_Chat_Init(PP4M_HOOK *hook_list) {
 
     // save pointer of hooked Alias
     alias_textbox->link = alias_text;
-    alias_text->obj = OBJ_TEXTBOX_INPUT;
+    alias_text->obj = OBJ_TEXTBOX_INPUT_OFF;
     GUI_Alias_Textbox_InitAlias(alias_textbox, OPENSANS_REGULAR, PP4M_GREY_NORMAL, 18, "Input text here");
 
     GUI_TextureAlias *alias_button_send = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
@@ -229,10 +229,13 @@ void GUI_HookList_Quit(PP4M_HOOK *hook_list) {
     return;
 }
 
-int GUI_HookLink_Update(PP4M_HOOK *link, int key) {
+int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, int key) {
 
     PP4M_HOOK *current = link;
+
     GUI_TextureAlias *alias_ttr = NULL;
+    GUI_TextureAlias *alias_ptr = NULL;
+
     int val = pp4m_HOOK_Size(link);
     char *buf_ptr = NULL;
 
@@ -242,6 +245,17 @@ int GUI_HookLink_Update(PP4M_HOOK *link, int key) {
 
         if (alias_ttr->obj == OBJ_NULL) continue;
 
+        // we should create a func for this
+        if (input.iner == 1) {
+            if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
+                alias_ptr = alias_ttr->link;
+
+                if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1)
+                    alias_ptr->obj = OBJ_TEXTBOX_INPUT_ON;
+                else alias_ptr->obj = OBJ_TEXTBOX_INPUT_OFF;
+            }
+        }
+
         if (buf_ptr != NULL) {
             DEBUG_PrintBox(2, "buf_ptr: %s", buf_ptr);
 
@@ -250,7 +264,10 @@ int GUI_HookLink_Update(PP4M_HOOK *link, int key) {
         }
 
         if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
-            buf_ptr = GUI_Alias_Textbox_UpdateAlias(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 18, key);
+            alias_ptr = alias_ttr->link;
+
+            if (alias_ptr->obj == OBJ_TEXTBOX_INPUT_ON)
+                buf_ptr = GUI_Alias_Textbox_UpdateAlias(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 18, key);
         }
     }
 
@@ -285,7 +302,7 @@ int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, int key) {
 
             // hooked list update
             if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF || alias_ttr->obj == OBJ_BUTTON_LINK_ON)
-                GUI_HookLink_Update(alias_ttr->link, key);
+                GUI_HookLink_Update(alias_ttr->link, input, key);
 
             if (input.iner == 1) {
                 if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) {

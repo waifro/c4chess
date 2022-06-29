@@ -24,7 +24,8 @@ typedef enum {
     OBJ_TEXTBOX_LINK,           // texture behind OBJ_TEXTBOX_INPUT + *link as linked list
     OBJ_TEXTBOX_ALIAS,          // texture behind OBJ_TEXTBOX_INPUT + *link as GUI_TextureAlias
 
-    OBJ_TEXTBOX_INPUT,          // init, reset, update and modify texture's input
+    OBJ_TEXTBOX_INPUT_OFF,      // init, reset, update and modify texture's input
+    OBJ_TEXTBOX_INPUT_ON,
 
     OBJ_LINK_PTR                // treat object as linked list
 
