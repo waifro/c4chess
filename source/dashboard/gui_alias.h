@@ -2,6 +2,7 @@
 #define GUI_ALIAS_H
 
 #include <SDL2/SDL.h>
+#include "../pp4m/pp4m.h"
 #include "../pp4m/pp4m_input.h"
 
 /* structures & variables */
@@ -10,7 +11,7 @@ typedef enum {
     OBJ_NONE,                   // ignore object
     OBJ_NULL,                   // drop itineration
 
-    OBJ_BUTTON_TXTBOX,          // object to toggle OBJ_TEXTBOX_INPUT usage
+    OBJ_BUTTON_TXTBOX,          // object to toggle OBJ_TEXTBOX_INPUT buffer
 
     OBJ_BUTTON_LINK_OFF,        // indicates *link as linked list toggled off
     OBJ_BUTTON_LINK_ON,         // indicates *link as linked list toggled on
@@ -30,6 +31,39 @@ typedef enum {
     OBJ_LINK_PTR                // treat object as linked list
 
 } GUI_ALIAS_OBJ;
+
+/*
+    structure of different objs inside a linked list
+
+    &&& // rappresents linked list
+    --- OBJ_NONE                                   // initial window
+    --- OBJ_NONE                                   // minor thing to render
+    --- OBJ_NULL                                   // minor thing to avoid
+    --- OBJ_BUTTON_LINK_OFF \                      // contains linked list for example chat
+                            &&&
+                            --- OBJ_NONE
+                            --- OBJ_TEXTBOX_LINK_OFF \                                     // obj used for input chat
+                                                    --- OBJ_TEXTBOX_INPUT_OFF              // obj to indicate accept input or not
+                            --- OBJ_SCROLL_VERTICAL \                                      // contains linked list of entire conversation
+                                                    &&&
+                                                    --- OBJ_NONE // conversation from player 0
+                                                    --- OBJ_NONE // conversation from player 1
+                                                    --- OBJ_NONE // conversation from player 0
+                                                    --- OBJ_NONE // conversation from player 0, new line
+                                                    --- OBJ_NONE // conversation from player 1
+                                                    --- etc ...
+                                                    (NULL)
+                            --- OBJ_BUTTON_TXTBOX                // send message
+                            (NULL)
+    --- OBJ_LINK_PTR \
+                    &&&
+                    --- OBJ_NONE
+                    (NULL)
+    --- OBJ_NONE
+    --- OBJ_NONE
+    --- OBJ_NONE
+    (NULL)
+*/
 
 typedef struct {
     GUI_ALIAS_OBJ obj;
@@ -55,5 +89,9 @@ int GUI_Alias_Textbox_Backspace(char *buf);
 int GUI_Alias_Textbox_InitAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, char *buffer);
 char *GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, int key);
 int GUI_Alias_Textbox_DestrAlias(GUI_TextureAlias *alias_ptr);
+
+int GUI_Alias_InnerWindow_Init(GUI_TextureAlias *alias_ttr);
+PP4M_HOOK *GUI_Alias_Tail(GUI_TextureAlias *alias);
+int GUI_Alias_InnerWindow_Add(GUI_TextureAlias *alias, char *pathname, SDL_Color color, int point, char *buffer);
 
 #endif

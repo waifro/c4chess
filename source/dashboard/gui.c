@@ -99,6 +99,8 @@ PP4M_HOOK *GUI_RenderWindow_Chat_Init(PP4M_HOOK *hook_list) {
     alias_inner_w->obj = OBJ_SCROLL_VERTICAL;
     alias_inner_w->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_WHITE, &alias_inner_w->rect, alias_window->rect.x + 10, alias_window->rect.y + 10, alias_window->rect.w - 20, alias_window->rect.h - 50);
 
+    GUI_Alias_InnerWindow_Init(alias_inner_w);
+
     GUI_TextureAlias *alias_textbox = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
     alias_textbox->obj = OBJ_TEXTBOX_ALIAS;
     alias_textbox->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_WHITE, 255, &alias_textbox->rect, alias_inner_w->rect.x, alias_inner_w->rect.y + alias_inner_w->rect.h + 5, alias_inner_w->rect.w - 30, 30);
@@ -188,8 +190,14 @@ int GUI_HookList_Render(PP4M_HOOK *hook_list) {
                 SDL_RenderCopy(glo_render, alias_ptr->texture, &alias_ptr->rect, &rect);
             }
 
-            if (alias_ttr->obj == OBJ_BUTTON_LINK_ON ||
-                alias_ttr->obj == OBJ_LINK_PTR) GUI_HookLink_Render(alias_ttr->link);
+            if (alias_ttr->obj == OBJ_LINK_PTR)
+                GUI_HookLink_Render(alias_ttr->link);
+
+            else if (alias_ttr->obj == OBJ_SCROLL_VERTICAL)
+                GUI_HookLink_Render(alias_ttr->link);
+
+            else if (alias_ttr->obj == OBJ_BUTTON_LINK_ON)
+                GUI_HookLink_Render(alias_ttr->link);
         }
     }
 
@@ -238,6 +246,8 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char *buffer, int
 
     int val = pp4m_HOOK_Size(link);
 
+    static char *buf_ptr = NULL;
+
     for (int i = 0; i < val; i++) {
         alias_ttr = current->ptr;
         current = current->next;
@@ -249,17 +259,16 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char *buffer, int
             if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
                 alias_ptr = alias_ttr->link;
 
-                if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1)
-                    alias_ptr->obj = OBJ_TEXTBOX_INPUT_ON;
+                if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) alias_ptr->obj = OBJ_TEXTBOX_INPUT_ON;
                 else alias_ptr->obj = OBJ_TEXTBOX_INPUT_OFF;
             }
         }
 
-        if (buffer != NULL) {
-            DEBUG_PrintBox(2, "buffer: %s", buffer);
-
-            free(buffer);
-            buffer = NULL;
+        if (alias_ttr->obj == OBJ_SCROLL_VERTICAL) {
+            if (buf_ptr != NULL) {
+                printf("hello\n");
+                GUI_Alias_InnerWindow_Add(alias_ttr,  OPENSANS_REGULAR, PP4M_BLACK, 14, buffer); printf("finish\n");
+            }
         }
 
         if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
@@ -268,6 +277,16 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char *buffer, int
             if (alias_ptr->obj == OBJ_TEXTBOX_INPUT_ON)
                 buffer = GUI_Alias_Textbox_UpdateAlias(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 18, key);
         }
+    }
+
+    if (buf_ptr != NULL) {
+        DEBUG_PrintBox(2, "buffer: %s", buf_ptr);
+        free(buffer); buf_ptr = NULL;
+    }
+
+    else if (buffer != NULL && buf_ptr == NULL) {
+        DEBUG_PrintBox(2, "deployed buffer: %p", buffer);
+        buf_ptr = buffer;
     }
 
     return 0;
@@ -302,6 +321,10 @@ int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, int key) {
             // hooked list update
             if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF || alias_ttr->obj == OBJ_BUTTON_LINK_ON)
                 GUI_HookLink_Update(alias_ttr->link, input, NULL, key);
+
+            if (alias_ttr->obj == OBJ_SCROLL_VERTICAL) {
+                GUI_HookLink_Update(alias_ttr->link, input, NULL, key);
+            }
 
             if (input.iner == 1) {
                 if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) {

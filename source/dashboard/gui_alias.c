@@ -164,3 +164,69 @@ int GUI_Alias_Textbox_DestrAlias(GUI_TextureAlias *alias_ptr) {
 
     return 0;
 }
+
+int GUI_Alias_InnerWindow_Init(GUI_TextureAlias *alias) {
+
+    PP4M_HOOK *init = pp4m_HOOK_Init();
+    alias->link = init;
+
+    return 0;
+}
+
+PP4M_HOOK *GUI_Alias_Tail(GUI_TextureAlias *alias) {
+
+    PP4M_HOOK *curr = alias->link;
+
+    while(curr->next != NULL)
+        curr = curr->next;
+
+    return curr;
+}
+
+int GUI_Alias_InnerWindow_Add(GUI_TextureAlias *alias, char *pathname, SDL_Color color, int point, char *buffer) {
+    PP4M_HOOK *head = alias->link;
+    PP4M_HOOK *tail = GUI_Alias_Tail(alias);
+
+    printf("hello\n");
+
+    GUI_TextureAlias *alias_ptr = NULL;
+    GUI_TextureAlias *new_alias = malloc(sizeof(GUI_TextureAlias));
+
+    printf("hello\n");
+
+    // grab last possible convo response
+    SDL_Rect rect = { alias->rect.x, alias->rect.y, 0, 0};
+    if (tail->ptr != NULL) {
+        alias_ptr = tail->ptr;
+
+        rect.x = alias_ptr->rect.x;
+        rect.y = alias_ptr->rect.y;
+    }
+
+    printf("hello\n");
+
+    // todo:
+    // create a new obj for player 0 and 1
+    new_alias->obj = OBJ_NONE;
+
+    // todo:
+    // to modify this for both players
+    // check if buffer is from same player
+    // if yes, dont create new info
+
+    new_alias->rect.x = rect.x;
+    if (alias_ptr != NULL) new_alias->rect.y = rect.y + alias_ptr->rect.w + 10;
+    else new_alias->rect.y = rect.y + 10;
+
+    printf("hello\n");
+
+    // what happends if goes over the width or height of alias->rect?
+    printf("added texture to linked convo: %s\nx %d -> %d\ny %d -> %d\n", buffer, rect.x, new_alias->rect.x, rect.y, new_alias->rect.y);
+
+    new_alias->texture = pp4m_TTF_TextureFont(glo_render, pathname, color, point, &alias_ptr->rect, rect.x, rect.y, buffer);
+
+    printf("hello\n");
+
+    pp4m_HOOK_Next(head, new_alias);
+    return 0;
+}
