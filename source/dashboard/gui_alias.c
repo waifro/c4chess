@@ -197,6 +197,7 @@ int GUI_Alias_InnerWindow_Add(GUI_TextureAlias *alias, char *pathname, SDL_Color
 
         rect.x = alias_ptr->rect.x;
         rect.y = alias_ptr->rect.y;
+        rect.h = alias_ptr->rect.h;
     }
 
     // todo:
@@ -209,8 +210,7 @@ int GUI_Alias_InnerWindow_Add(GUI_TextureAlias *alias, char *pathname, SDL_Color
     // if yes, dont create new info
 
     new_alias->rect.x = rect.x;
-    if (alias_ptr != NULL) new_alias->rect.y = rect.y + alias_ptr->rect.w + 10;
-    else new_alias->rect.y = rect.y + 10;
+    new_alias->rect.y = rect.y + rect.h + 5;
 
     // what happends if goes over the width or height of alias->rect?
     printf("added texture to linked convo: %s\nx %d -> %d\ny %d -> %d\n", buffer, rect.x, new_alias->rect.x, rect.y, new_alias->rect.y);

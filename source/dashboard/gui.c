@@ -150,14 +150,20 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
         if (alias_ttr->obj == OBJ_NULL) continue;
         SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
 
-        if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
+        if (alias_ttr->obj == OBJ_LINK_PTR)
+            GUI_HookLink_Render(alias_ttr->link);
+
+        else if (alias_ttr->obj == OBJ_SCROLL_VERTICAL)
+            GUI_HookLink_Render(alias_ttr->link);
+
+        else if (alias_ttr->obj == OBJ_BUTTON_LINK_ON)
+            GUI_HookLink_Render(alias_ttr->link);
+
+        else if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
             alias_ptr = alias_ttr->link; SDL_Rect rect;
             GUI_Alias_Textbox_UpdateRect(alias_ttr, &rect);
             SDL_RenderCopy(glo_render, alias_ptr->texture, &alias_ptr->rect, &rect);
         }
-
-        if (alias_ttr->obj == OBJ_BUTTON_LINK_ON ||
-            alias_ttr->obj == OBJ_LINK_PTR) GUI_HookLink_Render(alias_ttr->link);
     }
 
     return 0;
