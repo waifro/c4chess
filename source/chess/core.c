@@ -214,7 +214,7 @@ char *CORE_NET_ChessboardInit(CHESS_CORE_PLAYER *player, char *buffer) {
     return fen;
 }
 
-int CORE_NET_UpdateLobby(int code, int *socket, int *position_old, int *position_new, int *promotn) {
+int CORE_NET_UpdateLobby(int code, int *socket, char *buffer, int *position_old, int *position_new, int *promotn) {
     if (socket == NULL) return -1;
     int result = -1;
     char buf_1[256];

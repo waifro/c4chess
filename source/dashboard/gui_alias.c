@@ -184,6 +184,8 @@ PP4M_HOOK *GUI_Alias_Tail(GUI_TextureAlias *alias) {
 }
 
 int GUI_Alias_InnerWindow_Add(GUI_TextureAlias *alias, char *pathname, SDL_Color color, int point, char *buffer) {
+    if (buffer == NULL) return -1;
+
     PP4M_HOOK *head = alias->link;
     PP4M_HOOK *tail = GUI_Alias_Tail(alias);
 

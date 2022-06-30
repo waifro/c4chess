@@ -252,8 +252,6 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char *buffer, int
 
     int val = pp4m_HOOK_Size(link);
 
-    static char *buf_ptr = NULL;
-
     for (int i = 0; i < val; i++) {
         alias_ttr = current->ptr;
         current = current->next;
@@ -271,10 +269,7 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char *buffer, int
         }
 
         if (alias_ttr->obj == OBJ_SCROLL_VERTICAL) {
-            if (buf_ptr != NULL) {
-                printf("hello\n");
-                GUI_Alias_InnerWindow_Add(alias_ttr,  OPENSANS_REGULAR, PP4M_BLACK, 14, buf_ptr); printf("finish\n");
-            }
+            GUI_Alias_InnerWindow_Add(alias_ttr,  OPENSANS_REGULAR, PP4M_BLACK, 14, buffer);
         }
 
         if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
@@ -285,20 +280,10 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char *buffer, int
         }
     }
 
-    if (buf_ptr != NULL) {
-        DEBUG_PrintBox(2, "buffer: %s", buf_ptr);
-        free(buffer); buf_ptr = NULL;
-    }
-
-    else if (buffer != NULL && buf_ptr == NULL) {
-        DEBUG_PrintBox(2, "deployed buffer: %p", buffer);
-        buf_ptr = buffer;
-    }
-
     return 0;
 }
 
-int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, int key) {
+int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, char *buffer, int key) {
     int result = 0;
 
     int val = pp4m_HOOK_Size(hook_list);
@@ -326,10 +311,10 @@ int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, int key) {
 
             // hooked list update
             if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF || alias_ttr->obj == OBJ_BUTTON_LINK_ON)
-                GUI_HookLink_Update(alias_ttr->link, input, NULL, key);
+                GUI_HookLink_Update(alias_ttr->link, input, buffer, key);
 
             if (alias_ttr->obj == OBJ_SCROLL_VERTICAL) {
-                GUI_HookLink_Update(alias_ttr->link, input, NULL, key);
+                GUI_HookLink_Update(alias_ttr->link, input, buffer, key);
             }
 
             if (input.iner == 1) {

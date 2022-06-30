@@ -190,6 +190,9 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
     int code = -1;
     int key = -1;
 
+    static char *buffer = NULL;
+    static char *buf_bak = NULL;
+
     static int position_old = -1;
     static int position_new = -1;
 
@@ -201,13 +204,13 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
     //else if (key != 0) DEBUG_PrintBox(1, "raw mesg: [%c]", result);
 
     // update objects
-    GUI_HookList_Update(glo_chess_event_hooklist, touch_pos, key);
+    GUI_HookList_Update(glo_chess_event_hooklist, touch_pos, buffer, key);
 
     // updating chessboard
     MIDDLE_InputChessboardState(socket, touch_pos, glo_chess_core_tile, player, &position_old, &position_new, &code);
 
     // needs a brand new updates of sockets
-    CORE_NET_UpdateLobby(code, socket, &position_old, &position_new, &glo_chess_event_pawn_promotn);
+    CORE_NET_UpdateLobby(code, socket, buffer, &position_old, &position_new, &glo_chess_event_pawn_promotn);
 
     // record notation
     ARCHIVE_UpdateRegister_PieceState(&glo_chess_core_tile[position_new], position_old, position_new);
@@ -217,6 +220,23 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
 
     // update move the piece
     MIDDLE_UpdatePositionPiece(glo_chess_core_tile, position_old, position_new);
+
+
+    if (buf_bak == NULL && buffer != NULL) {
+        DEBUG_PrintBox(2, "deployed buf: %p", buffer);
+        buf_bak = buffer;
+    }
+
+    else if (buffer != NULL && buf_bak != NULL && buf_bak == buffer) {
+        //free(buffer);
+        buffer = NULL;
+        buf_bak = NULL;
+    }
+
+    else if (buffer != NULL && buf_bak != NULL && buf_bak != buffer) {
+        free(buf_bak);
+        buf_bak = buffer;
+    }
 
     if (position_old != -1 && position_new != -1) {
 
