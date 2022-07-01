@@ -87,11 +87,11 @@ int GUI_Alias_Textbox_UpdateRect(GUI_TextureAlias *alias_ttr, SDL_Rect *rect);
 int GUI_Alias_Textbox_Backspace(char *buf);
 
 int GUI_Alias_Textbox_InitAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, char *buffer);
-char *GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, int key);
+char *GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, char **buffer, int key);
 int GUI_Alias_Textbox_DestrAlias(GUI_TextureAlias *alias_ptr);
 
 int GUI_Alias_InnerWindow_Init(GUI_TextureAlias *alias_ttr);
 PP4M_HOOK *GUI_Alias_Tail(GUI_TextureAlias *alias);
-int GUI_Alias_InnerWindow_Add(GUI_TextureAlias *alias, char *pathname, SDL_Color color, int point, char *buffer);
+int GUI_Alias_InnerWindow_Add(GUI_TextureAlias *alias, char *pathname, SDL_Color color, int point, char **buffer);
 
 #endif

@@ -111,7 +111,7 @@ int GUI_Alias_Textbox_InitAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL
     return 0;
 }
 
-char *GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, int key) {
+char *GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, char **buffer, int key) {
     GUI_TextureAlias *alias_ptr = alias_ttr->link;
     char *link_ptr = alias_ptr->link;
     int link_len = strlen(link_ptr) - 1;
@@ -134,6 +134,7 @@ char *GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname,
         memcpy(buf_ptr, link_ptr, len);
         memset(link_ptr, 0x00, len);
 
+        *buffer = buf_ptr;
         return buf_ptr;
     }
 
@@ -183,8 +184,8 @@ PP4M_HOOK *GUI_Alias_Tail(GUI_TextureAlias *alias) {
     return curr;
 }
 
-int GUI_Alias_InnerWindow_Add(GUI_TextureAlias *alias, char *pathname, SDL_Color color, int point, char *buffer) {
-    if (buffer == NULL) return -1;
+int GUI_Alias_InnerWindow_Add(GUI_TextureAlias *alias, char *pathname, SDL_Color color, int point, char **buffer) {
+    if (*buffer == NULL) return -1;
 
     PP4M_HOOK *head = alias->link;
     PP4M_HOOK *tail = GUI_Alias_Tail(alias);
@@ -215,9 +216,9 @@ int GUI_Alias_InnerWindow_Add(GUI_TextureAlias *alias, char *pathname, SDL_Color
     new_alias->rect.y = rect.y + rect.h + 5;
 
     // what happends if goes over the width or height of alias->rect?
-    printf("added texture to linked convo: %s\nx %d -> %d\ny %d -> %d\n", buffer, rect.x, new_alias->rect.x, rect.y, new_alias->rect.y);
+    printf("added texture to linked convo: %s\nx %d -> %d\ny %d -> %d\n", *buffer, rect.x, new_alias->rect.x, rect.y, new_alias->rect.y);
 
-    new_alias->texture = pp4m_TTF_TextureFont(glo_render, pathname, color, point, &new_alias->rect, new_alias->rect.x, new_alias->rect.y, buffer);
+    new_alias->texture = pp4m_TTF_TextureFont(glo_render, pathname, color, point, &new_alias->rect, new_alias->rect.x, new_alias->rect.y, *buffer);
 
     pp4m_HOOK_Next(head, new_alias);
     return 0;
