@@ -201,7 +201,6 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
 
     key = EVENT_HandleKeyboard(event);
     if (key == -1) result = -1;
-    //else if (key != 0) DEBUG_PrintBox(1, "raw mesg: [%c]", result);
 
     // update objects
     GUI_HookList_Update(glo_chess_event_hooklist, touch_pos, &buffer, key);
@@ -228,12 +227,13 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
     }
 
     else if (buffer != NULL && buf_bak != NULL && buf_bak == buffer) {
-        //free(buffer);
+        DEBUG_PrintBox(2, "buf restored", buffer);
         buffer = NULL;
         buf_bak = NULL;
     }
 
     else if (buffer != NULL && buf_bak != NULL && buf_bak != buffer) {
+        DEBUG_PrintBox(2, "new buf deploying...", buffer);
         free(buf_bak);
         buf_bak = buffer;
     }
