@@ -87,16 +87,17 @@ int cl_redirect_svcode_LOBBY_REQ(int code, char *buffer, int *position_old, int 
     return result;
 }
 
-int cl_redirect_svcode_LOBBY_POST(int code, char *buffer, int *position_old, int *position_new, int *promotn) {
+int cl_redirect_svcode_LOBBY_POST(int code, char **buffer, int *position_old, int *position_new, int *promotn) {
     int result = -1;
 
     switch(code) {
 
     case SV_LOBBY_POST_MOVE:
-        result = cl_SV_LOBBY_POST_MOVE(buffer, position_old, position_new, promotn);
+        result = cl_SV_LOBBY_POST_MOVE(*buffer, position_old, position_new, promotn);
         break;
 
     case SV_LOBBY_POST_MESG:
+        result = cl_SV_LOBBY_POST_MESG(buffer);
         break;
 
     default:
@@ -110,6 +111,17 @@ int cl_redirect_svcode_LOBBY_POST(int code, char *buffer, int *position_old, int
 
 
 
+
+int cl_SV_LOBBY_POST_MESG(char **buffer) {
+    int result = -1;
+    char *buf = malloc(sizeof(char) * 255);
+
+    result = sscanf(*buffer, "%*d %255c", buf);
+
+    *buffer = buf;
+
+    return result;
+}
 
 int cl_SV_LOBBY_POST_MOVE(char *buffer, int *position_old, int *position_new, int *promotn) {
     int result = -1;
@@ -185,16 +197,18 @@ int cl_redirect_clcode_LOBBY_REQ(int code, char *buffer, int *position_old, int 
 
 int cl_redirect_clcode_LOBBY_POST(int code, cli_t *socket, char *buffer, int *position_old, int *position_new, int *promotn) {
     int result = -1;
+    char foo[256];
 
     switch(code) {
     case CL_LOBBY_POST_LEAVE:
         break;
 
     case CL_LOBBY_POST_MOVE:
-        result = cl_POST_LOBBY_MOVE(buffer, position_old, position_new, promotn);
+        result = cl_POST_LOBBY_MOVE(foo, 255, position_old, position_new, promotn);
         break;
 
     case CL_LOBBY_POST_MESG:
+        result = cl_POST_LOBBY_MESG(foo, buffer, 255);
         break;
 
     default:
@@ -202,7 +216,7 @@ int cl_redirect_clcode_LOBBY_POST(int code, cli_t *socket, char *buffer, int *po
     }
 
     if (result > -1)
-        result = NET_SendPacketToServer(socket, buffer, strlen(buffer)+1);
+        result = NET_SendPacketToServer(socket, foo, strlen(foo)+1);
 
     return result;
 }
@@ -211,13 +225,18 @@ int cl_redirect_clcode_LOBBY_POST(int code, cli_t *socket, char *buffer, int *po
 
 
 
+int cl_POST_LOBBY_MESG(char *buffer, char *mesg, int len) {
+    int result = -1;
+    result = snprintf(buffer, len, "%d %s", CL_LOBBY_POST_MESG, mesg);
+    if (result > 0) result = 0;
+    return result;
+}
 
-
-int cl_POST_LOBBY_MOVE(char *buffer, int *position_old, int *position_new, int *promotn) {
+int cl_POST_LOBBY_MOVE(char *buffer, int len, int *position_old, int *position_new, int *promotn) {
     int result = -1;
 
     if (buffer != NULL) {
-        result = sprintf(buffer, "%d %d %d %d", CL_LOBBY_POST_MOVE, *position_old, *position_new, *promotn);
+        result = snprintf(buffer, len, "%d %d %d %d", CL_LOBBY_POST_MOVE, *position_old, *position_new, *promotn);
         if (result > 0) result = 0;
     }
 
@@ -236,13 +255,13 @@ int cl_REQ_ASSIGN_LOBBY(char *buffer) {
 }
 
 // client: server sent a packet
-int cl_svcode_redirect(int code, char *buffer, int *position_old, int *position_new, int *promotn) {
+int cl_svcode_redirect(int code, char **buffer, int *position_old, int *position_new, int *promotn) {
     int result = 0;
 
     if (sv_status_STATE(code) == 0) result = 0; // im not sure what to do with this and cli_t.status
-    else if (sv_status_REQ(code) == 0) result = cl_redirect_svcode_REQ(code, buffer);
-    else if (sv_status_POST(code) == 0) result = cl_redirect_svcode_POST(code, buffer);
-    else if (sv_status_LOBBY_REQ(code) == 0) result = cl_redirect_svcode_LOBBY_REQ(code, buffer, position_old, position_new, promotn);
+    else if (sv_status_REQ(code) == 0) result = cl_redirect_svcode_REQ(code, *buffer);
+    else if (sv_status_POST(code) == 0) result = cl_redirect_svcode_POST(code, *buffer);
+    else if (sv_status_LOBBY_REQ(code) == 0) result = cl_redirect_svcode_LOBBY_REQ(code, *buffer, position_old, position_new, promotn);
     else if (sv_status_LOBBY_POST(code) == 0) result = cl_redirect_svcode_LOBBY_POST(code, buffer, position_old, position_new, promotn);
 
     return result;

@@ -214,17 +214,22 @@ char *CORE_NET_ChessboardInit(CHESS_CORE_PLAYER *player, char *buffer) {
     return fen;
 }
 
-int CORE_NET_UpdateLobby(int code, int *socket, char *buffer, int *position_old, int *position_new, int *promotn) {
+int CORE_NET_UpdateLobby(int code, int *socket, char **buffer, int *position_old, int *position_new, int *promotn) {
     if (socket == NULL) return -1;
     int result = -1;
-    char buf_1[256];
 
-    result = cl_clcode_redirect(code, socket, buf_1, position_old, position_new, promotn);
-    if (result > -1) DEBUG_PrintBox(2, "sended buf: [%s]", buf_1);
+    result = cl_clcode_redirect(code, socket, *buffer, position_old, position_new, promotn);
+    if (result > -1) DEBUG_PrintBox(2, "sent buf: [%s]", *buffer);
 
     if (NET_DetectSignal(socket) > 0) {
-        cl_svcode_redirect(cl_GrabPacket(socket, buf_1), buf_1, position_old, position_new, promotn);
-        DEBUG_PrintBox(2, "recieved buf: [%s] [%d] [%d] [%d]", buf_1, *position_old, *position_new, *promotn);
+
+        // we need to test chat and gameplay
+        // if two actions write to buffer then the behavior is undefined
+        char buf[256];
+        *buffer = buf;
+
+        cl_svcode_redirect(cl_GrabPacket(socket, buf), buffer, position_old, position_new, promotn);
+        DEBUG_PrintBox(2, "recieved buf: [%s] [%d] [%d] [%d]", buf, *position_old, *position_new, *promotn);
     }
 
     return result;

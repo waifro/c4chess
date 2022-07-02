@@ -74,7 +74,7 @@ void CORE_GlobalUpdate_StateRender(void);
 
 char *CORE_NET_ChessboardInit(CHESS_CORE_PLAYER *player, char *buffer);
 
-int CORE_NET_UpdateLobby(int code, int *socket, char *buffer, int *position_old, int *position_new, int *promotn);
+int CORE_NET_UpdateLobby(int code, int *socket, char **buffer, int *position_old, int *position_new, int *promotn);
 
 int CORE_NET_SocketRedirect(int *socket, CHESS_CORE_PLAYER *player);
 

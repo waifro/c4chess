@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+#include "../network/client.h"
+
 #include "../global.h"
 #include "../pp4m/pp4m.h"
 #include "../pp4m/pp4m_ttf.h"
@@ -111,7 +113,7 @@ int GUI_Alias_Textbox_InitAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL
     return 0;
 }
 
-char *GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, char **buffer, int key) {
+int GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, char **buffer, int key, int *code) {
     GUI_TextureAlias *alias_ptr = alias_ttr->link;
     char *link_ptr = alias_ptr->link;
     int link_len = strlen(link_ptr) - 1;
@@ -119,11 +121,11 @@ char *GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname,
 
     if (link_len == -1 && key == 0) {
         GUI_Alias_Textbox_Empty(alias_ttr, pathname, PP4M_GREY_NORMAL, point, "Input text here");
-        return NULL;
-    } else if (link_len >= 255) return NULL;
+        return 0;
+    } else if (link_len >= 255) return 0;
 
     // create a better key func
-    if (key == 0 && link_len > -1) return NULL;
+    if (key == 0 && link_len > -1) return 0;
     else if (key == -2 && link_len > -1) result += GUI_Alias_Textbox_Backspace(link_ptr);
     else if (key == -3 && link_len > -1) {
 
@@ -134,8 +136,10 @@ char *GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname,
         memcpy(buf_ptr, link_ptr, len);
         memset(link_ptr, 0x00, len);
 
+        *code = CL_LOBBY_POST_MESG;
         *buffer = buf_ptr;
-        return buf_ptr;
+
+        return 0;
     }
 
     result += isprint(key);
@@ -148,7 +152,7 @@ char *GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname,
         GUI_Alias_Textbox_UpdateTexture(alias_ttr, pathname, color, point);
     }
 
-    return NULL;
+    return 0;
 }
 
 int GUI_Alias_Textbox_DestrAlias(GUI_TextureAlias *alias_ptr) {

@@ -243,7 +243,7 @@ void GUI_HookList_Quit(PP4M_HOOK *hook_list) {
     return;
 }
 
-int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, int key) {
+int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, int key, int *code) {
 
     PP4M_HOOK *current = link;
 
@@ -276,14 +276,14 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, in
             alias_ptr = alias_ttr->link;
 
             if (alias_ptr->obj == OBJ_TEXTBOX_INPUT_ON)
-                GUI_Alias_Textbox_UpdateAlias(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 18, buffer, key);
+                GUI_Alias_Textbox_UpdateAlias(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 18, buffer, key, code);
         }
     }
 
     return 0;
 }
 
-int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, char **buffer, int key) {
+int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, char **buffer, int key, int *code) {
     int result = 0;
 
     int val = pp4m_HOOK_Size(hook_list);
@@ -311,10 +311,10 @@ int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, char **buffe
 
             // hooked list update
             if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF || alias_ttr->obj == OBJ_BUTTON_LINK_ON)
-                GUI_HookLink_Update(alias_ttr->link, input, buffer, key);
+                GUI_HookLink_Update(alias_ttr->link, input, buffer, key, code);
 
             if (alias_ttr->obj == OBJ_SCROLL_VERTICAL) {
-                GUI_HookLink_Update(alias_ttr->link, input, buffer, key);
+                GUI_HookLink_Update(alias_ttr->link, input, buffer, key, code);
             }
 
             if (input.iner == 1) {
