@@ -256,6 +256,7 @@ int cl_REQ_ASSIGN_LOBBY(char *buffer) {
 
 // client: server sent a packet
 int cl_svcode_redirect(int code, char **buffer, int *position_old, int *position_new, int *promotn) {
+    if (code == -1) return -1;
     int result = 0;
 
     if (sv_status_STATE(code) == 0) result = 0; // im not sure what to do with this and cli_t.status
