@@ -262,7 +262,7 @@ int EVENT_HandleKeyboard(SDL_Event *event) {
     int key = -1;
 
     key = pp4m_INPUT_SdlKeyboard(event);
-    if (key == -1 || key == 0) return key;
+    if (key == -1 || key == 0) return 0;
 
     else if (key == -2) // backspace key
         return key;

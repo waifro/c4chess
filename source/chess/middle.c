@@ -186,7 +186,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
     if (glo_chess_event_hooklist == NULL)
         glo_chess_event_hooklist = EVENT_HookList_Init();
 
-    int result = -1;
+    int result = 0;
     int code = -1;
     int key = -1;
 
