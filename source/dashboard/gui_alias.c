@@ -3,6 +3,7 @@
 #include <ctype.h>
 
 #include "../network/client.h"
+#include "../network/server.h"
 
 #include "../global.h"
 #include "../pp4m/pp4m.h"
@@ -188,7 +189,7 @@ PP4M_HOOK *GUI_Alias_Tail(GUI_TextureAlias *alias) {
     return curr;
 }
 
-int GUI_Alias_InnerWindow_Add(GUI_TextureAlias *alias, char *pathname, SDL_Color color, int point, char **buffer) {
+int GUI_Alias_InnerWindow_Add(GUI_TextureAlias *alias, char *pathname, SDL_Color color, int point, char **buffer, int code) {
     if (*buffer == NULL) return -1;
 
     PP4M_HOOK *head = alias->link;
@@ -197,15 +198,11 @@ int GUI_Alias_InnerWindow_Add(GUI_TextureAlias *alias, char *pathname, SDL_Color
     GUI_TextureAlias *alias_ptr = NULL;
     GUI_TextureAlias *new_alias = malloc(sizeof(GUI_TextureAlias));
 
-    // grab last possible convo response
-    SDL_Rect rect = { alias->rect.x, alias->rect.y, 0, 0};
-    if (tail->ptr != NULL) {
-        alias_ptr = tail->ptr;
-
-        rect.x = alias_ptr->rect.x;
-        rect.y = alias_ptr->rect.y;
-        rect.h = alias_ptr->rect.h;
-    }
+    SDL_Rect rect = {
+        alias->rect.x,
+        alias->rect.y,
+        0, 0
+    };
 
     // todo:
     // create a new obj for player 0 and 1
@@ -216,13 +213,30 @@ int GUI_Alias_InnerWindow_Add(GUI_TextureAlias *alias, char *pathname, SDL_Color
     // check if buffer is from same player
     // if yes, dont create new info
 
-    new_alias->rect.x = rect.x;
-    new_alias->rect.y = rect.y + rect.h + 5;
+    //new_alias->rect.x = rect.x;
+    //new_alias->rect.y = rect.y + rect.h + 5;
 
     // what happends if goes over the width or height of alias->rect?
-    printf("added texture to linked convo: %s\nx %d -> %d\ny %d -> %d\n", *buffer, rect.x, new_alias->rect.x, rect.y, new_alias->rect.y);
+    //printf("added texture to linked convo: %s\nx %d -> %d\ny %d -> %d\n", *buffer, rect.x, new_alias->rect.x, rect.y, new_alias->rect.y);
 
-    new_alias->texture = pp4m_TTF_TextureFont(glo_render, pathname, color, point, &new_alias->rect, new_alias->rect.x, new_alias->rect.y, *buffer);
+    new_alias->texture = pp4m_TTF_TextureFont(glo_render, pathname, color, point, &new_alias->rect, 0, 0, *buffer);
+
+    // grab last message height
+    if (tail->ptr != NULL) {
+        alias_ptr = tail->ptr;
+
+        // grab (y + height) value of last message
+        rect.y = alias_ptr->rect.y + alias_ptr->rect.h + 5;
+    }
+
+    printf("code: %d\n", code);
+
+    // incoming from opponent
+    if (code == SV_LOBBY_POST_MESG) new_alias->rect.x = rect.x;
+    else new_alias->rect.x = alias->rect.x + alias->rect.w - new_alias->rect.w;
+
+    // apply height to message
+    new_alias->rect.y = rect.y;
 
     pp4m_HOOK_Next(head, new_alias);
     return 0;
