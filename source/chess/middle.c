@@ -150,6 +150,8 @@ int MIDDLE_InputChessboardState(int *socket, PP4M_INPUT_POS touch, CHESS_CORE_TI
                 *position_new = tile;
                 *code = CL_LOBBY_POST_MOVE;
 
+                printf("MIDDLE_InputChessboardState: set code: %d\n", *code);
+
                 DOT_StateGlobalDotReset();
                 tile = -2;
 
@@ -187,8 +189,8 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
         glo_chess_event_hooklist = EVENT_HookList_Init();
 
     int result = 0;
-    int code = -1;
     int key = -1;
+    int code = -1;
 
     static char *buffer = NULL;
     static char *buf_bak = NULL;
@@ -209,7 +211,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
     MIDDLE_InputChessboardState(socket, touch_pos, glo_chess_core_tile, player, &position_old, &position_new, &code);
 
     // needs a brand new updates of sockets
-    CORE_NET_UpdateLobby(code, socket, &buffer, &position_old, &position_new, &glo_chess_event_pawn_promotn);
+    CORE_NET_UpdateLobby(&code, socket, &buffer, &position_old, &position_new, &glo_chess_event_pawn_promotn);
 
     // record notation
     ARCHIVE_UpdateRegister_PieceState(&glo_chess_core_tile[position_new], position_old, position_new);
@@ -219,7 +221,6 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
 
     // update move the piece
     MIDDLE_UpdatePositionPiece(glo_chess_core_tile, position_old, position_new);
-
 
     if (buf_bak == NULL && buffer != NULL) {
         DEBUG_PrintBox(2, "deployed buf: %p", buffer);

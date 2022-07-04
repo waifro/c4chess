@@ -12,6 +12,12 @@
 
 #define DEBUG_LEVEL 2
 
+typedef struct {
+    int len;
+    char *username;
+    // more to come
+} USER_STRUCT;
+
 // declared extern variables
 extern SDL_Window *glo_window;
 extern SDL_Renderer *glo_render;
@@ -19,6 +25,10 @@ extern SDL_Renderer *glo_render;
 extern int glo_screen_w;
 extern int glo_screen_h;
 
-//GLOBAL_TrimStrToken(char *str, char token);
+extern USER_STRUCT glo_user;
+
+int GLOBAL_DestrUser(USER_STRUCT *user);
+int GLOBAL_InitUser(USER_STRUCT *user, char *buffer);
+int GLOBAL_InitUser_Guest(USER_STRUCT *user);
 
 #endif

@@ -31,6 +31,9 @@ int main (int argc, char *argv[]) {
 
     CFG_BootFile_LoadConfig(LANG_DEFAULT);
 
+    GLOBAL_InitUser_Guest(&glo_user);
+    DEBUG_PrintBox(1, "user: %s", glo_user.username);
+
     CHESS_CORE_PLAYER player = WHITE_PLAYER;
 
     char *server_addr = NET_DEFAULT_SERVER;
@@ -77,6 +80,7 @@ int main (int argc, char *argv[]) {
     CORE_InitChess_Play(player, fen_notation, &socket);
 
     NET_CloseSocket(&socket);
+    GLOBAL_DestrUser(&glo_user);
 
     /*
     GUI_PopupWindow_Core(100, 50, 1080, 590, "test");

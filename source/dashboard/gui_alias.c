@@ -130,11 +130,11 @@ int GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, S
     else if (key == -2 && link_len > -1) result += GUI_Alias_Textbox_Backspace(link_ptr);
     else if (key == -3 && link_len > -1) {
 
-        int len = strlen(link_ptr);
+        int len = strlen(link_ptr) + glo_user.len;
         char *buf_ptr = malloc(sizeof(char) * len + 1);
 
         memset(buf_ptr, 0x00, len + 1);
-        memcpy(buf_ptr, link_ptr, len);
+        snprintf(buf_ptr, 255, "%s %s", glo_user.username, link_ptr);
         memset(link_ptr, 0x00, len);
 
         *code = CL_LOBBY_POST_MESG;
@@ -204,22 +204,16 @@ int GUI_Alias_InnerWindow_Add(GUI_TextureAlias *alias, char *pathname, SDL_Color
         0, 0
     };
 
-    // todo:
-    // create a new obj for player 0 and 1
     new_alias->obj = OBJ_NONE;
 
-    // todo:
-    // to modify this for both players
-    // check if buffer is from same player
-    // if yes, dont create new info
+    // temporary fix of user
+    char buf_user[17];
+    int len_buf = 0;
 
-    //new_alias->rect.x = rect.x;
-    //new_alias->rect.y = rect.y + rect.h + 5;
+    sscanf(*buffer, "%s %*s", buf_user);
+    len_buf = strlen(buf_user) + 1; // adding the space
 
-    // what happends if goes over the width or height of alias->rect?
-    //printf("added texture to linked convo: %s\nx %d -> %d\ny %d -> %d\n", *buffer, rect.x, new_alias->rect.x, rect.y, new_alias->rect.y);
-
-    new_alias->texture = pp4m_TTF_TextureFont(glo_render, pathname, color, point, &new_alias->rect, 0, 0, *buffer);
+    new_alias->texture = pp4m_TTF_TextureFont(glo_render, pathname, color, point, &new_alias->rect, 0, 0, &(*buffer)[len_buf]);
 
     // grab last message height
     if (tail->ptr != NULL) {
@@ -229,10 +223,8 @@ int GUI_Alias_InnerWindow_Add(GUI_TextureAlias *alias, char *pathname, SDL_Color
         rect.y = alias_ptr->rect.y + alias_ptr->rect.h + 5;
     }
 
-    printf("code: %d\n", code);
-
     // incoming from opponent
-    if (code == SV_LOBBY_POST_MESG) new_alias->rect.x = rect.x;
+    if (strcmp(glo_user.username, buf_user) != 0) new_alias->rect.x = rect.x;
     else new_alias->rect.x = alias->rect.x + alias->rect.w - new_alias->rect.w;
 
     // apply height to message
