@@ -19,6 +19,7 @@ typedef enum {
     OBJ_BUTTON_RETURN,          // go back
     OBJ_BUTTON_EXIT,            // terminate any loop
 
+    OBJ_WINDOW,                 // signals window containing more stuff
     OBJ_SCROLL_VERTICAL,        // with input, scroll up and down
     OBJ_SCROLL_HORIZONTAL,      // with input, scroll left or right
 
@@ -44,15 +45,16 @@ typedef enum {
                             --- OBJ_NONE
                             --- OBJ_TEXTBOX_LINK_OFF \                                     // obj used for input chat
                                                     --- OBJ_TEXTBOX_INPUT_OFF              // obj to indicate accept input or not
-                            --- OBJ_SCROLL_VERTICAL \                                      // contains linked list of entire conversation
-                                                    &&&
-                                                    --- OBJ_NONE // conversation from player 0
-                                                    --- OBJ_NONE // conversation from player 1
-                                                    --- OBJ_NONE // conversation from player 0
-                                                    --- OBJ_NONE // conversation from player 0, new line
-                                                    --- OBJ_NONE // conversation from player 1
-                                                    --- etc ...
-                                                    (NULL)
+                            --- OBJ_WINDOW \                                                        // contains linked list of entire conversation
+                                            &&&
+                                            --- OBJ_SCROLL_VERTICAL                                 // obj used for scrolling up/down
+                                            --- OBJ_NONE // conversation from player 0
+                                            --- OBJ_NONE // conversation from player 1
+                                            --- OBJ_NONE // conversation from player 0
+                                            --- OBJ_NONE // conversation from player 0, new line
+                                            --- OBJ_NONE // conversation from player 1
+                                            --- etc ...
+                                            (NULL)
                             --- OBJ_BUTTON_TXTBOX                // send message
                             (NULL)
     --- OBJ_LINK_PTR \
@@ -92,6 +94,8 @@ int GUI_Alias_Textbox_DestrAlias(GUI_TextureAlias *alias_ptr);
 
 int GUI_Alias_InnerWindow_Init(GUI_TextureAlias *alias_ttr);
 PP4M_HOOK *GUI_Alias_Tail(GUI_TextureAlias *alias);
-int GUI_Alias_InnerWindow_Add(GUI_TextureAlias *alias, char *pathname, SDL_Color color, int point, char **buffer, int code);
+
+int GUI_Alias_InnerWindow_Move(GUI_TextureAlias *inner_window);
+int GUI_Alias_InnerWindow_Add(GUI_TextureAlias *inner_window, char *pathname, SDL_Color color, int point, char **buffer, int code);
 
 #endif
