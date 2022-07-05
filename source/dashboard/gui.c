@@ -171,11 +171,8 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
             GUI_HookLink_Render(alias_ttr->link);
 
         /*
-        else if (alias_ttr->obj == OBJ_INNER_WINDOW_OOB) {
-            alias_ptr = alias_ttr->link; SDL_Rect rect;
-            GUI_Alias_InnerWindow_RectUpdate(alias_ttr, rect);
-            SDL_RenderCopy(glo_render, alias_ptr->texture, &alias_ptr->rect, &rect);
-        }
+        else if (alias_ttr->obj == OBJ_INNER_WINDOW_OOB)
+            GUI_Alias_InnerWindow_Render(alias_ttr);
         */
 
         else if (alias_ttr->obj == OBJ_BUTTON_LINK_ON)

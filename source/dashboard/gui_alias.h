@@ -106,7 +106,7 @@ int GUI_Alias_RectCopy(SDL_Rect *dest, SdL_Rect *src);
 // return -1 if outside of oob, otherwise 0 on success
 int GUI_Alias_RectUpdate_OOB(SDL_Rect *rect_1, SDL_Rect *rect_2, SDL_Rect *rect_oob);
 
-int GUI_Alias_InnerWindow_RectUpdate(GUI_TextureAlias *window_inner_oob, SDL_Rect *rect);
+int GUI_Alias_InnerWindow_Render(GUI_TextureAlias *window_inner_oob);
 
 PP4M_HOOK *GUI_Alias_Tail(GUI_TextureAlias *alias);
 
