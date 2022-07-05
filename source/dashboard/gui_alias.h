@@ -9,7 +9,7 @@
 
 typedef enum {
     OBJ_NONE,                   // ignore object
-    OBJ_NULL,                   // drop itineration
+    OBJ_NULL,                   // drop interaction
 
     OBJ_BUTTON_TXTBOX,          // object to toggle OBJ_TEXTBOX_INPUT buffer
 
@@ -19,7 +19,9 @@ typedef enum {
     OBJ_BUTTON_RETURN,          // go back
     OBJ_BUTTON_EXIT,            // terminate any loop
 
-    OBJ_WINDOW,                 // signals window containing more stuff
+    OBJ_WINDOW,                 // window containing more stuff
+    OBJ_WINDOW_INNER_OOB,       // used for cropping textures out-of-bounds inside this rectangle
+
     OBJ_SCROLL_VERTICAL,        // with input, scroll up and down
     OBJ_SCROLL_HORIZONTAL,      // with input, scroll left or right
 
@@ -28,6 +30,9 @@ typedef enum {
 
     OBJ_TEXTBOX_INPUT_OFF,      // init, reset, update and modify texture's input
     OBJ_TEXTBOX_INPUT_ON,
+
+    OBJ_CHAT_MESG,              // normal chat message
+    OBJ_CHAT_RECT,              // OBJ_CHAT_MESG -> link = SDL_Rect (used in conjunction with OBJ_INNER_WINDOW_OOB)
 
     OBJ_LINK_PTR                // treat object as linked list
 
@@ -47,12 +52,13 @@ typedef enum {
                                                     --- OBJ_TEXTBOX_INPUT_OFF              // obj to indicate accept input or not
                             --- OBJ_WINDOW \                                                        // contains linked list of entire conversation
                                             &&&
+                                            --- OBJ_WINDOW_INNER_OOB
                                             --- OBJ_SCROLL_VERTICAL                                 // obj used for scrolling up/down
-                                            --- OBJ_NONE // conversation from player 0
-                                            --- OBJ_NONE // conversation from player 1
-                                            --- OBJ_NONE // conversation from player 0
-                                            --- OBJ_NONE // conversation from player 0, new line
-                                            --- OBJ_NONE // conversation from player 1
+                                            --- OBJ_CHAT_MESG // conversation from player 0
+                                            --- OBJ_CHAT_MESG // conversation from player 1
+                                            --- OBJ_CHAT_MESG // conversation from player 0
+                                            --- OBJ_CHAT_MESG // conversation from player 0, new line
+                                            --- OBJ_CHAT_MESG // conversation from player 1
                                             --- etc ...
                                             (NULL)
                             --- OBJ_BUTTON_TXTBOX                // send message
