@@ -172,10 +172,137 @@ int GUI_Alias_Textbox_DestrAlias(GUI_TextureAlias *alias_ptr) {
     return 0;
 }
 
-int GUI_Alias_InnerWindow_Init(GUI_TextureAlias *alias) {
+int GUI_Alias_InnerWindow_Init(GUI_TextureAlias *window) {
 
-    PP4M_HOOK *init = pp4m_HOOK_Init();
-    alias->link = init;
+    GUI_TextureAlias *window_inner_oob = malloc(sizeof(GUI_TextureAlias));
+    window->link = window_inner_oob;
+
+    window_inner_oob->rect.x = window->rect.x - 5;
+    window_inner_oob->rect.y = window->rect.y - 5;
+    window_inner_oob->rect.w = window->rect.w - 5;
+    window_inner_oob->rect.h = window->rect.h - 5;
+
+    PP4M_HOOK *init_list = pp4m_HOOK_Init();
+    window_inner_oob->link = init_list;
+
+    return 0;
+}
+
+// return -1 if src is NULL, -2 if dest is NULL, otherwise 0 on success
+int GUI_Alias_RectCopy(SDL_Rect *dest, SdL_Rect *src) {
+    if (src == NULL) return -1;
+    else if (dest == NULL) return -2;
+
+    dest->x = src->x;
+    dest->y = src->y;
+    dest->w = src->w;
+    dest->h = src->h;
+
+    return 0;
+}
+
+// return -1 if outside of oob, otherwise 0 on success
+int GUI_Alias_RectUpdate_OOB(SDL_Rect *rect_1, SDL_Rect *rect_2, SDL_Rect *rect_oob) {
+
+    // rect_2
+    rect_2->x = 0;
+    rect_2->y = 0;
+    rect_2->w = rect_1->w;
+    rect_2->h = rect_1->h;
+
+    // rect_1
+    int rect_yh = rect_1->y + rect_1->h;
+    int rect_xw = rect_1->x + rect_1->w;
+
+    // oob
+    int oob_yh = rect_oob->y + rect_oob->h;
+    int oob_xw = rect_oob->x + rect_oob->w;
+
+    // object is out of bounds from rect_oob->y
+    if (rect_1->y < rect_oob->y) {
+
+        // check also if is outside
+        if (rect_yh >= rect_oob->y) return -1;
+
+        int delta_y = rect_oob->y - rect_1->y;
+
+        rect_1->y += delta_y;
+        rect_2->y = delta_y;
+    }
+
+    // object is out of bounds from oob_yh
+    if (rect_yh > oob_yh) {
+
+        // check also if is outside
+        if (rect_1->y >= oob_yh) return -1;
+
+        int delta_yh = oob_yh - rect_yh;
+
+        rect_1->h -= delta_yh;
+        rect_2->h = delta_yh;
+    }
+
+
+    // object is out of bounds from rect_oob->x
+    if (rect_1->x < rect_oob->x) {
+
+        // check also if is outside
+        if (rect_xw <= rect_oob->x) return -1;
+
+        int delta_x = rect_oob->x - rect_1->x;
+
+        rect_1->x += delta_x;
+        rect_2->x = delta_x;
+    }
+
+    // object is out of bounds from oob_xw
+    if (rect_xw > oob_xw) {
+
+        // check also if is outside
+        if (rect_1->x >= oob_xw) return -1;
+
+        int delta_xw = oob_xw - rect_xw;
+
+        rect_1->w -= delta_xw;
+        rect_2->w = delta_xw;
+    }
+
+    return 0;
+}
+
+int GUI_Alias_InnerWindow_Render(GUI_TextureAlias *window_inner_oob) {
+    int result = -1;
+
+    PP4M_HOOK *head = window_inner_oob->link;
+    PP4M_HOOK *curr = head;
+
+    int val = pp4m_HOOK_Size(head);
+    GUI_TextureAlias *alias_ptr = NULL;
+
+    SDL_Rect alias_rect_bak;
+    SDL_Rect src_rect;
+
+    // alias_ptr->rect is dest rect for render
+    // src_rect is src rect for texture
+
+    for (int i = 0; i < val; i++) {
+        alias_ptr = curr->ptr;
+        curr = curr->next;
+
+        if (alias_ptr->obj == OBJ_NULL) continue;
+        else if (alias_ptr->obj == OBJ_SCROLL_HORIZONTAL) continue;
+        else if (alias_ptr->obj == OBJ_SCROLL_VERTICAL) continue;
+
+        // copy SDL_Rect
+        GUI_Alias_RectCopy(&alias_rect_bak, &alias_ptr->rect);
+
+        if (GUI_Alias_RectUpdate_OOB(&alias_ptr->rect, &src_rect, &window_inner_oob->rect) == 0) {
+            SDL_RenderCopy(glo_render, alias_ptr->texture, &src_rect, &alias_ptr->rect);
+
+            // restore SDL_Rect
+            GUI_Alias_RectCopy(&alias_ptr->rect, &alias_rect_bak);
+        }
+    }
 
     return 0;
 }

@@ -95,26 +95,26 @@ PP4M_HOOK *GUI_RenderWindow_Chat_Init(PP4M_HOOK *hook_list) {
     alias_window->obj = OBJ_NONE;
     alias_window->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_NORMAL, &alias_window->rect, alias_button_chat->rect.x + 20, alias_button_chat->rect.y - 440, 300, 450);
 
-    GUI_TextureAlias *alias_inner_w = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
-    alias_inner_w->obj = OBJ_WINDOW;
-    alias_inner_w->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_WHITE, &alias_inner_w->rect, alias_window->rect.x + 10, alias_window->rect.y + 10, alias_window->rect.w - 20, alias_window->rect.h - 50);
+    GUI_TextureAlias *alias_window_chat = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
+    alias_window_chat->obj = OBJ_WINDOW;
+    alias_window_chat->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_WHITE, &alias_window_chat->rect, alias_window->rect.x + 10, alias_window->rect.y + 10, alias_window->rect.w - 20, alias_window->rect.h - 50);
 
-    // init list inside window
-    GUI_Alias_InnerWindow_Init(alias_inner_w);
+    // init OBJ_WINDOW_INNER_OOB
+    GUI_Alias_InnerWindow_Init(alias_window_chat);
 
     // scrollable obj for chat
     int scroll_size_delta = 3;
     int scroll_size_width = 5;
     GUI_TextureAlias *alias_inner_w_scroll = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
     alias_inner_w_scroll->obj = OBJ_NULL;
-    alias_inner_w_scroll->rect.x = alias_inner_w->rect.x + alias_inner_w->rect.w - scroll_size_width - scroll_size_delta;
-    alias_inner_w_scroll->rect.y = alias_inner_w->rect.y + scroll_size_delta;
+    alias_inner_w_scroll->rect.x = alias_window_chat->rect.x + alias_window_chat->rect.w - scroll_size_width - scroll_size_delta;
+    alias_inner_w_scroll->rect.y = alias_window_chat->rect.y + scroll_size_delta;
     alias_inner_w_scroll->rect.w = scroll_size_width;
-    alias_inner_w_scroll->rect.h = alias_inner_w->rect.h - (scroll_size_delta*2);
+    alias_inner_w_scroll->rect.h = alias_window_chat->rect.h - (scroll_size_delta*2);
 
     GUI_TextureAlias *alias_textbox = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
     alias_textbox->obj = OBJ_TEXTBOX_ALIAS;
-    alias_textbox->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_WHITE, 255, &alias_textbox->rect, alias_inner_w->rect.x, alias_inner_w->rect.y + alias_inner_w->rect.h + 5, alias_inner_w->rect.w - 30, 30);
+    alias_textbox->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_WHITE, 255, &alias_textbox->rect, alias_window_chat->rect.x, alias_window_chat->rect.y + alias_window_chat->rect.h + 5, alias_window_chat->rect.w - 30, 30);
 
     GUI_TextureAlias *alias_text = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
 
@@ -161,13 +161,22 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
 
         if (alias_ttr->obj == OBJ_NULL) continue;
 
-        SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
+        if (alias_ttr->texture != NULL)
+            SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
 
         if (alias_ttr->obj == OBJ_LINK_PTR)
             GUI_HookLink_Render(alias_ttr->link);
 
         else if (alias_ttr->obj == OBJ_WINDOW)
             GUI_HookLink_Render(alias_ttr->link);
+
+        /*
+        else if (alias_ttr->obj == OBJ_INNER_WINDOW_OOB) {
+            alias_ptr = alias_ttr->link; SDL_Rect rect;
+            GUI_Alias_InnerWindow_RectUpdate(alias_ttr, rect);
+            SDL_RenderCopy(glo_render, alias_ptr->texture, &alias_ptr->rect, &rect);
+        }
+        */
 
         else if (alias_ttr->obj == OBJ_BUTTON_LINK_ON)
             GUI_HookLink_Render(alias_ttr->link);
@@ -202,7 +211,8 @@ int GUI_HookList_Render(PP4M_HOOK *hook_list) {
 
             if (alias_ttr->obj == OBJ_NULL) continue;
 
-            SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
+            if (alias_ttr->texture != NULL)
+                SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
 
             if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
                 alias_ptr = alias_ttr->link; SDL_Rect rect;
