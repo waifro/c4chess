@@ -9,6 +9,7 @@
 #include "../pp4m/pp4m_input.h"
 #include "../dashboard/gui.h"
 #include "../dashboard/gui_alias.h"
+#include "../dashboard/ingame.h"
 #include "../dashboard/popup.h"
 #include "../global.h"
 
@@ -316,7 +317,7 @@ int EVENT_HandlePopup_Checkmate(char *comment, CHESS_CORE_PLAYER player) {
 PP4M_HOOK *EVENT_HookList_Init(void) {
 
     PP4M_HOOK *hook_list = pp4m_HOOK_Init();
-    GUI_RenderWindow_Chat_Init(hook_list);
+    GUI_Ingame_ChatInit(hook_list);
 
     return hook_list;
 }
