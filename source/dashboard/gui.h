@@ -6,6 +6,9 @@
 
 #define OPENSANS_REGULAR "./resources/OpenSans-Regular.ttf"
 
+#define TEXTURE_LOBBYCHAT "resources/logo_mesg.png"
+#define TEXTURE_LOBBYCHAT_SEND "resources/logo_direct.png"
+
 /* prototypes */
 
 void GUI_Testing(void);

@@ -172,24 +172,8 @@ int GUI_Alias_Textbox_DestrAlias(GUI_TextureAlias *alias_ptr) {
     return 0;
 }
 
-int GUI_Alias_InnerWindow_Init(GUI_TextureAlias *window) {
-
-    GUI_TextureAlias *window_inner_oob = malloc(sizeof(GUI_TextureAlias));
-    window->link = window_inner_oob;
-
-    window_inner_oob->rect.x = window->rect.x - 5;
-    window_inner_oob->rect.y = window->rect.y - 5;
-    window_inner_oob->rect.w = window->rect.w - 5;
-    window_inner_oob->rect.h = window->rect.h - 5;
-
-    PP4M_HOOK *init_list = pp4m_HOOK_Init();
-    window_inner_oob->link = init_list;
-
-    return 0;
-}
-
 // return -1 if src is NULL, -2 if dest is NULL, otherwise 0 on success
-int GUI_Alias_RectCopy(SDL_Rect *dest, SdL_Rect *src) {
+int GUI_Alias_RectCopy(SDL_Rect *dest, SDL_Rect *src) {
     if (src == NULL) return -1;
     else if (dest == NULL) return -2;
 
@@ -271,12 +255,16 @@ int GUI_Alias_RectUpdate_OOB(SDL_Rect *rect_1, SDL_Rect *rect_2, SDL_Rect *rect_
 }
 
 int GUI_Alias_InnerWindow_Render(GUI_TextureAlias *window_inner_oob) {
-    int result = -1;
 
-    PP4M_HOOK *head = window_inner_oob->link;
-    PP4M_HOOK *curr = head;
+    // get to last obj of list from innerWindow_OOB containing OBJ_LINK_PTR
+    PP4M_HOOK *tail = GUI_Alias_Tail(window_inner_oob->link);
+    GUI_TextureAlias *obj_link_list = tail->ptr;
 
-    int val = pp4m_HOOK_Size(head);
+    // hook to linked list from obj
+    if (obj_link_list->obj != OBJ_LINK_PTR) return -1;
+    PP4M_HOOK *curr_alias_list = obj_link_list->link;
+
+    int val = pp4m_HOOK_Size(curr_alias_list);
     GUI_TextureAlias *alias_ptr = NULL;
 
     SDL_Rect alias_rect_bak;
@@ -286,12 +274,10 @@ int GUI_Alias_InnerWindow_Render(GUI_TextureAlias *window_inner_oob) {
     // src_rect is src rect for texture
 
     for (int i = 0; i < val; i++) {
-        alias_ptr = curr->ptr;
-        curr = curr->next;
+        alias_ptr = curr_alias_list->ptr;
+        curr_alias_list = curr_alias_list->next;
 
         if (alias_ptr->obj == OBJ_NULL) continue;
-        else if (alias_ptr->obj == OBJ_SCROLL_HORIZONTAL) continue;
-        else if (alias_ptr->obj == OBJ_SCROLL_VERTICAL) continue;
 
         // copy SDL_Rect
         GUI_Alias_RectCopy(&alias_rect_bak, &alias_ptr->rect);
@@ -315,84 +301,4 @@ PP4M_HOOK *GUI_Alias_Tail(GUI_TextureAlias *alias) {
         curr = curr->next;
 
     return curr;
-}
-
-int GUI_Alias_InnerWindow_Move(GUI_TextureAlias *inner_window) {
-
-    PP4M_HOOK *head = inner_window->link;
-    PP4M_HOOK *curr = head;
-
-    GUI_TextureAlias *buf_alias = NULL;
-    int val = pp4m_HOOK_Size(head);
-
-    for (int i = 0; i < val; i++) {
-        buf_alias = curr->ptr;
-        curr = curr->next;
-
-        if (i == 0) continue; // scrollable obj
-
-        buf_alias->rect.y -= buf_alias->rect.h + 5;
-    }
-
-    return 0;
-}
-
-int GUI_Alias_InnerWindow_Add(GUI_TextureAlias *inner_window, char *pathname, SDL_Color color, int point, char **buffer, int code) {
-    if (*buffer == NULL) return -1;
-
-    PP4M_HOOK *head = inner_window->link;
-    PP4M_HOOK *tail = GUI_Alias_Tail(inner_window);
-
-    GUI_TextureAlias *alias_ptr = NULL;
-    GUI_TextureAlias *alias_inner_w_scroll = head->ptr;
-    GUI_TextureAlias *new_alias = malloc(sizeof(GUI_TextureAlias));
-
-    SDL_Rect rect = {
-        inner_window->rect.x,
-        inner_window->rect.y,
-        0, 0
-    };
-
-    new_alias->obj = OBJ_NONE;
-
-    // temporary fix of user
-    char buf_user[17];
-    int len_buf = 0;
-
-    sscanf(*buffer, "%s %*s", buf_user);
-    len_buf = strlen(buf_user) + 1; // adding the space
-
-    new_alias->texture = pp4m_TTF_TextureFont(glo_render, pathname, color, point, &new_alias->rect, 0, 0, &(*buffer)[len_buf]);
-
-    // grab last message height
-    if (tail->ptr != head->ptr) {
-        alias_ptr = tail->ptr;
-
-        if (alias_ptr != alias_inner_w_scroll) {
-
-            // chat is out of bounds
-            if ((alias_ptr->rect.y + alias_ptr->rect.h + new_alias->rect.h) > (inner_window->rect.y + inner_window->rect.h)) {
-
-                GUI_Alias_InnerWindow_Move(inner_window);
-
-                if (alias_inner_w_scroll->obj == OBJ_NULL) {
-                    alias_inner_w_scroll->obj = OBJ_SCROLL_VERTICAL;
-                    alias_inner_w_scroll->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_NORMAL, &alias_inner_w_scroll->rect, alias_inner_w_scroll->rect.x, alias_inner_w_scroll->rect.y, alias_inner_w_scroll->rect.w, alias_inner_w_scroll->rect.h);
-                }
-            }
-
-            // grab (y + height) value of last message
-            rect.y = alias_ptr->rect.y + alias_ptr->rect.h + 5;
-        }
-    }
-
-    // incoming from opponent
-    if (strcmp(glo_user.username, buf_user) != 0) new_alias->rect.x = rect.x;
-    else new_alias->rect.x = inner_window->rect.x + inner_window->rect.w - (new_alias->rect.w + 10);
-
-    // apply height to message
-    new_alias->rect.y = rect.y;
-
-    pp4m_HOOK_Next(head, new_alias);
-    return 0;
 }

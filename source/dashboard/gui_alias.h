@@ -19,8 +19,9 @@ typedef enum {
     OBJ_BUTTON_RETURN,          // go back
     OBJ_BUTTON_EXIT,            // terminate any loop
 
-    OBJ_WINDOW,                 // window containing more stuff
+    OBJ_WINDOW,                 // window containing more stuff for general purposes
     OBJ_WINDOW_INNER_OOB,       // used for cropping textures out-of-bounds inside this rectangle
+    OBJ_WINDOW_INNER_OOB_CHAT,  // window containing chat structure
 
     OBJ_SCROLL_VERTICAL,        // with input, scroll up and down
     OBJ_SCROLL_HORIZONTAL,      // with input, scroll left or right
@@ -41,37 +42,48 @@ typedef enum {
 /*
     structure of different objs inside a linked list
 
-    &&& LL // Linked List
-    --- OBJ_NONE                                   // initial window
-    --- OBJ_NONE                                   // minor thing to render
-    --- OBJ_NULL                                   // minor thing to avoid
-    --- OBJ_BUTTON_LINK_OFF \                      // contains linked list for example chat
-                            &&& LL
-                            --- OBJ_NONE
-                            --- OBJ_TEXTBOX_LINK_OFF \                                     // obj used for input chat
-                                                    --- OBJ_TEXTBOX_INPUT_OFF              // obj to indicate accept input or not
-                            --- OBJ_WINDOW \                                                        // contains linked list of entire conversation
-                                            --- OBJ_WINDOW_INNER_OOB \                              // useful for cropping images and adding scrolls objects
-                                                                    &&& LL
-                                                                    --- OBJ_SCROLL_VERTICAL                                 // obj used for scrolling up/down
-                                                                    --- OBJ_CHAT_MESG // conversation from player 0
-                                                                    --- OBJ_CHAT_MESG // conversation from player 1
-                                                                    --- OBJ_CHAT_MESG // conversation from player 0
-                                                                    --- OBJ_CHAT_MESG // conversation from player 0, new line
-                                                                    --- OBJ_CHAT_MESG // conversation from player 1
-                                                                    --- etc ...
-                                                                    (NULL)
-                            --- OBJ_BUTTON_TXTBOX                // send message
-                            (NULL)
-    --- OBJ_LINK_PTR \
-                    &&& LL
-                    --- OBJ_NONE
+    |- && LL
+    |- OBJ_NONE                                   // initial window
+    |- OBJ_NONE                                   // minor thing to render
+    |- OBJ_NULL                                   // minor thing to avoid
+    |- OBJ_BUTTON_LINK_OFF \                      // contains linked list for example chat
+                            - OBJ_WINDOW_CHAT **structure of ingame chat windowed**
+    |- OBJ_LINK_PTR \
+                    |- && LL
+                    |- OBJ_NONE
                     (NULL)
-    --- OBJ_NONE
-    --- OBJ_NONE
-    --- OBJ_NONE
+    |- OBJ_NONE
+    |- OBJ_NONE
+    |- OBJ_NONE
     (NULL)
 */
+
+/*  OBJ_WINDOW_CHAT
+    hipothetical structure of ingame chat windowed
+
+    |- && LL
+    |- OBJ_WINDOW_CHAT \                                                // contains linked list of entire conversation
+                        - OBJ_WINDOW_INNER_OOB \                          // useful for cropping images and adding scrolls objects
+                                                |- && LL
+                                                |- OBJ_SCROLL_VERTICAL                                 // obj used for scrolling up/down
+                                                |- OBJ_LINK_PTR \
+                                                                |- && LL
+                                                                |- OBJ_CHAT_MESG          // conversation from player 0
+                                                                |- OBJ_CHAT_MESG          // conversation from player 1
+                                                                |- OBJ_CHAT_MESG          // conversation from player 0
+                                                                |- OBJ_CHAT_MESG          // conversation from player 0, new line
+                                                                |- OBJ_CHAT_MESG          // conversation from player 1
+                                                                |- etc ...
+                                                                (NULL)
+                                                (NULL)
+    |- OBJ_TEXTBOX_LINK_OFF \                                              // obj used for input chat
+                            - OBJ_TEXTBOX_INPUT_OFF                        // obj to indicate accept input or not
+    |- OBJ_BUTTON_TXTBOX                               // send message
+    (NULL)
+
+*/
+
+/* definitions */
 
 typedef struct {
     GUI_ALIAS_OBJ obj;
@@ -98,10 +110,8 @@ int GUI_Alias_Textbox_InitAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL
 int GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, char **buffer, int key, int *code);
 int GUI_Alias_Textbox_DestrAlias(GUI_TextureAlias *alias_ptr);
 
-int GUI_Alias_InnerWindow_Init(GUI_TextureAlias *window);
-
 // return -1 if src is NULL, -2 if dest is NULL, otherwise 0 on success
-int GUI_Alias_RectCopy(SDL_Rect *dest, SdL_Rect *src);
+int GUI_Alias_RectCopy(SDL_Rect *dest, SDL_Rect *src);
 
 // return -1 if outside of oob, otherwise 0 on success
 int GUI_Alias_RectUpdate_OOB(SDL_Rect *rect_1, SDL_Rect *rect_2, SDL_Rect *rect_oob);
@@ -109,8 +119,5 @@ int GUI_Alias_RectUpdate_OOB(SDL_Rect *rect_1, SDL_Rect *rect_2, SDL_Rect *rect_
 int GUI_Alias_InnerWindow_Render(GUI_TextureAlias *window_inner_oob);
 
 PP4M_HOOK *GUI_Alias_Tail(GUI_TextureAlias *alias);
-
-int GUI_Alias_InnerWindow_Move(GUI_TextureAlias *inner_window);
-int GUI_Alias_InnerWindow_Add(GUI_TextureAlias *inner_window, char *pathname, SDL_Color color, int point, char **buffer, int code);
 
 #endif

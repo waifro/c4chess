@@ -12,10 +12,8 @@
 #include "../pp4m/pp4m_input.h"
 
 #include "../global.h"
+#include "ingame.h"
 #include "gui.h"
-
-#define TEXTURE_LOBBYCHAT "resources/logo_mesg.png"
-#define TEXTURE_LOBBYCHAT_SEND "resources/logo_direct.png"
 
 void GUI_Testing(void) {
 
@@ -82,71 +80,6 @@ void GUI_Testing(void) {
     return;
 }
 
-PP4M_HOOK *GUI_RenderWindow_Chat_Init(PP4M_HOOK *hook_list) {
-
-    PP4M_HOOK *chat_ttr_list = pp4m_HOOK_Init();
-    PP4M_HOOK *chat_init_list = pp4m_HOOK_Init();
-
-    GUI_TextureAlias *alias_button_chat = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
-    alias_button_chat->obj = OBJ_BUTTON_LINK_OFF;
-    alias_button_chat->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEXTURE_LOBBYCHAT, &alias_button_chat->rect, 850, 600, 30, 30);
-
-    GUI_TextureAlias *alias_window = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
-    alias_window->obj = OBJ_NONE;
-    alias_window->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_NORMAL, &alias_window->rect, alias_button_chat->rect.x + 20, alias_button_chat->rect.y - 440, 300, 450);
-
-    GUI_TextureAlias *alias_window_chat = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
-    alias_window_chat->obj = OBJ_WINDOW;
-    alias_window_chat->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_WHITE, &alias_window_chat->rect, alias_window->rect.x + 10, alias_window->rect.y + 10, alias_window->rect.w - 20, alias_window->rect.h - 50);
-
-    // init OBJ_WINDOW_INNER_OOB
-    GUI_Alias_InnerWindow_Init(alias_window_chat);
-
-    // scrollable obj for chat
-    int scroll_size_delta = 3;
-    int scroll_size_width = 5;
-    GUI_TextureAlias *alias_inner_w_scroll = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
-    alias_inner_w_scroll->obj = OBJ_NULL;
-    alias_inner_w_scroll->rect.x = alias_window_chat->rect.x + alias_window_chat->rect.w - scroll_size_width - scroll_size_delta;
-    alias_inner_w_scroll->rect.y = alias_window_chat->rect.y + scroll_size_delta;
-    alias_inner_w_scroll->rect.w = scroll_size_width;
-    alias_inner_w_scroll->rect.h = alias_window_chat->rect.h - (scroll_size_delta*2);
-
-    GUI_TextureAlias *alias_textbox = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
-    alias_textbox->obj = OBJ_TEXTBOX_ALIAS;
-    alias_textbox->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_WHITE, 255, &alias_textbox->rect, alias_window_chat->rect.x, alias_window_chat->rect.y + alias_window_chat->rect.h + 5, alias_window_chat->rect.w - 30, 30);
-
-    GUI_TextureAlias *alias_text = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
-
-    // save pointer of hooked Alias
-    alias_textbox->link = alias_text;
-    alias_text->obj = OBJ_TEXTBOX_INPUT_OFF;
-    GUI_Alias_Textbox_InitAlias(alias_textbox, OPENSANS_REGULAR, PP4M_GREY_NORMAL, 18, "Input text here");
-
-    GUI_TextureAlias *alias_button_send = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
-    alias_button_send->obj = OBJ_BUTTON_TXTBOX;
-    alias_button_send->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEXTURE_LOBBYCHAT_SEND, &alias_button_send->rect, alias_textbox->rect.x + alias_textbox->rect.w + 5, alias_textbox->rect.y, 30, 30);
-
-    GUI_TextureAlias *alias_chat = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
-    alias_chat->obj = OBJ_NULL;
-
-    pp4m_HOOK_Next(alias_inner_w->link, alias_inner_w_scroll);
-    pp4m_HOOK_Next(chat_init_list, alias_button_chat);
-
-    pp4m_HOOK_Next(chat_ttr_list, alias_window);
-    pp4m_HOOK_Next(chat_ttr_list, alias_inner_w);
-    pp4m_HOOK_Next(chat_ttr_list, alias_textbox);
-    pp4m_HOOK_Next(chat_ttr_list, alias_button_send);
-    pp4m_HOOK_Next(chat_ttr_list, alias_chat);
-
-    // save pointer of hooked list (unrendered)
-    alias_button_chat->link = chat_ttr_list;
-
-    pp4m_HOOK_Next(hook_list, chat_init_list);
-
-    return chat_ttr_list;
-}
-
 int GUI_HookLink_Render(PP4M_HOOK *link) {
 
     PP4M_HOOK *current = link;
@@ -170,13 +103,11 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
         else if (alias_ttr->obj == OBJ_WINDOW)
             GUI_HookLink_Render(alias_ttr->link);
 
-        /*
-        else if (alias_ttr->obj == OBJ_INNER_WINDOW_OOB)
-            GUI_Alias_InnerWindow_Render(alias_ttr);
-        */
-
         else if (alias_ttr->obj == OBJ_BUTTON_LINK_ON)
             GUI_HookLink_Render(alias_ttr->link);
+
+        else if (alias_ttr->obj == OBJ_WINDOW_INNER_OOB_CHAT)
+            GUI_Alias_InnerWindow_Render(alias_ttr);
 
         else if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
             alias_ptr = alias_ttr->link; SDL_Rect rect;
@@ -289,8 +220,8 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, in
             }
         }
 
-        if (alias_ttr->obj == OBJ_WINDOW) {
-            GUI_Alias_InnerWindow_Add(alias_ttr,  OPENSANS_REGULAR, PP4M_BLACK, 14, buffer, *code);
+        if (alias_ttr->obj == OBJ_WINDOW_INNER_OOB_CHAT) {
+            GUI_Ingame_ChatUpdate(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 14, buffer);
         }
 
         if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
