@@ -19,7 +19,6 @@
 // init linked list containg objects for windowed chat
 PP4M_HOOK *GUI_Ingame_ChatInit(PP4M_HOOK *hook_list) {
 
-    PP4M_HOOK *chat_ttr_list = pp4m_HOOK_Init();
     PP4M_HOOK *chat_init_list = pp4m_HOOK_Init();
 
     GUI_TextureAlias *alias_button_chat = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
@@ -36,16 +35,6 @@ PP4M_HOOK *GUI_Ingame_ChatInit(PP4M_HOOK *hook_list) {
 
     // init OBJ_WINDOW_INNER_OOB
     GUI_Ingame_Chat_InnerWindow_Init(alias_window_chat);
-
-    // scrollable obj for chat
-    int scroll_size_delta = 3;
-    int scroll_size_width = 5;
-    GUI_TextureAlias *alias_inner_w_scroll = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
-    alias_inner_w_scroll->obj = OBJ_NULL;
-    alias_inner_w_scroll->rect.x = alias_window_chat->rect.x + alias_window_chat->rect.w - scroll_size_width - scroll_size_delta;
-    alias_inner_w_scroll->rect.y = alias_window_chat->rect.y + scroll_size_delta;
-    alias_inner_w_scroll->rect.w = scroll_size_width;
-    alias_inner_w_scroll->rect.h = alias_window_chat->rect.h - (scroll_size_delta*2);
 
     GUI_TextureAlias *alias_textbox = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
     alias_textbox->obj = OBJ_TEXTBOX_ALIAS;
@@ -65,17 +54,19 @@ PP4M_HOOK *GUI_Ingame_ChatInit(PP4M_HOOK *hook_list) {
     GUI_TextureAlias *alias_chat = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
     alias_chat->obj = OBJ_NULL;
 
-    pp4m_HOOK_Next(alias_window_chat->link, alias_inner_w_scroll);
     pp4m_HOOK_Next(chat_init_list, alias_button_chat);
+
+    // save properties to button to open chat
+    PP4M_HOOK *chat_ttr_list = pp4m_HOOK_Init();
+    
+    // save pointer of linked list of structure of windowed chat
+    alias_button_chat->link = chat_ttr_list;
 
     pp4m_HOOK_Next(chat_ttr_list, alias_window);
     pp4m_HOOK_Next(chat_ttr_list, alias_window_chat);
     pp4m_HOOK_Next(chat_ttr_list, alias_textbox);
     pp4m_HOOK_Next(chat_ttr_list, alias_button_send);
     pp4m_HOOK_Next(chat_ttr_list, alias_chat);
-
-    // save pointer of hooked list (unrendered)
-    alias_button_chat->link = chat_ttr_list;
 
     pp4m_HOOK_Next(hook_list, chat_init_list);
 
