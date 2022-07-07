@@ -16,14 +16,28 @@
 #include "gui.h"
 #include "gui_alias.h"
 
-// init linked list containg objects for windowed chat
-PP4M_HOOK *GUI_Ingame_ChatInit(PP4M_HOOK *hook_list) {
+// init OBJ_BUTTON_LINK_OFF which will contain windowed chat as link
+int GUI_Ingame_ChatInit(PP4M_HOOK *hook_list) {
 
     PP4M_HOOK *chat_init_list = pp4m_HOOK_Init();
 
     GUI_TextureAlias *alias_button_chat = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
     alias_button_chat->obj = OBJ_BUTTON_LINK_OFF;
     alias_button_chat->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEXTURE_LOBBYCHAT, &alias_button_chat->rect, 850, 600, 30, 30);
+
+
+    pp4m_HOOK_Next(chat_init_list, alias_button_chat);
+
+    // save properties to button to open chat
+    alias_button_chat->link = GUI_Ingame_ChatInit_Window();
+
+    pp4m_HOOK_Next(hook_list, chat_init_list);
+
+    return 0;
+}
+
+// init linked list containing windowed chat
+PP4M_HOOK *GUI_Ingame_ChatInit_Window(void) {
 
     GUI_TextureAlias *alias_window = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
     alias_window->obj = OBJ_WINDOW_CHAT;
@@ -54,21 +68,13 @@ PP4M_HOOK *GUI_Ingame_ChatInit(PP4M_HOOK *hook_list) {
     GUI_TextureAlias *alias_chat = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
     alias_chat->obj = OBJ_NULL;
 
-    pp4m_HOOK_Next(chat_init_list, alias_button_chat);
-
-    // save properties to button to open chat
     PP4M_HOOK *chat_ttr_list = pp4m_HOOK_Init();
-
-    // save pointer of linked list of structure of windowed chat
-    alias_button_chat->link = chat_ttr_list;
 
     pp4m_HOOK_Next(chat_ttr_list, alias_window);
     pp4m_HOOK_Next(chat_ttr_list, alias_window_chat);
     pp4m_HOOK_Next(chat_ttr_list, alias_textbox);
     pp4m_HOOK_Next(chat_ttr_list, alias_button_send);
     pp4m_HOOK_Next(chat_ttr_list, alias_chat);
-
-    pp4m_HOOK_Next(hook_list, chat_init_list);
 
     return chat_ttr_list;
 }
