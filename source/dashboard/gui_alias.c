@@ -31,6 +31,21 @@ int GUI_Alias_ResetColor(SDL_Color *color) {
     return 0;
 }
 
+// return NULL on end of list, otherwise return PP4M_HOOK pointer where obj corrisponds on the list
+PP4M_HOOK *GUI_Alias_FindObj(PP4M_HOOK *hook_list, GUI_ALIAS_OBJ obj) {
+    PP4M_HOOK *ptr = NULL;
+    PP4M_HOOK *curr = hook_list;
+    GUI_TextureAlias *alias = NULL;
+
+    while(curr != NULL && ptr == NULL) {
+        alias = curr->ptr;
+        if (alias->obj == obj) ptr = curr;
+        curr = curr->next;
+    }
+
+    return ptr;
+}
+
 SDL_Texture *GUI_Alias_CreateSnapshot(SDL_Renderer *renderer, int width, int height) {
 
     SDL_Surface *snap = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
