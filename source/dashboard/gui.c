@@ -206,7 +206,6 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, in
 
     for (int i = 0; i < val; i++) {
         alias_ttr = current->ptr;
-        current = current->next;
 
         if (alias_ttr->obj == OBJ_NULL) continue;
 
@@ -220,8 +219,8 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, in
             }
         }
 
-        if (alias_ttr->obj == OBJ_WINDOW_INNER_OOB_CHAT) {
-            GUI_Ingame_ChatUpdate(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 14, buffer);
+        if (alias_ttr->obj == OBJ_WINDOW_CHAT) {
+            GUI_Ingame_ChatUpdate(current, OPENSANS_REGULAR, PP4M_BLACK, 14, buffer);
         }
 
         if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
@@ -230,6 +229,8 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, in
             if (alias_ptr->obj == OBJ_TEXTBOX_INPUT_ON)
                 GUI_Alias_Textbox_UpdateAlias(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 18, buffer, key, code);
         }
+
+        current = current->next;
     }
 
     return 0;
