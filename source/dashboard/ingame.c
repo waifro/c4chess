@@ -26,7 +26,7 @@ PP4M_HOOK *GUI_Ingame_ChatInit(PP4M_HOOK *hook_list) {
     alias_button_chat->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEXTURE_LOBBYCHAT, &alias_button_chat->rect, 850, 600, 30, 30);
 
     GUI_TextureAlias *alias_window = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
-    alias_window->obj = OBJ_NONE;
+    alias_window->obj = OBJ_WINDOW_CHAT;
     alias_window->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_NORMAL, &alias_window->rect, alias_button_chat->rect.x + 20, alias_button_chat->rect.y - 440, 300, 450);
 
     GUI_TextureAlias *alias_window_chat = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
@@ -58,7 +58,7 @@ PP4M_HOOK *GUI_Ingame_ChatInit(PP4M_HOOK *hook_list) {
 
     // save properties to button to open chat
     PP4M_HOOK *chat_ttr_list = pp4m_HOOK_Init();
-    
+
     // save pointer of linked list of structure of windowed chat
     alias_button_chat->link = chat_ttr_list;
 

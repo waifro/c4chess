@@ -20,6 +20,7 @@ typedef enum {
     OBJ_BUTTON_EXIT,            // terminate any loop
 
     OBJ_WINDOW,                 // window containing more stuff for general purposes
+    OBJ_WINDOW_CHAT,            // window containing structure of windowed chat
     OBJ_WINDOW_INNER_OOB,       // used for cropping textures out-of-bounds inside this rectangle
     OBJ_WINDOW_INNER_OOB_CHAT,  // window containing chat structure
 
