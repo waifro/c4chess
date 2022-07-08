@@ -205,7 +205,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
     if (key == -1) result = -1;
 
     // update objects
-    GUI_HookList_Update(glo_chess_event_hooklist, touch_pos, &buffer, key, &code);
+    GUI_HookLink_Update(glo_chess_event_hooklist, touch_pos, &buffer, key, &code);
 
     // updating chessboard
     MIDDLE_InputChessboardState(socket, touch_pos, glo_chess_core_tile, player, &position_old, &position_new, &code);

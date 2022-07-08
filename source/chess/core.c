@@ -184,7 +184,7 @@ void CORE_GlobalUpdate_StateRender(void) {
     }
 
     DEBUG_UpdateBox_Render();
-    GUI_HookList_Render(glo_chess_event_hooklist);
+    GUI_HookLink_Render(glo_chess_event_hooklist);
 
     return;
 }

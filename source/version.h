@@ -2,10 +2,10 @@
 #define VERSION_H
 
 	//Date Version Types
-	#define DATE "30"
-	#define MONTH "06"
+	#define DATE "08"
+	#define MONTH "07"
 	#define YEAR "2022"
-	#define UBUNTU_VERSION_STYLE  "22.06"
+	#define UBUNTU_VERSION_STYLE  "22.07"
 	
 	//Software Status
 	#define STATUS  ""
@@ -14,17 +14,17 @@
 	//Standard Version Type
 	#define MAJOR  0
 	#define MINOR  0
-	#define BUILD  2
-	#define REVISION  12
+	#define BUILD  24
+	#define REVISION  127
 	
 	//Miscellaneous Version Types
-	#define BUILDS_COUNT  4
-	#define RC_FILEVERSION 0,0,2,12
-	#define RC_FILEVERSION_STRING "0, 0, 2, 12\0"
-	#define FULLVERSION_STRING  "0.0.2.12"
+	#define BUILDS_COUNT  23
+	#define RC_FILEVERSION 0,0,24,127
+	#define RC_FILEVERSION_STRING "0, 0, 24, 127\0"
+	#define FULLVERSION_STRING  "0.0.24.127"
 	
 	//These values are to keep track of your versioning state, don't modify them.
-	#define BUILD_HISTORY  2
+	#define BUILD_HISTORY  24
 	
 
 #endif //VERSION_H

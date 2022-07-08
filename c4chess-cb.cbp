@@ -128,10 +128,22 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="source/dashboard/gui_alias.h" />
+		<Unit filename="source/dashboard/ingame.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/dashboard/ingame.h" />
 		<Unit filename="source/dashboard/menu.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="source/dashboard/menu.h" />
+		<Unit filename="source/dashboard/popup.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/dashboard/popup.h" />
+		<Unit filename="source/gen.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/gen.h" />
 		<Unit filename="source/global.c">
 			<Option compilerVar="CC" />
 		</Unit>

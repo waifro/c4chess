@@ -103,6 +103,12 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
         else if (alias_ttr->obj == OBJ_WINDOW)
             GUI_HookLink_Render(alias_ttr->link);
 
+        else if (alias_ttr->obj == OBJ_WINDOW_CHAT)
+            GUI_HookLink_Render(alias_ttr->link);
+
+        else if (alias_ttr->obj == OBJ_WINDOW_INNER_OOB_CHAT)
+            GUI_HookLink_Render(alias_ttr->link);
+
         else if (alias_ttr->obj == OBJ_BUTTON_LINK_ON)
             GUI_HookLink_Render(alias_ttr->link);
 
@@ -150,10 +156,10 @@ int GUI_HookList_Render(PP4M_HOOK *hook_list) {
 
             if (alias_ttr->obj == OBJ_LINK_PTR)
                 GUI_HookLink_Render(alias_ttr->link);
-
             else if (alias_ttr->obj == OBJ_WINDOW)
                 GUI_HookLink_Render(alias_ttr->link);
-
+            else if (alias_ttr->obj == OBJ_WINDOW_CHAT)
+                GUI_HookLink_Render(alias_ttr->link);
             else if (alias_ttr->obj == OBJ_BUTTON_LINK_ON)
                 GUI_HookLink_Render(alias_ttr->link);
         }
@@ -196,6 +202,7 @@ void GUI_HookList_Quit(PP4M_HOOK *hook_list) {
 }
 
 int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, int key, int *code) {
+    int result = 0;
 
     PP4M_HOOK *current = link;
 
@@ -209,6 +216,12 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, in
 
         if (alias_ttr->obj == OBJ_NULL) continue;
 
+        // hooked list update
+        if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF || alias_ttr->obj == OBJ_BUTTON_LINK_ON) {
+            alias_ptr = alias_ttr->link;
+            GUI_HookLink_Update(alias_ptr->link, input, buffer, key, code);
+        }
+
         // we should create a func for this
         if (input.iner == 1) {
             if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
@@ -219,25 +232,56 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, in
             }
         }
 
-        if (alias_ttr->obj == OBJ_WINDOW_CHAT) {
+        if (alias_ttr->obj == OBJ_WINDOW_INNER_OOB_CHAT)
+            GUI_HookLink_Update(alias_ttr->link, input, buffer, key, code);
+
+        // note: is a bit of a missleading the name of the func.
+        // instead of updating everything OBJ_WINDOW_CHAT releated,
+        // it only updates any pressed keys or adding a message to the list
+        else if (alias_ttr->obj == OBJ_WINDOW_CHAT) {
             GUI_Ingame_ChatUpdate(current, OPENSANS_REGULAR, PP4M_BLACK, 14, buffer);
+
+            // anyways ...
+            GUI_HookLink_Update(alias_ttr->link, input, buffer, key, code);
         }
 
-        if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
+        else if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
             alias_ptr = alias_ttr->link;
 
             if (alias_ptr->obj == OBJ_TEXTBOX_INPUT_ON)
                 GUI_Alias_Textbox_UpdateAlias(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 18, buffer, key, code);
         }
 
+        if (input.iner == 1) {
+            if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) {
+
+                if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF) {
+                    alias_ttr->obj = OBJ_BUTTON_LINK_ON;
+                }
+
+                else if (alias_ttr->obj == OBJ_BUTTON_RETURN) result = -1;
+                else if (alias_ttr->obj == OBJ_BUTTON_EXIT) result = -2;
+            } else {
+                if (alias_ttr->obj == OBJ_BUTTON_LINK_ON) {
+                        /* old code
+                    link_ptr = alias_ttr->link;
+                    alias_ptr = link_ptr->ptr;
+
+                    if (GUI_Alias_InputOnObj(input, alias_ptr->rect) != 1)
+                        alias_ttr->obj = OBJ_BUTTON_LINK_OFF;
+                        */
+                }
+            }
+        }
+
         current = current->next;
     }
 
-    return 0;
+    return result;
 }
 
+/*
 int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, char **buffer, int key, int *code) {
-    int result = 0;
 
     int val = pp4m_HOOK_Size(hook_list);
 
@@ -260,13 +304,28 @@ int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, char **buffe
             if (curr_ptr == NULL) continue;
 
             alias_ttr = curr_ptr->ptr;
-            curr_ptr = curr_ptr->next;
 
             // hooked list update
-            if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF || alias_ttr->obj == OBJ_BUTTON_LINK_ON)
+            if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF || alias_ttr->obj == OBJ_BUTTON_LINK_ON) {
+                alias_ptr = alias_ttr->link;
+                printf("alias->obj = %d\n", alias_ttr->obj);
+
+                GUI_HookLink_Update(alias_ptr->link, input, buffer, key, code);
+            }
+
+
+            else if (alias_ttr->obj == OBJ_WINDOW)
                 GUI_HookLink_Update(alias_ttr->link, input, buffer, key, code);
 
-            if (alias_ttr->obj == OBJ_WINDOW) {
+            // note: is a bit of a missleading the name of the func.
+            // instead of updating everything OBJ_WINDOW_CHAT releated,
+            // it only updates any pressed keys or adding a message to the list
+            else if (alias_ttr->obj == OBJ_WINDOW_CHAT) {
+
+                printf("hello\n");
+                GUI_Ingame_ChatUpdate(current, OPENSANS_REGULAR, PP4M_BLACK, 14, buffer);
+
+                // anyways ...
                 GUI_HookLink_Update(alias_ttr->link, input, buffer, key, code);
             }
 
@@ -281,11 +340,13 @@ int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, char **buffe
                     else if (alias_ttr->obj == OBJ_BUTTON_EXIT) result = -2;
                 } else {
                     if (alias_ttr->obj == OBJ_BUTTON_LINK_ON) {
+                            /* old code
                         link_ptr = alias_ttr->link;
                         alias_ptr = link_ptr->ptr;
 
                         if (GUI_Alias_InputOnObj(input, alias_ptr->rect) != 1)
                             alias_ttr->obj = OBJ_BUTTON_LINK_OFF;
+
                     }
                 }
             }
@@ -308,9 +369,11 @@ int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, char **buffe
                     GUI_Alias_ResetColor(&color_btn_bak);
                 }
             }
-            */
+
+            curr_ptr = curr_ptr->next;
         }
     }
 
     return result;
 }
+*/

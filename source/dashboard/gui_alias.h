@@ -64,22 +64,23 @@ typedef enum {
 
     |- OBJ_WINDOW_CHAT \
                         |- && LL                                          // contains linked list of entire conversation
-                        - OBJ_WINDOW_INNER_OOB_CHAT \                          // useful for cropping images and adding scrolls objects
-                                                    |- && LL
-                                                    |- OBJ_SCROLL_VERTICAL                                 // obj used for scrolling up/down
-                                                    |- OBJ_LINK_PTR \
-                                                                    |- && LL
-                                                                    |- OBJ_CHAT_MESG          // conversation from player 0
-                                                                    |- OBJ_CHAT_MESG          // conversation from player 1
-                                                                    |- OBJ_CHAT_MESG          // conversation from player 0
-                                                                    |- OBJ_CHAT_MESG          // conversation from player 0, new line
-                                                                    |- OBJ_CHAT_MESG          // conversation from player 1
-                                                                    |- etc ...
-                                                                    (NULL)
-                                                    (NULL)
+                        |- OBJ_NONE                                             // white blank object behind chat
+                        |- OBJ_WINDOW_INNER_OOB_CHAT \                          // useful for cropping images and adding scrolls objects
+                                                     |- && LL
+                                                     |- OBJ_SCROLL_VERTICAL                                 // obj used for scrolling up/down
+                                                     |- OBJ_LINK_PTR \
+                                                                     |- && LL
+                                                                     |- OBJ_CHAT_MESG          // conversation from player 0
+                                                                     |- OBJ_CHAT_MESG          // conversation from player 1
+                                                                     |- OBJ_CHAT_MESG          // conversation from player 0
+                                                                     |- OBJ_CHAT_MESG          // conversation from player 0, new line
+                                                                     |- OBJ_CHAT_MESG          // conversation from player 1
+                                                                     |- etc ...
+                                                                     (NULL)
+                                                     (NULL)
                         |- OBJ_TEXTBOX_ALIAS \
-                                            |- OBJ_TEXTBOX_LINK_OFF \                                              // obj used for input chat
-                                                                    - OBJ_TEXTBOX_INPUT_OFF                        // obj to indicate accept input or not
+                                             |- OBJ_TEXTBOX_INPUT_OFF \                       // obj to indicate accept input or not
+                                                                       |- char*
                         |- OBJ_BUTTON_TXTBOX                                                     // send message
                         (NULL)
 
