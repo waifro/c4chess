@@ -31,6 +31,14 @@ int GUI_Alias_ResetColor(SDL_Color *color) {
     return 0;
 }
 
+GUI_TextureAlias *GUI_Alias_InitAlias(void) {
+    GUI_TextureAlias *alias = malloc(sizeof(GUI_TextureAlias));
+    alias->obj = OBJ_NULL;
+    alias->texture = NULL;
+
+    return alias;
+}
+
 // return NULL on end of list, otherwise return PP4M_HOOK pointer where obj corrisponds on the list
 PP4M_HOOK *GUI_Alias_FindObj(PP4M_HOOK *hook_list, GUI_ALIAS_OBJ obj) {
     PP4M_HOOK *ptr = NULL;

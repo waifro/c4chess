@@ -35,42 +35,43 @@ int GUI_Ingame_ChatInit(PP4M_HOOK *hook_list) {
 // init obj containing structure of windowed chat
 GUI_TextureAlias *GUI_Ingame_ChatInit_Window(GUI_TextureAlias *alias_button_chat) {
 
-    GUI_TextureAlias *window = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
+    GUI_TextureAlias *window = GUI_Alias_InitAlias();
     window->obj = OBJ_WINDOW_CHAT;
     window->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_NORMAL, &window->rect, alias_button_chat->rect.x + 20, alias_button_chat->rect.y - 440, 300, 450);
 
     /* list of objects for windowed chat */
 
-    GUI_TextureAlias *alias_blank_window = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
+    GUI_TextureAlias *alias_blank_window = GUI_Alias_InitAlias();
     alias_blank_window->obj = OBJ_NONE;
     alias_blank_window->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_WHITE, &alias_blank_window->rect, window->rect.x + 10, window->rect.y + 10, window->rect.w - 20, window->rect.h - 50);
 
     // init OBJ_WINDOW_INNER_OOB
     GUI_TextureAlias *alias_window_inner_oob = GUI_Ingame_ChatInit_InnerWindow(alias_blank_window);
 
-    GUI_TextureAlias *alias_textbox = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
+    GUI_TextureAlias *alias_textbox = GUI_Alias_InitAlias();
     alias_textbox->obj = OBJ_TEXTBOX_ALIAS;
     alias_textbox->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_WHITE, 255, &alias_textbox->rect, alias_blank_window->rect.x, alias_blank_window->rect.y + alias_blank_window->rect.h + 5, alias_blank_window->rect.w - 30, 30);
 
-    GUI_TextureAlias *alias_text = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
+    GUI_TextureAlias *alias_text = GUI_Alias_InitAlias();
 
     alias_textbox->link = alias_text;
     alias_text->obj = OBJ_TEXTBOX_INPUT_OFF;
     GUI_Alias_Textbox_InitAlias(alias_textbox, OPENSANS_REGULAR, PP4M_GREY_NORMAL, 18, "Input text here");
 
-    GUI_TextureAlias *alias_button_send = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
+    GUI_TextureAlias *alias_button_send = GUI_Alias_InitAlias();
     alias_button_send->obj = OBJ_BUTTON_TXTBOX;
     alias_button_send->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEXTURE_LOBBYCHAT_SEND, &alias_button_send->rect, alias_textbox->rect.x + alias_textbox->rect.w + 5, alias_textbox->rect.y, 30, 30);
 
     // save list into obj
     PP4M_HOOK *window_obj_list = pp4m_HOOK_Init();
-    window->link = window_obj_list;
 
     pp4m_HOOK_Next(window_obj_list, alias_blank_window);
     pp4m_HOOK_Next(window_obj_list, alias_window_inner_oob);
     pp4m_HOOK_Next(window_obj_list, alias_textbox);
     pp4m_HOOK_Next(window_obj_list, alias_button_send);
 
+    window->link = window_obj_list;
+    
     return window;
 }
 

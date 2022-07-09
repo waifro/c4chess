@@ -101,6 +101,8 @@ int GUI_Alias_InputOnObj(PP4M_INPUT_POS input, SDL_Rect rect);
 int GUI_Alias_IsColor(SDL_Color *color);
 int GUI_Alias_ResetColor(SDL_Color *color);
 
+GUI_TextureAlias *GUI_Alias_InitAlias(void);
+
 // return NULL on end of list, otherwise return PP4M_HOOK pointer where obj corrisponds on the list
 PP4M_HOOK *GUI_Alias_FindObj(PP4M_HOOK *hook_list, GUI_ALIAS_OBJ obj);
 
