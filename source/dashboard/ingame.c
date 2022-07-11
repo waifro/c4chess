@@ -154,7 +154,7 @@ int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat_obj, char *pathname, SDL_C
     new_alias->texture = pp4m_TTF_TextureFont(glo_render, pathname, color, point, &new_alias->rect, 0, 0, &(*buffer)[len_buf]);
 
     // grab last message height
-    if (tail_chat != NULL && tail_chat->ptr != head_chat->ptr) {
+    if (head_chat->ptr != NULL) {
         GUI_TextureAlias *alias_ptr = tail_chat->ptr;
 
         printf("im here\n");
@@ -164,9 +164,10 @@ int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat_obj, char *pathname, SDL_C
 
             GUI_Ingame_ChatUpdate_ListUpdate(inner_window_oob);
 
-            // grab (y + height) value of last message
-            rect.y = alias_ptr->rect.y + alias_ptr->rect.h + 5;
         }
+
+        // grab (y + height) value of last message
+        rect.y = alias_ptr->rect.y + alias_ptr->rect.h + 5;
     }
 
     // message incoming from opponent
