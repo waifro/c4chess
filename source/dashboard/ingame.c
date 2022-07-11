@@ -162,7 +162,7 @@ int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat_obj, char *pathname, SDL_C
         // new message is out of bounds of inner_window_oob
         if ((alias_ptr->rect.y + alias_ptr->rect.h + new_alias->rect.h) > (inner_window_oob->rect.y + inner_window_oob->rect.h)) {
 
-            GUI_Ingame_ChatUpdate_ListUpdate(inner_window_oob);
+            GUI_Ingame_ChatUpdate_ListUpdate(obj_link_list);
 
         }
 
@@ -192,8 +192,6 @@ int GUI_Ingame_ChatUpdate_ListUpdate(GUI_TextureAlias *inner_window) {
     for (int i = 0; i < val; i++) {
         buf_alias = curr->ptr;
         curr = curr->next;
-
-        if (i == 0) continue; // scrollable obj
 
         buf_alias->rect.y -= buf_alias->rect.h + 5;
     }
