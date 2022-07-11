@@ -244,7 +244,9 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, in
             alias_ptr = alias_ttr->link;
 
             GUI_HookLink_Update(alias_ptr->link, input, buffer, key, code);
-            GUI_Ingame_ChatUpdate(current, OPENSANS_REGULAR, PP4M_BLACK, 14, buffer);
+
+            if (alias_ptr->obj == OBJ_WINDOW_CHAT)
+                GUI_Ingame_ChatUpdate(alias_ptr->link, OPENSANS_REGULAR, PP4M_BLACK, 14, buffer);
         }
 
         // we should create a func for this

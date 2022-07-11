@@ -121,27 +121,24 @@ GUI_TextureAlias *GUI_Ingame_ChatInit_InnerWindow(GUI_TextureAlias *blank_window
     return window_inner_oob;
 }
 
-int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat, char *pathname, SDL_Color color, int point, char **buffer) {
+int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat_obj, char *pathname, SDL_Color color, int point, char **buffer) {
     if (*buffer == NULL) return -1;
 
-    printf("hi\n");
-
-    PP4M_HOOK *link_inner_window_oob = GUI_Alias_FindObj(list_window_chat, OBJ_WINDOW_INNER_OOB_CHAT);
+    PP4M_HOOK *link_inner_window_oob = GUI_Alias_FindObj(list_window_chat_obj, OBJ_WINDOW_INNER_OOB_CHAT);
     if (link_inner_window_oob == NULL) return -1;
 
     GUI_TextureAlias *inner_window_oob = link_inner_window_oob->ptr;
 
     // get to last obj of list from innerWindow_OOB containing OBJ_LINK_PTR
-    PP4M_HOOK *tail = GUI_Alias_Tail(inner_window_oob->link);
+    PP4M_HOOK *tail = GUI_Alias_Tail(inner_window_oob);
     GUI_TextureAlias *obj_link_list = tail->ptr;
 
     if (obj_link_list->obj != OBJ_LINK_PTR) return -1;
 
     PP4M_HOOK *head_chat = obj_link_list->link;
-    PP4M_HOOK *tail_chat = GUI_Alias_Tail(obj_link_list->link);
+    PP4M_HOOK *tail_chat = GUI_Alias_Tail(obj_link_list);
 
-    GUI_TextureAlias *alias_ptr = NULL;
-    GUI_TextureAlias *new_alias = malloc(sizeof(GUI_TextureAlias));
+    GUI_TextureAlias *new_alias = GUI_Alias_InitAlias();
 
     SDL_Rect rect = {
         inner_window_oob->rect.x,
@@ -150,8 +147,6 @@ int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat, char *pathname, SDL_Color
     };
 
     new_alias->obj = OBJ_CHAT_MESG;
-
-    printf("GUI_Ingame_ChatUpdate:\n");
 
     // temporary fix of user
     char buf_user[17];
@@ -163,9 +158,7 @@ int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat, char *pathname, SDL_Color
 
     // grab last message height
     if (tail_chat->ptr != head_chat->ptr) {
-        alias_ptr = tail_chat->ptr;
-
-        printf("  im here also\n");
+        GUI_TextureAlias *alias_ptr = tail_chat->ptr;
 
         // new message is out of bounds of inner_window_oob
         if ((alias_ptr->rect.y + alias_ptr->rect.h + new_alias->rect.h) > (inner_window_oob->rect.y + inner_window_oob->rect.h)) {
@@ -183,8 +176,6 @@ int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat, char *pathname, SDL_Color
 
     // apply height to message
     new_alias->rect.y = rect.y;
-
-    printf("  hooking message\n");
 
     pp4m_HOOK_Next(head_chat, new_alias);
     return 0;

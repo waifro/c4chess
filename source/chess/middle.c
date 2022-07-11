@@ -192,8 +192,8 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
     int key = -1;
     int code = -1;
 
-    char *buffer = NULL;
-    //static char *buf_bak = NULL;
+    static char *buffer = NULL;
+    static char *buf_bak = NULL;
 
     static int position_old = -1;
     static int position_new = -1;
@@ -222,7 +222,6 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
     // update move the piece
     MIDDLE_UpdatePositionPiece(glo_chess_core_tile, position_old, position_new);
 
-    /*
     if (buf_bak == NULL && buffer != NULL) {
         DEBUG_PrintBox(2, "deployed buf: %p", buffer);
         buf_bak = buffer;
@@ -239,7 +238,6 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
         free(buf_bak);
         buf_bak = buffer;
     }
-    */
 
     if (position_old != -1 && position_new != -1) {
 
