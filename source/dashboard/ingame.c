@@ -157,8 +157,6 @@ int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat_obj, char *pathname, SDL_C
     if (head_chat->ptr != NULL) {
         GUI_TextureAlias *alias_ptr = tail_chat->ptr;
 
-        printf("im here\n");
-
         // new message is out of bounds of inner_window_oob
         if ((alias_ptr->rect.y + alias_ptr->rect.h + new_alias->rect.h) > (inner_window_oob->rect.y + inner_window_oob->rect.h)) {
 
