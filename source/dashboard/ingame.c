@@ -82,8 +82,8 @@ GUI_TextureAlias *GUI_Ingame_ChatInit_InnerWindow(GUI_TextureAlias *blank_window
     window_inner_oob->obj = OBJ_WINDOW_INNER_OOB_CHAT;
 
     // initialize out of bounds rect where textures will be allocated
-    window_inner_oob->rect.x = blank_window->rect.x - 5;
-    window_inner_oob->rect.y = blank_window->rect.y - 5;
+    window_inner_oob->rect.x = blank_window->rect.x + 5;
+    window_inner_oob->rect.y = blank_window->rect.y + 5;
     window_inner_oob->rect.w = blank_window->rect.w - 5;
     window_inner_oob->rect.h = blank_window->rect.h - 5;
 
