@@ -23,10 +23,10 @@ DEP_PP4M := source/pp4m/pp4m.c source/pp4m/pp4m_io.c source/pp4m/pp4m_draw.c sou
 LIBS := -lSDL2 -lSDL2_ttf -lSDL2_image
 
 Release : $(SOURCE_PROJECT) $(DEP_PP4M)
-	clang $(SOURCE_PROJECT) $(DEP_PP4M) $(sdl2-config --cflags) $(LIBMMAN) -Wall -Wextra $(SANITIZE) $(LIBS) -o $(OUTPUT)
+	gcc $(SOURCE_PROJECT) $(DEP_PP4M) $(sdl2-config --cflags) $(LIBMMAN) -Wall -Wextra $(SANITIZE) $(LIBS) -o $(OUTPUT)
 
 all : $(SOURCE_PROJECT) $(DEP_PP4M)
-	clang $(SOURCE_PROJECT) $(DEP_PP4M) $(sdl2-config --cflags) $(LIBMMAN) -Wmsvc-not-found -Wall -Wextra $(SANITIZE) $(LIBS) -o $(OUTPUT)
+	gcc $(SOURCE_PROJECT) $(DEP_PP4M) $(sdl2-config --cflags) $(LIBMMAN) -Wmsvc-not-found -Wall -Wextra $(SANITIZE) $(LIBS) -o $(OUTPUT)
 
 clean :
 	rm *.o $(OUTPUT)

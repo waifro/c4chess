@@ -71,14 +71,14 @@ GUI_TextureAlias *GUI_Ingame_ChatInit_Window(GUI_TextureAlias *alias_button_chat
     pp4m_HOOK_Next(window_obj_list, alias_button_send);
 
     window->link = window_obj_list;
-    
+
     return window;
 }
 
 // by using OBJ_WINDOW_CHAT, where going to create a chat floating
 GUI_TextureAlias *GUI_Ingame_ChatInit_InnerWindow(GUI_TextureAlias *blank_window) {
 
-    GUI_TextureAlias *window_inner_oob = malloc(sizeof(GUI_TextureAlias));
+    GUI_TextureAlias *window_inner_oob = GUI_Alias_InitAlias();
     window_inner_oob->obj = OBJ_WINDOW_INNER_OOB_CHAT;
 
     // initialize out of bounds rect where textures will be allocated
@@ -94,7 +94,7 @@ GUI_TextureAlias *GUI_Ingame_ChatInit_InnerWindow(GUI_TextureAlias *blank_window
     int scroll_size_delta = 3;
     int scroll_size_width = 5;
 
-    GUI_TextureAlias *scroll_vertical = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
+    GUI_TextureAlias *scroll_vertical = GUI_Alias_InitAlias();
     scroll_vertical->obj = OBJ_NULL;
     scroll_vertical->rect.x = window_inner_oob->rect.x + window_inner_oob->rect.w - scroll_size_width - scroll_size_delta;
     scroll_vertical->rect.y = window_inner_oob->rect.y + scroll_size_delta;
@@ -103,12 +103,12 @@ GUI_TextureAlias *GUI_Ingame_ChatInit_InnerWindow(GUI_TextureAlias *blank_window
 
     // init list of chat
     PP4M_HOOK *init_list_chat = pp4m_HOOK_Init();
-    GUI_TextureAlias *chat_mesg_null = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
+    GUI_TextureAlias *chat_mesg_null = GUI_Alias_InitAlias();
     chat_mesg_null->obj = OBJ_NULL;
     init_list_chat->ptr = chat_mesg_null;
 
     // initialize OBJ_LINK_PTR for chat redirection
-    GUI_TextureAlias *chat_link = (GUI_TextureAlias*)malloc(sizeof(GUI_TextureAlias));
+    GUI_TextureAlias *chat_link = GUI_Alias_InitAlias();
     chat_link->obj = OBJ_LINK_PTR;
 
     // save list of initialized chat to chat_link
