@@ -103,9 +103,6 @@ GUI_TextureAlias *GUI_Ingame_ChatInit_InnerWindow(GUI_TextureAlias *blank_window
 
     // init list of chat
     PP4M_HOOK *init_list_chat = pp4m_HOOK_Init();
-    GUI_TextureAlias *chat_mesg_null = GUI_Alias_InitAlias();
-    chat_mesg_null->obj = OBJ_NULL;
-    init_list_chat->ptr = chat_mesg_null;
 
     // initialize OBJ_LINK_PTR for chat redirection
     GUI_TextureAlias *chat_link = GUI_Alias_InitAlias();
@@ -157,8 +154,10 @@ int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat_obj, char *pathname, SDL_C
     new_alias->texture = pp4m_TTF_TextureFont(glo_render, pathname, color, point, &new_alias->rect, 0, 0, &(*buffer)[len_buf]);
 
     // grab last message height
-    if (tail_chat->ptr != head_chat->ptr) {
+    if (tail_chat != NULL && tail_chat->ptr != head_chat->ptr) {
         GUI_TextureAlias *alias_ptr = tail_chat->ptr;
+
+        printf("im here\n");
 
         // new message is out of bounds of inner_window_oob
         if ((alias_ptr->rect.y + alias_ptr->rect.h + new_alias->rect.h) > (inner_window_oob->rect.y + inner_window_oob->rect.h)) {
