@@ -230,11 +230,9 @@ int CORE_NET_UpdateLobby(int *code, int *socket, char **buffer, int *position_ol
             // we need to test chat and gameplay
             // if two actions write to buffer then the behavior is undefined
             char buf[256];
-            memset(buf, 0x00, 255);
-
             *buffer = buf;
 
-            cl_svcode_redirect(cl_GrabPacket(socket, buf), buffer, position_old, position_new, promotn);
+            cl_svcode_redirect(cl_GrabPacket(socket, *buffer), buffer, position_old, position_new, promotn);
             DEBUG_PrintBox(2, "recieved buf: [%s] [%d] [%d] [%d]", buf, *position_old, *position_new, *promotn);
         }
 

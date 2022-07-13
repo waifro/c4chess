@@ -115,6 +115,7 @@ int cl_redirect_svcode_LOBBY_POST(int code, char **buffer, int *position_old, in
 int cl_SV_LOBBY_POST_MESG(char **buffer) {
     int result = -1;
     char *buf = malloc(sizeof(char) * 255);
+    memset(buf, 0x00, 255);
 
     result = sscanf(*buffer, "%*d %255c", buf);
 
