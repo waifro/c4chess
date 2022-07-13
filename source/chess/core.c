@@ -234,7 +234,7 @@ int CORE_NET_UpdateLobby(int *code, int *socket, char **buffer, int *position_ol
 
             *buffer = buf;
 
-            cl_svcode_redirect(cl_GrabPacket(socket, buf), buf, position_old, position_new, promotn);
+            cl_svcode_redirect(cl_GrabPacket(socket, buf), buffer, position_old, position_new, promotn);
             DEBUG_PrintBox(2, "recieved buf: [%s] [%d] [%d] [%d]", buf, *position_old, *position_new, *promotn);
         }
 
