@@ -279,13 +279,12 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
 
     while(running == 0) {
         deltaTime = pp4m_DeltaFramerate();
-        (void)deltaTime;
 
         /* checks if king under attack */
         CHESS_PiecePattern_UpdateState(glo_chess_core_tile, player);
 
         /* makes the in-game changes during gameplay */
-        running = MIDDLE_UpdateChangeState(&event, &player, socket);
+        running = MIDDLE_UpdateChangeState(&event, &player, socket, deltaTime);
 
         SDL_RenderClear(glo_render);
         SDL_RenderCopy(glo_render, background, NULL, NULL);
