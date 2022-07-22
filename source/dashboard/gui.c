@@ -193,33 +193,34 @@ int GUI_HookList_Render(PP4M_HOOK *hook_list) {
 
 void GUI_HookList_Quit(PP4M_HOOK *hook_list) {
 
-    PP4M_HOOK *current = hook_list;
-    PP4M_HOOK *curr_nxt = NULL;
-    PP4M_HOOK *ptr_list = NULL;
+    PP4M_HOOK *curr = hook_list;
+    GUI_TextureAlias *alias = NULL;
+    GUI_TextureAlias *alias_ptr = NULL;
 
-    // take total main loop
     int val = pp4m_HOOK_Size(hook_list);
 
     for (int i = 0; i < val; i++) {
-        curr_nxt = current;
 
-        // grab last ptr of tail
-        int ras = pp4m_HOOK_Size(curr_nxt);
+        alias = curr->ptr;
 
-        for (int n = 0; n < ras; n++) {
-            ptr_list = curr_nxt->ptr;
-            curr_nxt = curr_nxt->next;
+        if (alias->obj == OBJ_BUTTON_LINK_OFF || alias->obj == OBJ_BUTTON_LINK_ON) {
+            alias_ptr = alias->link;
+
+            if (alias_ptr->obj == OBJ_WINDOW_CHAT)
+                GUI_AliasDestroy_WindowChat(alias_ptr);
+
+            if (alias_ptr->texture != NULL)
+                SDL_DestroyTexture(alias_ptr->texture);
         }
 
-        int res = pp4m_HOOK_Size(ptr_list);
+        if (alias->texture != NULL)
+            SDL_DestroyTexture(alias->texture);
 
-        // remove all last ptr -> hook
-        for (int n = 0; n < res; n++)
-            pp4m_HOOK_Remove(ptr_list);
-
-        // remove tail
-        pp4m_HOOK_Remove(current);
+        curr = curr->next;
     }
+
+    for (int i = 0; i < val; i++)
+        pp4m_HOOK_Remove(hook_list);
 
     return;
 }

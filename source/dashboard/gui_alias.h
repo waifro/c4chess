@@ -128,4 +128,9 @@ int GUI_Alias_InnerWindow_Render(GUI_TextureAlias *window_inner_oob);
 
 PP4M_HOOK *GUI_Alias_Tail(GUI_TextureAlias *alias);
 
+int GUI_AliasDestroy_WindowChat(GUI_TextureAlias *window);
+int GUI_AliasDestroy_WindowChat_InnerWindow(GUI_TextureAlias *inner_window);
+int GUI_AliasDestroy_WindowChat_Chat(PP4M_HOOK *list);
+int GUI_AliasDestroy_Textbox(GUI_TextureAlias *alias_ptr);
+
 #endif
