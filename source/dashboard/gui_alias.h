@@ -24,6 +24,8 @@ typedef enum {
     OBJ_WINDOW_INNER_OOB,       // used for cropping textures out-of-bounds inside this rectangle
     OBJ_WINDOW_INNER_OOB_CHAT,  // window containing chat structure
 
+    OBJ_WINDOW_OOB_RENDER,      // texture as renderer for drawing stuff, links to list
+
     OBJ_SCROLL_VERTICAL,        // with input, scroll up and down
     OBJ_SCROLL_HORIZONTAL,      // with input, scroll left or right
 
@@ -68,15 +70,15 @@ typedef enum {
                         |- OBJ_WINDOW_INNER_OOB_CHAT \                          // useful for cropping images and adding scrolls objects
                                                      |- && LL
                                                      |- OBJ_SCROLL_VERTICAL                                 // obj used for scrolling up/down
-                                                     |- OBJ_LINK_PTR \
-                                                                     |- && LL
-                                                                     |- OBJ_CHAT_MESG          // conversation from player 0
-                                                                     |- OBJ_CHAT_MESG          // conversation from player 1
-                                                                     |- OBJ_CHAT_MESG          // conversation from player 0
-                                                                     |- OBJ_CHAT_MESG          // conversation from player 0, new line
-                                                                     |- OBJ_CHAT_MESG          // conversation from player 1
-                                                                     |- etc ...
-                                                                     (NULL)
+                                                     |- OBJ_WINDOW_OOB_RENDER \
+                                                                              |- && LL
+                                                                              |- OBJ_CHAT_MESG          // conversation from player 0
+                                                                              |- OBJ_CHAT_MESG          // conversation from player 1
+                                                                              |- OBJ_CHAT_MESG          // conversation from player 0
+                                                                              |- OBJ_CHAT_MESG          // conversation from player 0, new line
+                                                                              |- OBJ_CHAT_MESG          // conversation from player 1
+                                                                              |- etc ...
+                                                                              (NULL)
                                                      (NULL)
                         |- OBJ_TEXTBOX_ALIAS \
                                              |- OBJ_TEXTBOX_INPUT_OFF \                       // obj to indicate accept input or not

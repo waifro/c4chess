@@ -13,9 +13,11 @@ int GUI_Ingame_ChatInit(PP4M_HOOK *hook_list);
 GUI_TextureAlias *GUI_Ingame_ChatInit_Window(GUI_TextureAlias *alias_button_chat);
 
 // by using OBJ_WINDOW, where going to create a chat floating
-GUI_TextureAlias *GUI_Ingame_ChatInit_InnerWindow(GUI_TextureAlias *window);
+PP4M_HOOK *GUI_Ingame_ChatInit_InnerWindow(GUI_TextureAlias *window_inner_oob);
 
 int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat, char *pathname, SDL_Color color, int point, char **buffer);
 int GUI_Ingame_ChatUpdate_ListUpdate(GUI_TextureAlias *inner_window);
+
+int GUI_Ingame_ChatInit_RenderObj_Increase(GUI_TextureAlias *render_obj, GUI_TextureAlias *new_alias);
 
 #endif

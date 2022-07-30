@@ -279,30 +279,36 @@ int GUI_Alias_RectUpdate_OOB(SDL_Rect *rect_1, SDL_Rect *rect_2, SDL_Rect *rect_
 
 int GUI_Alias_InnerWindow_Render(GUI_TextureAlias *window_inner_oob) {
 
-    // get to last obj of list from innerWindow_OOB containing OBJ_LINK_PTR
+    // get to last obj of list from innerWindow_OOB containing OBJ_WINDOW_OOB_RENDER
     PP4M_HOOK *tail = GUI_Alias_Tail(window_inner_oob->link);
-    GUI_TextureAlias *obj_link_list = tail->ptr;
+    GUI_TextureAlias *render_obj = tail->ptr;
 
     // hook to linked list from obj
-    if (obj_link_list->obj != OBJ_LINK_PTR) return -1;
-    PP4M_HOOK *curr_alias_list = obj_link_list->link;
+    if (render_obj->obj != OBJ_WINDOW_OOB_RENDER) return -1;
+    if (render_obj->texture == NULL) return -2;
+
+    PP4M_HOOK *curr_alias_list = render_obj->link;
 
     int val = pp4m_HOOK_Size(curr_alias_list);
     GUI_TextureAlias *alias_ptr = NULL;
 
-    SDL_Rect alias_rect_bak;
-    SDL_Rect src_rect;
-
     // alias_ptr->rect is dest rect for render
     // src_rect is src rect for texture
+
+    SDL_SetRenderTarget(glo_render, render_obj->texture);
+    SDL_RenderClear(glo_render);
 
     for (int i = 0; i < val; i++) {
         alias_ptr = curr_alias_list->ptr;
         curr_alias_list = curr_alias_list->next;
 
+        // in theory, this is safe, but it crashes if theres a obj, and the render_obj hasnt been initialized
         if (alias_ptr->obj == OBJ_NULL) continue;
 
-        // copy SDL_Rect
+        SDL_RenderCopy(glo_render, alias_ptr->texture, NULL, &alias_ptr->rect);
+
+        /* old data (used old approach)
+        /* copy SDL_Rect
         GUI_Alias_RectCopy(&alias_rect_bak, &alias_ptr->rect);
 
         if (GUI_Alias_RectUpdate_OOB(&alias_ptr->rect, &src_rect, &window_inner_oob->rect) == 0) {
@@ -311,7 +317,39 @@ int GUI_Alias_InnerWindow_Render(GUI_TextureAlias *window_inner_oob) {
             // restore SDL_Rect
             GUI_Alias_RectCopy(&alias_ptr->rect, &alias_rect_bak);
         }
+        */
     }
+
+    SDL_SetRenderTarget(glo_render, NULL);
+
+    // temporary fix (untill i add src_dest and src_src to obj's)
+    SDL_Rect dst_rect;
+    SDL_Rect src_rect;
+
+    dst_rect.x = window_inner_oob->rect.x;
+    dst_rect.y = window_inner_oob->rect.y;
+    dst_rect.w = render_obj->rect.w;
+    dst_rect.h = render_obj->rect.h;
+
+    // for now, we just grub the latest height, in future we will use obj_scroll_..
+    src_rect.x = render_obj->rect.x;
+    src_rect.y = render_obj->rect.y;
+    src_rect.w = render_obj->rect.w;
+    src_rect.h = render_obj->rect.h;
+
+    if (render_obj->rect.w > window_inner_oob->rect.w) {
+        dst_rect.w = window_inner_oob->rect.w;
+        src_rect.x = render_obj->rect.w - window_inner_oob->rect.w;
+    }
+
+    if (render_obj->rect.h > window_inner_oob->rect.h) {
+        dst_rect.h = window_inner_oob->rect.h;
+        src_rect.y = render_obj->rect.h - window_inner_oob->rect.h;
+    }
+
+    //printf("render_obj->rect: %d, %d, %d, %d\n", render_obj->rect.x, render_obj->rect.y, render_obj->rect.w, render_obj->rect.h);
+    //SDL_RenderCopy(glo_render, render_obj->texture, NULL, &render_obj->rect);
+    SDL_RenderCopy(glo_render, render_obj->texture, &src_rect, &dst_rect);
 
     return 0;
 }
@@ -366,7 +404,7 @@ int GUI_AliasDestroy_WindowChat_InnerWindow(GUI_TextureAlias *inner_window) {
     for (int i = 0; i < val; i++) {
         alias_ptr = curr->ptr;
 
-        if (alias_ptr->obj == OBJ_LINK_PTR)
+        if (alias_ptr->obj == OBJ_WINDOW_OOB_RENDER)
             GUI_AliasDestroy_WindowChat_Chat(alias_ptr->link);
 
         if (alias_ptr->texture != NULL)

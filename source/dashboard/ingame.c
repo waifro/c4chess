@@ -46,7 +46,17 @@ GUI_TextureAlias *GUI_Ingame_ChatInit_Window(GUI_TextureAlias *alias_button_chat
     alias_blank_window->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_WHITE, &alias_blank_window->rect, window->rect.x + 10, window->rect.y + 10, window->rect.w - 20, window->rect.h - 50);
 
     // init OBJ_WINDOW_INNER_OOB
-    GUI_TextureAlias *alias_window_inner_oob = GUI_Ingame_ChatInit_InnerWindow(alias_blank_window);
+    GUI_TextureAlias *alias_window_inner_oob = GUI_Alias_InitAlias();
+    alias_window_inner_oob->obj = OBJ_WINDOW_INNER_OOB_CHAT;
+
+    // initialize out of bounds rect where textures will be allocated
+    alias_window_inner_oob->rect.x = alias_blank_window->rect.x + 5;
+    alias_window_inner_oob->rect.y = alias_blank_window->rect.y + 5;
+    alias_window_inner_oob->rect.w = alias_blank_window->rect.w - 5;
+    alias_window_inner_oob->rect.h = alias_blank_window->rect.h - 5;
+
+    // init inner window stuff
+    alias_window_inner_oob->link = GUI_Ingame_ChatInit_InnerWindow(alias_window_inner_oob);
 
     GUI_TextureAlias *alias_textbox = GUI_Alias_InitAlias();
     alias_textbox->obj = OBJ_TEXTBOX_ALIAS;
@@ -76,20 +86,10 @@ GUI_TextureAlias *GUI_Ingame_ChatInit_Window(GUI_TextureAlias *alias_button_chat
 }
 
 // by using OBJ_WINDOW_CHAT, where going to create a chat floating
-GUI_TextureAlias *GUI_Ingame_ChatInit_InnerWindow(GUI_TextureAlias *blank_window) {
+PP4M_HOOK *GUI_Ingame_ChatInit_InnerWindow(GUI_TextureAlias *window_inner_oob) {
 
-    GUI_TextureAlias *window_inner_oob = GUI_Alias_InitAlias();
-    window_inner_oob->obj = OBJ_WINDOW_INNER_OOB_CHAT;
-
-    // initialize out of bounds rect where textures will be allocated
-    window_inner_oob->rect.x = blank_window->rect.x + 5;
-    window_inner_oob->rect.y = blank_window->rect.y + 5;
-    window_inner_oob->rect.w = blank_window->rect.w - 5;
-    window_inner_oob->rect.h = blank_window->rect.h - 5;
-
-    // initialize linked list for scrollable object + OBJ_LINK_PTR containing list of chat
+    // initialize linked list for scrollable object + OBJ_WINDOW_OOB_RENDER containing list of chat
     PP4M_HOOK *init_list_struct = pp4m_HOOK_Init();
-    window_inner_oob->link = init_list_struct;
 
     int scroll_size_delta = 3;
     int scroll_size_width = 5;
@@ -101,21 +101,23 @@ GUI_TextureAlias *GUI_Ingame_ChatInit_InnerWindow(GUI_TextureAlias *blank_window
     scroll_vertical->rect.w = scroll_size_width;
     scroll_vertical->rect.h = window_inner_oob->rect.h - (scroll_size_delta*2);
 
-    // init list of chat
-    PP4M_HOOK *init_list_chat = pp4m_HOOK_Init();
+    // initialize OBJ_WINDOW_OOB_RENDER for chat redirection
+    GUI_TextureAlias *render_obj = GUI_Alias_InitAlias();
+    render_obj->obj = OBJ_WINDOW_OOB_RENDER;
+    render_obj->rect.x = 0;
+    render_obj->rect.y = 0;
+    render_obj->rect.w = window_inner_oob->rect.w;
+    render_obj->rect.h = 0;
 
-    // initialize OBJ_LINK_PTR for chat redirection
-    GUI_TextureAlias *chat_link = GUI_Alias_InitAlias();
-    chat_link->obj = OBJ_LINK_PTR;
-
-    // save list of initialized chat to chat_link
-    chat_link->link = init_list_chat;
+    // save list of initialized chat to render_obj
+    PP4M_HOOK *list_obj = pp4m_HOOK_Init();
+    render_obj->link = list_obj;
 
     // completed structure of inner Window OOB
     pp4m_HOOK_Next(init_list_struct, scroll_vertical);
-    pp4m_HOOK_Next(init_list_struct, chat_link);
+    pp4m_HOOK_Next(init_list_struct, render_obj);
 
-    return window_inner_oob;
+    return init_list_struct;
 }
 
 int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat_obj, char *pathname, SDL_Color color, int point, char **buffer) {
@@ -126,21 +128,19 @@ int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat_obj, char *pathname, SDL_C
 
     GUI_TextureAlias *inner_window_oob = link_inner_window_oob->ptr;
 
-    // get to last obj of list from innerWindow_OOB containing OBJ_LINK_PTR
+    // get to last obj of list from innerWindow_OOB containing OBJ_WINDOW_OOB_RENDER
     PP4M_HOOK *tail = GUI_Alias_Tail(inner_window_oob);
-    GUI_TextureAlias *obj_link_list = tail->ptr;
+    GUI_TextureAlias *render_obj = tail->ptr;
 
-    if (obj_link_list->obj != OBJ_LINK_PTR) return -1;
+    if (render_obj->obj != OBJ_WINDOW_OOB_RENDER) return -1;
 
-    PP4M_HOOK *head_chat = obj_link_list->link;
-    PP4M_HOOK *tail_chat = GUI_Alias_Tail(obj_link_list);
+    PP4M_HOOK *head_chat = render_obj->link;
+    PP4M_HOOK *tail_chat = GUI_Alias_Tail(render_obj);
 
     GUI_TextureAlias *new_alias = GUI_Alias_InitAlias();
 
     SDL_Rect rect = {
-        inner_window_oob->rect.x,
-        inner_window_oob->rect.y,
-        0, 0
+        0, 0, 0, 0
     };
 
     new_alias->obj = OBJ_CHAT_MESG;
@@ -155,16 +155,20 @@ int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat_obj, char *pathname, SDL_C
 
     new_alias->texture = pp4m_TTF_TextureFont(glo_render, pathname, color, point, &new_alias->rect, 0, 0, &(*buffer)[len_buf]);
 
+
     // grab last message height
     if (head_chat->ptr != NULL) {
         GUI_TextureAlias *alias_ptr = tail_chat->ptr;
 
+        /* old approach (not using OBJ_WINDOW_OOB_RENDER)
+        /*
         // new message is out of bounds of inner_window_oob
         if ((alias_ptr->rect.y + alias_ptr->rect.h + new_alias->rect.h) > (inner_window_oob->rect.y + inner_window_oob->rect.h)) {
 
-            GUI_Ingame_ChatUpdate_ListUpdate(obj_link_list);
+            //GUI_Ingame_ChatUpdate_ListUpdate(render_obj);
 
         }
+        */
 
         // grab (y + height) value of last message
         rect.y = alias_ptr->rect.y + alias_ptr->rect.h + 5;
@@ -172,10 +176,12 @@ int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat_obj, char *pathname, SDL_C
 
     // message incoming from opponent
     if (strcmp(glo_user.username, buf_user) != 0) new_alias->rect.x = rect.x;
-    else new_alias->rect.x = inner_window_oob->rect.x + inner_window_oob->rect.w - (new_alias->rect.w + 10);
+    else new_alias->rect.x = inner_window_oob->rect.w - new_alias->rect.w + 10;
 
-    // apply height to message
+    // (old) apply height to message
     new_alias->rect.y = rect.y;
+
+    GUI_Ingame_ChatInit_RenderObj_Increase(render_obj, new_alias);
 
     pp4m_HOOK_Next(head_chat, new_alias);
     return 0;
@@ -195,6 +201,25 @@ int GUI_Ingame_ChatUpdate_ListUpdate(GUI_TextureAlias *inner_window) {
 
         buf_alias->rect.y -= buf_alias->rect.h + 5;
     }
+
+    return 0;
+}
+
+int GUI_Ingame_ChatInit_RenderObj_Increase(GUI_TextureAlias *render_obj, GUI_TextureAlias *new_alias) {
+    if (render_obj->texture != NULL)
+        SDL_DestroyTexture(render_obj->texture);
+
+    int xw = new_alias->rect.x + new_alias->rect.w;
+    int yh = new_alias->rect.y + new_alias->rect.h;
+
+    if (xw > render_obj->rect.w) render_obj->rect.w = xw;
+    if (yh > render_obj->rect.h) render_obj->rect.h = yh;
+
+    // increase size of new obj
+    SDL_Texture *texture = NULL;
+    texture = SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, render_obj->rect.w, render_obj->rect.h);
+
+    render_obj->texture = texture;
 
     return 0;
 }
