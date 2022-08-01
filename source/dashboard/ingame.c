@@ -218,7 +218,7 @@ int GUI_Ingame_ChatInit_RenderObj_Increase(GUI_TextureAlias *render_obj, GUI_Tex
     // increase size of new obj
     SDL_Texture *texture = NULL;
     texture = SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, render_obj->rect.w, render_obj->rect.h);
-
+    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
     render_obj->texture = texture;
 
     return 0;
