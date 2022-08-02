@@ -292,9 +292,6 @@ int GUI_Alias_InnerWindow_Render(GUI_TextureAlias *window_inner_oob) {
     int val = pp4m_HOOK_Size(curr_alias_list);
     GUI_TextureAlias *alias_ptr = NULL;
 
-    // alias_ptr->rect is dest rect for render
-    // src_rect is src rect for texture
-
     SDL_SetRenderTarget(glo_render, render_obj->texture);
     SDL_RenderClear(glo_render);
 
@@ -306,18 +303,6 @@ int GUI_Alias_InnerWindow_Render(GUI_TextureAlias *window_inner_oob) {
         if (alias_ptr->obj == OBJ_NULL) continue;
 
         SDL_RenderCopy(glo_render, alias_ptr->texture, NULL, &alias_ptr->rect);
-
-        /* old data (used old approach)
-        /* copy SDL_Rect
-        GUI_Alias_RectCopy(&alias_rect_bak, &alias_ptr->rect);
-
-        if (GUI_Alias_RectUpdate_OOB(&alias_ptr->rect, &src_rect, &window_inner_oob->rect) == 0) {
-            SDL_RenderCopy(glo_render, alias_ptr->texture, &src_rect, &alias_ptr->rect);
-
-            // restore SDL_Rect
-            GUI_Alias_RectCopy(&alias_ptr->rect, &alias_rect_bak);
-        }
-        */
     }
 
     SDL_SetRenderTarget(glo_render, NULL);
@@ -347,8 +332,6 @@ int GUI_Alias_InnerWindow_Render(GUI_TextureAlias *window_inner_oob) {
         src_rect.y = render_obj->rect.h - window_inner_oob->rect.h;
     }
 
-    //printf("render_obj->rect: %d, %d, %d, %d\n", render_obj->rect.x, render_obj->rect.y, render_obj->rect.w, render_obj->rect.h);
-    //SDL_RenderCopy(glo_render, render_obj->texture, NULL, &render_obj->rect);
     SDL_RenderCopy(glo_render, render_obj->texture, &src_rect, &dst_rect);
 
     return 0;

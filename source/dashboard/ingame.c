@@ -151,24 +151,12 @@ int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat_obj, char *pathname, SDL_C
     sscanf(*buffer, "%s %*s", buf_user);
     len_buf = strlen(buf_user) + 1; // adding the space
 
-    printf("buffer write: [%s]\n", &(*buffer)[len_buf]);
-
     new_alias->texture = pp4m_TTF_TextureFont(glo_render, pathname, color, point, &new_alias->rect, 0, 0, &(*buffer)[len_buf]);
 
 
     // grab last message height
     if (head_chat->ptr != NULL) {
         GUI_TextureAlias *alias_ptr = tail_chat->ptr;
-
-        /* old approach (not using OBJ_WINDOW_OOB_RENDER)
-        /*
-        // new message is out of bounds of inner_window_oob
-        if ((alias_ptr->rect.y + alias_ptr->rect.h + new_alias->rect.h) > (inner_window_oob->rect.y + inner_window_oob->rect.h)) {
-
-            //GUI_Ingame_ChatUpdate_ListUpdate(render_obj);
-
-        }
-        */
 
         // grab (y + height) value of last message
         rect.y = alias_ptr->rect.y + alias_ptr->rect.h + 5;
