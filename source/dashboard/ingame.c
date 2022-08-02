@@ -139,8 +139,8 @@ int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat_obj, char *pathname, SDL_C
 
     // create a new texture for new lines
     while (strlen(buf) > 35) {
-        if (buf == NULL) break;
         buf = GUI_Ingame_ChatUpdate_NewLine(inner_window_oob, pathname, color, point, buf_user, buf);
+        if (buf == NULL) break;
     }
 
     GUI_Ingame_ChatUpdate_AddLine(inner_window_oob, pathname, color, point, buf_user, buf);
@@ -181,7 +181,7 @@ int GUI_Ingame_ChatUpdate_AddLine(GUI_TextureAlias *inner_window_oob, char *path
     PP4M_HOOK *tail_chat = GUI_Alias_Tail(render_obj);
 
     GUI_TextureAlias *new_alias = GUI_Alias_InitAlias();
-    SDL_Rect rect;
+    SDL_Rect rect = {0, 0, 0, 0};
 
     new_alias->obj = OBJ_CHAT_MESG;
     new_alias->texture = pp4m_TTF_TextureFont(glo_render, pathname, color, point, &new_alias->rect, 0, 0, buffer);
@@ -191,7 +191,7 @@ int GUI_Ingame_ChatUpdate_AddLine(GUI_TextureAlias *inner_window_oob, char *path
         GUI_TextureAlias *alias_ptr = tail_chat->ptr;
 
         // grab (y + height) value of last message
-        rect.y = alias_ptr->rect.y + alias_ptr->rect.h + 5;
+        rect.y = alias_ptr->rect.y + alias_ptr->rect.h;
     }
 
     // message incoming from opponent
