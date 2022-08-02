@@ -52,8 +52,8 @@ GUI_TextureAlias *GUI_Ingame_ChatInit_Window(GUI_TextureAlias *alias_button_chat
     // initialize out of bounds rect where textures will be allocated
     alias_window_inner_oob->rect.x = alias_blank_window->rect.x + 5;
     alias_window_inner_oob->rect.y = alias_blank_window->rect.y + 5;
-    alias_window_inner_oob->rect.w = alias_blank_window->rect.w - 5;
-    alias_window_inner_oob->rect.h = alias_blank_window->rect.h - 5;
+    alias_window_inner_oob->rect.w = alias_blank_window->rect.w - 10;
+    alias_window_inner_oob->rect.h = alias_blank_window->rect.h - 10;
 
     // init inner window stuff
     alias_window_inner_oob->link = GUI_Ingame_ChatInit_InnerWindow(alias_window_inner_oob);
@@ -164,7 +164,7 @@ int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat_obj, char *pathname, SDL_C
 
     // message incoming from opponent
     if (strcmp(glo_user.username, buf_user) != 0) new_alias->rect.x = rect.x;
-    else new_alias->rect.x = inner_window_oob->rect.w - new_alias->rect.w + 10;
+    else new_alias->rect.x = inner_window_oob->rect.w - new_alias->rect.w;
 
     // (old) apply height to message
     new_alias->rect.y = rect.y;
@@ -175,6 +175,7 @@ int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat_obj, char *pathname, SDL_C
     return 0;
 }
 
+/*
 int GUI_Ingame_ChatUpdate_ListUpdate(GUI_TextureAlias *inner_window) {
 
     PP4M_HOOK *head = inner_window->link;
@@ -192,6 +193,7 @@ int GUI_Ingame_ChatUpdate_ListUpdate(GUI_TextureAlias *inner_window) {
 
     return 0;
 }
+*/
 
 int GUI_Ingame_ChatInit_RenderObj_Increase(GUI_TextureAlias *render_obj, GUI_TextureAlias *new_alias) {
     if (render_obj->texture != NULL)
