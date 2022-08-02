@@ -3,12 +3,18 @@
 
 #define CONFIG_BOOT_FILE "./config_boot.ini"
 
+#include <stdio.h>
+
 typedef enum {
     LANG_DEFAULT,
     LANG_EN = 1,
     LANG_IT = 2,
     LANG_NL = 3
 } CFG_LANG;
+
+extern char *cfg_boot_set[];
+extern char *cfg_boot_set_lang[];
+extern char *cfg_boot_set_style[];
 
 char *CFG_BootFile_BoxRedirect(CFG_LANG lang);
 

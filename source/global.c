@@ -6,6 +6,7 @@
 
 // local libraries
 #include "global.h"
+#include "lang.h"
 #include "pp4m/pp4m.h"
 #include "gen.h"
 
@@ -17,7 +18,9 @@ int glo_screen_w = 1280;
 int glo_screen_h = 720;
 
 USER_STRUCT glo_user;
+char **glo_lang;
 
+// functions
 int GLOBAL_DestrUser(USER_STRUCT *user) {
     if (user == NULL) return -1;
 

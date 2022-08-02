@@ -33,9 +33,9 @@ char *CFG_BootFile_BoxRedirect(CFG_LANG lang) {
         return (lang_boot_it);
     case LANG_NL:
         return (lang_boot_nl);
-    default:
-        return (lang_boot_en);
     }
+
+    return (lang_boot_en);
 }
 
 FILE* CFG_BootFile_Init(CFG_LANG lang) {
@@ -128,8 +128,12 @@ int CFG_BootFile_ConfigRule(char *set, char *value) {
 
     DEBUG_PrintBox(1, "CFG_BootFile_ConfigRule:");
 
-    if (strncmp(set, cfg_boot_set[0], strlen(cfg_boot_set[1])) == 0) {
+    if (strncmp(set, cfg_boot_set[0], strlen(cfg_boot_set[0])) == 0) {
+
+        CFG_LANG lang = LANG_ConfigLanguage(value);
+        LANG_SetLanguage(lang);
         DEBUG_PrintBox(1, "  language set as: %s", value);
+
     } else if (strncmp(set, cfg_boot_set[1], strlen(cfg_boot_set[1])) == 0) {
         DEBUG_PrintBox(1, "  style set as: %s", value);
     }

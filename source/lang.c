@@ -1,4 +1,8 @@
+#include <stdio.h>
+
+#include "global.h"
 #include "lang.h"
+#include "config.h"
 
 /* WILL PROBABLY MAKE FUNCS WHICH CAN CREATE THEM THIS BOXES */
 
@@ -37,19 +41,56 @@ char *lang_boot_nl = { // dutch
 	"# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #" };
 
 const char *lang_cfg_it[] = {
-    "Errore", "Attenzione", "C'e' qualcosa che non va", "Riprova", "Si", "No", "Okay", "Torna nel gioco", "Esci", "Continua",
+    "Errore", "Attenzione", "C'e qualcosa che non va", "Riprova", "Si", "No", "Okay", "Torna nel gioco",
+    "Indietro", "Esci", "Continua", "Annulla",
     "Gioca", "Info", "Impostazioni", "Statistiche", "Prossimamente", "Sei Sicuro?", "Premi",
     "stile", "personalizza", "immetti", "sfondo immagine", "suoni", "musica", "locale", "globale", "giocatori",
     "lobby trovate", "indirizzo Ip", "per uscire", "per entrare", "in chat" };
 
 const char *lang_cfg_en[] = {
-    "Error", "Attention", "There is something wrong", "Retry", "Yes", "No", "Okay", "Back to the game", "Exit", "Continue",
+    "Error", "Attention", "There is something wrong", "Retry", "Yes", "No", "Okay", "Back to the game",
+    "Back", "Exit", "Continue", "Cancel",
     "Play", "Info", "Settings", "Statistics", "Coming soon", "Are you sure?", "Press",
     "style", "personalize", "insert", "background", "sounds", "music", "local", "global", "players",
     "lobby found", "address Ip", "to exit", "to enter", "in chat" };
 
 const char *lang_cfg_nl[] = {
-    "Error", "Attentie", "Er is iets misgelopen", "Probeer opnieuw", "Ja", "Nee", "Oké", "Terug naar de game", "Verlaat", "Ga verder",
+    "Error", "Attentie", "Er is iets misgelopen", "Probeer opnieuw", "Ja", "Nee", "Oke'", "Terug naar de game",
+    "Rug", "Verlaat", "Ga verder", "Annuleren",
     "Speel", "Informatie", "Instellingen", "Statistieken", "Binnenkort beschikbaar", "Ben je zeker?", "Druk",
     "stijl", "personalizeer", "invoegen", "achtergrond", "sounds", "muziek", "lokaal", "globaal", "spelers",
     "lobby gevonden", "address Ip", "verlaten", "binnengaan", "in de chat" };
+
+
+CFG_LANG LANG_ConfigLanguage(char *value) {
+
+    if (strcmp(value, cfg_boot_set_lang[0]) == 0) {
+        return LANG_IT;
+    } else if (strcmp(value, cfg_boot_set_lang[1]) == 0) {
+        return LANG_EN;
+    } else if (strcmp(value, cfg_boot_set_lang[2]) == 0) {
+        return LANG_NL;
+    }
+
+    return LANG_DEFAULT;
+}
+
+int LANG_SetLanguage(CFG_LANG lang) {
+
+    switch(lang) {
+    case LANG_DEFAULT:
+        glo_lang = (char**)lang_cfg_en;
+        break;
+    case LANG_EN:
+        glo_lang = (char**)lang_cfg_en;
+        break;
+    case LANG_IT:
+        glo_lang = (char**)lang_cfg_it;
+        break;
+    case LANG_NL:
+        glo_lang = (char**)lang_cfg_nl;
+        break;
+    }
+
+    return 0;
+}

@@ -212,8 +212,8 @@ int EVENT_HandlePopup_Pause(int *running) {
 
         PP4M_HOOK *hook_list_pw = GUI_PopupWindow_Init(440, 180);
 
-        GUI_PopupWindow_Button(hook_list_pw, OPENSANS_REGULAR, OBJ_BUTTON_RETURN, "Continua", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 15, 15, 410, 70);
-        GUI_PopupWindow_Button(hook_list_pw, OPENSANS_REGULAR, OBJ_BUTTON_EXIT, "Esci dal gioco", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 15, 95, 410, 70);
+        GUI_PopupWindow_Button(hook_list_pw, OPENSANS_REGULAR, OBJ_BUTTON_RETURN, glo_lang[_LANG_SET_CONTINUE], PP4M_WHITE, 24, PP4M_GREY_NORMAL, 15, 15, 410, 70);
+        GUI_PopupWindow_Button(hook_list_pw, OPENSANS_REGULAR, OBJ_BUTTON_EXIT, glo_lang[_LANG_SET_BACK], PP4M_WHITE, 24, PP4M_GREY_NORMAL, 15, 95, 410, 70);
 
         result = GUI_PopupWindow_Core(hook_list_pw, txr_snapshot);
 
@@ -223,9 +223,9 @@ int EVENT_HandlePopup_Pause(int *running) {
         SDL_Texture *txr_snapshot2 = GUI_Alias_CreateSnapshot(glo_render, glo_screen_w, glo_screen_h);
         PP4M_HOOK *hook_list_pw_exit = GUI_PopupWindow_Init(400, 165);
 
-        GUI_PopupWindow_Title(hook_list_pw_exit, OPENSANS_REGULAR, "Sei sicuro?", PP4M_WHITE, 32);
-        GUI_PopupWindow_Button(hook_list_pw_exit, OPENSANS_REGULAR, OBJ_BUTTON_RETURN, "Annulla", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 10, 85, 185, 70);
-        GUI_PopupWindow_Button(hook_list_pw_exit, OPENSANS_REGULAR, OBJ_BUTTON_EXIT, "Okay", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 205, 85, 185, 70);
+        GUI_PopupWindow_Title(hook_list_pw_exit, OPENSANS_REGULAR, glo_lang[_LANG_SET_CONFIRM], PP4M_WHITE, 32);
+        GUI_PopupWindow_Button(hook_list_pw_exit, OPENSANS_REGULAR, OBJ_BUTTON_RETURN, glo_lang[_LANG_SET_CANCEL], PP4M_WHITE, 24, PP4M_GREY_NORMAL, 10, 85, 185, 70);
+        GUI_PopupWindow_Button(hook_list_pw_exit, OPENSANS_REGULAR, OBJ_BUTTON_EXIT, glo_lang[_LANG_SET_OKAY], PP4M_WHITE, 24, PP4M_GREY_NORMAL, 205, 85, 185, 70);
 
         if (GUI_PopupWindow_Core(hook_list_pw_exit, txr_snapshot2) == -2) *running = -1;
 
@@ -290,7 +290,7 @@ int EVENT_HandlePopup_Stalemate(char *comment) {
 
     // leaving this for now
     if (comment != NULL) GUI_PopupWindow_Title(hook_list, OPENSANS_REGULAR, comment, PP4M_WHITE, 32);
-    GUI_PopupWindow_Button(hook_list, OPENSANS_REGULAR, -1, "Continua", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 10, 90, 430, 50);
+    GUI_PopupWindow_Button(hook_list, OPENSANS_REGULAR, -1, glo_lang[_LANG_SET_CONTINUE], PP4M_WHITE, 24, PP4M_GREY_NORMAL, 10, 90, 430, 50);
 
     result = GUI_PopupWindow_Core(hook_list, txr_snapshot);
     return result;
@@ -308,7 +308,7 @@ int EVENT_HandlePopup_Checkmate(char *comment, CHESS_CORE_PLAYER player) {
 
     // leaving this for now
     if (comment != NULL) GUI_PopupWindow_Title(hook_list, OPENSANS_REGULAR, comment, PP4M_WHITE, 32);
-    GUI_PopupWindow_Button(hook_list, OPENSANS_REGULAR, -1, "Continua", PP4M_WHITE, 24, PP4M_GREY_NORMAL, 10, 90, 430, 50);
+    GUI_PopupWindow_Button(hook_list, OPENSANS_REGULAR, -1, glo_lang[_LANG_SET_CONTINUE], PP4M_WHITE, 24, PP4M_GREY_NORMAL, 10, 90, 430, 50);
 
     result = GUI_PopupWindow_Core(hook_list, txr_snapshot);
     return result;
