@@ -123,27 +123,11 @@ PP4M_HOOK *GUI_Ingame_ChatInit_InnerWindow(GUI_TextureAlias *window_inner_oob) {
 int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat_obj, char *pathname, SDL_Color color, int point, char **buffer) {
     if (*buffer == NULL) return -1;
 
+    // properties of window_inner_oob
     PP4M_HOOK *link_inner_window_oob = GUI_Alias_FindObj(list_window_chat_obj, OBJ_WINDOW_INNER_OOB_CHAT);
     if (link_inner_window_oob == NULL) return -1;
 
     GUI_TextureAlias *inner_window_oob = link_inner_window_oob->ptr;
-
-    // get to last obj of list from innerWindow_OOB containing OBJ_WINDOW_OOB_RENDER
-    PP4M_HOOK *tail = GUI_Alias_Tail(inner_window_oob);
-    GUI_TextureAlias *render_obj = tail->ptr;
-
-    if (render_obj->obj != OBJ_WINDOW_OOB_RENDER) return -1;
-
-    PP4M_HOOK *head_chat = render_obj->link;
-    PP4M_HOOK *tail_chat = GUI_Alias_Tail(render_obj);
-
-    GUI_TextureAlias *new_alias = GUI_Alias_InitAlias();
-
-    SDL_Rect rect = {
-        0, 0, 0, 0
-    };
-
-    new_alias->obj = OBJ_CHAT_MESG;
 
     // temporary fix of user
     char buf_user[17];
@@ -151,8 +135,56 @@ int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat_obj, char *pathname, SDL_C
     sscanf(*buffer, "%s %*s", buf_user);
     len_buf = strlen(buf_user) + 1; // adding the space
 
-    new_alias->texture = pp4m_TTF_TextureFont(glo_render, pathname, color, point, &new_alias->rect, 0, 0, &(*buffer)[len_buf]);
+    char *buf = &(*buffer)[len_buf];
 
+    // create a new texture for new lines
+    while (strlen(buf) > 35) {
+        if (buf == NULL) break;
+        buf = GUI_Ingame_ChatUpdate_NewLine(inner_window_oob, pathname, color, point, buf_user, buf);
+    }
+
+    GUI_Ingame_ChatUpdate_AddLine(inner_window_oob, pathname, color, point, buf_user, buf);
+
+    return 0;
+}
+
+char *GUI_Ingame_ChatUpdate_NewLine(GUI_TextureAlias *inner_window_oob, char *pathname, SDL_Color color, int point, char *buf_user, char *buf) {
+
+    int len = strlen(buf);
+
+        int i;
+        for (i = 30; i < len; i++) {
+
+            if (buf[i] == '\0') return NULL;
+            else if (buf[i] == ' ') {
+
+                buf[i++] = '\0';
+                GUI_Ingame_ChatUpdate_AddLine(inner_window_oob, pathname, color, point, buf_user, buf);
+
+                break;
+            }
+        }
+
+    return (&buf[i]);
+}
+
+int GUI_Ingame_ChatUpdate_AddLine(GUI_TextureAlias *inner_window_oob, char *pathname, SDL_Color color, int point, char *buf_user, char *buffer) {
+
+    // get to last obj of list from innerWindow_OOB containing OBJ_WINDOW_OOB_RENDER
+    PP4M_HOOK *tail = GUI_Alias_Tail(inner_window_oob);
+    GUI_TextureAlias *render_obj = tail->ptr;
+
+    if (render_obj->obj != OBJ_WINDOW_OOB_RENDER) return -1;
+
+    // chat linked list
+    PP4M_HOOK *head_chat = render_obj->link;
+    PP4M_HOOK *tail_chat = GUI_Alias_Tail(render_obj);
+
+    GUI_TextureAlias *new_alias = GUI_Alias_InitAlias();
+    SDL_Rect rect;
+
+    new_alias->obj = OBJ_CHAT_MESG;
+    new_alias->texture = pp4m_TTF_TextureFont(glo_render, pathname, color, point, &new_alias->rect, 0, 0, buffer);
 
     // grab last message height
     if (head_chat->ptr != NULL) {
@@ -163,37 +195,19 @@ int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat_obj, char *pathname, SDL_C
     }
 
     // message incoming from opponent
-    if (strcmp(glo_user.username, buf_user) != 0) new_alias->rect.x = rect.x;
-    else new_alias->rect.x = inner_window_oob->rect.w - new_alias->rect.w;
+    if (strcmp(glo_user.username, buf_user) == 0)
+        rect.x = inner_window_oob->rect.w - new_alias->rect.w;
 
     // (old) apply height to message
+    new_alias->rect.x = rect.x;
     new_alias->rect.y = rect.y;
 
     GUI_Ingame_ChatInit_RenderObj_Increase(render_obj, new_alias);
 
     pp4m_HOOK_Next(head_chat, new_alias);
-    return 0;
-}
-
-/*
-int GUI_Ingame_ChatUpdate_ListUpdate(GUI_TextureAlias *inner_window) {
-
-    PP4M_HOOK *head = inner_window->link;
-    PP4M_HOOK *curr = head;
-
-    GUI_TextureAlias *buf_alias = NULL;
-    int val = pp4m_HOOK_Size(head);
-
-    for (int i = 0; i < val; i++) {
-        buf_alias = curr->ptr;
-        curr = curr->next;
-
-        buf_alias->rect.y -= buf_alias->rect.h + 5;
-    }
 
     return 0;
 }
-*/
 
 int GUI_Ingame_ChatInit_RenderObj_Increase(GUI_TextureAlias *render_obj, GUI_TextureAlias *new_alias) {
     if (render_obj->texture != NULL)
