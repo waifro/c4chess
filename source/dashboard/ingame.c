@@ -95,7 +95,7 @@ PP4M_HOOK *GUI_Ingame_ChatInit_InnerWindow(GUI_TextureAlias *window_inner_oob) {
     int scroll_size_width = 5;
 
     GUI_TextureAlias *scroll_vertical = GUI_Alias_InitAlias();
-    scroll_vertical->obj = OBJ_NULL;
+    scroll_vertical->obj = OBJ_SCROLL_VERTICAL;
     scroll_vertical->rect.x = window_inner_oob->rect.x + window_inner_oob->rect.w - scroll_size_width - scroll_size_delta;
     scroll_vertical->rect.y = window_inner_oob->rect.y + scroll_size_delta;
     scroll_vertical->rect.w = scroll_size_width;
@@ -120,14 +120,8 @@ PP4M_HOOK *GUI_Ingame_ChatInit_InnerWindow(GUI_TextureAlias *window_inner_oob) {
     return init_list_struct;
 }
 
-int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat_obj, char *pathname, SDL_Color color, int point, char **buffer) {
+int GUI_Ingame_ChatUpdate(GUI_TextureAlias *inner_window_oob, char *pathname, SDL_Color color, int point, char **buffer) {
     if (*buffer == NULL) return -1;
-
-    // properties of window_inner_oob
-    PP4M_HOOK *link_inner_window_oob = GUI_Alias_FindObj(list_window_chat_obj, OBJ_WINDOW_INNER_OOB_CHAT);
-    if (link_inner_window_oob == NULL) return -1;
-
-    GUI_TextureAlias *inner_window_oob = link_inner_window_oob->ptr;
 
     // temporary fix of user
     char buf_user[17];
@@ -144,6 +138,8 @@ int GUI_Ingame_ChatUpdate(PP4M_HOOK *list_window_chat_obj, char *pathname, SDL_C
     }
 
     GUI_Ingame_ChatUpdate_AddLine(inner_window_oob, pathname, color, point, buf_user, buf);
+
+    GUI_Ingame_ChatUpdate_Scroll(inner_window_oob);
 
     return 0;
 }
@@ -205,6 +201,28 @@ int GUI_Ingame_ChatUpdate_AddLine(GUI_TextureAlias *inner_window_oob, char *path
     GUI_Ingame_ChatInit_RenderObj_Increase(render_obj, new_alias);
 
     pp4m_HOOK_Next(head_chat, new_alias);
+
+    return 0;
+}
+
+int GUI_Ingame_ChatUpdate_Scroll(GUI_TextureAlias *inner_window_oob) {
+
+    PP4M_HOOK *obj_ptr = GUI_Alias_FindObj(inner_window_oob->link, OBJ_SCROLL_VERTICAL);
+    if (obj_ptr == NULL) return -1;
+    GUI_TextureAlias *scroll_obj = obj_ptr->ptr;
+
+    obj_ptr = GUI_Alias_FindObj(inner_window_oob->link, OBJ_WINDOW_OOB_RENDER);
+    if (obj_ptr == NULL) return -2;
+    GUI_TextureAlias *render_obj = obj_ptr->ptr;
+
+    if (render_obj->rect.h > inner_window_oob->rect.h) {
+
+        // init texture of scroll
+        if (scroll_obj->texture == NULL)
+            scroll_obj->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_BLACK, &scroll_obj->rect, scroll_obj->rect.x, scroll_obj->rect.y, scroll_obj->rect.w, scroll_obj->rect.h);
+
+        printf("testing::\n");
+    }
 
     return 0;
 }

@@ -116,7 +116,7 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
         current = current->next;
 
         if (alias_ttr == NULL) continue;
-        if (alias_ttr->obj == OBJ_NULL) continue;
+        if (alias_ttr->obj == OBJ_NULL || alias_ttr->obj == OBJ_WINDOW_OOB_RENDER) continue;
 
         if (alias_ttr->texture != NULL)
             SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
@@ -133,8 +133,10 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
         else if (alias_ttr->obj == OBJ_BUTTON_LINK_ON)
             GUI_HookLink_RenderObj(alias_ttr->link);
 
-        else if (alias_ttr->obj == OBJ_WINDOW_INNER_OOB_CHAT)
+        else if (alias_ttr->obj == OBJ_WINDOW_INNER_OOB_CHAT) {
             GUI_Alias_InnerWindow_Render(alias_ttr);
+            GUI_HookLink_Render(alias_ttr->link);
+        }
 
         else if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
             alias_ptr = alias_ttr->link; SDL_Rect rect;
@@ -244,9 +246,6 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, in
         if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF || alias_ttr->obj == OBJ_BUTTON_LINK_ON) {
             alias_ptr = alias_ttr->link;
 
-            if (alias_ptr->obj == OBJ_WINDOW_CHAT)
-                GUI_Ingame_ChatUpdate(alias_ptr->link, OPENSANS_REGULAR, PP4M_BLACK, 14, buffer);
-
             GUI_HookLink_Update(alias_ptr->link, input, buffer, key, code);
         }
 
@@ -261,7 +260,7 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, in
         }
 
         if (alias_ttr->obj == OBJ_WINDOW_INNER_OOB_CHAT)
-            GUI_HookLink_Update(alias_ttr->link, input, buffer, key, code);
+            GUI_Ingame_ChatUpdate(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 14, buffer);
 
         /*
         // note: is a bit of a missleading the name of the func.

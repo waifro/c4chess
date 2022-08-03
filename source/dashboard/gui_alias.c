@@ -280,12 +280,12 @@ int GUI_Alias_RectUpdate_OOB(SDL_Rect *rect_1, SDL_Rect *rect_2, SDL_Rect *rect_
 int GUI_Alias_InnerWindow_Render(GUI_TextureAlias *window_inner_oob) {
 
     // get to last obj of list from innerWindow_OOB containing OBJ_WINDOW_OOB_RENDER
-    PP4M_HOOK *tail = GUI_Alias_Tail(window_inner_oob->link);
-    GUI_TextureAlias *render_obj = tail->ptr;
+    PP4M_HOOK *render_ptr = GUI_Alias_FindObj(window_inner_oob->link, OBJ_WINDOW_OOB_RENDER);
+    if (render_ptr == NULL) return -1;
+    GUI_TextureAlias *render_obj = render_ptr->ptr;
 
     // hook to linked list from obj
-    if (render_obj->obj != OBJ_WINDOW_OOB_RENDER) return -1;
-    if (render_obj->texture == NULL) return -2;
+    if (render_obj->texture == NULL) return -3;
 
     PP4M_HOOK *curr_alias_list = render_obj->link;
 
