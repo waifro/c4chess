@@ -96,7 +96,7 @@ PP4M_HOOK *GUI_Ingame_ChatInit_InnerWindow(GUI_TextureAlias *window_inner_oob) {
 
     GUI_TextureAlias *scroll_vertical = GUI_Alias_InitAlias();
     scroll_vertical->obj = OBJ_SCROLL_VERTICAL;
-    scroll_vertical->rect.x = window_inner_oob->rect.x + window_inner_oob->rect.w - scroll_size_width - scroll_size_delta;
+    scroll_vertical->rect.x = window_inner_oob->rect.x + window_inner_oob->rect.w - scroll_size_width;
     scroll_vertical->rect.y = window_inner_oob->rect.y + scroll_size_delta;
     scroll_vertical->rect.w = scroll_size_width;
     scroll_vertical->rect.h = window_inner_oob->rect.h - (scroll_size_delta*2);
@@ -221,7 +221,7 @@ int GUI_Ingame_ChatUpdate_Scroll(GUI_TextureAlias *inner_window_oob) {
         if (scroll_obj->texture == NULL)
             scroll_obj->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_BLACK, &scroll_obj->rect, scroll_obj->rect.x, scroll_obj->rect.y, scroll_obj->rect.w, scroll_obj->rect.h);
 
-        printf("testing::\n");
+
     }
 
     return 0;
