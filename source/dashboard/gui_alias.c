@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <time.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <ctype.h>
 
@@ -19,6 +21,14 @@ int GUI_Alias_InputOnObj(PP4M_INPUT_POS input, SDL_Rect rect) {
     if (input.x >= rect.x && input.x <= (rect.x + rect.w) &&
         input.y >= rect.y && input.y <= (rect.y + rect.h)) return 1;
     else return -1;
+}
+
+bool GUI_Alias_FramerateSet(int val, int *old) {
+    if (clock() < (*old + val))
+        return false;
+
+    *old += val;
+    return true;
 }
 
 int GUI_Alias_IsColor(SDL_Color *color) {

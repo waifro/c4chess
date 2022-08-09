@@ -183,7 +183,7 @@ int MIDDLE_InputChessboardState(int *socket, PP4M_INPUT_POS touch, CHESS_CORE_TI
     return tile;
 }
 
-int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *socket, float deltaTime) {
+int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *socket) {
 
     if (glo_chess_event_hooklist == NULL)
         glo_chess_event_hooklist = EVENT_HookList_Init();

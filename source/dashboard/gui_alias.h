@@ -1,6 +1,7 @@
 #ifndef GUI_ALIAS_H
 #define GUI_ALIAS_H
 
+#include <stdbool.h>
 #include <SDL2/SDL.h>
 #include "../pp4m/pp4m.h"
 #include "../pp4m/pp4m_input.h"
@@ -99,6 +100,9 @@ typedef struct {
 
 /* prototypes */
 int GUI_Alias_InputOnObj(PP4M_INPUT_POS input, SDL_Rect rect);
+
+// on success, return TRUE if defined clock has passed and updates *old, otherwise FALSE
+bool GUI_Alias_FramerateSet(int val, int *old);
 
 int GUI_Alias_IsColor(SDL_Color *color);
 int GUI_Alias_ResetColor(SDL_Color *color);

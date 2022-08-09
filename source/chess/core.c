@@ -1,6 +1,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdbool.h>
@@ -275,23 +276,25 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
     SDL_Event event;
 
     // testing: cap framerate to 30/60 fps
-    float deltaTime; int running = 0;
+    int running = 0;
+    int capped_fps = clock();
 
     while(running == 0) {
-        deltaTime = pp4m_DeltaFramerate();
 
         /* checks if king under attack */
         CHESS_PiecePattern_UpdateState(glo_chess_core_tile, player);
 
         /* makes the in-game changes during gameplay */
-        running = MIDDLE_UpdateChangeState(&event, &player, socket, deltaTime);
-
-        SDL_RenderClear(glo_render);
-        SDL_RenderCopy(glo_render, background, NULL, NULL);
+        running = MIDDLE_UpdateChangeState(&event, &player, socket);
 
         /* renders everything chessboard releated */
-        CORE_GlobalUpdate_StateRender();
-        SDL_RenderPresent(glo_render);
+
+        if (GUI_Alias_FramerateSet(CLOCKS_PER_SEC / 60, &capped_fps) == true) {
+            SDL_RenderClear(glo_render);
+            SDL_RenderCopy(glo_render, background, NULL, NULL);
+            CORE_GlobalUpdate_StateRender();
+            SDL_RenderPresent(glo_render);
+        }
     }
 
     SDL_DestroyTexture(background);
