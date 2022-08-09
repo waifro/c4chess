@@ -97,9 +97,9 @@ PP4M_HOOK *GUI_Ingame_ChatInit_InnerWindow(GUI_TextureAlias *window_inner_oob) {
     GUI_TextureAlias *scroll_vertical = GUI_Alias_InitAlias();
     scroll_vertical->obj = OBJ_SCROLL_VERTICAL;
     scroll_vertical->rect.x = window_inner_oob->rect.x + window_inner_oob->rect.w - scroll_size_width;
-    scroll_vertical->rect.y = window_inner_oob->rect.y + scroll_size_delta;
+    scroll_vertical->rect.y = window_inner_oob->rect.y;
     scroll_vertical->rect.w = scroll_size_width;
-    scroll_vertical->rect.h = window_inner_oob->rect.h - (scroll_size_delta*2);
+    scroll_vertical->rect.h = window_inner_oob->rect.h;
 
     // initialize OBJ_WINDOW_OOB_RENDER for chat redirection
     GUI_TextureAlias *render_obj = GUI_Alias_InitAlias();
@@ -221,7 +221,43 @@ int GUI_Ingame_ChatUpdate_Scroll(GUI_TextureAlias *inner_window_oob) {
         if (scroll_obj->texture == NULL)
             scroll_obj->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_BLACK, &scroll_obj->rect, scroll_obj->rect.x, scroll_obj->rect.y, scroll_obj->rect.w, scroll_obj->rect.h);
 
+        // temporary fix untill src_rect & dst_rect
+        int src_render_inner_y = render_obj->rect.h - inner_window_oob->rect.h;
+        float size_diff_page = (float)render_obj->rect.h / (float)inner_window_oob->rect.h;
+        float foo = 0;
+        int bar = 0;
 
+        for (int i = 0; i < inner_window_oob->rect.h; i++) {
+            foo += size_diff_page;
+
+            if (foo < src_render_inner_y) {
+                scroll_obj->rect.y = inner_window_oob->rect.y + i;
+                bar = i;
+                continue;
+            } else if (foo < (src_render_inner_y + inner_window_oob->rect.h)) {
+                scroll_obj->rect.h = i - bar;
+                continue;
+            }
+
+            break;
+
+            /*
+            if ((int)foo >= src_render_inner_y) {
+
+                if (bar == 0) {
+                    scroll_obj->rect.y = inner_window_oob->rect.y + i;
+                    bar = i;
+
+                    continue;
+                }
+
+                if ((int)foo >= (src_render_inner_y + inner_window_oob->rect.h)) {
+                    scroll_obj->rect.h = i - bar;
+                    break;
+                }
+            }
+            */
+        }
     }
 
     return 0;
