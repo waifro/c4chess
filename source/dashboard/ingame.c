@@ -234,7 +234,7 @@ int GUI_Ingame_ChatUpdate_Scroll(GUI_TextureAlias *inner_window_oob) {
                 scroll_obj->rect.y = inner_window_oob->rect.y + i;
                 bar = i;
                 continue;
-            } else if (foo < (src_render_inner_y + inner_window_oob->rect.h)) {
+            } else if (foo < (src_render_inner_y + inner_window_oob->rect.h + 1)) {
                 scroll_obj->rect.h = i - bar;
                 continue;
             }
