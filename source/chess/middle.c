@@ -89,7 +89,7 @@ void MIDDLE_UpdatePositionPiece(CHESS_CORE_TILE *chess_tile, int old, int new) {
     DEBUG_PrintBox(2, "  chess_tile[old] = %p, %c%d", chess_tile[old].piece, chess_tile[old].tag.col, chess_tile[old].tag.row);
     DEBUG_PrintBox(2, "  chess_tile[new] = %p, %c%d", chess_tile[new].piece, chess_tile[new].tag.col, chess_tile[new].tag.row);
 
-    if (chess_tile[new].piece != NULL) CORE_GlobalDestroyPiece(chess_tile[new].piece);
+    if (chess_tile[new].piece != NULL) CORE_GlobalDestroyPiece(&chess_tile[new].piece);
 
     chess_tile[new].piece = chess_tile[old].piece;
     chess_tile[new].piece->rect = chess_tile[new].rect;

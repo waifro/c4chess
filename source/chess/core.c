@@ -92,28 +92,20 @@ void CORE_ChessTag_Init(CHESS_CORE_TILE *chess_tile) {
     return;
 }
 
-void CORE_GlobalDestroyPiece(CHESS_CORE_PIECE *piece) {
+void CORE_GlobalDestroyPiece(CHESS_CORE_PIECE **piece) {
 
-    if (piece != NULL) {
+    if (*piece != NULL) {
+
+        CHESS_CORE_PIECE *piece_bl = *piece;
+
         DEBUG_PrintBox(2, "CORE_GlobalDestroyPiece:");
-        DEBUG_PrintBox(2, "  destroy piece = %p", piece);
-        SDL_DestroyTexture(piece->texture);
-        piece->enum_piece = NONE;
-    }
+        DEBUG_PrintBox(2, "  destroy piece = %p", piece_bl);
 
-    return;
-}
+        SDL_DestroyTexture(piece_bl->texture);
+        piece_bl->texture = NULL;
+        piece_bl->enum_piece = NONE;
 
-void CORE_GlobalClearCorePiece(void) {
-    for (int n = 0; n < 32; n++) if (sizeof(glo_chess_core_piece[n]) != 0) CORE_GlobalDestroyPiece(&glo_chess_core_piece[n]);
-    return;
-}
-
-void CORE_GlobalClearChessTile(void) {
-
-    for (int n = 0; n < 64; n++) {
-        if (sizeof(glo_chess_core_tile[n].piece) != sizeof(CHESS_CORE_PIECE*)) CORE_GlobalDestroyPiece(glo_chess_core_tile[n].piece);
-        SDL_DestroyTexture(glo_chess_core_tile[n].texture);
+        *piece = NULL;
     }
 
     return;

@@ -163,6 +163,16 @@ int CHESS_Redirect_PiecePattern(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE
     return tile;
 }
 
+int CHESS_Redirect_PiecePattern_Pawn(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PLAYER player) {
+    int result = -1;
+
+    if (chess_tile[tile].piece->player == WHITE_PLAYER)
+        result = CHESS_PiecePattern_Pawn(chess_tile, tile, player);
+    else result = CHESS_PiecePattern_BPawn(chess_tile, tile, player);
+
+    return result;
+}
+
 int CHESS_Redirect_EnumKing(CHESS_CORE_TILE *chess_tile, int slot) {
     return ((chess_tile[slot].piece->enum_piece == KING || chess_tile[slot].piece->enum_piece == BKING) ? 0 : -1);
 }
@@ -583,48 +593,27 @@ int CHESS_CheckState_PawnPromotion(CHESS_CORE_TILE *chess_tile, int position_old
 int CHESS_CheckState_PawnEnPassant(CHESS_CORE_TILE *chess_tile, int position_old, int position_new, CHESS_CORE_PLAYER player) {
 
     CHESS_CORE_TILE_TAG tag = chess_tile[position_old].tag;
-    if (chess_tile[position_old].piece->enum_piece == PAWN) {
 
-        if (CHESS_PiecePattern_Pawn(chess_tile, position_old, player) != 2) {
+    if (CHESS_Redirect_PiecePattern_Pawn(chess_tile, position_old, player) != 2) {
 
-            if (glo_chess_event_tile_passant != -1) {
+        if (glo_chess_event_tile_passant != -1) {
 
-                if (glo_chess_event_tile_passant == position_new) {
-                    CHESS_CORE_TILE_TAG tag_pl = chess_tile[position_new].tag;
-                    tag_pl.row -= 1;
+            if (glo_chess_event_tile_passant == position_new) {
+                CHESS_CORE_TILE_TAG tag_pl = chess_tile[position_new].tag;
+                tag_pl.row -= 1;
 
-                    CORE_GlobalDestroyPiece(chess_tile[MIDDLE_TagToTile(tag_pl)].piece);
-                }
+                CORE_GlobalDestroyPiece(&chess_tile[MIDDLE_TagToTile(tag_pl)].piece);
             }
-
-            glo_chess_event_tile_passant = -1;
-            return (-1);
         }
 
-        tag.row += 1;
-        glo_chess_event_tile_passant = MIDDLE_TagToTile(tag);
-
-    } else if (chess_tile[position_old].piece->enum_piece == BPAWN) {
-
-        if (CHESS_PiecePattern_BPawn(chess_tile, position_old, player) != 2) {
-
-            if (glo_chess_event_tile_passant != -1) {
-
-                if (glo_chess_event_tile_passant == position_new) {
-                    CHESS_CORE_TILE_TAG tag_pl = chess_tile[position_new].tag;
-                    tag_pl.row -= 1;
-
-                    CORE_GlobalDestroyPiece(chess_tile[MIDDLE_TagToTile(tag_pl)].piece);
-                }
-            }
-
-            glo_chess_event_tile_passant = -1;
-            return (-1);
-        }
-
-        tag.row -= 1;
-        glo_chess_event_tile_passant = MIDDLE_TagToTile(tag);
+        glo_chess_event_tile_passant = -1;
+        return (-1);
     }
+
+    if (chess_tile[position_old].piece->enum_piece == PAWN) tag.row += 1;
+    else tag.row -= 1;
+
+    glo_chess_event_tile_passant = MIDDLE_TagToTile(tag);
 
     return (0);
 }

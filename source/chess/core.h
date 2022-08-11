@@ -58,9 +58,7 @@ extern CHESS_CORE_PIECE glo_chess_core_piece[32];
 void CORE_Chessboard_Init(void);
 void CORE_ChessTag_Init(CHESS_CORE_TILE *chess_tile);
 
-void CORE_GlobalDestroyPiece(CHESS_CORE_PIECE *piece);
-void CORE_GlobalClearCorePiece(void);
-void CORE_GlobalClearChessTile(void);
+void CORE_GlobalDestroyPiece(CHESS_CORE_PIECE **piece);
 
 void CORE_UpdateState_PieceStruct(int tile, CHESS_CORE_PIECE *piece, CHESS_CORE_PLAYER player, int enum_piece);
 

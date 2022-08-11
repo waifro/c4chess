@@ -165,12 +165,13 @@ char *GUI_Ingame_ChatUpdate_NewLine(GUI_TextureAlias *inner_window_oob, char *pa
 }
 
 int GUI_Ingame_ChatUpdate_AddLine(GUI_TextureAlias *inner_window_oob, char *pathname, SDL_Color color, int point, char *buf_user, char *buffer) {
+    if (buffer == NULL) return -1;
 
     // get to last obj of list from innerWindow_OOB containing OBJ_WINDOW_OOB_RENDER
     PP4M_HOOK *tail = GUI_Alias_Tail(inner_window_oob);
     GUI_TextureAlias *render_obj = tail->ptr;
 
-    if (render_obj->obj != OBJ_WINDOW_OOB_RENDER) return -1;
+    if (render_obj->obj != OBJ_WINDOW_OOB_RENDER) return -2;
 
     // chat linked list
     PP4M_HOOK *head_chat = render_obj->link;

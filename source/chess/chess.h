@@ -9,6 +9,7 @@ int CHESS_PiecePattern_UpdateState(CHESS_CORE_TILE *core_tile, CHESS_CORE_PLAYER
 int CHESS_PiecePattern_RangeReset(CHESS_CORE_TILE *core_tile, int tile);
 int CHESS_PiecePattern_RangeAllowed(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player);
 int CHESS_Redirect_PiecePattern(CHESS_CORE_TILE *core_tile, int tile, CHESS_CORE_PLAYER player);
+int CHESS_Redirect_PiecePattern_Pawn(CHESS_CORE_TILE *chess_tile, int tile, CHESS_CORE_PLAYER player);
 
 int CHESS_Redirect_EnumKing(CHESS_CORE_TILE *chess_tile, int slot);
 int CHESS_Redirect_EnumPawn(CHESS_CORE_TILE *chess_tile, int slot);
