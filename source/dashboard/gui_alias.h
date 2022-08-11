@@ -94,7 +94,7 @@ typedef enum {
 typedef struct {
     GUI_ALIAS_OBJ obj;
     void *link;
-    SDL_Rect rect;
+    SDL_Rect src_rect, dst_rect;
     SDL_Texture *texture;
 } GUI_TextureAlias;
 

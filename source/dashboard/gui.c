@@ -84,7 +84,7 @@ int GUI_HookLink_RenderObj(GUI_TextureAlias *alias_ptr) {
     if (alias_ptr == NULL) return -1;
 
     if (alias_ptr->texture != NULL)
-        SDL_RenderCopy(glo_render, alias_ptr->texture, NULL, &alias_ptr->rect);
+        SDL_RenderCopy(glo_render, alias_ptr->texture, NULL, &alias_ptr->dst_rect);
 
     switch(alias_ptr->obj) {
         default:
@@ -119,7 +119,7 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
         if (alias_ttr->obj == OBJ_NULL || alias_ttr->obj == OBJ_WINDOW_OOB_RENDER) continue;
 
         if (alias_ttr->texture != NULL)
-            SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
+            SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->dst_rect);
 
         if (alias_ttr->obj == OBJ_LINK_PTR)
             GUI_HookLink_Render(alias_ttr->link);
@@ -141,57 +141,12 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
         else if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
             alias_ptr = alias_ttr->link; SDL_Rect rect;
             GUI_Alias_Textbox_UpdateRect(alias_ttr, &rect);
-            SDL_RenderCopy(glo_render, alias_ptr->texture, &alias_ptr->rect, &rect);
+            SDL_RenderCopy(glo_render, alias_ptr->texture, &alias_ptr->src_rect, &rect);
         }
     }
 
     return 0;
 }
-
-/*
-int GUI_HookList_Render(PP4M_HOOK *hook_list) {
-    int val = pp4m_HOOK_Size(hook_list);
-
-    PP4M_HOOK *current = hook_list;
-    PP4M_HOOK *curr_ptr = NULL;
-
-    GUI_TextureAlias *alias_ttr = NULL;
-    GUI_TextureAlias *alias_ptr = NULL;
-
-    for (int i = 0; i < val; i++) {
-        curr_ptr = current->ptr;
-        current = current->next;
-        int res = pp4m_HOOK_Size(curr_ptr);
-
-        for (int n = 0; n < res; n++) {
-            alias_ttr = curr_ptr->ptr;
-            curr_ptr = curr_ptr->next;
-
-            if (alias_ttr->obj == OBJ_NULL) continue;
-
-            if (alias_ttr->texture != NULL)
-                SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
-
-            if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
-                alias_ptr = alias_ttr->link; SDL_Rect rect;
-                GUI_Alias_Textbox_UpdateRect(alias_ttr, &rect);
-                SDL_RenderCopy(glo_render, alias_ptr->texture, &alias_ptr->rect, &rect);
-            }
-
-            if (alias_ttr->obj == OBJ_LINK_PTR)
-                GUI_HookLink_Render(alias_ttr->link);
-            else if (alias_ttr->obj == OBJ_WINDOW)
-                GUI_HookLink_Render(alias_ttr->link);
-            else if (alias_ttr->obj == OBJ_WINDOW_CHAT)
-                GUI_HookLink_Render(alias_ttr->link);
-            else if (alias_ttr->obj == OBJ_BUTTON_LINK_ON)
-                GUI_HookLink_Render(alias_ttr->link);
-        }
-    }
-
-    return 0;
-}
-*/
 
 void GUI_HookList_Quit(PP4M_HOOK *hook_list) {
 
@@ -254,7 +209,7 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, in
             if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
                 alias_ptr = alias_ttr->link;
 
-                if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) alias_ptr->obj = OBJ_TEXTBOX_INPUT_ON;
+                if (GUI_Alias_InputOnObj(input, alias_ttr->dst_rect) == 1) alias_ptr->obj = OBJ_TEXTBOX_INPUT_ON;
                 else alias_ptr->obj = OBJ_TEXTBOX_INPUT_OFF;
             }
         }
@@ -282,7 +237,7 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, in
         }
 
         if (input.iner == 1) {
-            if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) {
+            if (GUI_Alias_InputOnObj(input, alias_ttr->dst_rect) == 1) {
 
                 if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF) {
                     alias_ttr->obj = OBJ_BUTTON_LINK_ON;
@@ -294,7 +249,7 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, in
                 if (alias_ttr->obj == OBJ_BUTTON_LINK_ON) {
                     alias_ptr = alias_ttr->link;
 
-                    if (GUI_Alias_InputOnObj(input, alias_ptr->rect) != 1)
+                    if (GUI_Alias_InputOnObj(input, alias_ptr->dst_rect) != 1)
                         alias_ttr->obj = OBJ_BUTTON_LINK_OFF;
                 }
             }
@@ -356,7 +311,7 @@ int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, char **buffe
             }
 
             if (input.iner == 1) {
-                if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) {
+                if (GUI_Alias_InputOnObj(input, alias_ttr->dst_rect) == 1) {
 
                     if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF) {
                         alias_ttr->obj = OBJ_BUTTON_LINK_ON;
@@ -370,7 +325,7 @@ int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, char **buffe
                         link_ptr = alias_ttr->link;
                         alias_ptr = link_ptr->ptr;
 
-                        if (GUI_Alias_InputOnObj(input, alias_ptr->rect) != 1)
+                        if (GUI_Alias_InputOnObj(input, alias_ptr->dst_rect) != 1)
                             alias_ttr->obj = OBJ_BUTTON_LINK_OFF;
 
                     }
@@ -379,7 +334,7 @@ int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, char **buffe
 
             /* attempt on highlighting objects failed :(
 
-            else if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == 1) {
+            else if (GUI_Alias_InputOnObj(input, alias_ttr->dst_rect) == 1) {
 
                 // mouse on top of object highlights it
                 if (alias_ttr->obj != OBJ_NONE) {
@@ -387,7 +342,7 @@ int GUI_HookList_Update(PP4M_HOOK *hook_list, PP4M_INPUT_POS input, char **buffe
                     SDL_SetTextureColorMod(alias_ttr->texture, 220, 220, 220);
                 }
 
-            } else if (GUI_Alias_InputOnObj(input, alias_ttr->rect) == -1) {
+            } else if (GUI_Alias_InputOnObj(input, alias_ttr->dst_rect) == -1) {
 
                 // restores the object to original color
                 if (GUI_Alias_IsColor(&color_btn_bak) == 1) {

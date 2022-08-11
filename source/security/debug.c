@@ -40,7 +40,7 @@ int DEBUG_UpdateBox_Render(void) {
 
     for (int i = pp4m_HOOK_Size(glo_debug_list); i > 0; i--) {
         alias_ttr = current->ptr;
-        SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->rect);
+        SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->dst_rect);
         current = current->next;
     }
 
@@ -58,8 +58,8 @@ int DEBUG_UpdateBox_WriteLine(int val, char *string) {
 
     GUI_TextureAlias *buf_txt = calloc(1, sizeof(GUI_TextureAlias));
     buf_txt->obj = 0;
-    buf_txt->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_WHITE, 12, &buf_txt->rect, buf->rect.x, buf->rect.y + 15, string);
-    if (val == 0) buf_txt->rect.x += 15;
+    buf_txt->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_WHITE, 12, &buf_txt->dst_rect, buf->dst_rect.x, buf->dst_rect.y + 15, string);
+    if (val == 0) buf_txt->dst_rect.x += 15;
 
     pp4m_HOOK_Next(glo_debug_list, buf_txt);
 
@@ -89,7 +89,7 @@ int DEBUG_UpdateBox_ClearLine(int *val) {
         if (i != 0)
         {
             alias_ttr = tail->ptr;
-            alias_ttr->rect.y -= 15;
+            alias_ttr->dst_rect.y -= 15;
         }
 
         bak = bak->next;
@@ -107,7 +107,7 @@ int DEBUG_InitBox(void) {
 
     GUI_TextureAlias *box = calloc(1, sizeof(GUI_TextureAlias));
     box->obj = 0;
-    box->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_BLACK, 100, &box->rect, 15, 15, 500, 330);
+    box->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_BLACK, 100, &box->dst_rect, 15, 15, 500, 330);
 
     pp4m_HOOK_Next(glo_debug_list, box);
 

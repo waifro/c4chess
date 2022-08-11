@@ -81,13 +81,13 @@ int GUI_Alias_Textbox_Empty(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Col
 
     alias_ptr->texture = pp4m_TTF_TextureFont(glo_render, pathname, color, point, &rect, 0, 0, buffer);
 
-    alias_ptr->rect.x = 0;
-    alias_ptr->rect.y = 0;
-    alias_ptr->rect.w = rect.w;
-    alias_ptr->rect.h = rect.h;
+    alias_ptr->dst_rect.x = 0;
+    alias_ptr->dst_rect.y = 0;
+    alias_ptr->dst_rect.w = rect.w;
+    alias_ptr->dst_rect.h = rect.h;
 
-    if (rect.w > alias_ttr->rect.w)
-        alias_ptr->rect.x = rect.w - alias_ttr->rect.w;
+    if (rect.w > alias_ttr->dst_rect.w)
+        alias_ptr->dst_rect.x = rect.w - alias_ttr->dst_rect.w;
 
     return 0;
 }
@@ -99,13 +99,13 @@ int GUI_Alias_Textbox_UpdateTexture(GUI_TextureAlias *alias_ttr, char *pathname,
 
     alias_ptr->texture = pp4m_TTF_TextureFont(glo_render, pathname, color, point, &rect, 0, 0, buffer);
 
-    alias_ptr->rect.x = 0;
-    alias_ptr->rect.y = 0;
-    alias_ptr->rect.w = rect.w;
-    alias_ptr->rect.h = rect.h;
+    alias_ptr->dst_rect.x = 0;
+    alias_ptr->dst_rect.y = 0;
+    alias_ptr->dst_rect.w = rect.w;
+    alias_ptr->dst_rect.h = rect.h;
 
-    if (rect.w > alias_ttr->rect.w)
-        alias_ptr->rect.x = rect.w - alias_ttr->rect.w;
+    if (rect.w > alias_ttr->dst_rect.w)
+        alias_ptr->dst_rect.x = rect.w - alias_ttr->dst_rect.w;
 
     return 0;
 }
@@ -113,13 +113,13 @@ int GUI_Alias_Textbox_UpdateTexture(GUI_TextureAlias *alias_ttr, char *pathname,
 int GUI_Alias_Textbox_UpdateRect(GUI_TextureAlias *alias_ttr, SDL_Rect *rect) {
     GUI_TextureAlias *alias_ptr = alias_ttr->link;
 
-    rect->x = alias_ttr->rect.x;
-    rect->y = alias_ttr->rect.y;
+    rect->x = alias_ttr->dst_rect.x;
+    rect->y = alias_ttr->dst_rect.y;
 
-    if (alias_ptr->rect.w > alias_ttr->rect.w) rect->w = alias_ttr->rect.w;
-    else rect->w = alias_ptr->rect.w;
+    if (alias_ptr->dst_rect.w > alias_ttr->dst_rect.w) rect->w = alias_ttr->dst_rect.w;
+    else rect->w = alias_ptr->dst_rect.w;
 
-    rect->h = alias_ptr->rect.h;
+    rect->h = alias_ptr->dst_rect.h;
 
     return 0;
 }
@@ -312,7 +312,7 @@ int GUI_Alias_InnerWindow_Render(GUI_TextureAlias *window_inner_oob) {
         // in theory, this is safe, but it crashes if theres a obj, and the render_obj hasnt been initialized
         if (alias_ptr->obj == OBJ_NULL) continue;
 
-        SDL_RenderCopy(glo_render, alias_ptr->texture, NULL, &alias_ptr->rect);
+        SDL_RenderCopy(glo_render, alias_ptr->texture, NULL, &alias_ptr->dst_rect);
     }
 
     SDL_SetRenderTarget(glo_render, NULL);
@@ -321,25 +321,25 @@ int GUI_Alias_InnerWindow_Render(GUI_TextureAlias *window_inner_oob) {
     SDL_Rect dst_rect;
     SDL_Rect src_rect;
 
-    dst_rect.x = window_inner_oob->rect.x;
-    dst_rect.y = window_inner_oob->rect.y;
-    dst_rect.w = render_obj->rect.w;
-    dst_rect.h = render_obj->rect.h;
+    dst_rect.x = window_inner_oob->dst_rect.x;
+    dst_rect.y = window_inner_oob->dst_rect.y;
+    dst_rect.w = render_obj->dst_rect.w;
+    dst_rect.h = render_obj->dst_rect.h;
 
     // for now, we just grub the latest height, in future we will use obj_scroll_..
-    src_rect.x = render_obj->rect.x;
-    src_rect.y = render_obj->rect.y;
-    src_rect.w = render_obj->rect.w;
-    src_rect.h = render_obj->rect.h;
+    src_rect.x = render_obj->dst_rect.x;
+    src_rect.y = render_obj->dst_rect.y;
+    src_rect.w = render_obj->dst_rect.w;
+    src_rect.h = render_obj->dst_rect.h;
 
-    if (render_obj->rect.w > window_inner_oob->rect.w) {
-        dst_rect.w = window_inner_oob->rect.w;
-        src_rect.x = render_obj->rect.w - window_inner_oob->rect.w;
+    if (render_obj->dst_rect.w > window_inner_oob->dst_rect.w) {
+        dst_rect.w = window_inner_oob->dst_rect.w;
+        src_rect.x = render_obj->dst_rect.w - window_inner_oob->dst_rect.w;
     }
 
-    if (render_obj->rect.h > window_inner_oob->rect.h) {
-        dst_rect.h = window_inner_oob->rect.h;
-        src_rect.y = render_obj->rect.h - window_inner_oob->rect.h;
+    if (render_obj->dst_rect.h > window_inner_oob->dst_rect.h) {
+        dst_rect.h = window_inner_oob->dst_rect.h;
+        src_rect.y = render_obj->dst_rect.h - window_inner_oob->dst_rect.h;
     }
 
     SDL_RenderCopy(glo_render, render_obj->texture, &src_rect, &dst_rect);
