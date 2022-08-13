@@ -5,6 +5,7 @@ LIBMMAN := "-L. -lmman" -lws2_32 # -mwindows
 
 # uncomment this line if you want to sanitize
 SANITIZE := -O0 -g # -fsanitize=address #-static-libasan
+COMPILER := x86_64-w64-mingw32-gcc # decide what compiler to use
 
 SOURCE_MAIN := 			source/main.c source/global.c source/config.c source/mman.c source/lang.c source/gen.c
 SOURCE_ANIMATION := 	source/animation/animation.c
@@ -23,10 +24,10 @@ DEP_PP4M := source/pp4m/pp4m.c source/pp4m/pp4m_io.c source/pp4m/pp4m_draw.c sou
 LIBS := -lSDL2 -lSDL2_ttf -lSDL2_image
 
 Release : $(SOURCE_PROJECT) $(DEP_PP4M)
-	gcc $(SOURCE_PROJECT) $(DEP_PP4M) $(sdl2-config --cflags) $(LIBMMAN) -Wall -Wextra $(SANITIZE) $(LIBS) -o $(OUTPUT)
+	$(COMPILER) $(SOURCE_PROJECT) $(DEP_PP4M) $(sdl2-config --cflags) $(LIBMMAN) -Wall -Wextra $(SANITIZE) $(LIBS) -o $(OUTPUT)
 
 all : $(SOURCE_PROJECT) $(DEP_PP4M)
-	gcc $(SOURCE_PROJECT) $(DEP_PP4M) $(sdl2-config --cflags) $(LIBMMAN) -Wmsvc-not-found -Wall -Wextra $(SANITIZE) $(LIBS) -o $(OUTPUT)
+	$(COMPILER) $(SOURCE_PROJECT) $(DEP_PP4M) $(sdl2-config --cflags) $(LIBMMAN) -Wmsvc-not-found -Wall -Wextra $(SANITIZE) $(LIBS) -o $(OUTPUT)
 
 clean :
 	rm *.o $(OUTPUT)
