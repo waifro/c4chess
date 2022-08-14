@@ -110,16 +110,16 @@ int GUI_Alias_Textbox_UpdateTexture(GUI_TextureAlias *alias_ttr, char *pathname,
     return 0;
 }
 
-int GUI_Alias_Textbox_UpdateRect(GUI_TextureAlias *alias_ttr, SDL_Rect *rect) {
+int GUI_Alias_Textbox_UpdateRect(GUI_TextureAlias *alias_ttr) {
     GUI_TextureAlias *alias_ptr = alias_ttr->link;
 
-    rect->x = alias_ttr->dst_rect.x;
-    rect->y = alias_ttr->dst_rect.y;
+    if (alias_ptr->dst_rect.w > alias_ttr->dst_rect.w)
+        alias_ptr->src_rect.x = alias_ptr->dst_rect.w - alias_ttr->dst_rect.w;
+    else alias_ptr->src_rect.x = 0;
 
-    if (alias_ptr->dst_rect.w > alias_ttr->dst_rect.w) rect->w = alias_ttr->dst_rect.w;
-    else rect->w = alias_ptr->dst_rect.w;
-
-    rect->h = alias_ptr->dst_rect.h;
+    alias_ptr->src_rect.y = 0;
+    alias_ptr->src_rect.w = alias_ptr->dst_rect.w;
+    alias_ptr->src_rect.h = alias_ptr->dst_rect.h;
 
     return 0;
 }
@@ -127,8 +127,8 @@ int GUI_Alias_Textbox_UpdateRect(GUI_TextureAlias *alias_ttr, SDL_Rect *rect) {
 int GUI_Alias_Textbox_Backspace(char *buf) {
 
     int buf_len = strlen(buf);
-    if (buf_len == 0) return 0;
 
+    if (buf_len == 0) return 0;
     buf[buf_len-1] = '\0';
 
     return 1;

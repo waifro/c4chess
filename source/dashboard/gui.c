@@ -138,10 +138,12 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
             GUI_HookLink_Render(alias_ttr->link);
         }
 
+        // temporary fix
         else if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
-            alias_ptr = alias_ttr->link; SDL_Rect rect;
-            GUI_Alias_Textbox_UpdateRect(alias_ttr, &rect);
-            SDL_RenderCopy(glo_render, alias_ptr->texture, &alias_ptr->src_rect, &rect);
+            GUI_Alias_Textbox_UpdateRect(alias_ttr);
+
+            alias_ptr = alias_ttr->link;
+            SDL_RenderCopy(glo_render, alias_ptr->texture, &alias_ptr->src_rect, &alias_ptr->dst_rect);
         }
     }
 
