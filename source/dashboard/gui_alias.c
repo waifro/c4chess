@@ -113,13 +113,13 @@ int GUI_Alias_Textbox_UpdateTexture(GUI_TextureAlias *alias_ttr, char *pathname,
 int GUI_Alias_Textbox_UpdateRect(GUI_TextureAlias *alias_ttr) {
     GUI_TextureAlias *alias_ptr = alias_ttr->link;
 
-    if (alias_ptr->dst_rect.w > alias_ttr->dst_rect.w)
-        alias_ptr->src_rect.x = alias_ptr->dst_rect.w - alias_ttr->dst_rect.w;
-    else alias_ptr->src_rect.x = 0;
-
+    alias_ptr->src_rect.x = 0;
     alias_ptr->src_rect.y = 0;
     alias_ptr->src_rect.w = alias_ptr->dst_rect.w;
     alias_ptr->src_rect.h = alias_ptr->dst_rect.h;
+
+    if (alias_ptr->dst_rect.w > alias_ttr->dst_rect.w)
+        alias_ptr->src_rect.x = alias_ptr->dst_rect.w - alias_ttr->dst_rect.w;
 
     return 0;
 }
