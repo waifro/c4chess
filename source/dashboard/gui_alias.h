@@ -2,6 +2,7 @@
 #define GUI_ALIAS_H
 
 #include <stdbool.h>
+#include <time.h>
 #include <SDL2/SDL.h>
 #include "../pp4m/pp4m.h"
 #include "../pp4m/pp4m_input.h"
@@ -96,6 +97,7 @@ typedef enum {
 typedef struct {
     GUI_ALIAS_OBJ obj;
     void *link, *add;
+    int interval, timer;
     SDL_Rect src_rect, dst_rect;
     SDL_Texture *texture;
 } GUI_TextureAlias;
@@ -122,6 +124,10 @@ int GUI_Alias_Textbox_UpdateRect(GUI_TextureAlias *alias_ttr);
 
 int GUI_Alias_Textbox_Backspace(char *buf);
 
+/* blink object */
+int GUI_Alias_Textbox_InitBlink(GUI_TextureAlias *alias_ttr);
+int GUI_Alias_BlinkUpdate(GUI_TextureAlias *alias_ttr);
+
 int GUI_Alias_Textbox_InitAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, char *buffer);
 int GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, char **buffer, int key, int *code);
 int GUI_Alias_Textbox_DestrAlias(GUI_TextureAlias *alias_ptr);
@@ -139,6 +145,6 @@ PP4M_HOOK *GUI_Alias_Tail(GUI_TextureAlias *alias);
 int GUI_AliasDestroy_WindowChat(GUI_TextureAlias *window);
 int GUI_AliasDestroy_WindowChat_InnerWindow(GUI_TextureAlias *inner_window);
 int GUI_AliasDestroy_WindowChat_Chat(PP4M_HOOK *list);
-int GUI_AliasDestroy_Textbox(GUI_TextureAlias *alias_ptr);
+int GUI_AliasDestroy_Textbox(GUI_TextureAlias *alias_ttr);
 
 #endif

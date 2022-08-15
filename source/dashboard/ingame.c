@@ -139,7 +139,7 @@ int GUI_Ingame_ChatUpdate(GUI_TextureAlias *inner_window_oob, char *pathname, SD
 
     GUI_Ingame_ChatUpdate_AddLine(inner_window_oob, pathname, color, point, buf_user, buf);
     GUI_Ingame_ChatUpdate_Scroll(inner_window_oob);
-
+    
     return 0;
 }
 

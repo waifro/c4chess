@@ -48,6 +48,7 @@ GUI_TextureAlias *GUI_Alias_InitAlias(void) {
     alias->texture = NULL;
     alias->link = NULL;
     alias->add = NULL;
+    alias->timer = 0;
 
     return alias;
 }
@@ -145,6 +146,37 @@ int GUI_Alias_Textbox_Backspace(char *buf) {
     return 1;
 }
 
+int GUI_Alias_Textbox_InitBlink(GUI_TextureAlias *alias_ttr) {
+    GUI_TextureAlias *alias_blink = GUI_Alias_InitAlias();
+
+    alias_blink->obj = OBJ_TEXTBOX_BLINK;
+    alias_blink->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_BLACK, 0, &alias_blink->dst_rect, alias_ttr->dst_rect.x, alias_ttr->dst_rect.y, 1, alias_ttr->dst_rect.h);
+
+    alias_blink->src_rect.x = 0;
+    alias_blink->src_rect.y = 0;
+    alias_blink->src_rect.w = alias_blink->dst_rect.w;
+    alias_blink->src_rect.h = alias_blink->dst_rect.h;
+    alias_blink->interval = CLOCKS_PER_SEC / 2;
+
+    alias_ttr->add = alias_blink;
+    return 0;
+}
+
+int GUI_Alias_BlinkUpdate(GUI_TextureAlias *alias_ttr) {
+    GUI_TextureAlias *alias_blink = alias_ttr->add;
+
+    if (GUI_Alias_FramerateSet(alias_blink->interval, alias_blink->timer) == false)
+        return -1;
+
+    unsigned int val = 0;
+    SDL_GetTextureAlphaMod(alias_blink->texture, &val);
+
+    if (val == 0) SDL_SetTextureAlphaMod(alias_blink->texture, 255);
+    else SDL_SetTextureAlphaMod(alias_blink->texture, 0);
+
+    return 0;
+}
+
 int GUI_Alias_Textbox_InitAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, char *buffer) {
     GUI_TextureAlias *alias_ptr = alias_ttr->link;
 
@@ -155,15 +187,20 @@ int GUI_Alias_Textbox_InitAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL
 
     // create texture
     GUI_Alias_Textbox_Empty(alias_ttr, pathname, color, point, buffer);
+    GUI_Alias_Textbox_InitBlink(alias_ttr);
 
     return 0;
 }
 
 int GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, char **buffer, int key, int *code) {
     GUI_TextureAlias *alias_ptr = alias_ttr->link;
+    GUI_TextureAlias *alias_blink = alias_ttr->add;
+
     char *link_ptr = alias_ptr->link;
     int link_len = strlen(link_ptr) - 1;
     int result = 0;
+
+    GUI_Alias_BlinkUpdate(alias_ttr);
 
     if (link_len == -1 && key == 0) {
         GUI_Alias_Textbox_Empty(alias_ttr, pathname, PP4M_GREY_NORMAL, point, glo_lang[_LANG_PROMPT_INPUT_TEXT]);
@@ -197,6 +234,8 @@ int GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, S
         SDL_DestroyTexture(alias_ptr->texture);
         GUI_Alias_Textbox_UpdateTexture(alias_ttr, pathname, color, point);
     }
+
+    alias_blink->timer = 0;
 
     return 0;
 }
@@ -384,7 +423,7 @@ int GUI_AliasDestroy_WindowChat(GUI_TextureAlias *window) {
         if (alias_ptr->obj == OBJ_WINDOW_INNER_OOB_CHAT)
             GUI_AliasDestroy_WindowChat_InnerWindow(alias_ptr);
         else if (alias_ptr->obj == OBJ_TEXTBOX_ALIAS)
-            GUI_AliasDestroy_Textbox(alias_ptr->link);
+            GUI_AliasDestroy_Textbox(alias_ptr);
 
         if (alias_ptr->texture != NULL)
             SDL_DestroyTexture(alias_ptr->texture);
@@ -445,13 +484,22 @@ int GUI_AliasDestroy_WindowChat_Chat(PP4M_HOOK *list) {
     return 0;
 }
 
-int GUI_AliasDestroy_Textbox(GUI_TextureAlias *alias_ptr) {
+int GUI_AliasDestroy_Textbox(GUI_TextureAlias *alias_ttr) {
+    GUI_TextureAlias *alias_ptr = alias_ttr->link;
+    GUI_TextureAlias *alias_blink = alias_ttr->add;
 
-    if (alias_ptr->link != NULL)
-        free(alias_ptr->link); // char*
+    if (alias_ptr != NULL) {
+        if (alias_ptr->link != NULL)
+            free(alias_ptr->link); // char*
 
-    if (alias_ptr->texture != NULL)
-        SDL_DestroyTexture(alias_ptr->texture);
+        if (alias_ptr->texture != NULL)
+            SDL_DestroyTexture(alias_ptr->texture);
+    }
+
+    if (alias_blink != NULL) {
+        if (alias_blink->texture != NULL)
+            SDL_DestroyTexture(alias_blink->texture);
+    }
 
     return 0;
 }
