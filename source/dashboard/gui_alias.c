@@ -157,7 +157,7 @@ int GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, S
     if (link_len == -1 && key == 0) {
         GUI_Alias_Textbox_Empty(alias_ttr, pathname, PP4M_GREY_NORMAL, point, "Input text here");
         return 0;
-    } else if (link_len >= 255) return 0;
+    } else if (link_len > 255) return 0;
 
     // create a better key func
     if (key == 0 && link_len > -1) return 0;
