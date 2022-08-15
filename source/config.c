@@ -114,11 +114,27 @@ int CFG_BootFile_ReadSet(char *buffer, char *dest) {
 
 int CFG_BootFile_ReadValue(char *buffer, char *dest) {
 
-    for (int n = 0; n < (int)strlen(buffer); n++)
-        if (buffer[n] == '=') {
-            strncpy(dest, &buffer[++n], strlen(buffer));
-            break;
+    int foo = -1;
+    int len = (int)strlen(buffer);
+
+    char buf[len];
+    memset(buf, 0x00, len);
+
+    for (int n = 0; n < len; n++) {
+        if (foo < 0 && buffer[n] == '=') {
+            foo++; continue;
         }
+
+        if (foo != -1) {
+
+            if (buffer[n] == ' ' || buffer[n] == '#' || buffer[n] == '\n' || buffer[n] == '\0')
+                break;
+
+            buf[foo++] = buffer[n];
+        }
+    }
+
+    strcpy(dest, buf);
 
     return (0);
 }
@@ -131,8 +147,8 @@ int CFG_BootFile_ConfigRule(char *set, char *value) {
     if (strncmp(set, cfg_boot_set[0], strlen(cfg_boot_set[0])) == 0) {
 
         CFG_LANG lang = LANG_ConfigLanguage(value);
-        LANG_SetLanguage(lang);
-        DEBUG_PrintBox(1, "  language set as: %s", value);
+        int val = LANG_SetLanguage(lang);
+        DEBUG_PrintBox(1, "  language set as: %s [%d]", value, val);
 
     } else if (strncmp(set, cfg_boot_set[1], strlen(cfg_boot_set[1])) == 0) {
         DEBUG_PrintBox(1, "  style set as: %s", value);

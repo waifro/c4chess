@@ -95,5 +95,5 @@ int LANG_SetLanguage(CFG_LANG lang) {
         break;
     }
 
-    return 0;
+    return lang;
 }
