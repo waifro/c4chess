@@ -116,6 +116,7 @@ int GUI_Alias_Textbox_UpdateTexture(GUI_TextureAlias *alias_ttr, char *pathname,
 
 int GUI_Alias_Textbox_UpdateRect(GUI_TextureAlias *alias_ttr) {
     GUI_TextureAlias *alias_ptr = alias_ttr->link;
+    //GUI_TextureAlias *alias_blink = alias_ttr->add;
 
     int w, h;
     SDL_QueryTexture(alias_ptr->texture, NULL, NULL, &w, &h);
@@ -156,7 +157,9 @@ int GUI_Alias_Textbox_InitBlink(GUI_TextureAlias *alias_ttr) {
     alias_blink->src_rect.y = 0;
     alias_blink->src_rect.w = alias_blink->dst_rect.w;
     alias_blink->src_rect.h = alias_blink->dst_rect.h;
+
     alias_blink->interval = CLOCKS_PER_SEC / 2;
+    alias_blink->timer = clock();
 
     alias_ttr->add = alias_blink;
     return 0;
@@ -165,10 +168,10 @@ int GUI_Alias_Textbox_InitBlink(GUI_TextureAlias *alias_ttr) {
 int GUI_Alias_BlinkUpdate(GUI_TextureAlias *alias_ttr) {
     GUI_TextureAlias *alias_blink = alias_ttr->add;
 
-    if (GUI_Alias_FramerateSet(alias_blink->interval, alias_blink->timer) == false)
+    if (GUI_Alias_FramerateSet(alias_blink->interval, &alias_blink->timer) == false)
         return -1;
 
-    unsigned int val = 0;
+    char val = 0;
     SDL_GetTextureAlphaMod(alias_blink->texture, &val);
 
     if (val == 0) SDL_SetTextureAlphaMod(alias_blink->texture, 255);
@@ -203,13 +206,16 @@ int GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, S
     GUI_Alias_BlinkUpdate(alias_ttr);
 
     if (link_len == -1 && key == 0) {
+        alias_blink->dst_rect.x = alias_ttr->dst_rect.x;
+
         GUI_Alias_Textbox_Empty(alias_ttr, pathname, PP4M_GREY_NORMAL, point, glo_lang[_LANG_PROMPT_INPUT_TEXT]);
         return 0;
-    } else if (link_len > 255) return 0;
+    }
 
     // create a better key func
     if (key == 0 && link_len > -1) return 0;
     else if (key == -2 && link_len > -1) result += GUI_Alias_Textbox_Backspace(link_ptr);
+    else if (link_len > 255) return 0;
     else if (key == -3 && link_len > -1) {
 
         int len = strlen(link_ptr) + glo_user.len;
@@ -235,6 +241,8 @@ int GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, S
         GUI_Alias_Textbox_UpdateTexture(alias_ttr, pathname, color, point);
     }
 
+    // follow
+    alias_blink->dst_rect.x = alias_ttr->dst_rect.x + alias_ptr->dst_rect.w;
     alias_blink->timer = 0;
 
     return 0;

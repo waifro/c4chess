@@ -145,8 +145,9 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
             alias_ptr = alias_ttr->link;
             SDL_RenderCopy(glo_render, alias_ptr->texture, &alias_ptr->src_rect, &alias_ptr->dst_rect);
 
-            if (alias_ptr->add != NULL) {
-                alias_ptr = alias_ptr->add;
+            if (alias_ttr->add != NULL) {
+
+                alias_ptr = alias_ttr->add;
                 SDL_RenderCopy(glo_render, alias_ptr->texture, &alias_ptr->src_rect, &alias_ptr->dst_rect);
             }
         }
@@ -219,10 +220,12 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, in
                 if (GUI_Alias_InputOnObj(input, alias_ttr->dst_rect) == 1) alias_ptr->obj = OBJ_TEXTBOX_INPUT_ON;
                 else alias_ptr->obj = OBJ_TEXTBOX_INPUT_OFF;
 
+                /*
                 // resetting the blinking texture
                 GUI_TextureAlias *alias_blink = alias_ttr->add;
                 alias_blink->timer = 255;
                 GUI_Alias_BlinkUpdate(alias_ttr);
+                */
             }
         }
 
