@@ -11,7 +11,7 @@ char *lang_boot_it = { // italian
     "#             Questo file e stato generato nel primo boot.              #\n"
     "#                                                                       #\n"
     "#       Qui puoi modificare la dinamica del gioco a tuo piacimento,     #\n"
-    "#        Qualunque modifica applicata nel gioco sarà salvato qui.       #\n"
+    "#        Qualunque modifica applicata nel gioco sarï¿½ salvato qui.       #\n"
     "#       Tutte le configurazioni saranno applicate durante il boot       #\n"
     "#                                                                       #\n"
     "# Per maggiori informazioni visita https://github.com/waifro/c4chess    #\n"
@@ -41,21 +41,24 @@ char *lang_boot_nl = { // dutch
 	"# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #" };
 
 const char *lang_cfg_it[] = {
-    "Errore", "Attenzione", "C'e qualcosa che non va", "Riprova", "Si", "No", "Okay", "Torna nel gioco",
+    "Errore", "Attenzione", "C'e qualcosa che non va", "Riprova", "Si", "No", "Okay",
+    "Torna nel gioco", "Inserire il testo",
     "Indietro", "Esci", "Continua", "Annulla",
     "Gioca", "Info", "Impostazioni", "Statistiche", "Prossimamente", "Sei Sicuro?", "Premi",
     "stile", "personalizza", "immetti", "sfondo immagine", "suoni", "musica", "locale", "globale", "giocatori",
     "lobby trovate", "indirizzo Ip", "per uscire", "per entrare", "in chat" };
 
 const char *lang_cfg_en[] = {
-    "Error", "Attention", "There is something wrong", "Retry", "Yes", "No", "Okay", "Back to the game",
+    "Error", "Attention", "There is something wrong", "Retry", "Yes", "No", "Okay",
+    "Back to the game", "Input text here",
     "Back", "Exit", "Continue", "Cancel",
     "Play", "Info", "Settings", "Statistics", "Coming soon", "Are you sure?", "Press",
     "style", "personalize", "insert", "background", "sounds", "music", "local", "global", "players",
     "lobby found", "address Ip", "to exit", "to enter", "in chat" };
 
 const char *lang_cfg_nl[] = {
-    "Error", "Attentie", "Er is iets misgelopen", "Probeer opnieuw", "Ja", "Nee", "Oke'", "Terug naar de game",
+    "Error", "Attentie", "Er is iets misgelopen", "Probeer opnieuw", "Ja", "Nee", "Oke'",
+    "Terug naar de game", "Voer hier tekst in",
     "Rug", "Verlaat", "Ga verder", "Annuleren",
     "Speel", "Informatie", "Instellingen", "Statistieken", "Binnenkort beschikbaar", "Ben je zeker?", "Druk",
     "stijl", "personalizeer", "invoegen", "achtergrond", "sounds", "muziek", "lokaal", "globaal", "spelers",
