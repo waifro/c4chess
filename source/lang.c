@@ -42,7 +42,7 @@ char *lang_boot_nl = { // dutch
 
 const char *lang_cfg_it[] = {
     "Errore", "Attenzione", "C'e qualcosa che non va", "Riprova", "Si", "No", "Okay",
-    "Torna nel gioco", "Inserire il testo",
+    "Torna nel gioco", "Inserisci testo qui",
     "Indietro", "Esci", "Continua", "Annulla",
     "Gioca", "Info", "Impostazioni", "Statistiche", "Prossimamente", "Sei Sicuro?", "Premi",
     "stile", "personalizza", "immetti", "sfondo immagine", "suoni", "musica", "locale", "globale", "giocatori",
@@ -50,7 +50,7 @@ const char *lang_cfg_it[] = {
 
 const char *lang_cfg_en[] = {
     "Error", "Attention", "There is something wrong", "Retry", "Yes", "No", "Okay",
-    "Back to the game", "Input text here",
+    "Back to the game", "Insert text here",
     "Back", "Exit", "Continue", "Cancel",
     "Play", "Info", "Settings", "Statistics", "Coming soon", "Are you sure?", "Press",
     "style", "personalize", "insert", "background", "sounds", "music", "local", "global", "players",
@@ -58,7 +58,7 @@ const char *lang_cfg_en[] = {
 
 const char *lang_cfg_nl[] = {
     "Error", "Attentie", "Er is iets misgelopen", "Probeer opnieuw", "Ja", "Nee", "Oke'",
-    "Terug naar de game", "Voer hier tekst in",
+    "Terug naar de game", "Voeg hier tekst in",
     "Rug", "Verlaat", "Ga verder", "Annuleren",
     "Speel", "Informatie", "Instellingen", "Statistieken", "Binnenkort beschikbaar", "Ben je zeker?", "Druk",
     "stijl", "personalizeer", "invoegen", "achtergrond", "sounds", "muziek", "lokaal", "globaal", "spelers",
