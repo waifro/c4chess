@@ -43,8 +43,11 @@ int GUI_Alias_ResetColor(SDL_Color *color) {
 
 GUI_TextureAlias *GUI_Alias_InitAlias(void) {
     GUI_TextureAlias *alias = malloc(sizeof(GUI_TextureAlias));
+
     alias->obj = OBJ_NULL;
     alias->texture = NULL;
+    alias->link = NULL;
+    alias->add = NULL;
 
     return alias;
 }

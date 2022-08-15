@@ -32,6 +32,7 @@ typedef enum {
 
     OBJ_TEXTBOX_LINK,           // texture behind OBJ_TEXTBOX_INPUT + *link as linked list
     OBJ_TEXTBOX_ALIAS,          // texture behind OBJ_TEXTBOX_INPUT + *link as GUI_TextureAlias
+    OBJ_TEXTBOX_BLINK,          // texture which blinks at input
 
     OBJ_TEXTBOX_INPUT_OFF,      // init, reset, update and modify texture's input
     OBJ_TEXTBOX_INPUT_ON,
@@ -84,6 +85,7 @@ typedef enum {
                         |- OBJ_TEXTBOX_ALIAS \
                                              |- OBJ_TEXTBOX_INPUT_OFF \                       // obj to indicate accept input or not
                                                                        |- char*
+                                                                       |+ OBJ_TEXTBOX_BLINK
                         |- OBJ_BUTTON_TXTBOX                                                     // send message
                         (NULL)
 
@@ -93,7 +95,7 @@ typedef enum {
 
 typedef struct {
     GUI_ALIAS_OBJ obj;
-    void *link;
+    void *link, *add;
     SDL_Rect src_rect, dst_rect;
     SDL_Texture *texture;
 } GUI_TextureAlias;
