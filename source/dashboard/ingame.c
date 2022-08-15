@@ -66,7 +66,7 @@ GUI_TextureAlias *GUI_Ingame_ChatInit_Window(GUI_TextureAlias *alias_button_chat
 
     alias_textbox->link = alias_text;
     alias_text->obj = OBJ_TEXTBOX_INPUT_OFF;
-    GUI_Alias_Textbox_InitAlias(alias_textbox, OPENSANS_REGULAR, PP4M_GREY_NORMAL, 18, "Input text here");
+    GUI_Alias_Textbox_InitAlias(alias_textbox, OPENSANS_REGULAR, PP4M_GREY_NORMAL, 18, glo_lang[_LANG_PROMPT_INPUT_TEXT]);
 
     GUI_TextureAlias *alias_button_send = GUI_Alias_InitAlias();
     alias_button_send->obj = OBJ_BUTTON_TXTBOX;

@@ -105,7 +105,7 @@ int GUI_Alias_Textbox_UpdateTexture(GUI_TextureAlias *alias_ttr, char *pathname,
     alias_ptr->dst_rect.h = rect.h;
 
     if (rect.w > alias_ttr->dst_rect.w)
-        alias_ptr->dst_rect.x = rect.w - alias_ttr->dst_rect.w;
+        alias_ptr->dst_rect.w = alias_ttr->dst_rect.w;
 
     return 0;
 }
@@ -113,13 +113,21 @@ int GUI_Alias_Textbox_UpdateTexture(GUI_TextureAlias *alias_ttr, char *pathname,
 int GUI_Alias_Textbox_UpdateRect(GUI_TextureAlias *alias_ttr) {
     GUI_TextureAlias *alias_ptr = alias_ttr->link;
 
+    int w, h;
+    SDL_QueryTexture(alias_ptr->texture, NULL, NULL, &w, &h);
+
+    alias_ptr->dst_rect.x = alias_ttr->dst_rect.x;
+    alias_ptr->dst_rect.y = alias_ttr->dst_rect.y;
+
     alias_ptr->src_rect.x = 0;
     alias_ptr->src_rect.y = 0;
-    alias_ptr->src_rect.w = alias_ptr->dst_rect.w;
-    alias_ptr->src_rect.h = alias_ptr->dst_rect.h;
+    alias_ptr->src_rect.w = w;
+    alias_ptr->src_rect.h = h;
 
-    if (alias_ptr->dst_rect.w > alias_ttr->dst_rect.w)
-        alias_ptr->src_rect.x = alias_ptr->dst_rect.w - alias_ttr->dst_rect.w;
+    if (w > alias_ttr->dst_rect.w) {
+        alias_ptr->src_rect.x = w - alias_ttr->dst_rect.w;
+        alias_ptr->dst_rect.w = alias_ttr->dst_rect.w;
+    }
 
     return 0;
 }
@@ -155,7 +163,7 @@ int GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, S
     int result = 0;
 
     if (link_len == -1 && key == 0) {
-        GUI_Alias_Textbox_Empty(alias_ttr, pathname, PP4M_GREY_NORMAL, point, "Input text here");
+        GUI_Alias_Textbox_Empty(alias_ttr, pathname, PP4M_GREY_NORMAL, point, glo_lang[_LANG_PROMPT_INPUT_TEXT]);
         return 0;
     } else if (link_len > 255) return 0;
 
