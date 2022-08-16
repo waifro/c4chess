@@ -122,6 +122,14 @@ void CORE_UpdateState_PieceStruct(int tile, CHESS_CORE_PIECE *piece, CHESS_CORE_
     return;
 }
 
+void CORE_ResetGlobal_CoreTile(void) {
+
+    for (int n = 0; n < 64; n++)
+        glo_chess_core_tile[n].piece = NULL;
+
+    return;
+}
+
 void CORE_ResetGlobal_CorePiece(void) {
 
     for (int n = 0; n < 32; n++)

@@ -68,7 +68,10 @@ void CORE_GlobalDestroyPiece(CHESS_CORE_PIECE **piece);
 /* on success, transforms a piece into another piece */
 void CORE_UpdateState_PieceStruct(int tile, CHESS_CORE_PIECE *piece, CHESS_CORE_PLAYER player, int enum_piece);
 
-/* on success, resets every pieces (not from tiles) */
+/* on success, resets every tile */
+void CORE_ResetGlobal_CoreTile(void);
+
+/* on success, resets every piece */
 void CORE_ResetGlobal_CorePiece(void);
 
 /* on success, inverts every tile */
