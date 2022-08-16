@@ -249,7 +249,7 @@ void CORE_RenderUpdate(SDL_Texture *background, int frames_per_sec, int *timer) 
             SDL_RenderPresent(glo_render);
     }
 
-    return 0;
+    return;
 }
 
 void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *socket) {

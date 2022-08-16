@@ -196,6 +196,77 @@ int GUI_Alias_Textbox_InitAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL
 }
 
 int GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, char **buffer, int key, int *code) {
+
+    GUI_TextureAlias *alias_ptr = alias_ttr->link;
+    GUI_TextureAlias *alias_blink = alias_ttr->add;
+
+    GUI_Alias_BlinkUpdate(alias_ttr);
+
+    char *msg = alias_ptr->link;
+    int msg_len = (int)strlen(msg);
+
+    // nothing
+    if (key == 0) {
+
+        // nothing written
+        if (msg_len == 0) {
+            alias_blink->dst_rect.x = alias_ttr->dst_rect.x;
+            GUI_Alias_Textbox_Empty(alias_ttr, pathname, PP4M_GREY_NORMAL, point, glo_lang[_LANG_PROMPT_INPUT_TEXT]);
+        }
+
+        return 0;
+    }
+
+    // backspace
+    else if (key == -2) {
+
+        if (msg_len > 0) GUI_Alias_Textbox_Backspace(msg);
+
+    }
+
+    // enter
+    else if (key == -3) {
+
+        // has been written something
+        if (msg_len > 0) {
+            int len = strlen(msg) + glo_user.len;
+            char *buf_ptr = malloc(sizeof(char) * len + 1);
+
+            memset(buf_ptr, 0x00, len + 1);
+            snprintf(buf_ptr, 255, "%s %s", glo_user.username, msg);
+            memset(msg, 0x00, len);
+
+            *code = CL_LOBBY_POST_MESG;
+            *buffer = buf_ptr;
+
+        }
+
+        return 0;
+    }
+
+    // possibly any printable key
+    else if (isprint(key)){
+
+        if (msg_len < 256) {
+            msg[msg_len] = key;
+            msg[msg_len + 1] = '\0';
+        }
+    }
+
+    // any applicated changes to the message
+    if ((int)strlen(msg) != msg_len) {
+
+        SDL_DestroyTexture(alias_ptr->texture);
+        GUI_Alias_Textbox_UpdateTexture(alias_ttr, pathname, color, point);
+
+    }
+
+
+    // follow any edit of texture from message
+    alias_blink->dst_rect.x = alias_ttr->dst_rect.x + alias_ptr->dst_rect.w;
+    alias_blink->timer = 0;
+
+    /*
     GUI_TextureAlias *alias_ptr = alias_ttr->link;
     GUI_TextureAlias *alias_blink = alias_ttr->add;
 
@@ -218,15 +289,15 @@ int GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, S
     else if (link_len > 255) return 0;
     else if (key == -3 && link_len > -1) {
 
-        int len = strlen(link_ptr) + glo_user.len;
-        char *buf_ptr = malloc(sizeof(char) * len + 1);
+    int len = strlen(link_ptr) + glo_user.len;
+    char *buf_ptr = malloc(sizeof(char) * len + 1);
 
-        memset(buf_ptr, 0x00, len + 1);
-        snprintf(buf_ptr, 255, "%s %s", glo_user.username, link_ptr);
-        memset(link_ptr, 0x00, len);
+    memset(buf_ptr, 0x00, len + 1);
+    snprintf(buf_ptr, 255, "%s %s", glo_user.username, link_ptr);
+    memset(link_ptr, 0x00, len);
 
-        *code = CL_LOBBY_POST_MESG;
-        *buffer = buf_ptr;
+    *code = CL_LOBBY_POST_MESG;
+    *buffer = buf_ptr;
 
         return 0;
     }
@@ -242,8 +313,8 @@ int GUI_Alias_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, S
     }
 
     // follow
-    alias_blink->dst_rect.x = alias_ttr->dst_rect.x + alias_ptr->dst_rect.w;
-    alias_blink->timer = 0;
+
+    */
 
     return 0;
 }
