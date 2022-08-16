@@ -55,19 +55,29 @@ extern CHESS_CORE_TILE glo_chess_core_tile[64];
 extern CHESS_CORE_PIECE glo_chess_core_piece[32];
 
 /* prototypes */
+
+/* on success, creates an array of CHESS_CORE_TILE in the middle */
 void CORE_Chessboard_Init(void);
+
+/* on success, initializes every tile with tags */
 void CORE_ChessTag_Init(CHESS_CORE_TILE *chess_tile);
 
+/* on success, destroyes a selected piece from memory */
 void CORE_GlobalDestroyPiece(CHESS_CORE_PIECE **piece);
 
+/* on success, transforms a piece into another piece */
 void CORE_UpdateState_PieceStruct(int tile, CHESS_CORE_PIECE *piece, CHESS_CORE_PLAYER player, int enum_piece);
 
-void CORE_ResetGlobal_CorePiece(void);
+/* on success, resets every pieces (not from tiles) */
 void CORE_ResetGlobal_CorePiece(void);
 
+/* on success, inverts every tile */
 void CORE_Chessboard_Reverse(CHESS_CORE_TILE *core_tile);
+
+/* on success, returns inverted player */
 CHESS_CORE_PLAYER CORE_ReversePlayer_State(CHESS_CORE_PLAYER player);
 
+/* on success, updates rendering chessboard, debugging and stuff */
 void CORE_GlobalUpdate_StateRender(void);
 
 char *CORE_NET_ChessboardInit(CHESS_CORE_PLAYER *player, char *buffer);

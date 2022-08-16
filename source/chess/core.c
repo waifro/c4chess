@@ -122,14 +122,6 @@ void CORE_UpdateState_PieceStruct(int tile, CHESS_CORE_PIECE *piece, CHESS_CORE_
     return;
 }
 
-void CORE_ResetGlobal_CoreTile(void) {
-
-    for (int n = 0; n < 64; n++)
-        glo_chess_core_tile[n].piece = NULL;
-
-    return;
-}
-
 void CORE_ResetGlobal_CorePiece(void) {
 
     for (int n = 0; n < 32; n++)
@@ -147,11 +139,6 @@ void CORE_ResetGlobal_CorePiece(void) {
     return;
 }
 
-CHESS_CORE_PLAYER CORE_ReversePlayer_State(CHESS_CORE_PLAYER player) {
-    if (player == WHITE_PLAYER) return BLACK_PLAYER;
-    else return WHITE_PLAYER;
-}
-
 void CORE_Chessboard_Reverse(CHESS_CORE_TILE *core_tile) {
 
     CHESS_CORE_TILE core_tile_bak[64];
@@ -166,6 +153,11 @@ void CORE_Chessboard_Reverse(CHESS_CORE_TILE *core_tile) {
         memcpy(&core_tile[n].tag, &core_tile_bak[63 - n].tag, sizeof(CHESS_CORE_TILE_TAG));
 
     return;
+}
+
+CHESS_CORE_PLAYER CORE_ReversePlayer_State(CHESS_CORE_PLAYER player) {
+    if (player == WHITE_PLAYER) return BLACK_PLAYER;
+    else return WHITE_PLAYER;
 }
 
 void CORE_GlobalUpdate_StateRender(void) {
