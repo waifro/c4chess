@@ -238,6 +238,20 @@ int CORE_NET_SocketRedirect(int *socket, CHESS_CORE_PLAYER *player) {
     return (socket != NULL && *player != glo_chess_core_player ? -1 : 0);
 }
 
+void CORE_RenderUpdate(int frames_per_sec) {
+
+    if (GUI_Alias_FramerateSet(frames_per_sec, &capped_fps) == true) {
+            SDL_RenderClear(glo_render);
+
+            SDL_RenderCopy(glo_render, background, NULL, NULL);
+            CORE_GlobalUpdate_StateRender();
+
+            SDL_RenderPresent(glo_render);
+    }
+
+    return 0;
+}
+
 void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *socket) {
 
     /* preserve player */
@@ -280,13 +294,8 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
         running = MIDDLE_UpdateChangeState(&event, &player, socket);
 
         /* renders everything chessboard releated */
+        CORE_RenderUpdate(CLOCKS_PER_SEC / 60);
 
-        if (GUI_Alias_FramerateSet(CLOCKS_PER_SEC / 60, &capped_fps) == true) {
-            SDL_RenderClear(glo_render);
-            SDL_RenderCopy(glo_render, background, NULL, NULL);
-            CORE_GlobalUpdate_StateRender();
-            SDL_RenderPresent(glo_render);
-        }
     }
 
     SDL_DestroyTexture(background);
