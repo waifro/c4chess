@@ -238,7 +238,7 @@ int CORE_NET_SocketRedirect(int *socket, CHESS_CORE_PLAYER *player) {
     return (socket != NULL && *player != glo_chess_core_player ? -1 : 0);
 }
 
-void CORE_RenderUpdate(SDL_Texture background, int frames_per_sec, int *timer) {
+void CORE_RenderUpdate(SDL_Texture *background, int frames_per_sec, int *timer) {
 
     if (GUI_Alias_FramerateSet(frames_per_sec, timer) == true) {
             SDL_RenderClear(glo_render);

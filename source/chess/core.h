@@ -89,7 +89,7 @@ int CORE_NET_UpdateLobby(int *code, int *socket, char **buffer, int *position_ol
 
 int CORE_NET_SocketRedirect(int *socket, CHESS_CORE_PLAYER *player);
 
-void CORE_RenderUpdate(SDL_Texture background, int frames_per_sec, int *timer);
+void CORE_RenderUpdate(SDL_Texture *background, int frames_per_sec, int *timer);
 
 void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *socket);
 
