@@ -182,7 +182,7 @@ int GUI_Textbox_BlinkInit(GUI_TextureAlias *alias_ttr) {
     alias_blink->src_rect.h = alias_blink->dst_rect.h;
 
     alias_blink->interval = CLOCKS_PER_SEC / 2;
-    alias_blink->timer = clock();
+    alias_blink->timer = 0;
 
     alias_ttr->add = alias_blink;
     return 0;
