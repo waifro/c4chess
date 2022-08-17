@@ -15,6 +15,7 @@
 #include "ingame.h"
 #include "gui.h"
 #include "gui_alias.h"
+#include "textbox.h"
 
 // init OBJ_BUTTON_LINK_OFF which will contain windowed chat as link
 int GUI_Ingame_ChatInit(PP4M_HOOK *hook_list) {
@@ -66,7 +67,7 @@ GUI_TextureAlias *GUI_Ingame_ChatInit_Window(GUI_TextureAlias *alias_button_chat
 
     alias_textbox->link = alias_text;
     alias_text->obj = OBJ_TEXTBOX_INPUT_OFF;
-    GUI_Alias_Textbox_InitAlias(alias_textbox, OPENSANS_REGULAR, PP4M_GREY_NORMAL, 18, glo_lang[_LANG_PROMPT_INPUT_TEXT]);
+    GUI_Textbox_InitAlias(alias_textbox, OPENSANS_REGULAR, PP4M_GREY_NORMAL, 18, glo_lang[_LANG_PROMPT_INPUT_TEXT]);
 
     GUI_TextureAlias *alias_button_send = GUI_Alias_InitAlias();
     alias_button_send->obj = OBJ_BUTTON_TXTBOX;
@@ -139,7 +140,7 @@ int GUI_Ingame_ChatUpdate(GUI_TextureAlias *inner_window_oob, char *pathname, SD
 
     GUI_Ingame_ChatUpdate_AddLine(inner_window_oob, pathname, color, point, buf_user, buf);
     GUI_Ingame_ChatUpdate_Scroll(inner_window_oob);
-    
+
     return 0;
 }
 
@@ -240,23 +241,6 @@ int GUI_Ingame_ChatUpdate_Scroll(GUI_TextureAlias *inner_window_oob) {
             }
 
             break;
-
-            /*
-            if ((int)foo >= src_render_inner_y) {
-
-                if (bar == 0) {
-                    scroll_obj->dst_rect.y = inner_window_oob->dst_rect.y + i;
-                    bar = i;
-
-                    continue;
-                }
-
-                if ((int)foo >= (src_render_inner_y + inner_window_oob->dst_rect.h)) {
-                    scroll_obj->dst_rect.h = i - bar;
-                    break;
-                }
-            }
-            */
         }
     }
 

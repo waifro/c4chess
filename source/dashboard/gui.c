@@ -13,6 +13,8 @@
 
 #include "../global.h"
 #include "ingame.h"
+#include "textbox.h"
+#include "destroy.h"
 #include "gui.h"
 
 void GUI_Testing(void) {
@@ -140,7 +142,7 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
 
         // temporary fix
         else if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
-            GUI_Alias_Textbox_UpdateRect(alias_ttr);
+            GUI_Textbox_UpdateRect(alias_ttr);
 
             alias_ptr = alias_ttr->link;
             SDL_RenderCopy(glo_render, alias_ptr->texture, &alias_ptr->src_rect, &alias_ptr->dst_rect);
@@ -172,7 +174,7 @@ void GUI_HookList_Quit(PP4M_HOOK *hook_list) {
             alias_ptr = alias->link;
 
             if (alias_ptr->obj == OBJ_WINDOW_CHAT)
-                GUI_AliasDestroy_WindowChat(alias_ptr);
+                GUI_Destroy_WindowChat(alias_ptr);
 
             if (alias_ptr->texture != NULL)
                 SDL_DestroyTexture(alias_ptr->texture);
@@ -248,7 +250,7 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, in
             alias_ptr = alias_ttr->link;
 
             if (alias_ptr->obj == OBJ_TEXTBOX_INPUT_ON)
-                GUI_Alias_Textbox_UpdateAlias(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 18, buffer, key, code);
+                GUI_Textbox_UpdateAlias(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 18, buffer, key, code);
         }
 
         if (input.iner == 1) {
