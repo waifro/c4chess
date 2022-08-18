@@ -1,3 +1,6 @@
 [submodule "source/pp4m"]
 	path = source/pp4m
 	url = https://github.com/waifro/pp4m
+[submodule "source/c4network"]
+	path = source/c4network
+	url = https://github.com/waifro/c4network
