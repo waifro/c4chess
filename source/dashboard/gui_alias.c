@@ -79,20 +79,6 @@ SDL_Texture *GUI_Alias_CreateSnapshot(SDL_Renderer *renderer, int width, int hei
     return (texture);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // return -1 if src is NULL, -2 if dest is NULL, otherwise 0 on success
 int GUI_Alias_RectCopy(SDL_Rect *dest, SDL_Rect *src) {
     if (src == NULL) return -1;
