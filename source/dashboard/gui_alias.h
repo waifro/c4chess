@@ -84,9 +84,9 @@ typedef enum {
                                                                               (NULL)
                                                      (NULL)
                         |- OBJ_TEXTBOX_ALIAS \
+                                             |+ OBJ_TEXTBOX_BLINK
                                              |- OBJ_TEXTBOX_INPUT_OFF \                       // obj to indicate accept input or not
                                                                        |- char*
-                                                                       |+ OBJ_TEXTBOX_BLINK
                         |- OBJ_BUTTON_TXTBOX                                                     // send message
                         (NULL)
 

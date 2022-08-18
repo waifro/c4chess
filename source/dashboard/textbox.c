@@ -52,13 +52,6 @@ int GUI_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Col
         return 0;
     }
 
-    // backspace
-    else if (key == -2) {
-
-        if (msg_len > 0) GUI_Textbox_Backspace(msg);
-
-    }
-
     // enter
     else if (key == -3) {
 
@@ -79,6 +72,14 @@ int GUI_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Col
         return 0;
     }
 
+    // backspace
+    else if (key == -2) {
+
+        if (msg_len > 0)
+            GUI_Textbox_Backspace(msg);
+
+    }
+
     // possibly any printable key
     else if (isprint(key)){
 
@@ -89,15 +90,12 @@ int GUI_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Col
     }
 
     // any applicated changes to the message
-    if ((int)strlen(msg) != msg_len) {
-
-        SDL_DestroyTexture(alias_ptr->texture);
-        GUI_Textbox_UpdateTexture(alias_ttr, pathname, color, point);
-    }
+    SDL_DestroyTexture(alias_ptr->texture);
+    GUI_Textbox_UpdateTexture(alias_ttr, pathname, color, point);
 
     // follow any edit of texture from message
     alias_blink->dst_rect.x = alias_ttr->dst_rect.x + alias_ptr->dst_rect.w;
-    alias_blink->timer = 0;
+    GUI_Textbox_BlinkReset(alias_ttr);
 
     return 0;
 }
@@ -194,11 +192,20 @@ int GUI_Textbox_BlinkUpdate(GUI_TextureAlias *alias_ttr) {
     if (GUI_Alias_FramerateSet(alias_blink->interval, &alias_blink->timer) == false)
         return -1;
 
-    char val = 0;
+    uint8_t val = 0;
     SDL_GetTextureAlphaMod(alias_blink->texture, &val);
 
     if (val == 0) SDL_SetTextureAlphaMod(alias_blink->texture, 255);
     else SDL_SetTextureAlphaMod(alias_blink->texture, 0);
+
+    return 0;
+}
+
+int GUI_Textbox_BlinkReset(GUI_TextureAlias *alias_ttr) {
+    GUI_TextureAlias *alias_blink = alias_ttr->add;
+
+    SDL_SetTextureAlphaMod(alias_blink->texture, 255);
+    alias_blink->timer = clock();
 
     return 0;
 }

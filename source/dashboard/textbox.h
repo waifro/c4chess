@@ -29,4 +29,7 @@ int GUI_Textbox_BlinkInit(GUI_TextureAlias *alias_ttr);
 /* on success, updates blink object frame by frame */
 int GUI_Textbox_BlinkUpdate(GUI_TextureAlias *alias_ttr);
 
+/* if state is true, resets texture's alpha to 255 and timer to 0 */
+int GUI_Textbox_BlinkReset(GUI_TextureAlias *alias_ttr);
+
 #endif
