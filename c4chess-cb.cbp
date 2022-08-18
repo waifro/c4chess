@@ -43,9 +43,6 @@
 		<Unit filename="README.md" />
 		<Unit filename="c4chess-cb.depend" />
 		<Unit filename="c4chess-cb.layout" />
-		<Unit filename="c4chess_debug.bat" />
-		<Unit filename="command-line.bat" />
-		<Unit filename="git-commit.sh" />
 		<Unit filename="obj/Release/source/chess/core.o" />
 		<Unit filename="output/SDL2.dll" />
 		<Unit filename="output/SDL2_image.dll" />
@@ -120,6 +117,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="source/config.h" />
+		<Unit filename="source/dashboard/destroy.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/dashboard/destroy.h" />
 		<Unit filename="source/dashboard/gui.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -140,6 +141,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="source/dashboard/popup.h" />
+		<Unit filename="source/dashboard/textbox.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/dashboard/textbox.h" />
 		<Unit filename="source/gen.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -187,6 +192,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="source/network/server.h" />
+		<Unit filename="source/pp4m/README.md" />
 		<Unit filename="source/pp4m/pp4m.c">
 			<Option compilerVar="CC" />
 		</Unit>
