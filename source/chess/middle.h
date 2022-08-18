@@ -8,6 +8,7 @@
 #include "../pp4m/pp4m_input.h"
 #include "core.h"
 
+int MIDDLE_InitTouchPos(PP4M_INPUT_POS *foo);
 int MIDDLE_TouchToTile(CHESS_CORE_TILE *chess_tile, PP4M_INPUT_POS touch_pos);
 
 int MIDDLE_TagToTile(CHESS_CORE_TILE_TAG tag);

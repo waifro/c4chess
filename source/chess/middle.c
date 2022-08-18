@@ -18,6 +18,17 @@
 #include "core.h"
 #include "middle.h"
 
+int MIDDLE_InitTouchPos(PP4M_INPUT_POS *foo) {
+
+    static int once = 0;
+    if (once == 0) {
+        once++;
+        foo->iner = -1;
+    }
+
+    return 0;
+}
+
 int MIDDLE_TouchToTile(CHESS_CORE_TILE *chess_tile, PP4M_INPUT_POS touch_pos) {
 
     int result = -1;
@@ -198,7 +209,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
     static int position_old = -1;
     static int position_new = -1;
 
-    PP4M_INPUT_POS touch_pos;
+    static PP4M_INPUT_POS touch_pos;// = pp4m_INPUT_InitInputPos();
     pp4m_INPUT_GetMouseState(event, &touch_pos);
 
     key = EVENT_HandleKeyboard(event);

@@ -85,6 +85,35 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="source/animation/animation.h" />
+		<Unit filename="source/c4network/README.md" />
+		<Unit filename="source/c4network/client.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/c4network/client.h" />
+		<Unit filename="source/c4network/lobby.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/c4network/lobby.h" />
+		<Unit filename="source/c4network/net.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/c4network/net.h" />
+		<Unit filename="source/c4network/net_utils.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/c4network/net_utils.h" />
+		<Unit filename="source/c4network/recv.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/c4network/recv.h" />
+		<Unit filename="source/c4network/send.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/c4network/send.h" />
+		<Unit filename="source/c4network/server.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="source/c4network/server.h" />
 		<Unit filename="source/chess/archive.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -164,34 +193,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="source/mman.h" />
-		<Unit filename="source/network/client.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="source/network/client.h" />
-		<Unit filename="source/network/lobby.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="source/network/lobby.h" />
-		<Unit filename="source/network/net.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="source/network/net.h" />
-		<Unit filename="source/network/net_utils.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="source/network/net_utils.h" />
-		<Unit filename="source/network/recv.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="source/network/recv.h" />
-		<Unit filename="source/network/send.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="source/network/send.h" />
-		<Unit filename="source/network/server.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="source/network/server.h" />
 		<Unit filename="source/pp4m/README.md" />
 		<Unit filename="source/pp4m/pp4m.c">
 			<Option compilerVar="CC" />
