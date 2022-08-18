@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 
+#include "../chess/middle.h"
 #include "popup.h"
 #include "gui.h"
 #include "gui_alias.h"
@@ -103,7 +104,8 @@ int GUI_PopupWindow_Core(PP4M_HOOK *head, SDL_Texture *background) {
     SDL_Event event;
     int result = 0;
 
-    PP4M_INPUT_POS input;
+    PP4M_INPUT_POS input = {0, 0, -1};
+    //MIDDLE_InitTouchPos(&input);
 
     while(result == 0) {
 
@@ -123,20 +125,27 @@ int GUI_PopupWindow_Core(PP4M_HOOK *head, SDL_Texture *background) {
             current = current->next;
             SDL_GetTextureColorMod(txr_alias->texture, &color_btn_bak.r, &color_btn_bak.g, &color_btn_bak.b);
 
-            if (input.iner == 1) {
-                if (GUI_Alias_InputOnObj(input, txr_alias->dst_rect) == 1)
-                {
-                    if (txr_alias->obj == OBJ_BUTTON_LINK_OFF) txr_alias->obj = OBJ_BUTTON_LINK_ON;
-                    else if (txr_alias->obj == OBJ_BUTTON_RETURN) result = -1;
-                    else if (txr_alias->obj == OBJ_BUTTON_EXIT) result = -2;
-                } else {
-                    // reset button presses
-                    if (txr_alias->obj == OBJ_BUTTON_LINK_ON) txr_alias->obj = OBJ_BUTTON_LINK_OFF;
-                }
-            }
+            if (txr_alias->obj != OBJ_NONE) {
 
-            if (txr_alias->obj != OBJ_NONE && GUI_Alias_InputOnObj(input, txr_alias->dst_rect) == 1) {
-                SDL_SetTextureColorMod(txr_alias->texture, 220, 220, 220);
+                if (GUI_Alias_InputOnObj(input, txr_alias->dst_rect) == 1) {
+                    SDL_SetTextureColorMod(txr_alias->texture, 220, 220, 220);
+
+                    if (input.iner == 1) {
+
+                        if (txr_alias->obj == OBJ_BUTTON_LINK_OFF)
+                            txr_alias->obj = OBJ_BUTTON_LINK_ON;
+
+                        else if (txr_alias->obj == OBJ_BUTTON_RETURN) result = -1;
+                        else if (txr_alias->obj == OBJ_BUTTON_EXIT) result = -2;
+                    }
+
+                        /*
+                        else {
+                            // reset button presses
+                            if (txr_alias->obj == OBJ_BUTTON_LINK_ON) txr_alias->obj = OBJ_BUTTON_LINK_OFF;
+                        }
+                        */
+                }
             }
 
             SDL_RenderCopy(glo_render, txr_alias->texture, NULL, &txr_alias->dst_rect);

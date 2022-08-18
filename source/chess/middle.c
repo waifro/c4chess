@@ -20,17 +20,14 @@
 
 int MIDDLE_InitTouchPos(PP4M_INPUT_POS *foo) {
 
-    static int once = 0;
-    if (once == 0) {
-        once++;
-        foo->iner = -1;
-    }
+    foo->x = 0;
+    foo->y = 0;
+    foo->iner = -1;
 
     return 0;
 }
 
 int MIDDLE_TouchToTile(CHESS_CORE_TILE *chess_tile, PP4M_INPUT_POS touch_pos) {
-
     int result = -1;
 
     for (int n = 0; n < 64; n++) {
@@ -131,7 +128,7 @@ void MIDDLE_UnsafePosition_Copy(CHESS_CORE_TILE *restrict src, CHESS_CORE_TILE *
 }
 
 int MIDDLE_InputChessboardState(int *socket, PP4M_INPUT_POS touch, CHESS_CORE_TILE *chess_tile, CHESS_CORE_PLAYER *player, int *position_old, int *position_new, int *code) {
-    if (touch.iner == -1) return -1;
+    if (touch.iner != 1) return -1;
     if (*position_old != -1 && *position_new != -1) return -1;
 
     int tile = MIDDLE_TouchToTile(chess_tile, touch);
@@ -194,7 +191,7 @@ int MIDDLE_InputChessboardState(int *socket, PP4M_INPUT_POS touch, CHESS_CORE_TI
     return tile;
 }
 
-int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *socket) {
+int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, PP4M_INPUT_POS *input, int *socket) {
 
     if (glo_chess_event_hooklist == NULL)
         glo_chess_event_hooklist = EVENT_HookList_Init();
@@ -209,17 +206,16 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, int *s
     static int position_old = -1;
     static int position_new = -1;
 
-    static PP4M_INPUT_POS touch_pos;// = pp4m_INPUT_InitInputPos();
-    pp4m_INPUT_GetMouseState(event, &touch_pos);
+    pp4m_INPUT_GetMouseState(event, input);
 
     key = EVENT_HandleKeyboard(event);
     if (key == -1) result = -1;
 
     // update objects
-    GUI_HookLink_Update(glo_chess_event_hooklist, touch_pos, &buffer, key, &code);
+    GUI_HookLink_Update(glo_chess_event_hooklist, *input, &buffer, key, &code);
 
     // updating chessboard
-    MIDDLE_InputChessboardState(socket, touch_pos, glo_chess_core_tile, player, &position_old, &position_new, &code);
+    MIDDLE_InputChessboardState(socket, *input, glo_chess_core_tile, player, &position_old, &position_new, &code);
 
     // needs a brand new updates of sockets
     CORE_NET_UpdateLobby(&code, socket, &buffer, &position_old, &position_new, &glo_chess_event_pawn_promotn);

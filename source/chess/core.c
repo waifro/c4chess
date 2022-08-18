@@ -280,6 +280,8 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
     SDL_Texture *background = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_DARK, 255, NULL, 0, 0, glo_screen_w, glo_screen_h);
 
     SDL_Event event;
+    PP4M_INPUT_POS input;
+    MIDDLE_InitTouchPos(&input);
 
     // testing: cap framerate to 30/60 fps
     int running = 0;
@@ -291,7 +293,7 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
         CHESS_PiecePattern_UpdateState(glo_chess_core_tile, player);
 
         /* makes the in-game changes during gameplay */
-        running = MIDDLE_UpdateChangeState(&event, &player, socket);
+        running = MIDDLE_UpdateChangeState(&event, &player, &input, socket);
 
         /* renders everything chessboard releated */
         CORE_RenderUpdate(background, CLOCKS_PER_SEC / 60, &fps_timer);
