@@ -1,7 +1,7 @@
 #include "../lang.h"
 #include "../global.h"
-#include "../network/server.h"
-#include "../network/client.h"
+#include "../c4network/server.h"
+#include "../c4network/client.h"
 
 #include "textbox.h"
 #include "gui.h"

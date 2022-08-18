@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#include "../network/net.h"
+#include "../c4network/net.h"
 #include "../pp4m/pp4m_input.h"
 #include "core.h"
 

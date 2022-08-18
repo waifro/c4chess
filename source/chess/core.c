@@ -14,9 +14,9 @@
 #include "../pp4m/pp4m_image.h"
 #include "../pp4m/pp4m_input.h"
 
-#include "../network/net.h"
-#include "../network/client.h"
-#include "../network/server.h"
+#include "../c4network/net.h"
+#include "../c4network/client.h"
+#include "../c4network/server.h"
 
 #include "../dashboard/gui.h"
 #include "../dashboard/gui_alias.h"

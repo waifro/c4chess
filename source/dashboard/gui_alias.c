@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include "../network/client.h"
-#include "../network/server.h"
+#include "../c4network/client.h"
+#include "../c4network/server.h"
 
 #include "../global.h"
 #include "../pp4m/pp4m.h"

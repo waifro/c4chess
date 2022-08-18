@@ -6,7 +6,7 @@
 
 #include "../pp4m/pp4m_input.h"
 #include "../animation/animation.h"
-#include "../network/net.h"
+#include "../c4network/net.h"
 #include "../security/debug.h"
 #include "../dashboard/gui.h"
 

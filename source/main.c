@@ -16,9 +16,9 @@
 #include "dashboard/gui.h"
 #include "security/debug.h"
 
-#include "network/net.h"
-#include "network/client.h"
-#include "network/server.h"
+#include "c4network/net.h"
+#include "c4network/client.h"
+#include "c4network/server.h"
 
 int main (int argc, char *argv[]) {
     (void)argc; (void)argv;

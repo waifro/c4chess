@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 
-#include "../network/net.h"
+#include "../c4network/net.h"
 
 /* structs & enums */
 typedef enum {
