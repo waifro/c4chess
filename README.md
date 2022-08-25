@@ -19,7 +19,7 @@ Run this sequences of commands for any of your device:
 
 ### **- Linux/Posix**
 
-Dipendence's used: `git make gcc libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev`
+Dipendence's used: `git make gcc autoconf automake libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev`
 
 (for Windows builds also install `mingw64` and everything else required)
 
