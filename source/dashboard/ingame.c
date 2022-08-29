@@ -133,10 +133,8 @@ int GUI_Ingame_ChatUpdate(GUI_TextureAlias *inner_window_oob, char *pathname, SD
     char *buf = &(*buffer)[len_buf];
 
     // create a new texture for new lines
-    while (strlen(buf) > 35) {
+    while (strlen(buf) >= 35)
         buf = GUI_Ingame_ChatUpdate_NewLine(inner_window_oob, pathname, color, point, buf_user, buf);
-        if (buf == NULL) break;
-    }
 
     GUI_Ingame_ChatUpdate_AddLine(inner_window_oob, pathname, color, point, buf_user, buf);
     GUI_Ingame_ChatUpdate_Scroll(inner_window_oob);
@@ -148,19 +146,17 @@ char *GUI_Ingame_ChatUpdate_NewLine(GUI_TextureAlias *inner_window_oob, char *pa
 
     int len = strlen(buf);
 
-        int i;
-        for (i = 30; i < len; i++) {
-
-            if (buf[i] == '\0') return NULL;
-            else if (buf[i] == ' ') {
-
-                buf[i++] = '\0';
-                GUI_Ingame_ChatUpdate_AddLine(inner_window_oob, pathname, color, point, buf_user, buf);
-
-                break;
-            }
-        }
-
+	int i;
+	for (i = 30; i < len; i++) {
+		
+		if (buf[i] != '\0' && buf[i] != ' ') continue;
+		
+		buf[i++] = '\0';
+		GUI_Ingame_ChatUpdate_AddLine(inner_window_oob, pathname, color, point, buf_user, buf);
+		
+		break;
+	}
+	
     return (&buf[i]);
 }
 
