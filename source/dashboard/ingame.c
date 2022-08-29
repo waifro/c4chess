@@ -149,7 +149,7 @@ char *GUI_Ingame_ChatUpdate_NewLine(GUI_TextureAlias *inner_window_oob, char *pa
 	int i;
 	for (i = 30; i < len; i++) {
 		
-		if (buf[i] != '\0' && buf[i] != ' ') continue;
+		if (buf[i] != '\0' && buf[i] != ' ' && i < 33) continue;
 		
 		buf[i++] = '\0';
 		GUI_Ingame_ChatUpdate_AddLine(inner_window_oob, pathname, color, point, buf_user, buf);
