@@ -135,6 +135,9 @@ int MIDDLE_InputChessboardState(int *socket, PP4M_INPUT_POS touch, CHESS_CORE_TI
     if (tile == -1) {
         *position_old = -1;
         *position_new = -1;
+
+        DOT_StateGlobalDotReset();
+
         return tile;
     }
 
