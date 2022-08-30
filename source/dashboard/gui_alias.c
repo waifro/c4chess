@@ -23,14 +23,6 @@ int GUI_Alias_InputOnObj(PP4M_INPUT_POS input, SDL_Rect rect) {
     else return -1;
 }
 
-bool GUI_Alias_FramerateSet(int val, int *old) {
-    if (clock() < (*old + val))
-        return false;
-
-    *old += val;
-    return true;
-}
-
 int GUI_Alias_IsColor(SDL_Color *color) {
     if (color->r == 0 && color->g == 0 && color->b == 0 && color->a == 0) return 1;
     else return -1;

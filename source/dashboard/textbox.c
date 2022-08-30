@@ -189,7 +189,7 @@ int GUI_Textbox_BlinkInit(GUI_TextureAlias *alias_ttr) {
 int GUI_Textbox_BlinkUpdate(GUI_TextureAlias *alias_ttr) {
     GUI_TextureAlias *alias_blink = alias_ttr->add;
 
-    if (GUI_Alias_FramerateSet(alias_blink->interval, &alias_blink->timer) == false)
+    if (pp4m_FramerateTimer(alias_blink->interval, &alias_blink->timer) == false)
         return -1;
 
     uint8_t val = 0;
