@@ -4,3 +4,4 @@
 [submodule "source/c4network"]
 	path = source/c4network
 	url = https://github.com/waifro/c4network
+	branch = main
