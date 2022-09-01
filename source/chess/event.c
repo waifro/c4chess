@@ -317,6 +317,9 @@ int EVENT_HandlePopup_Checkmate(char *comment, CHESS_CORE_PLAYER player) {
 PP4M_HOOK *EVENT_HookList_Init(void) {
 
     PP4M_HOOK *hook_list = pp4m_HOOK_Init();
+
+    GUI_Ingame_TimerInit_Player(hook_list);
+    GUI_Ingame_TimerInit_OppositePlayer(hook_list);
     GUI_Ingame_ChatInit(hook_list);
 
     return hook_list;

@@ -41,6 +41,11 @@ typedef enum {
     OBJ_CHAT_MESG,              // normal chat message
     OBJ_CHAT_RECT,              // OBJ_CHAT_MESG -> link = SDL_Rect (used in conjunction with OBJ_INNER_WINDOW_OOB)
 
+    OBJ_DISPLAY_TIMER,          // display containing timer objects
+    OBJ_DISPLAY_TIMER_BD,       // texture of the ':' (BD = Blink Dots)
+    OBJ_DISPLAY_TIMER_MIN,      // texture displaying the minutes left
+    OBJ_DISPLAY_TIMER_SEC,      // texture displaying the seconds left
+
     OBJ_LINK_PTR                // treat object as linked list
 
 } GUI_ALIAS_OBJ;

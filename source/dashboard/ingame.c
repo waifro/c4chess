@@ -148,15 +148,15 @@ char *GUI_Ingame_ChatUpdate_NewLine(GUI_TextureAlias *inner_window_oob, char *pa
 
 	int i;
 	for (i = 30; i < len; i++) {
-		
+
 		if (buf[i] != '\0' && buf[i] != ' ' && i < 33) continue;
-		
+
 		buf[i++] = '\0';
 		GUI_Ingame_ChatUpdate_AddLine(inner_window_oob, pathname, color, point, buf_user, buf);
-		
+
 		break;
 	}
-	
+
     return (&buf[i]);
 }
 
@@ -258,6 +258,76 @@ int GUI_Ingame_ChatInit_RenderObj_Increase(GUI_TextureAlias *render_obj, GUI_Tex
     texture = SDL_CreateTexture(glo_render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, render_obj->dst_rect.w, render_obj->dst_rect.h);
     SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
     render_obj->texture = texture;
+
+    return 0;
+}
+
+int GUI_Ingame_TimerInit_OppositePlayer(PP4M_HOOK *hook_list) {
+
+    GUI_TextureAlias *timer = GUI_Alias_InitAlias();
+    timer->obj = OBJ_DISPLAY_TIMER;
+    timer->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_NORMAL, timer->dst_rect, 0, 0, 70, 140);
+
+    // allocate player
+    timer->add = (void*)malloc(sizeof(CHESS_CORE_PLAYER));
+    *add = CORE_ReversePlayer_State(glo_chess_core_player);
+
+    PP4M_HOOK *list = pp4m_HOOK_Init();
+
+    GUI_TextureAlias *blink_dots = GUI_Alias_InitAlias();
+    blink_dots->obj = OBJ_DISPLAY_TIMER_BD;
+    blink_dots->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_WHITE, 14, &blink_dots->dst_rect, (timer->dst_rect.x + timer->dst_rect.w) / 2, (timer->dst_rect.y + timer->dst_rect.h) / 2, ":");
+
+    GUI_TextureAlias *minutes = GUI_Alias_InitAlias();
+    minutes->obj = OBJ_DISPLAY_TIMER_MIN;
+    minutes->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_WHITE, 14, &minutes->dst_rect, blink_dots->dst_rect.x - 25, blink_dots->dst_rect.y, "00");
+
+    GUI_TextureAlias *seconds = GUI_Alias_InitAlias();
+    seconds->obj = OBJ_DISPLAY_TIMER_SEC;
+    seconds->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_WHITE, 14, &seconds->dst_rect, (blink_dots->dst_rect.x + blink_dots->dst_rect.w) + 5, blink_dots->dst_rect.y, "00");
+
+    // save items inside list
+    pp4m_HOOK_Next(list, minutes);
+    pp4m_HOOK_Next(list, blink_dots);
+    pp4m_HOOK_Next(list, seconds);
+
+    // save object into main list
+    pp4m_HOOK_Next(hook_list, display);
+
+    return 0;
+}
+
+int GUI_Ingame_TimerInit_Player(PP4M_HOOK *hook_list) {
+
+    GUI_TextureAlias *timer = GUI_Alias_InitAlias();
+    timer->obj = OBJ_DISPLAY_TIMER;
+    timer->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_NORMAL, timer->dst_rect, glo_screen_w - 70, 0, 70, 140);
+
+    // allocate player
+    timer->add = (void*)malloc(sizeof(CHESS_CORE_PLAYER));
+    *add = glo_chess_core_player;
+
+    PP4M_HOOK *list = pp4m_HOOK_Init();
+
+    GUI_TextureAlias *blink_dots = GUI_Alias_InitAlias();
+    blink_dots->obj = OBJ_DISPLAY_TIMER_BD;
+    blink_dots->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_WHITE, 14, &blink_dots->dst_rect, (timer->dst_rect.x + timer->dst_rect.w) / 2, (timer->dst_rect.y + timer->dst_rect.h) / 2, ":");
+
+    GUI_TextureAlias *minutes = GUI_Alias_InitAlias();
+    minutes->obj = OBJ_DISPLAY_TIMER_MIN;
+    minutes->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_WHITE, 14, &minutes->dst_rect, blink_dots->dst_rect.x - 25, blink_dots->dst_rect.y, "00");
+
+    GUI_TextureAlias *seconds = GUI_Alias_InitAlias();
+    seconds->obj = OBJ_DISPLAY_TIMER_SEC;
+    seconds->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_WHITE, 14, &seconds->dst_rect, (blink_dots->dst_rect.x + blink_dots->dst_rect.w) + 5, blink_dots->dst_rect.y, "00");
+
+    // save items inside list
+    pp4m_HOOK_Next(list, minutes);
+    pp4m_HOOK_Next(list, blink_dots);
+    pp4m_HOOK_Next(list, seconds);
+
+    // save object into main list
+    pp4m_HOOK_Next(hook_list, display);
 
     return 0;
 }

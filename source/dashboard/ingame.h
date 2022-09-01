@@ -27,4 +27,7 @@ int GUI_Ingame_ChatUpdate_Scroll(GUI_TextureAlias *inner_window_oob);
 
 int GUI_Ingame_ChatInit_RenderObj_Increase(GUI_TextureAlias *render_obj, GUI_TextureAlias *new_alias);
 
+int GUI_Ingame_TimerInit_Player(PP4M_HOOK *hook_list);
+int GUI_Ingame_TimerInit_OppositePlayer(PP4M_HOOK *hook_list);
+
 #endif
