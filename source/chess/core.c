@@ -240,7 +240,7 @@ int CORE_NET_SocketRedirect(int *socket, CHESS_CORE_PLAYER *player) {
 
 void CORE_RenderUpdate(SDL_Texture *background, int frames_per_sec, int *timer) {
 
-    if (pp4m_FramerateTimer(frames_per_sec, timer) == true) {
+    if (pp4m_FramerateTimer(frames_per_sec, timer, 0) == true) {
             SDL_RenderClear(glo_render);
 
             SDL_RenderCopy(glo_render, background, NULL, NULL);
