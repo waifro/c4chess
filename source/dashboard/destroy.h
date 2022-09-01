@@ -17,4 +17,7 @@ int GUI_Destroy_WindowChat_Chat(PP4M_HOOK *list);
 /* on success, destroy textbox */
 int GUI_Destroy_Textbox(GUI_TextureAlias *alias_ttr);
 
+/* on success, destroy timer */
+int GUI_Destroy_Timer(PP4M_HOOK *list);
+
 #endif

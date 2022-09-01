@@ -175,10 +175,12 @@ void CORE_GlobalUpdate_StateRender(void) {
         if (glo_chess_core_tile[n].piece != NULL) SDL_RenderCopy(glo_render, glo_chess_core_tile[n].piece->texture, NULL, &glo_chess_core_tile[n].piece->rect);
         DOT_StateGlobalDot(n);
     }
-
-    DEBUG_UpdateBox_Render();
+	
+	// gui rendering
     GUI_HookLink_Render(glo_chess_event_hooklist);
-
+	
+	DEBUG_UpdateBox_Render();
+	
     return;
 }
 

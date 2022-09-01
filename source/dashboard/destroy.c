@@ -97,3 +97,29 @@ int GUI_Destroy_Textbox(GUI_TextureAlias *alias_ttr) {
 
     return 0;
 }
+
+
+int GUI_Destroy_Timer(PP4M_HOOK *list) {
+	
+	PP4M_HOOK *curr = list;
+	
+	int val = pp4m_HOOK_Size(list);
+	GUI_TextureAlias *alias_ptr = NULL;
+	
+	for (int i = 0; i < val; i++) {
+		alias_ptr = curr->ptr;
+		
+		if (alias_ptr->texture != NULL)
+			SDL_DestroyTexture(alias_ptr->texture);
+		
+		if (alias_ptr->add != NULL)
+			free(alias_ptr->add);
+		
+		curr = curr->next;
+	}
+	
+	for (int i = 0; i < val; i++)
+        pp4m_HOOK_Remove(list);
+	
+	return 0;
+}
