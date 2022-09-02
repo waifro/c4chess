@@ -266,7 +266,7 @@ int GUI_Ingame_ChatInit_RenderObj_Increase(GUI_TextureAlias *render_obj, GUI_Tex
 
 int GUI_Ingame_TimerInit_OppositePlayer(PP4M_HOOK *hook_list) {
 	int point = 40;
-	
+
     GUI_TextureAlias *timer = GUI_Alias_InitAlias();
     timer->obj = OBJ_DISPLAY_TIMER;
     timer->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_NORMAL, &timer->dst_rect, 0, 0, 140, 70);
@@ -276,45 +276,8 @@ int GUI_Ingame_TimerInit_OppositePlayer(PP4M_HOOK *hook_list) {
     int *foo = timer->add;
 	*foo = CORE_ReversePlayer_State(glo_chess_core_player);
 
-    PP4M_HOOK *list = pp4m_HOOK_Init();
+    GUI_Ingame_TimerInit_Clock(timer, point);
 
-    GUI_TextureAlias *blink_dots = GUI_Alias_InitAlias();
-    blink_dots->obj = OBJ_DISPLAY_TIMER_BD;
-    blink_dots->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_WHITE, point, &blink_dots->dst_rect, 0, 0, ":");
-
-    GUI_TextureAlias *minutes = GUI_Alias_InitAlias();
-    minutes->obj = OBJ_DISPLAY_TIMER_MIN;
-    minutes->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_WHITE, point, &minutes->dst_rect, 0, 0, "00");
-
-    GUI_TextureAlias *seconds = GUI_Alias_InitAlias();
-    seconds->obj = OBJ_DISPLAY_TIMER_SEC;
-    seconds->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_WHITE, point, &seconds->dst_rect, (blink_dots->dst_rect.x + blink_dots->dst_rect.w) + 5, blink_dots->dst_rect.y, "00");
-	
-	// modify position of clocks
-	int width = 0, height = 0;
-	SDL_QueryTexture(blink_dots->texture, NULL, NULL, &width, &height);
-	
-	blink_dots->dst_rect.x = (timer->dst_rect.x + timer->dst_rect.w) - (timer->dst_rect.w / 2) - (width / 2);
-	blink_dots->dst_rect.y = (timer->dst_rect.h / 2) - (height / 2);
-	
-	width = 0, height = 0;
-	SDL_QueryTexture(minutes->texture, NULL, NULL, &width, &height);
-	
-	minutes->dst_rect.x = blink_dots->dst_rect.x - width;
-	minutes->dst_rect.y = blink_dots->dst_rect.y;
-	
-	width = 0, height = 0;
-	SDL_QueryTexture(seconds->texture, NULL, NULL, &width, &height);
-	
-	seconds->dst_rect.x = (blink_dots->dst_rect.x + blink_dots->dst_rect.w);
-	seconds->dst_rect.y = blink_dots->dst_rect.y;
-	
-    // save items inside list
-    pp4m_HOOK_Next(list, minutes);
-    pp4m_HOOK_Next(list, blink_dots);
-    pp4m_HOOK_Next(list, seconds);
-	timer->link = list;
-	
     // save object into main list
     pp4m_HOOK_Next(hook_list, timer);
 
@@ -323,7 +286,7 @@ int GUI_Ingame_TimerInit_OppositePlayer(PP4M_HOOK *hook_list) {
 
 int GUI_Ingame_TimerInit_Player(PP4M_HOOK *hook_list) {
 	int point = 40;
-	
+
     GUI_TextureAlias *timer = GUI_Alias_InitAlias();
     timer->obj = OBJ_DISPLAY_TIMER;
     timer->texture = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_NORMAL, &timer->dst_rect, glo_screen_w - 140, 0, 140, 70);
@@ -333,6 +296,16 @@ int GUI_Ingame_TimerInit_Player(PP4M_HOOK *hook_list) {
     int *foo = timer->add;
 	*foo = glo_chess_core_player;
 
+    GUI_Ingame_TimerInit_Clock(timer, point);
+
+    // save object into main list
+    pp4m_HOOK_Next(hook_list, timer);
+
+    return 0;
+}
+
+int GUI_Ingame_TimerInit_Clock(GUI_TextureAlias *timer, int point) {
+
     PP4M_HOOK *list = pp4m_HOOK_Init();
 
     GUI_TextureAlias *blink_dots = GUI_Alias_InitAlias();
@@ -346,34 +319,32 @@ int GUI_Ingame_TimerInit_Player(PP4M_HOOK *hook_list) {
     GUI_TextureAlias *seconds = GUI_Alias_InitAlias();
     seconds->obj = OBJ_DISPLAY_TIMER_SEC;
     seconds->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_WHITE, point, &seconds->dst_rect, (blink_dots->dst_rect.x + blink_dots->dst_rect.w) + 5, blink_dots->dst_rect.y, "00");
-	
-	// modify position of clocks
+
+
+    // modify position of clocks
 	int width = 0, height = 0;
 	SDL_QueryTexture(blink_dots->texture, NULL, NULL, &width, &height);
-	
+
 	blink_dots->dst_rect.x = (timer->dst_rect.x + timer->dst_rect.w) - (timer->dst_rect.w / 2) - (width / 2);
 	blink_dots->dst_rect.y = (timer->dst_rect.h / 2) - (height / 2);
-	
+
 	width = 0, height = 0;
 	SDL_QueryTexture(minutes->texture, NULL, NULL, &width, &height);
-	
+
 	minutes->dst_rect.x = blink_dots->dst_rect.x - width;
 	minutes->dst_rect.y = blink_dots->dst_rect.y;
-	
+
 	width = 0, height = 0;
 	SDL_QueryTexture(seconds->texture, NULL, NULL, &width, &height);
-	
+
 	seconds->dst_rect.x = (blink_dots->dst_rect.x + blink_dots->dst_rect.w);
 	seconds->dst_rect.y = blink_dots->dst_rect.y;
-	
+
     // save items inside list
     pp4m_HOOK_Next(list, minutes);
     pp4m_HOOK_Next(list, blink_dots);
     pp4m_HOOK_Next(list, seconds);
-	timer->link = list;
-	
-    // save object into main list
-    pp4m_HOOK_Next(hook_list, timer);
+    timer->link = list;
 
     return 0;
 }
