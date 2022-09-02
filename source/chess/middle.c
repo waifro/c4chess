@@ -231,25 +231,6 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, PP4M_I
     // update move the piece
     MIDDLE_UpdatePositionPiece(glo_chess_core_tile, position_old, position_new);
 
-    /*
-    if (buf_bak == NULL && buffer != NULL) {
-        DEBUG_PrintBox(2, "deployed buf: %p", buffer);
-        buf_bak = buffer;
-    }
-
-    else if (buffer != NULL && buf_bak != NULL && buf_bak == buffer) {
-        DEBUG_PrintBox(2, "buf restored", buffer);
-        buffer = NULL;
-        buf_bak = NULL;
-    }
-
-    else if (buffer != NULL && buf_bak != NULL && buf_bak != buffer) {
-        DEBUG_PrintBox(2, "new buf deploying...", buffer);
-        free(buf_bak);
-        buf_bak = buffer;
-    }
-    */
-
     if (position_old != -1 && position_new != -1) {
 
         *player = CORE_ReversePlayer_State(*player);

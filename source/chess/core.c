@@ -213,19 +213,21 @@ int CORE_NET_UpdateLobby(int *code, int *socket, char **buf_arr, int *position_o
     if (socket == NULL) return -1;
     int result = -1;
 
+    // send packets (if code is set)
     if (*code != -1) {
 
         result = cl_clcode_redirect(*code, socket, buf_arr[1], position_old, position_new, promotn);
         if (result > -1) DEBUG_PrintBox(2, "sent buf: [%s]", buf_arr[1]);
 
-    } else {
+    } else memset(buf_arr[1], 0x00, 255);
 
-        if (NET_DetectSignal(socket) > 0) {
+    // recieve packets
+    if (NET_DetectSignal(socket) > 0) {
+
             cl_svcode_redirect(cl_GrabPacket(socket, buf_arr[0]), buf_arr[0], position_old, position_new, promotn);
             DEBUG_PrintBox(2, "recieved buf: [%s] [%d] [%d] [%d]", buf_arr[0], *position_old, *position_new, *promotn);
-        }
 
-    }
+    } else memset(buf_arr[0], 0x00, 255);
 
     return result;
 }
@@ -283,6 +285,9 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
     int running = 0;
     int fps_timer = clock();
     char buf_in[256], buf_out[256];
+
+    memset(buf_in, 0x00, 255);
+    memset(buf_out, 0x00, 255);
 
     while(running == 0) {
 
