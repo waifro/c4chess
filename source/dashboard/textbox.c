@@ -30,7 +30,7 @@ int GUI_Textbox_InitAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color
     return 0;
 }
 
-int GUI_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, char **buffer, int key, int *code) {
+int GUI_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Color color, int point, char **buf_arr, int key, int *code) {
 
     GUI_TextureAlias *alias_ptr = alias_ttr->link;
     GUI_TextureAlias *alias_blink = alias_ttr->add;
@@ -65,7 +65,7 @@ int GUI_Textbox_UpdateAlias(GUI_TextureAlias *alias_ttr, char *pathname, SDL_Col
             memset(msg, 0x00, len);
 
             *code = CL_LOBBY_POST_MESG;
-            *buffer = buf_ptr;
+            buf_arr[1] = buf_ptr;
 
         }
 

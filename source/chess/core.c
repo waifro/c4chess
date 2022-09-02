@@ -175,12 +175,12 @@ void CORE_GlobalUpdate_StateRender(void) {
         if (glo_chess_core_tile[n].piece != NULL) SDL_RenderCopy(glo_render, glo_chess_core_tile[n].piece->texture, NULL, &glo_chess_core_tile[n].piece->rect);
         DOT_StateGlobalDot(n);
     }
-	
+
 	// gui rendering
     GUI_HookLink_Render(glo_chess_event_hooklist);
-	
+
 	DEBUG_UpdateBox_Render();
-	
+
     return;
 }
 
@@ -209,26 +209,20 @@ char *CORE_NET_ChessboardInit(CHESS_CORE_PLAYER *player, char *buffer) {
     return fen;
 }
 
-int CORE_NET_UpdateLobby(int *code, int *socket, char **buffer, int *position_old, int *position_new, int *promotn) {
+int CORE_NET_UpdateLobby(int *code, int *socket, char **buf_arr, int *position_old, int *position_new, int *promotn) {
     if (socket == NULL) return -1;
     int result = -1;
 
     if (*code != -1) {
 
-        result = cl_clcode_redirect(*code, socket, *buffer, position_old, position_new, promotn);
-        if (result > -1) DEBUG_PrintBox(2, "sent buf: [%s]", *buffer);
+        result = cl_clcode_redirect(*code, socket, buf_arr[1], position_old, position_new, promotn);
+        if (result > -1) DEBUG_PrintBox(2, "sent buf: [%s]", buf_arr[1]);
 
     } else {
 
         if (NET_DetectSignal(socket) > 0) {
-
-            // we need to test chat and gameplay
-            // if two actions write to buffer then the behavior is undefined
-            char buf[256];
-            *buffer = buf;
-
-            cl_svcode_redirect(cl_GrabPacket(socket, *buffer), buffer, position_old, position_new, promotn);
-            DEBUG_PrintBox(2, "recieved buf: [%s] [%d] [%d] [%d]", buf, *position_old, *position_new, *promotn);
+            cl_svcode_redirect(cl_GrabPacket(socket, buf_arr[0]), buf_arr[0], position_old, position_new, promotn);
+            DEBUG_PrintBox(2, "recieved buf: [%s] [%d] [%d] [%d]", buf_arr[0], *position_old, *position_new, *promotn);
         }
 
     }
@@ -282,12 +276,13 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
     SDL_Texture *background = pp4m_DRAW_TextureInitColor_Target(glo_render, PP4M_GREY_DARK, 255, NULL, 0, 0, glo_screen_w, glo_screen_h);
 
     SDL_Event event;
-    PP4M_INPUT_POS input;
-    MIDDLE_InitTouchPos(&input);
+    PP4M_INPUT_POS input_pos;
+    MIDDLE_InitTouchPos(&input_pos);
 
     // testing: cap framerate to 30/60 fps
     int running = 0;
     int fps_timer = clock();
+    char buf_in[256], buf_out[256];
 
     while(running == 0) {
 
@@ -295,7 +290,7 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
         CHESS_PiecePattern_UpdateState(glo_chess_core_tile, player);
 
         /* makes the in-game changes during gameplay */
-        running = MIDDLE_UpdateChangeState(&event, &player, &input, socket);
+        running = MIDDLE_UpdateChangeState(&event, &player, &input_pos, socket, buf_in, buf_out);
 
         /* renders everything chessboard releated */
         CORE_RenderUpdate(background, CLOCKS_PER_SEC / 60, &fps_timer);

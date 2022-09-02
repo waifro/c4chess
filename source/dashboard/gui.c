@@ -125,10 +125,10 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
 
         if (alias_ttr->obj == OBJ_LINK_PTR)
             GUI_HookLink_Render(alias_ttr->link);
-		
+
 		else if (alias_ttr->obj == OBJ_DISPLAY_TIMER)
             GUI_HookLink_Render(alias_ttr->link);
-		
+
         else if (alias_ttr->obj == OBJ_WINDOW)
             GUI_HookLink_Render(alias_ttr->link);
 
@@ -173,10 +173,10 @@ void GUI_HookList_Quit(PP4M_HOOK *hook_list) {
     for (int i = 0; i < val; i++) {
 
         alias = curr->ptr;
-		
+
 		if (alias->obj == OBJ_DISPLAY_TIMER)
 			GUI_Destroy_Timer(alias->link);
-		
+
         else if (alias->obj == OBJ_BUTTON_LINK_OFF || alias->obj == OBJ_BUTTON_LINK_ON) {
             alias_ptr = alias->link;
 
@@ -186,7 +186,7 @@ void GUI_HookList_Quit(PP4M_HOOK *hook_list) {
             if (alias_ptr->texture != NULL)
                 SDL_DestroyTexture(alias_ptr->texture);
         }
-		
+
         if (alias->texture != NULL)
             SDL_DestroyTexture(alias->texture);
 
@@ -199,7 +199,7 @@ void GUI_HookList_Quit(PP4M_HOOK *hook_list) {
     return;
 }
 
-int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, int key, int *code) {
+int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buf_arr, int key, int *code) {
     int result = 0;
 
     PP4M_HOOK *current = link;
@@ -218,7 +218,7 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, in
         if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF || alias_ttr->obj == OBJ_BUTTON_LINK_ON) {
             alias_ptr = alias_ttr->link;
 
-            GUI_HookLink_Update(alias_ptr->link, input, buffer, key, code);
+            GUI_HookLink_Update(alias_ptr->link, input, buf_arr, key, code);
         }
 
         // we should create a func for this
@@ -232,13 +232,13 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, in
         }
 
         if (alias_ttr->obj == OBJ_WINDOW_INNER_OOB_CHAT)
-            GUI_Ingame_ChatUpdate(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 14, buffer);
+            GUI_Ingame_ChatUpdate(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 14, buf_arr);
 
         else if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
             alias_ptr = alias_ttr->link;
 
             if (alias_ptr->obj == OBJ_TEXTBOX_INPUT_ON)
-                GUI_Textbox_UpdateAlias(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 18, buffer, key, code);
+                GUI_Textbox_UpdateAlias(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 18, buf_arr, key, code);
         }
 
         if (input.iner == 1) {

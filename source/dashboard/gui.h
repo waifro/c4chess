@@ -21,6 +21,6 @@ int GUI_HookLink_Render(PP4M_HOOK *link);
 
 void GUI_HookList_Quit(PP4M_HOOK *hook_list);
 
-int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buffer, int key, int *code);
+int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buf_arr, int key, int *code);
 
 #endif

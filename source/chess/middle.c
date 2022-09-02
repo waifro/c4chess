@@ -194,7 +194,7 @@ int MIDDLE_InputChessboardState(int *socket, PP4M_INPUT_POS touch, CHESS_CORE_TI
     return tile;
 }
 
-int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, PP4M_INPUT_POS *input, int *socket) {
+int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, PP4M_INPUT_POS *input, int *socket, char *buf_in, char *buf_out) {
 
     if (glo_chess_event_hooklist == NULL)
         glo_chess_event_hooklist = EVENT_HookList_Init();
@@ -203,8 +203,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, PP4M_I
     int key = -1;
     int code = -1;
 
-    static char *buffer = NULL;
-    static char *buf_bak = NULL;
+    char *buf_arr[2] = { buf_in, buf_out };
 
     static int position_old = -1;
     static int position_new = -1;
@@ -215,13 +214,13 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, PP4M_I
     if (key == -1) result = -1;
 
     // update objects
-    GUI_HookLink_Update(glo_chess_event_hooklist, *input, &buffer, key, &code);
+    GUI_HookLink_Update(glo_chess_event_hooklist, *input, buf_arr, key, &code);
 
     // updating chessboard
     MIDDLE_InputChessboardState(socket, *input, glo_chess_core_tile, player, &position_old, &position_new, &code);
 
     // needs a brand new updates of sockets
-    CORE_NET_UpdateLobby(&code, socket, &buffer, &position_old, &position_new, &glo_chess_event_pawn_promotn);
+    CORE_NET_UpdateLobby(&code, socket, buf_arr, &position_old, &position_new, &glo_chess_event_pawn_promotn);
 
     // record notation
     ARCHIVE_UpdateRegister_PieceState(&glo_chess_core_tile[position_new], position_old, position_new);
@@ -232,6 +231,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, PP4M_I
     // update move the piece
     MIDDLE_UpdatePositionPiece(glo_chess_core_tile, position_old, position_new);
 
+    /*
     if (buf_bak == NULL && buffer != NULL) {
         DEBUG_PrintBox(2, "deployed buf: %p", buffer);
         buf_bak = buffer;
@@ -248,6 +248,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, PP4M_I
         free(buf_bak);
         buf_bak = buffer;
     }
+    */
 
     if (position_old != -1 && position_new != -1) {
 

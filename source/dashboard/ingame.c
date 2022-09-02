@@ -123,16 +123,18 @@ PP4M_HOOK *GUI_Ingame_ChatInit_InnerWindow(GUI_TextureAlias *window_inner_oob) {
     return init_list_struct;
 }
 
-int GUI_Ingame_ChatUpdate(GUI_TextureAlias *inner_window_oob, char *pathname, SDL_Color color, int point, char **buffer) {
-    if (*buffer == NULL) return -1;
+int GUI_Ingame_ChatUpdate(GUI_TextureAlias *inner_window_oob, char *pathname, SDL_Color color, int point, char **buf_arr) {
+    if (buf_arr == NULL) return -1;
 
+    /*
+    /* tmp fix (no chat)
     // temporary fix of user
     char buf_user[17];
     int len_buf = 0;
-    sscanf(*buffer, "%s %*s", buf_user);
+    sscanf(buffer, "%s %*s", buf_user);
     len_buf = strlen(buf_user) + 1; // adding the space
 
-    char *buf = &(*buffer)[len_buf];
+    char *buf = &buffer[len_buf];
 
     // create a new texture for new lines
     while (strlen(buf) >= 35)
@@ -140,6 +142,7 @@ int GUI_Ingame_ChatUpdate(GUI_TextureAlias *inner_window_oob, char *pathname, SD
 
     GUI_Ingame_ChatUpdate_AddLine(inner_window_oob, pathname, color, point, buf_user, buf);
     GUI_Ingame_ChatUpdate_Scroll(inner_window_oob);
+    */
 
     return 0;
 }
