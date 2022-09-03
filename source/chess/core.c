@@ -288,7 +288,7 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
 
     memset(buf_in, 0x00, 255);
     memset(buf_out, 0x00, 255);
-
+	
     while(running == 0) {
 
         /* checks if king under attack */

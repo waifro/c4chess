@@ -207,12 +207,22 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, PP4M_I
 
     static int position_old = -1;
     static int position_new = -1;
-
+	
+	// update event
+	SDL_PollEvent(event);
+	
     pp4m_INPUT_GetMouseState(event, input);
-
+    
+    static int foo = -1;
+    
+    if (foo != input->iner) {
+    	printf("input: %d\n", input->iner);
+    	foo = input->iner;
+    }
+    
     key = EVENT_HandleKeyboard(event);
     if (key == -1) result = -1;
-
+	
     // update objects
     GUI_HookLink_Update(glo_chess_event_hooklist, *input, buf_arr, key, &code);
 

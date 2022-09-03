@@ -1,17 +1,17 @@
 # Makefile
 
 # uncomment this line if your on windows
-LIBMMAN := "-L. -lmman" -lws2_32 # -mwindows
+#LIBMMAN := "-L. -lmman" -lws2_32 # -mwindows
 
 # uncomment this line if you want to sanitize
 SANITIZE := -O0 -g # -fsanitize=address #-static-libasan
-COMPILER := x86_64-w64-mingw32-gcc # decide what compiler to use
+COMPILER := gcc #x86_64-w64-mingw32-gcc # decide what compiler to use
 
-SOURCE_MAIN := 			source/main.c source/global.c source/config.c source/mman.c source/lang.c source/gen.c
+SOURCE_MAIN := 		source/main.c source/global.c source/config.c source/mman.c source/lang.c source/gen.c
 SOURCE_ANIMATION := 	source/animation/animation.c
-SOURCE_CHESS := 		source/chess/core.c source/chess/middle.c source/chess/chess.c source/chess/dot.c source/chess/event.c source/chess/fen.c source/chess/archive.c
+SOURCE_CHESS := 	source/chess/core.c source/chess/middle.c source/chess/chess.c source/chess/dot.c source/chess/event.c source/chess/fen.c source/chess/archive.c
 SOURCE_DASHBOARD := 	source/dashboard/gui.c source/dashboard/gui_alias.c source/dashboard/menu.c source/dashboard/popup.c source/dashboard/ingame.c source/dashboard/textbox.c source/dashboard/destroy.c
-SOURCE_SECURITY	:=		source/security/sec.c source/security/debug.c
+SOURCE_SECURITY	:= 	source/security/sec.c source/security/debug.c
 
 SOURCE_PROJECT := $(SOURCE_MAIN) $(SOURCE_ANIMATION) $(SOURCE_CHESS) $(SOURCE_DASHBOARD) $(SOURCE_SECURITY)
 
