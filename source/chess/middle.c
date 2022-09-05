@@ -161,7 +161,7 @@ int MIDDLE_InputChessboardState(int *socket, PP4M_INPUT_POS touch, CHESS_CORE_TI
 				*position_new = tile;
 				*code = CL_LOBBY_POST_MOVE;
 
-				printf("MIDDLE_InputChessboardState: set code: %d\n", *code);
+				DEBUG_PrintBox(2, "MIDDLE_InputChessboardState set code: %d", *code);
 
 				DOT_StateGlobalDotReset();
 				tile = -2;
@@ -207,17 +207,15 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, PP4M_I
 
 	static int position_old = -1;
 	static int position_new = -1;
-	
+
 	// update event
 	SDL_PollEvent(event);
-	
+
 	pp4m_INPUT_GetMouseState(event, input);
-	
-	static int foo = -1;
-	
+
 	key = EVENT_HandleKeyboard(event);
 	if (key == -1) result = -1;
-	
+
 	// update objects
 	GUI_HookLink_Update(glo_chess_event_hooklist, *input, buf_arr, key, &code);
 

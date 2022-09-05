@@ -97,6 +97,19 @@ typedef enum {
 
 */
 
+/*  OBJ_DISPLAY_TIMER
+
+    |- OBJ_DISPLAY_TIMER \
+                        |- && LL
+                        |- OBJ_DISPLAY_TIMER_MIN \
+                                                  |- int*
+                        |- OBJ_DISPLAY_TIMER_SEC \
+                                                  |- int*
+                        |- OBJ_DISPLAY_TIMER_BD
+                        |- (NULL)
+
+*/
+
 /* definitions */
 
 typedef struct {

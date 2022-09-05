@@ -231,6 +231,10 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buf_arr, i
             }
         }
 
+        if (alias_ttr->obj == OBJ_DISPLAY_TIMER) {
+            GUI_Ingame_TimerUpdate_Clock();
+        }
+
         if (alias_ttr->obj == OBJ_WINDOW_INNER_OOB_CHAT)
             GUI_Ingame_ChatUpdate(alias_ttr, OPENSANS_REGULAR, PP4M_BLACK, 14, buf_arr);
 

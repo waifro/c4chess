@@ -95,7 +95,7 @@ PP4M_HOOK *GUI_Ingame_ChatInit_InnerWindow(GUI_TextureAlias *window_inner_oob) {
     // initialize linked list for scrollable object + OBJ_WINDOW_OOB_RENDER containing list of chat
     PP4M_HOOK *init_list_struct = pp4m_HOOK_Init();
 
-    int scroll_size_delta = 3;
+    volatile int scroll_size_delta = 3;
     int scroll_size_width = 5;
 
     GUI_TextureAlias *scroll_vertical = GUI_Alias_InitAlias();
@@ -127,41 +127,41 @@ PP4M_HOOK *GUI_Ingame_ChatInit_InnerWindow(GUI_TextureAlias *window_inner_oob) {
 int GUI_Ingame_ChatUpdate(GUI_TextureAlias *inner_window_oob, char *pathname, SDL_Color color, int point, char **buf_arr) {
     if (buf_arr == NULL) return -1;
     else if (retrieve_code(buf_arr[0]) != SV_LOBBY_POST_MESG) return -2;
-    
+
 	if (strlen(buf_arr[0]) != 0) {
-		
+
 		// temporary fix of user
     	char buf_user[17];
     	int len_buf = 0;
     	sscanf(buf_arr[0], "%s %*s", buf_user);
-    	len_buf = strlen(buf_user) + 1; // adding the space	
-		
+    	len_buf = strlen(buf_user) + 1; // adding the space
+
 		char *buf = &buf_arr[0][len_buf];
-		
+
 		while (strlen(buf) >= 35)
 			buf = GUI_Ingame_ChatUpdate_NewLine(inner_window_oob, pathname, color, point, buf_user, buf);
 
     	GUI_Ingame_ChatUpdate_AddLine(inner_window_oob, pathname, color, point, buf_user, buf);
     	GUI_Ingame_ChatUpdate_Scroll(inner_window_oob);
-	
+
 	}
-	
+
 	if (strlen(buf_arr[1]) != 0) {
-		
+
 		// temporary fix of user
     	char buf_user[17];
     	int len_buf = 0;
     	sscanf(buf_arr[1], "%s %*s", buf_user);
-    	len_buf = strlen(buf_user) + 1; // adding the space	
-		
+    	len_buf = strlen(buf_user) + 1; // adding the space
+
 		char *buf = &buf_arr[1][len_buf];
-		
+
 		while (strlen(buf) >= 35)
 			buf = GUI_Ingame_ChatUpdate_NewLine(inner_window_oob, pathname, color, point, buf_user, buf);
 
     	GUI_Ingame_ChatUpdate_AddLine(inner_window_oob, pathname, color, point, buf_user, buf);
     	GUI_Ingame_ChatUpdate_Scroll(inner_window_oob);
-	
+
 	}
 
     return 0;
@@ -368,6 +368,20 @@ int GUI_Ingame_TimerInit_Clock(GUI_TextureAlias *timer, int point) {
     pp4m_HOOK_Next(list, blink_dots);
     pp4m_HOOK_Next(list, seconds);
     timer->link = list;
+
+    return 0;
+}
+
+int GUI_Ingame_TimerUpdate_Clock(GUI_TextureAlias *display) {
+    if (display == NULL) return -1;
+
+    GUI_TextureAlias *min = GUI_Alias_FindObj(display->link, OBJ_DISPLAY_TIMER_MIN);
+    if (min == NULL) return -2;
+
+    GUI_TextureAlias *sec = GUI_Alias_FindObj(display->link, OBJ_DISPLAY_TIMER_SEC);
+    if (sec == NULL) return -3;
+
+
 
     return 0;
 }

@@ -104,8 +104,7 @@ int GUI_PopupWindow_Core(PP4M_HOOK *head, SDL_Texture *background) {
     SDL_Event event;
     int result = 0;
 
-    PP4M_INPUT_POS input = {0, 0, -1};
-    //MIDDLE_InitTouchPos(&input);
+    PP4M_INPUT_POS input = pp4m_INPUT_InitInputPos();
 
     while(result == 0) {
 
