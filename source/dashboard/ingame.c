@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+#include "../c4network/net_utils.h"
 #include "../c4network/client.h"
 #include "../c4network/server.h"
 
@@ -125,24 +126,43 @@ PP4M_HOOK *GUI_Ingame_ChatInit_InnerWindow(GUI_TextureAlias *window_inner_oob) {
 
 int GUI_Ingame_ChatUpdate(GUI_TextureAlias *inner_window_oob, char *pathname, SDL_Color color, int point, char **buf_arr) {
     if (buf_arr == NULL) return -1;
+    else if (retrieve_code(buf_arr[0]) != SV_LOBBY_POST_MESG) return -2;
+    
+	if (strlen(buf_arr[0]) != 0) {
+		
+		// temporary fix of user
+    	char buf_user[17];
+    	int len_buf = 0;
+    	sscanf(buf_arr[0], "%s %*s", buf_user);
+    	len_buf = strlen(buf_user) + 1; // adding the space	
+		
+		char *buf = &buf_arr[0][len_buf];
+		
+		while (strlen(buf) >= 35)
+			buf = GUI_Ingame_ChatUpdate_NewLine(inner_window_oob, pathname, color, point, buf_user, buf);
 
-    /*
-    /* tmp fix (no chat)
-    // temporary fix of user
-    char buf_user[17];
-    int len_buf = 0;
-    sscanf(buffer, "%s %*s", buf_user);
-    len_buf = strlen(buf_user) + 1; // adding the space
+    	GUI_Ingame_ChatUpdate_AddLine(inner_window_oob, pathname, color, point, buf_user, buf);
+    	GUI_Ingame_ChatUpdate_Scroll(inner_window_oob);
+	
+	}
+	
+	if (strlen(buf_arr[1]) != 0) {
+		
+		// temporary fix of user
+    	char buf_user[17];
+    	int len_buf = 0;
+    	sscanf(buf_arr[1], "%s %*s", buf_user);
+    	len_buf = strlen(buf_user) + 1; // adding the space	
+		
+		char *buf = &buf_arr[1][len_buf];
+		
+		while (strlen(buf) >= 35)
+			buf = GUI_Ingame_ChatUpdate_NewLine(inner_window_oob, pathname, color, point, buf_user, buf);
 
-    char *buf = &buffer[len_buf];
-
-    // create a new texture for new lines
-    while (strlen(buf) >= 35)
-        buf = GUI_Ingame_ChatUpdate_NewLine(inner_window_oob, pathname, color, point, buf_user, buf);
-
-    GUI_Ingame_ChatUpdate_AddLine(inner_window_oob, pathname, color, point, buf_user, buf);
-    GUI_Ingame_ChatUpdate_Scroll(inner_window_oob);
-    */
+    	GUI_Ingame_ChatUpdate_AddLine(inner_window_oob, pathname, color, point, buf_user, buf);
+    	GUI_Ingame_ChatUpdate_Scroll(inner_window_oob);
+	
+	}
 
     return 0;
 }
