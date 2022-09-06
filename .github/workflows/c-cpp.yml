@@ -14,8 +14,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    - name: Submodule
+    - name: installing dependencies
+      run: |
+        sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev -y
+        sudo apt install gcc mingw64
+        
+    - name: init submodules
       run: git submodule update --remote
     
-    - name: npm install, build and test
+    - name: building...
       run: make
