@@ -16,12 +16,11 @@ jobs:
     
     - name: Grubbing packages
     run: |
-    sudo apt update
-    sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
-    
-    - name: preparing submodules
+	sudo apt update && sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev -y
+
+	- name: preparing submodules
     run: |
-    git submodule update --remote
-    
+	git submodule update --remote
+
     - name: make
       run: make
