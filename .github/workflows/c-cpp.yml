@@ -13,9 +13,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    
     - name: Grubbing packages
-    - run: sudo apt update && sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
+    run: sudo apt update && sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
+    
     - name: preparing submodules
-    - run: git submodule update --remote
+    run: git submodule update --remote
+    
     - name: make
       run: make
