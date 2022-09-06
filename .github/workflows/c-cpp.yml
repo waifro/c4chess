@@ -19,7 +19,7 @@ jobs:
         sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev -y
         
     - name: init submodules
-      run: git submodule update --remote
+      run: git submodule update --init
     
     - name: building...
       run: make
