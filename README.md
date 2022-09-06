@@ -1,5 +1,5 @@
 # *c4 opening, C for Chess*
-# Discord invite: [Official C4Chess Server](https://discord.com/invite/2ma5DeAFFq)
+# Discord invite: [discord.me/c4chess](discord.me/c4chess)
 
 ## A C project with (possible future) online multiplayer using SDL2.0, oriented for multiple devices (including homebrew projects)
 
