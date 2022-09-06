@@ -16,7 +16,7 @@ jobs:
     
     - name: installing dependencies
       run: |
-        sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev -y
+        sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev mingw32 -y
         
     - name: init submodules
       run: git submodule update --init
