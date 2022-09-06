@@ -13,11 +13,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: configure
-      run: ./configure
+    - name: Grubbing packages
+    - run: sudo apt update && sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
+    - name: preparing submodules
+    - run: git submodule update --remote
     - name: make
       run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
