@@ -1,10 +1,11 @@
 # *c4 opening, C for Chess*
-# Discord invite: [discord.me/c4chess](https://discord.me/c4chess)
+![example workflow](https://github.com/waifro/c4chess/actions/workflows/c-cpp.yml/badge.svg)
 
 ## A C project with (possible future) online multiplayer using SDL2.0, oriented for multiple devices (including homebrew projects)
 
-![First impact](https://i.ibb.co/HgwvmXb/Cattura.png)
-(old screenshot)
+![First impact](https://i.ibb.co/bm1rD2b/c4chess-banner.jpg)
+
+# Discord invite: [discord.me/c4chess](https://discord.me/c4chess)
 
 ### The project is still under development, no roadmap or release date available publicly. Check [here](https://github.com/waifro/c4chess/projects/2) for the work to be done.
 ### The official server **c4server** (195.58.38.16) is running only on testnet till further advice.
