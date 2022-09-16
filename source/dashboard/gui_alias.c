@@ -153,6 +153,25 @@ int GUI_Alias_RectUpdate_OOB(SDL_Rect *rect_1, SDL_Rect *rect_2, SDL_Rect *rect_
     return 0;
 }
 
+int GUI_Alias_AlignObject_Middle(GUI_TextureAlias *alias_major, GUI_TextureAlias *alias_minor) {
+	
+	alias_minor->dst_rect.x = (alias_major->dst_rect.x + alias_major->dst_rect.w / 2) - (alias_minor->dst_rect.w / 2);
+	alias_minor->dst_rect.y = (alias_major->dst_rect.y + alias_major->dst_rect.h / 2) - (alias_minor->dst_rect.h / 2);
+	
+	return 0;
+}
+
+int GUI_Alias_AlignObject_Proportion(GUI_TextureAlias *alias_major, GUI_TextureAlias *alias_minor, int prop_x, int prop_y) {
+	
+	int prop_a = alias_major->dst_rect.w / 100;
+	int prop_b = alias_major->dst_rect.h / 100;
+	
+	alias_minor->dst_rect.x = prop_x * prop_a - (alias_minor->dst_rect.w / 2);
+	alias_minor->dst_rect.y = prop_y * prop_b - (alias_minor->dst_rect.h / 2);
+	
+	return 0;
+}
+
 int GUI_Alias_InnerWindow_Render(GUI_TextureAlias *window_inner_oob) {
 
     // get to last obj of list from innerWindow_OOB containing OBJ_WINDOW_OOB_RENDER

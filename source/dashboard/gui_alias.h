@@ -140,6 +140,12 @@ int GUI_Alias_RectCopy(SDL_Rect *dest, SDL_Rect *src);
 // return -1 if outside of oob, otherwise 0 on success
 int GUI_Alias_RectUpdate_OOB(SDL_Rect *rect_1, SDL_Rect *rect_2, SDL_Rect *rect_oob);
 
+// on success, places alias_minor in the middle of alias_major
+int GUI_Alias_AlignObject_Middle(GUI_TextureAlias *alias_major, GUI_TextureAlias *alias_minor);
+
+// on success, aligns alias_minor based on proportion of prop_x and prop_y with alias_major
+int GUI_Alias_AlignObject_Proportion(GUI_TextureAlias *alias_major, GUI_TextureAlias *alias_minor, int prop_x, int prop_y);
+
 int GUI_Alias_InnerWindow_Render(GUI_TextureAlias *window_inner_oob);
 
 PP4M_HOOK *GUI_Alias_Tail(GUI_TextureAlias *alias);
