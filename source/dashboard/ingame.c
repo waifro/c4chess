@@ -96,7 +96,7 @@ PP4M_HOOK *GUI_Ingame_ChatInit_InnerWindow(GUI_TextureAlias *window_inner_oob) {
     // initialize linked list for scrollable object + OBJ_WINDOW_OOB_RENDER containing list of chat
     PP4M_HOOK *init_list_struct = pp4m_HOOK_Init();
 
-    volatile int scroll_size_delta = 3;
+    //int scroll_size_delta = 3; // (it was used to create a space between objects for nicer ui)
     int scroll_size_width = 5;
 
     GUI_TextureAlias *scroll_vertical = GUI_Alias_InitAlias();
@@ -346,24 +346,21 @@ int GUI_Ingame_TimerInit_Clock(GUI_TextureAlias *timer, int point) {
 
 
     // modify position of clocks
-	int width = 0, height = 0;
-	SDL_QueryTexture(blink_dots->texture, NULL, NULL, &width, &height);
-
+    GUI_Alias_AlignObject_Middle(timer, blink_dots);
+    GUI_Alias_AlignObject_Proportion(timer, minutes, 25, 50);
+    GUI_Alias_AlignObject_Proportion(timer, seconds, 75, 50);
+    
+    /*
 	blink_dots->dst_rect.x = (timer->dst_rect.x + timer->dst_rect.w) - (timer->dst_rect.w / 2) - (width / 2);
 	blink_dots->dst_rect.y = (timer->dst_rect.h / 2) - (height / 2);
-
-	width = 0, height = 0;
-	SDL_QueryTexture(minutes->texture, NULL, NULL, &width, &height);
 
 	minutes->dst_rect.x = blink_dots->dst_rect.x - width;
 	minutes->dst_rect.y = blink_dots->dst_rect.y;
 
-	width = 0, height = 0;
-	SDL_QueryTexture(seconds->texture, NULL, NULL, &width, &height);
-
 	seconds->dst_rect.x = (blink_dots->dst_rect.x + blink_dots->dst_rect.w);
 	seconds->dst_rect.y = blink_dots->dst_rect.y;
-
+	*/
+	
     // save items inside list
     pp4m_HOOK_Next(list, minutes);
     pp4m_HOOK_Next(list, blink_dots);
