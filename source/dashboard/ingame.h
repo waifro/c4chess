@@ -31,4 +31,6 @@ int GUI_Ingame_TimerInit_Player(PP4M_HOOK *hook_list);
 int GUI_Ingame_TimerInit_OppositePlayer(PP4M_HOOK *hook_list);
 int GUI_Ingame_TimerInit_Clock(GUI_TextureAlias *timer, int point);
 
+int GUI_Ingame_TimerUpdate_Clock(GUI_TextureAlias *display);
+
 #endif

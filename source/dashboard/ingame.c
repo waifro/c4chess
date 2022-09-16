@@ -7,6 +7,7 @@
 #include "../c4network/server.h"
 
 #include "../global.h"
+#include "../security/debug.h"
 #include "../pp4m/pp4m.h"
 #include "../pp4m/pp4m_draw.h"
 #include "../pp4m/pp4m_ttf.h"
@@ -375,13 +376,11 @@ int GUI_Ingame_TimerInit_Clock(GUI_TextureAlias *timer, int point) {
 int GUI_Ingame_TimerUpdate_Clock(GUI_TextureAlias *display) {
     if (display == NULL) return -1;
 
-    GUI_TextureAlias *min = GUI_Alias_FindObj(display->link, OBJ_DISPLAY_TIMER_MIN);
-    if (min == NULL) return -2;
+    PP4M_HOOK *min_ptr = GUI_Alias_FindObj(display->link, OBJ_DISPLAY_TIMER_MIN);
+    if (min_ptr == NULL) return -2;
 
-    GUI_TextureAlias *sec = GUI_Alias_FindObj(display->link, OBJ_DISPLAY_TIMER_SEC);
-    if (sec == NULL) return -3;
-
-
+    PP4M_HOOK *sec_ptr = GUI_Alias_FindObj(display->link, OBJ_DISPLAY_TIMER_SEC);
+    if (sec_ptr == NULL) return -3;
 
     return 0;
 }
