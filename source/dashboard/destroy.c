@@ -123,3 +123,23 @@ int GUI_Destroy_Timer(PP4M_HOOK *list) {
 	
 	return 0;
 }
+
+int GUI_Destroy_Alias(GUI_TextureAlias *ttr_alias) {
+	
+	if (ttr_alias != NULL) {
+	
+		if (ttr_alias->texture != NULL)
+			SDL_DestroyTexture(ttr_alias->texture);
+			
+		if (ttr_alias->link != NULL)
+			GUI_Destroy_Alias(ttr_alias->link);
+			
+		if (ttr_alias->add != NULL)
+			free(ttr_alias->add);
+
+	}
+
+	return 0;
+}
+
+

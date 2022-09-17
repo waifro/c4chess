@@ -16,6 +16,7 @@
 
 #include "gui.h"
 #include "gui_alias.h"
+#include "destroy.h"
 
 int GUI_Alias_InputOnObj(PP4M_INPUT_POS input, SDL_Rect rect) {
     if (input.x >= rect.x && input.x <= (rect.x + rect.w) &&
@@ -157,23 +158,14 @@ int GUI_Alias_WriteFontOnTop(GUI_TextureAlias *txr_alias, char *path, SDL_Color 
 	
 	SDL_SetRenderTarget(glo_render, txr_alias->texture);
 
-    // _fnt is font
-    SDL_Rect rect_fnt;
-    SDL_Texture *texture_fnt = NULL;
-    texture_fnt = pp4m_TTF_TextureFont(glo_render, path, color, point, &rect_fnt, 0, 0, title);
-
-    int w_text = 0;
-    int h_text = 0;
-    SDL_QueryTexture(texture_fnt, NULL, NULL, &w_text, &h_text);
-
-    rect_fnt.x = (w / 2) - (w_text / 2);
-    rect_fnt.y = (h / 2) - (h_text / 2);
-
-    SDL_RenderCopy(glo_render, texture_fnt, NULL, &rect_fnt);
-
+	GUI_TextureAlias *font = GUI_Alias_InitAlias();
+	font->texture = pp4m_TTF_TextureFont(glo_render, path, color, point, &font->dst_rect, 0, 0, title);
+	
+	GUI_Alias_AlignObject_Middle(txr_alias, font);
+	
+	GUI_Destroy_Alias(font);
+	
     SDL_SetRenderTarget(glo_render, NULL);
-
-    SDL_DestroyTexture(texture_fnt);
 
 	return 0;
 }

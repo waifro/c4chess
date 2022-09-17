@@ -68,7 +68,7 @@ int GUI_PopupWindow_Button(PP4M_HOOK *head, char *path, int OBJ_FLAG, char *titl
 
     txr_alias->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, color_button, 255, &txr_alias->dst_rect, x, y, w, h);
     
-    GUI_Alias_WriteFontOnTop(txr_alias->texture, path, color_text, point, title);
+    GUI_Alias_WriteFontOnTop(txr_alias, path, color_text, point, title);
 
     pp4m_HOOK_Next(head, txr_alias);
     return (0);

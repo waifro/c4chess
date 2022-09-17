@@ -29,8 +29,8 @@ int MENU_Core_UpdateRender(SDL_Texture *bg, PP4M_HOOK *hook_list) {
 	
 	SDL_RenderClear(glo_render);
 		
-	SDL_RenderCopy(glo_render, background, NULL, NULL);
-	GUI_HookList_Render(hook_list);
+	SDL_RenderCopy(glo_render, bg, NULL, NULL);
+	GUI_HookLink_Render(hook_list);
 		
 	SDL_RenderPresent(glo_render);
 
@@ -47,7 +47,7 @@ PP4M_HOOK *MENU_HookList_Init(void) {
 	return hook_list;
 }
 
-int MENU_ListButtons_Init(GUI_TextureAlias *hook_list) {
+int MENU_ListButtons_Init(PP4M_HOOK *hook_list) {
 	
 	GUI_TextureAlias *alias	= GUI_Alias_InitAlias();
 	alias->obj = OBJ_LINK_PTR;
@@ -83,7 +83,7 @@ int MENU_ListButtons_InitButton(GUI_TextureAlias *ttr_alias, char *path, GUI_ALI
 	button->obj = obj_flag;
 	button->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, color_button, 255, &button->dst_rect, last_alias->dst_rect.x + last_alias->dst_rect.w, 50, ttr_alias->dst_rect.w, 30);
 	
-	GUI_Alias_WriteFontOnTop(button->texture, OPENSANS_REGULAR, color_text, point, title);
+	GUI_Alias_WriteFontOnTop(button, path, color_text, point, title);
 	
 	pp4m_HOOK_Next(ttr_alias->link, button);
 	

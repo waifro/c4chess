@@ -20,4 +20,7 @@ int GUI_Destroy_Textbox(GUI_TextureAlias *alias_ttr);
 /* on success, destroy timer */
 int GUI_Destroy_Timer(PP4M_HOOK *list);
 
+/* on success, destroy alias (treat's 'link' as another object) */
+int GUI_Destroy_Alias(GUI_TextureAlias *ttr_alias);
+
 #endif
