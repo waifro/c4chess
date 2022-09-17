@@ -6,7 +6,7 @@
 # [official c4chess Discord server - discord.me/c4chess](https://discord.me/c4chess)
 
 ### The project is still under development, no roadmap or release date available publicly. Check [here](https://github.com/waifro/c4chess/projects/2) for the work to be done.
-### The official server **c4server** (195.58.38.13) is running only for development testing. 
+### The official server **c4server** (41.216.182.2) is running only for development testing. 
 See more info at https://github.com/waifro/c4server
 
 ## CLONE AND BUILD

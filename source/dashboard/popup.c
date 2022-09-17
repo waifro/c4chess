@@ -67,27 +67,8 @@ int GUI_PopupWindow_Button(PP4M_HOOK *head, char *path, int OBJ_FLAG, char *titl
     txr_alias->obj = OBJ_FLAG;
 
     txr_alias->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, color_button, 255, &txr_alias->dst_rect, x, y, w, h);
-
-    SDL_SetRenderTarget(glo_render, txr_alias->texture);
-
-    // _fnt is font
-    SDL_Rect rect_fnt;
-    SDL_Texture *texture_fnt = NULL;
-    texture_fnt = pp4m_TTF_TextureFont(glo_render, path, color_text, point, &rect_fnt, 0, 0, title);
-
-    int w_text = 0;
-    int h_text = 0;
-    SDL_QueryTexture(texture_fnt, NULL, NULL, &w_text, &h_text);
-
-    rect_fnt.x = (w / 2) - (w_text / 2);
-    rect_fnt.y = (h / 2) - (h_text / 2);
-
-    SDL_RenderCopy(glo_render, texture_fnt, NULL, &rect_fnt);
-
-    SDL_SetRenderTarget(glo_render, NULL);
-
-    SDL_DestroyTexture(texture_fnt);
-    texture_fnt = NULL;
+    
+    GUI_Alias_WriteFontOnTop(txr_alias->texture, path, color_text, point, title);
 
     pp4m_HOOK_Next(head, txr_alias);
     return (0);

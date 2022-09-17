@@ -46,8 +46,13 @@ typedef enum {
     OBJ_DISPLAY_TIMER_MIN,      // texture displaying the minutes left
     OBJ_DISPLAY_TIMER_SEC,      // texture displaying the seconds left
 
-    OBJ_LINK_PTR                // treat object as linked list
-
+    OBJ_LINK_PTR, 				// treat object as linked list
+	
+	OBJ_MENU_PLAY,				// mainmenu: play button
+	OBJ_MENU_EXIT,				// mainmenu: quit from game
+	
+	OBJ_SUBMENU_PLAY_ONLINE		// submenu: start play online
+	
 } GUI_ALIAS_OBJ;
 
 /*
@@ -139,6 +144,9 @@ int GUI_Alias_RectCopy(SDL_Rect *dest, SDL_Rect *src);
 
 // return -1 if outside of oob, otherwise 0 on success
 int GUI_Alias_RectUpdate_OOB(SDL_Rect *rect_1, SDL_Rect *rect_2, SDL_Rect *rect_oob);
+
+// on success, writes on top of a passing texture
+int GUI_Alias_WriteFontOnTop(GUI_TextureAlias *txr_alias, char *path, SDL_Color color, int point, char *title);
 
 // on success, places alias_minor in the middle of alias_major
 int GUI_Alias_AlignObject_Middle(GUI_TextureAlias *alias_major, GUI_TextureAlias *alias_minor);
