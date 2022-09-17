@@ -65,6 +65,7 @@ int MENU_ListButtons_Init(PP4M_HOOK *hook_list) {
 	alias->dst_rect.y = 350;
 	alias->dst_rect.w = 400;
 	alias->dst_rect.h = 50;
+	
 	// create a linked list to host the buttons
 	alias->link = pp4m_HOOK_Init();
 	
