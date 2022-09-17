@@ -155,14 +155,16 @@ int GUI_Alias_RectUpdate_OOB(SDL_Rect *rect_1, SDL_Rect *rect_2, SDL_Rect *rect_
 }
 
 int GUI_Alias_WriteFontOnTop(GUI_TextureAlias *txr_alias, char *path, SDL_Color color, int point, char *title) {
-	
-	SDL_SetRenderTarget(glo_render, txr_alias->texture);
 
 	GUI_TextureAlias *font = GUI_Alias_InitAlias();
 	font->texture = pp4m_TTF_TextureFont(glo_render, path, color, point, &font->dst_rect, 0, 0, title);
 	
-	GUI_Alias_AlignObject_Middle(txr_alias, font);
+	SDL_SetRenderTarget(glo_render, txr_alias->texture);
 	
+	font->dst_rect.x = (txr_alias->dst_rect.w / 2) - (font->dst_rect.w / 2);
+	font->dst_rect.y = (txr_alias->dst_rect.h / 2) - (font->dst_rect.h / 2);
+	
+	SDL_RenderCopy(glo_render, font->texture, NULL, &font->dst_rect);
 	GUI_Destroy_Alias(font);
 	
     SDL_SetRenderTarget(glo_render, NULL);

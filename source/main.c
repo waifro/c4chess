@@ -35,7 +35,7 @@ int main (int argc, char *argv[]) {
 
     GLOBAL_InitUser_Guest(&glo_user);
     
-    SDL_Texture *background = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_NORMAL, NULL, 0, 0, glo_screen_w, glo_screen_h);
+    SDL_Texture *background = pp4m_DRAW_TextureInitColor(glo_render, PP4M_WHITE, NULL, 0, 0, glo_screen_w, glo_screen_h);
     
     MENU_Core(background);
     

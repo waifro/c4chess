@@ -58,14 +58,14 @@ int MENU_ListButtons_Init(PP4M_HOOK *hook_list) {
 	alias->obj = OBJ_LINK_PTR;
 	
 	// positioning a dinamyc rectangle to place the buttons inside
-	alias->dst_rect.x = 0;
-	alias->dst_rect.y = 0;
+	alias->dst_rect.x = 50;
+	alias->dst_rect.y = 500;
 	alias->dst_rect.w = 300;
 	
 	// create a linked list to host the buttons
 	alias->link = pp4m_HOOK_Init();
 	
-	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_MENU_PLAY, glo_lang[_LANG_SET_PLAY], PP4M_WHITE, 24, PP4M_GREY_LIGHT);	
+	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_MENU_PLAY, glo_lang[_LANG_SET_PLAY], PP4M_BLACK, 24, PP4M_GREY_LIGHT);	
 	
 	pp4m_HOOK_Next(hook_list, alias);
 	
@@ -82,11 +82,13 @@ int MENU_ListButtons_InitButton(GUI_TextureAlias *ttr_alias, char *path, GUI_ALI
 		curr = curr->next;
 	}
 	
-	if (last_alias == NULL) return -1;
+	if (last_alias == NULL) {
+		last_alias = ttr_alias;
+	}
 	
 	GUI_TextureAlias *button = GUI_Alias_InitAlias();
 	button->obj = obj_flag;
-	button->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, color_button, 255, &button->dst_rect, last_alias->dst_rect.x + last_alias->dst_rect.w, 50, ttr_alias->dst_rect.w, 30);
+	button->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, color_button, 255, &button->dst_rect, last_alias->dst_rect.x, last_alias->dst_rect.y + last_alias->dst_rect.h, ttr_alias->dst_rect.w, 30);
 	
 	GUI_Alias_WriteFontOnTop(button, path, color_text, point, title);
 	
