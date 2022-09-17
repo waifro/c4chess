@@ -185,8 +185,8 @@ int GUI_Alias_AlignObject_Proportion(GUI_TextureAlias *alias_major, GUI_TextureA
 	int prop_a = alias_major->dst_rect.w / 100;
 	int prop_b = alias_major->dst_rect.h / 100;
 	
-	alias_minor->dst_rect.x = prop_x * prop_a - (alias_minor->dst_rect.w / 2);
-	alias_minor->dst_rect.y = prop_y * prop_b - (alias_minor->dst_rect.h / 2);
+	alias_minor->dst_rect.x = alias_major->dst_rect.x + (prop_a * prop_x) - (alias_minor->dst_rect.w / 2);
+	alias_minor->dst_rect.y = alias_major->dst_rect.y + (prop_b * prop_y) - (alias_minor->dst_rect.h / 2);
 	
 	return 0;
 }

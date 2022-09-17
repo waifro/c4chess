@@ -7,6 +7,8 @@
 
 #include "../pp4m/pp4m.h"
 #include "../pp4m/pp4m_draw.h"
+#include "../pp4m/pp4m_ttf.h"
+#include "../pp4m/pp4m_image.h"
 
 int MENU_Core(SDL_Texture *background) {
 
@@ -38,7 +40,7 @@ int MENU_Core_UpdateRender(SDL_Texture *bg, PP4M_HOOK *hook_list) {
 		
 	SDL_RenderCopy(glo_render, bg, NULL, NULL);
 	GUI_HookLink_Render(hook_list);
-	DEBUG_UpdateBox_Render();
+	//DEBUG_UpdateBox_Render();
 	
 	SDL_RenderPresent(glo_render);
 
@@ -50,12 +52,31 @@ PP4M_HOOK *MENU_HookList_Init(void) {
 	PP4M_HOOK *hook_list = pp4m_HOOK_Init();
 	
 	// init objects
-	MENU_ListButtons_Init(hook_list);
+	MENU_ListInit_Logo(hook_list);
+	MENU_ListInit_Buttons(hook_list);
 	
 	return hook_list;
 }
 
-int MENU_ListButtons_Init(PP4M_HOOK *hook_list) {
+int MENU_ListInit_Logo(PP4M_HOOK *hook_list) {
+
+	GUI_TextureAlias *c4_alias = GUI_Alias_InitAlias();
+	c4_alias->obj = OBJ_NONE;
+	c4_alias->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, TEXTURE_C4_LOGO, &c4_alias->dst_rect, 250, 50, 250, 300);
+	
+	GUI_TextureAlias *chess_font = GUI_Alias_InitAlias();
+	chess_font->obj = OBJ_NONE;
+	chess_font->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_BLACK, 200, &chess_font->dst_rect, 0, 0, "chess");
+
+	GUI_Alias_AlignObject_Proportion(c4_alias, chess_font, 260, 70);
+	
+	pp4m_HOOK_Next(hook_list, c4_alias);
+	pp4m_HOOK_Next(hook_list, chess_font);
+	
+	return 0;
+}
+
+int MENU_ListInit_Buttons(PP4M_HOOK *hook_list) {
 	
 	GUI_TextureAlias *alias	= GUI_Alias_InitAlias();
 	alias->obj = OBJ_LINK_PTR;
@@ -70,6 +91,7 @@ int MENU_ListButtons_Init(PP4M_HOOK *hook_list) {
 	alias->link = pp4m_HOOK_Init();
 	
 	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_MENU_PLAY, glo_lang[_LANG_SET_PLAY], PP4M_BLACK, 26, PP4M_GREY_NORMAL);	
+	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_NONE, glo_lang[_LANG_SET_STATISTICS], PP4M_GREY_NORMAL, 26, PP4M_GREY_LIGHT);		
 	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_NONE, glo_lang[_LANG_SET_INFO], PP4M_GREY_NORMAL, 26, PP4M_GREY_LIGHT);	
 	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_NONE, glo_lang[_LANG_SET_SETTINGS], PP4M_GREY_NORMAL, 26, PP4M_GREY_LIGHT);		
 	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_MENU_EXIT, glo_lang[_LANG_SET_QUIT], PP4M_BLACK, 26, PP4M_GREY_NORMAL);	
