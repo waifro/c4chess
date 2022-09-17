@@ -206,14 +206,23 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buf_arr, i
 
     GUI_TextureAlias *alias_ttr = NULL;
     GUI_TextureAlias *alias_ptr = NULL;
-
+	
+	// applying onthefly modifications to mouse surfacing
+	static SDL_Color color_bak;
+	static GUI_TextureAlias *pointer_obj = NULL;
+	
     int val = pp4m_HOOK_Size(link);
 
     for (int i = 0; i < val; i++) {
         alias_ttr = current->ptr;
-
-        if (alias_ttr->obj == OBJ_NULL) continue;
-
+		
+		if (alias_ttr->obj == OBJ_NULL) continue;
+		
+		else if (alias_ttr->obj == OBJ_LINK_PTR) {
+			GUI_HookLink_Update(alias_ttr->link, input, buf_arr, key, code);
+			continue;
+		}
+		
         // hooked list update
         if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF || alias_ttr->obj == OBJ_BUTTON_LINK_ON) {
             alias_ptr = alias_ttr->link;
@@ -263,7 +272,33 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buf_arr, i
                 }
             }
         }
+		
+		// mouse hovering on top of object
+		if (alias_ttr != pointer_obj) {
+			
+			if (GUI_Alias_InputOnObj(input, alias_ttr->dst_rect) == 1) {
+			
+				// reset old pointer back to original colors
+				if (pointer_obj != NULL)
+					SDL_SetTextureColorMod(pointer_obj->texture, color_bak.r, color_bak.g, color_bak.b);
+				
+				// save new pointer and color
+				pointer_obj = alias_ttr;
+				SDL_GetTextureColorMod(alias_ttr->texture, &color_bak.r, &color_bak.g, &color_bak.b);
+				
+				// highlight object
+				SDL_SetTextureColorMod(alias_ttr->texture, 220, 220, 220);
 
+			} else if (pointer_obj != NULL && GUI_Alias_InputOnObj(input, pointer_obj->dst_rect) == -1) {
+				
+				// reset old pointer back to original colors
+				SDL_SetTextureColorMod(pointer_obj->texture, color_bak.r, color_bak.g, color_bak.b);
+					
+				// reset also ther pointer
+				pointer_obj = NULL;
+			}
+		}
+		
         current = current->next;
     }
 

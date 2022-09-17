@@ -16,11 +16,14 @@ int MENU_Core(SDL_Texture *background) {
 	if (listButtons_ptr == NULL) return -1;
 	
 	SDL_Event event;
+	PP4M_INPUT_POS input = pp4m_INPUT_InitInputPos();
 	
 	while(1) {
 		SDL_PollEvent(&event);
+		pp4m_INPUT_GetMouseState(&event, &input);
 		if (event.type == SDL_QUIT) break;
 		
+		GUI_HookLink_Update(hook_list, input, NULL, -1, (int*){&(int){-1}});
 		MENU_Core_UpdateRender(background, hook_list);
 	}
 	
@@ -59,16 +62,16 @@ int MENU_ListButtons_Init(PP4M_HOOK *hook_list) {
 	
 	// positioning a dinamyc rectangle to place the buttons inside
 	alias->dst_rect.x = 50;
-	alias->dst_rect.y = 500;
-	alias->dst_rect.w = 300;
-	
+	alias->dst_rect.y = 350;
+	alias->dst_rect.w = 400;
+	alias->dst_rect.h = 50;
 	// create a linked list to host the buttons
 	alias->link = pp4m_HOOK_Init();
 	
-	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_MENU_PLAY, glo_lang[_LANG_SET_PLAY], PP4M_BLACK, 24, PP4M_GREY_NORMAL);	
-	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_NONE, glo_lang[_LANG_SET_INFO], PP4M_GREY_NORMAL, 24, PP4M_GREY_LIGHT);	
-	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_NONE, glo_lang[_LANG_SET_SETTINGS], PP4M_GREY_NORMAL, 24, PP4M_GREY_LIGHT);		
-	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_MENU_EXIT, glo_lang[_LANG_SET_QUIT], PP4M_BLACK, 24, PP4M_GREY_NORMAL);	
+	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_MENU_PLAY, glo_lang[_LANG_SET_PLAY], PP4M_BLACK, 26, PP4M_GREY_NORMAL);	
+	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_NONE, glo_lang[_LANG_SET_INFO], PP4M_GREY_NORMAL, 26, PP4M_GREY_LIGHT);	
+	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_NONE, glo_lang[_LANG_SET_SETTINGS], PP4M_GREY_NORMAL, 26, PP4M_GREY_LIGHT);		
+	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_MENU_EXIT, glo_lang[_LANG_SET_QUIT], PP4M_BLACK, 26, PP4M_GREY_NORMAL);	
 	
 	pp4m_HOOK_Next(hook_list, alias);
 	
@@ -89,7 +92,7 @@ int MENU_ListButtons_InitButton(GUI_TextureAlias *ttr_alias, char *path, GUI_ALI
 	
 	GUI_TextureAlias *button = GUI_Alias_InitAlias();
 	button->obj = obj_flag;
-	button->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, color_button, 255, &button->dst_rect, last_alias->dst_rect.x, last_alias->dst_rect.y + last_alias->dst_rect.h, ttr_alias->dst_rect.w, 30);
+	button->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, color_button, 255, &button->dst_rect, last_alias->dst_rect.x, last_alias->dst_rect.y + last_alias->dst_rect.h + 5, ttr_alias->dst_rect.w, last_alias->dst_rect.h);
 	
 	GUI_Alias_WriteFontOnTop(button, path, color_text, point, title);
 	
