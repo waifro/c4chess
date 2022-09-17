@@ -3,6 +3,7 @@
 #include "gui_alias.h"
 
 #include "../global.h"
+#include "../security/debug.h"
 
 #include "../pp4m/pp4m.h"
 #include "../pp4m/pp4m_draw.h"
@@ -14,8 +15,11 @@ int MENU_Core(SDL_Texture *background) {
 	PP4M_HOOK *listButtons_ptr = GUI_Alias_FindObj(hook_list, OBJ_LINK_PTR);
 	if (listButtons_ptr == NULL) return -1;
 	
+	SDL_Event event;
 	
-	while(0) {
+	while(1) {
+		SDL_PollEvent(&event);
+		if (event.type == SDL_QUIT) break;
 		
 		MENU_Core_UpdateRender(background, hook_list);
 	}
@@ -31,7 +35,8 @@ int MENU_Core_UpdateRender(SDL_Texture *bg, PP4M_HOOK *hook_list) {
 		
 	SDL_RenderCopy(glo_render, bg, NULL, NULL);
 	GUI_HookLink_Render(hook_list);
-		
+	DEBUG_UpdateBox_Render();
+	
 	SDL_RenderPresent(glo_render);
 
 	return 0;

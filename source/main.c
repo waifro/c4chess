@@ -10,10 +10,12 @@
 #include "pp4m/pp4m.h"
 #include "pp4m/pp4m_ttf.h"
 #include "pp4m/pp4m_net.h"
+#include "pp4m/pp4m_draw.h"
 
 #include "version.h"
 #include "chess/core.h"
 #include "dashboard/gui.h"
+#include "dashboard/menu.h"
 #include "security/debug.h"
 
 #include "c4network/net.h"
@@ -32,6 +34,12 @@ int main (int argc, char *argv[]) {
     CFG_BootFile_LoadConfig(LANG_DEFAULT);
 
     GLOBAL_InitUser_Guest(&glo_user);
+    
+    SDL_Texture *background = pp4m_DRAW_TextureInitColor(glo_render, PP4M_GREY_NORMAL, NULL, 0, 0, glo_screen_w, glo_screen_h);
+    
+    MENU_Core(background);
+    
+    /*
     DEBUG_PrintBox(1, "user: %s", glo_user.username);
 
     CHESS_CORE_PLAYER player = WHITE_PLAYER;
