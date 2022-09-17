@@ -44,7 +44,7 @@ const char *lang_cfg_it[] = {
     "Errore", "Attenzione", "C'e qualcosa che non va", "Riprova", "Si", "No", "Okay",
     "Torna nel gioco", "Inserisci testo qui",
     "Indietro", "Esci", "Continua", "Annulla",
-    "Gioca", "Info", "Impostazioni", "Statistiche", "Prossimamente", "Sei Sicuro?", "Premi",
+    "Gioca", "Info", "Impostazioni", "Statistiche", "Esci", "Prossimamente", "Sei Sicuro?", "Premi",
     "stile", "personalizza", "immetti", "sfondo immagine", "suoni", "musica", "locale", "globale", "giocatori",
     "lobby trovate", "indirizzo Ip", "per uscire", "per entrare", "in chat" };
 
@@ -52,7 +52,7 @@ const char *lang_cfg_en[] = {
     "Error", "Attention", "There is something wrong", "Retry", "Yes", "No", "Okay",
     "Back to the game", "Insert text here",
     "Back", "Exit", "Continue", "Cancel",
-    "Play", "Info", "Settings", "Statistics", "Coming soon", "Are you sure?", "Press",
+    "Play", "Info", "Settings", "Statistics", "Quit", "Coming soon", "Are you sure?", "Press",
     "style", "personalize", "insert", "background", "sounds", "music", "local", "global", "players",
     "lobby found", "address Ip", "to exit", "to enter", "in chat" };
 
@@ -60,7 +60,7 @@ const char *lang_cfg_nl[] = {
     "Error", "Attentie", "Er is iets misgelopen", "Probeer opnieuw", "Ja", "Nee", "Oke'",
     "Terug naar de game", "Voeg hier tekst in",
     "Rug", "Verlaat", "Ga verder", "Annuleren",
-    "Speel", "Informatie", "Instellingen", "Statistieken", "Binnenkort beschikbaar", "Ben je zeker?", "Druk",
+    "Speel", "Informatie", "Instellingen", "Statistieken", "Uitgaan", "Binnenkort beschikbaar", "Ben je zeker?", "Druk",
     "stijl", "personalizeer", "invoegen", "achtergrond", "sounds", "muziek", "lokaal", "globaal", "spelers",
     "lobby gevonden", "address Ip", "verlaten", "binnengaan", "in de chat" };
 

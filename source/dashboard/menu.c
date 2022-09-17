@@ -65,7 +65,10 @@ int MENU_ListButtons_Init(PP4M_HOOK *hook_list) {
 	// create a linked list to host the buttons
 	alias->link = pp4m_HOOK_Init();
 	
-	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_MENU_PLAY, glo_lang[_LANG_SET_PLAY], PP4M_BLACK, 24, PP4M_GREY_LIGHT);	
+	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_MENU_PLAY, glo_lang[_LANG_SET_PLAY], PP4M_BLACK, 24, PP4M_GREY_NORMAL);	
+	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_NONE, glo_lang[_LANG_SET_INFO], PP4M_GREY_NORMAL, 24, PP4M_GREY_LIGHT);	
+	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_NONE, glo_lang[_LANG_SET_SETTINGS], PP4M_GREY_NORMAL, 24, PP4M_GREY_LIGHT);		
+	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_MENU_EXIT, glo_lang[_LANG_SET_QUIT], PP4M_BLACK, 24, PP4M_GREY_NORMAL);	
 	
 	pp4m_HOOK_Next(hook_list, alias);
 	
@@ -77,14 +80,12 @@ int MENU_ListButtons_InitButton(GUI_TextureAlias *ttr_alias, char *path, GUI_ALI
 	PP4M_HOOK *curr = ttr_alias->link;
 	GUI_TextureAlias *last_alias = NULL;
 	
-	while (curr->ptr != NULL) {
-		last_alias = curr->ptr;
+	while (curr->next != NULL)
 		curr = curr->next;
-	}
-	
-	if (last_alias == NULL) {
+		
+	if (curr->ptr == NULL)
 		last_alias = ttr_alias;
-	}
+	else last_alias = curr->ptr;
 	
 	GUI_TextureAlias *button = GUI_Alias_InitAlias();
 	button->obj = obj_flag;
