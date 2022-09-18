@@ -40,7 +40,7 @@ int MENU_Core_UpdateRender(SDL_Texture *bg, PP4M_HOOK *hook_list) {
 		
 	SDL_RenderCopy(glo_render, bg, NULL, NULL);
 	GUI_HookLink_Render(hook_list);
-	//DEBUG_UpdateBox_Render();
+	DEBUG_UpdateBox_Render();
 	
 	SDL_RenderPresent(glo_render);
 
