@@ -10,28 +10,87 @@
 #include "../pp4m/pp4m_ttf.h"
 #include "../pp4m/pp4m_image.h"
 
-int MENU_Core(SDL_Texture *background) {
-
-	PP4M_HOOK *hook_list = MENU_HookList_Init();
+int MENU_HookListArr_Init(PP4M_HOOK **hook_list_arr, int val) {
 	
-	PP4M_HOOK *listButtons_ptr = GUI_Alias_FindObj(hook_list, OBJ_LINK_PTR);
+	for (int i = 0; i < val; i++)
+		hook_list_arr[i] = NULL;
+	
+	hook_list_arr[0] = MENU_HookList_Init();
+	
+	return 0;
+}
+
+int MENU_HookList_Quit(PP4M_HOOK **hook_list_arr, int val) {
+	
+	for (int i = 0; i < val; i++)
+		hook_list_arr[i] = NULL;
+
+	return 0;
+}
+
+int MENU_Core(SDL_Texture *background) {
+	
+	int result = 0;
+	int index = 0;
+	
+	// to maintain the same loop for every submenu, popup, etc..
+	// we are going to use a static hook_list array (with 32 lists Maximum), 
+	// to switch from on hook_list to another in a fast way,
+	// while keeping most of the loaded stuff still in memory,
+	// without passing them into every function.
+	
+	PP4M_HOOK *hook_list_arr[32];
+	MENU_HookListArr_Init(hook_list_arr, 32);
+	
+	PP4M_HOOK *listButtons_ptr = GUI_Alias_FindObj(hook_list_arr[index], OBJ_LINK_PTR);
 	if (listButtons_ptr == NULL) return -1;
 	
 	SDL_Event event;
 	PP4M_INPUT_POS input = pp4m_INPUT_InitInputPos();
 	
-	while(1) {
+	while(result != -1) {
 		SDL_PollEvent(&event);
 		pp4m_INPUT_GetMouseState(&event, &input);
 		if (event.type == SDL_QUIT) break;
 		
-		GUI_HookLink_Update(hook_list, input, NULL, -1, (int*){&(int){-1}});
-		MENU_Core_UpdateRender(background, hook_list);
+		// hop into a new hook_list
+		result = MENU_UpdateRedirect_HookLink(hook_list_arr, &index, &input);
+		MENU_Core_UpdateRender(background, hook_list_arr[index]);
 	}
 	
-	GUI_HookList_Quit(hook_list);
+	MENU_HookList_Quit(hook_list_arr, 32);
 
 	return 0;
+}
+
+int MENU_UpdateRedirect_HookLink(PP4M_HOOK **hook_list_arr, int *index, PP4M_INPUT_POS *input) {
+	int result = -1;
+	
+	result = GUI_HookLink_Update(hook_list_arr[*index], *input, NULL, -1, (int*){&(int){-1}});
+	
+	if (result == -1) {
+		
+		printf("result: %d\n", result);
+	
+		GUI_HookList_Quit(hook_list_arr[*index]);
+		*index -= 1;
+	}
+	
+	else if (result == OBJ_BUTTON_PLAY) {
+		*index += 1;	
+		hook_list_arr[*index] = MENU_Play_HookList();
+	}
+	
+	return result;
+}
+
+PP4M_HOOK *MENU_Play_HookList(void) {
+	
+	PP4M_HOOK *hook_list = pp4m_HOOK_Init();
+	
+	printf("hello\n");
+	
+	return hook_list;
 }
 
 int MENU_Core_UpdateRender(SDL_Texture *bg, PP4M_HOOK *hook_list) {
@@ -90,11 +149,11 @@ int MENU_ListInit_Buttons(PP4M_HOOK *hook_list) {
 	// create a linked list to host the buttons
 	alias->link = pp4m_HOOK_Init();
 	
-	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_MENU_PLAY, glo_lang[_LANG_SET_PLAY], PP4M_BLACK, 26, PP4M_GREY_NORMAL);	
+	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_BUTTON_PLAY, glo_lang[_LANG_SET_PLAY], PP4M_BLACK, 26, PP4M_GREY_NORMAL);	
 	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_NONE, glo_lang[_LANG_SET_STATISTICS], PP4M_GREY_NORMAL, 26, PP4M_GREY_LIGHT);		
 	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_NONE, glo_lang[_LANG_SET_INFO], PP4M_GREY_NORMAL, 26, PP4M_GREY_LIGHT);	
 	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_NONE, glo_lang[_LANG_SET_SETTINGS], PP4M_GREY_NORMAL, 26, PP4M_GREY_LIGHT);		
-	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_MENU_EXIT, glo_lang[_LANG_SET_QUIT], PP4M_BLACK, 26, PP4M_GREY_NORMAL);	
+	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_BUTTON_RETURN, glo_lang[_LANG_SET_QUIT], PP4M_BLACK, 26, PP4M_GREY_NORMAL);	
 	
 	pp4m_HOOK_Next(hook_list, alias);
 	

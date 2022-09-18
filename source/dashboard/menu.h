@@ -7,8 +7,16 @@
 
 #include "../pp4m/pp4m.h"
 
+int MENU_HookListArr_Init(PP4M_HOOK **hook_list_arr, int val);
+
+int MENU_HookList_Quit(PP4M_HOOK **hook_list_arr, int val);
+
 // main menu core
 int MENU_Core(SDL_Texture *background);
+
+int MENU_UpdateRedirect_HookLink(PP4M_HOOK **hook_list_arr, int *index, PP4M_INPUT_POS *input);
+
+PP4M_HOOK *MENU_Play_HookList(void);
 
 // on success, update the rendering of the object's list
 int MENU_Core_UpdateRender(SDL_Texture *bg, PP4M_HOOK *hook_list);

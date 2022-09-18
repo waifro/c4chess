@@ -12,7 +12,10 @@
 typedef enum {
     OBJ_NONE,                   // ignore object
     OBJ_NULL,                   // drop interaction
-
+	
+	OBJ_BUTTON_PLAY,			// mainmenu: play button
+	OBJ_BUTTON_PLAY_ONLINE,		// submenu: start play online
+	
     OBJ_BUTTON_TXTBOX,          // object to toggle OBJ_TEXTBOX_INPUT buffer
 
     OBJ_BUTTON_LINK_OFF,        // indicates *link as linked list toggled off
@@ -46,12 +49,7 @@ typedef enum {
     OBJ_DISPLAY_TIMER_MIN,      // texture displaying the minutes left
     OBJ_DISPLAY_TIMER_SEC,      // texture displaying the seconds left
 
-    OBJ_LINK_PTR, 				// treat object as linked list
-	
-	OBJ_MENU_PLAY,				// mainmenu: play button
-	OBJ_MENU_EXIT,				// mainmenu: quit from game
-	
-	OBJ_SUBMENU_PLAY_ONLINE		// submenu: start play online
+    OBJ_LINK_PTR 				// treat object as linked list
 	
 } GUI_ALIAS_OBJ;
 

@@ -257,12 +257,14 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buf_arr, i
         if (input.iner == 1) {
             if (GUI_Alias_InputOnObj(input, alias_ttr->dst_rect) == 1) {
 
-                if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF) {
-                    alias_ttr->obj = OBJ_BUTTON_LINK_ON;
-                }
-
+                if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF) alias_ttr->obj = OBJ_BUTTON_LINK_ON;
+				
+				else if (alias_ttr->obj == OBJ_BUTTON_PLAY) result = OBJ_BUTTON_PLAY;
+				
                 else if (alias_ttr->obj == OBJ_BUTTON_RETURN) result = -1;
+                
                 else if (alias_ttr->obj == OBJ_BUTTON_EXIT) result = -2;
+                
             } else {
                 if (alias_ttr->obj == OBJ_BUTTON_LINK_ON) {
                     alias_ptr = alias_ttr->link;
