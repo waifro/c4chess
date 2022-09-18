@@ -32,6 +32,7 @@ int MENU_Core(SDL_Texture *background) {
 	
 	int result = 0;
 	int index = 0;
+	int fps_timer = 0;
 	
 	// to maintain the same loop for every submenu, popup, etc..
 	// we are going to use a static hook_list array (with 32 lists Maximum), 
@@ -53,7 +54,7 @@ int MENU_Core(SDL_Texture *background) {
 		pp4m_INPUT_GetMouseState(&event, &input);
 		if (event.type == SDL_QUIT) break;
 		
-		MENU_Core_UpdateRender(background, hook_list_arr[index]);
+		MENU_Core_UpdateRender(background, hook_list_arr[index], &fps_timer);
 		
 		// hop into a new hook_list
 		result = MENU_UpdateRedirect_HookLink(hook_list_arr, &index, &input);
@@ -129,16 +130,19 @@ int MENU_Submenu_Play_OnlineButton(PP4M_HOOK *hook_list) {
 	return 0;
 }
 
-int MENU_Core_UpdateRender(SDL_Texture *bg, PP4M_HOOK *hook_list) {
+int MENU_Core_UpdateRender(SDL_Texture *bg, PP4M_HOOK *hook_list, int *timer) {
 	
-	SDL_RenderClear(glo_render);
+	 if (pp4m_FramerateTimer(CLOCKS_PER_SEC / 60, timer, 0) == true) {
+	
+		SDL_RenderClear(glo_render);
 		
-	SDL_RenderCopy(glo_render, bg, NULL, NULL);
-	GUI_HookLink_Render(hook_list);
-	//DEBUG_UpdateBox_Render();
+		SDL_RenderCopy(glo_render, bg, NULL, NULL);
+		GUI_HookLink_Render(hook_list);
+		//DEBUG_UpdateBox_Render();
 	
-	SDL_RenderPresent(glo_render);
-
+		SDL_RenderPresent(glo_render);
+	}
+	
 	return 0;
 }
 
