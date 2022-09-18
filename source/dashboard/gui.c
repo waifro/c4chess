@@ -273,34 +273,46 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buf_arr, i
             }
         }
 		
-		// mouse hovering on top of object
-		if (alias_ttr != pointer_obj) {
-			
-			if (GUI_Alias_InputOnObj(input, alias_ttr->dst_rect) == 1) {
-			
-				// reset old pointer back to original colors
-				if (pointer_obj != NULL)
-					SDL_SetTextureColorMod(pointer_obj->texture, color_bak.r, color_bak.g, color_bak.b);
-				
-				// save new pointer and color
-				pointer_obj = alias_ttr;
-				SDL_GetTextureColorMod(alias_ttr->texture, &color_bak.r, &color_bak.g, &color_bak.b);
-				
-				// highlight object
-				SDL_SetTextureColorMod(alias_ttr->texture, 220, 220, 220);
-
-			} else if (pointer_obj != NULL && GUI_Alias_InputOnObj(input, pointer_obj->dst_rect) == -1) {
-				
-				// reset old pointer back to original colors
-				SDL_SetTextureColorMod(pointer_obj->texture, color_bak.r, color_bak.g, color_bak.b);
-					
-				// reset also ther pointer
-				pointer_obj = NULL;
-			}
-		}
+		GUI_HoverMouse_Highlight(&input, &alias_ttr, &pointer_obj, &color_bak);
 		
         current = current->next;
     }
 
     return result;
 }
+
+int GUI_HoverMouse_Highlight(PP4M_INPUT_POS *input, GUI_TextureAlias **alias_ttr, GUI_TextureAlias **alias_ptr, SDL_Color *color_bak) {
+	
+	GUI_TextureAlias *ttr = *alias_ttr;
+	GUI_TextureAlias *ptr = *alias_ptr;
+	
+	// mouse hovering on top of object
+	if (ttr != ptr) {
+			
+		if (GUI_Alias_InputOnObj(*input, ttr->dst_rect) == 1) {
+			
+			// reset old pointer back to original colors
+			if (ptr != NULL)
+				SDL_SetTextureColorMod(ptr->texture, color_bak->r, color_bak->g, color_bak->b);
+				
+			// save new pointer and color
+			*alias_ptr = ttr;
+			SDL_GetTextureColorMod(ttr->texture, &color_bak->r, &color_bak->g, &color_bak->b);
+				
+			// highlight object
+			SDL_SetTextureColorMod(ttr->texture, 220, 220, 220);
+
+		} else if (ptr != NULL && GUI_Alias_InputOnObj(*input, ptr->dst_rect) == -1) {
+				
+			// reset old pointer back to original colors
+			SDL_SetTextureColorMod(ptr->texture, color_bak->r, color_bak->g, color_bak->b);
+					
+			// reset also ther pointer
+			ptr = NULL;
+		}
+	}
+
+	return 0;
+}
+
+
