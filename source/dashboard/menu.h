@@ -18,6 +18,9 @@ int MENU_UpdateRedirect_HookLink(PP4M_HOOK **hook_list_arr, int *index, PP4M_INP
 
 PP4M_HOOK *MENU_Play_HookList(void);
 
+int MENU_Submenu_Play_LocalButton(PP4M_HOOK *hook_list);
+int MENU_Submenu_Play_OnlineButton(PP4M_HOOK *hook_list);
+
 // on success, update the rendering of the object's list
 int MENU_Core_UpdateRender(SDL_Texture *bg, PP4M_HOOK *hook_list);
 

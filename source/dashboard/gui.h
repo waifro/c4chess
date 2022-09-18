@@ -11,6 +11,7 @@
 #define TEXTURE_LOBBYCHAT 				"./resources/logo_mesg.png"
 #define TEXTURE_LOBBYCHAT_SEND 			"./resources/logo_direct.png"
 #define TEXTURE_GLOBE_WORLDWIDE 		"./resources/earth.png"
+#define TEXTURE_TWO_PEOPLE				"./resources/two_people.png"
 
 /* prototypes */
 

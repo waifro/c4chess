@@ -14,6 +14,7 @@ typedef enum {
     OBJ_NULL,                   // drop interaction
 	
 	OBJ_BUTTON_PLAY,			// mainmenu: play button
+	OBJ_BUTTON_PLAY_LOCAL,		// submenu: start play locally
 	OBJ_BUTTON_PLAY_ONLINE,		// submenu: start play online
 	
     OBJ_BUTTON_TXTBOX,          // object to toggle OBJ_TEXTBOX_INPUT buffer
