@@ -7,16 +7,22 @@
 
 #include "../pp4m/pp4m.h"
 
+#include "../c4network/net_utils.h"
+
 int MENU_HookListArr_Init(PP4M_HOOK **hook_list_arr, int val);
 
 int MENU_HookList_Quit(PP4M_HOOK **hook_list_arr, int val);
 
 // main menu core
-int MENU_Core(SDL_Texture *background);
+int MENU_Core(SDL_Texture *background, cli_t *socket);
 
-int MENU_UpdateRedirect_HookLink(PP4M_HOOK **hook_list_arr, int *index, PP4M_INPUT_POS *input);
+int MENU_UpdateRedirect_HookLink(PP4M_HOOK **hook_list_arr, int *index, PP4M_INPUT_POS *input, int *socket);
 
 PP4M_HOOK *MENU_Play_HookList(void);
+
+PP4M_HOOK *MENU_Play_LoadingGame_Online_HookList(int *socket);
+
+void MENUPtr_SEQ_AssignLobby(int *socket);
 
 int MENU_Submenu_Play_LocalButton(PP4M_HOOK *hook_list);
 int MENU_Submenu_Play_OnlineButton(PP4M_HOOK *hook_list);

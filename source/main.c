@@ -37,7 +37,16 @@ int main (int argc, char *argv[]) {
     
     SDL_Texture *background = pp4m_DRAW_TextureInitColor(glo_render, PP4M_WHITE, NULL, 0, 0, glo_screen_w, glo_screen_h);
     
-    MENU_Core(background);
+    char *server_addr = NET_DEFAULT_SERVER;
+    cli_t socket = pp4m_NET_Init(TCP);
+    
+    DEBUG_PrintBox(2, "waiting connection to host...");
+    
+    if (NET_ConnectSocketToServer(&socket, server_addr, NET_PORT_TESTNET) < 0)
+    	DEBUG_PrintBox(2, "error socket: [%d] %s, %d", socket, strerror(errno), pp4m_NET_RecieveError());
+	else DEBUG_PrintBox(2, "connection established to [%s:%d]", server_addr, NET_PORT_TESTNET);
+
+    MENU_Core(background, &socket);
     
     /*
     DEBUG_PrintBox(1, "user: %s", glo_user.username);
@@ -47,7 +56,7 @@ int main (int argc, char *argv[]) {
     char *server_addr = NET_DEFAULT_SERVER;
     cli_t socket = pp4m_NET_Init(TCP);
 
-    DEBUG_PrintBox(1, "waiting connection to host...");
+    
 
     if (NET_ConnectSocketToServer(&socket, server_addr, NET_PORT_TESTNET) < 0) {
         DEBUG_PrintBox(1, "error socket: %s, %d", strerror(errno), pp4m_NET_RecieveError());
@@ -61,7 +70,7 @@ int main (int argc, char *argv[]) {
 
     DEBUG_PrintBox(1, "connection established to [%s:%d]", server_addr, NET_PORT_TESTNET);
 
-    // make CL_REQ_ASSIGN_LOBBY in network/
+    // make CL_REQ_ASSIGN_LOBBY in network
     char buf_1[256]; char buf_2[256];
     cl_redirect_clcode_REQ(CL_REQ_ASSIGN_LOBBY, buf_2);
     NET_SendPacketToServer(&socket, buf_2, strlen(buf_2)+1);

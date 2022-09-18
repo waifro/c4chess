@@ -224,6 +224,14 @@ void *GUI_Alias_AddComment(GUI_TextureAlias *alias_ttr, char *path, SDL_Color co
 	return comment;
 }
 
+int GUI_Alias_UpdateText(GUI_TextureAlias *alias_ttr, char *path, SDL_Color color, int point, char *text) {
+	
+	SDL_DestroyTexture(alias_ttr->texture);
+	alias_ttr->texture = pp4m_TTF_TextureFont(glo_render, path, color, point, NULL, 0, 0, text);
+	
+	return 0;
+}
+
 int GUI_Alias_WriteFontOnTop(GUI_TextureAlias *txr_alias, char *path, SDL_Color color, int point, char *title) {
 
 	GUI_TextureAlias *font = GUI_Alias_InitAlias();

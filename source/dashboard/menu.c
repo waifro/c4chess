@@ -5,6 +5,11 @@
 #include "../global.h"
 #include "../security/debug.h"
 
+#include "../c4network/net.h"
+#include "../c4network/client.h"
+#include "../c4network/server.h"
+#include "../c4network/net_utils.h"
+
 #include "../pp4m/pp4m.h"
 #include "../pp4m/pp4m_draw.h"
 #include "../pp4m/pp4m_ttf.h"
@@ -28,7 +33,7 @@ int MENU_HookList_Quit(PP4M_HOOK **hook_list_arr, int val) {
 	return 0;
 }
 
-int MENU_Core(SDL_Texture *background) {
+int MENU_Core(SDL_Texture *background, cli_t *socket) {
 	
 	int result = 0;
 	int index = 0;
@@ -57,7 +62,7 @@ int MENU_Core(SDL_Texture *background) {
 		MENU_Core_UpdateRender(background, hook_list_arr[index], &fps_timer);
 		
 		// hop into a new hook_list
-		result = MENU_UpdateRedirect_HookLink(hook_list_arr, &index, &input);
+		result = MENU_UpdateRedirect_HookLink(hook_list_arr, &index, &input, socket);
 	}
 	
 	MENU_HookList_Quit(hook_list_arr, 32);
@@ -65,11 +70,11 @@ int MENU_Core(SDL_Texture *background) {
 	return 0;
 }
 
-int MENU_UpdateRedirect_HookLink(PP4M_HOOK **hook_list_arr, int *index, PP4M_INPUT_POS *input) {
+int MENU_UpdateRedirect_HookLink(PP4M_HOOK **hook_list_arr, int *index, PP4M_INPUT_POS *input, int *socket) {
 	int result = -1;
 	
-	result = GUI_HookLink_Update(hook_list_arr[*index], *input, NULL, -1, (int*){&(int){-1}});
-
+	result = GUI_HookLink_Update(hook_list_arr[*index], *input, NULL, -1, (int*){&(int){-1}}, socket);
+	
 	if (result == -1) {
 		GUI_HookList_Quit(hook_list_arr[*index]);
 		*index -= 1;
@@ -78,6 +83,11 @@ int MENU_UpdateRedirect_HookLink(PP4M_HOOK **hook_list_arr, int *index, PP4M_INP
 	else if (result == OBJ_BUTTON_PLAY) {
 		*index += 1;
 		hook_list_arr[*index] = MENU_Play_HookList();
+	}
+	
+	else if (result == OBJ_BUTTON_PLAY_ONLINE) {
+		*index += 1;
+		hook_list_arr[*index] = MENU_Play_LoadingGame_Online_HookList(socket);
 	}
 	
 	// exit if index is below zero
@@ -94,6 +104,44 @@ PP4M_HOOK *MENU_Play_HookList(void) {
 	MENU_Submenu_Play_LocalButton(hook_list);	
 	
 	return hook_list;
+}
+
+PP4M_HOOK *MENU_Play_LoadingGame_Online_HookList(int *socket) {
+
+	PP4M_HOOK *hook_list = pp4m_HOOK_Init();
+
+	// a object to containing a function under callbacks
+	GUI_TextureAlias *container = GUI_Alias_InitAlias();
+	
+	void (*func)(int *) = &MENUPtr_SEQ_AssignLobby;
+	container->add = func;
+	
+	GUI_TextureAlias *alias = GUI_Alias_InitAlias();
+	alias->obj = OBJ_NONE;
+	alias->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_BLACK, 72, &alias->dst_rect, 0, glo_screen_h - 100, "loading...");
+	
+	pp4m_HOOK_Next(hook_list, container);
+	pp4m_HOOK_Next(hook_list, alias);
+	
+	// meanwhile, we send an assign code
+	char buffer[256];
+	cl_redirect_clcode_REQ(CL_REQ_ASSIGN_LOBBY, buffer);
+    NET_SendPacketToServer(socket, buffer, strlen(buffer)+1);
+	
+	return hook_list;
+}
+
+void MENUPtr_SEQ_AssignLobby(int *socket) {
+	
+	if (NET_DetectSignal(socket) > 0) {
+	
+		char buffer[256];
+		cl_GrabPacket(socket, buffer);
+	
+		printf("buf recieved: [%s]\n", buffer);
+	}
+	
+	return;
 }
 
 int MENU_Submenu_Play_LocalButton(PP4M_HOOK *hook_list) {
@@ -138,7 +186,7 @@ int MENU_Core_UpdateRender(SDL_Texture *bg, PP4M_HOOK *hook_list, int *timer) {
 		
 		SDL_RenderCopy(glo_render, bg, NULL, NULL);
 		GUI_HookLink_Render(hook_list);
-		//DEBUG_UpdateBox_Render();
+		DEBUG_UpdateBox_Render();
 	
 		SDL_RenderPresent(glo_render);
 	}

@@ -13,6 +13,8 @@ typedef enum {
     OBJ_NONE,                   // ignore object
     OBJ_NULL,                   // drop interaction
 	
+	OBJ_FUNC_CONTAINER,			// contains a function pointer, useful for custom callbacks under parallel linked lists
+	
 	OBJ_BUTTON_PLAY,			// mainmenu: play button
 	OBJ_BUTTON_PLAY_LOCAL,		// submenu: start play locally
 	OBJ_BUTTON_PLAY_ONLINE,		// submenu: start play online
@@ -158,6 +160,9 @@ int GUI_Alias_AddTitle(GUI_TextureAlias *alias_ttr, char *path, SDL_Color color,
 
 // on success, uses alias_ttr->link as linked list and places it inside a positioned text
 void *GUI_Alias_AddComment(GUI_TextureAlias *alias_ttr, char *path, SDL_Color color, int point, int pp_x, int pp_y, char *text);
+
+// on success, updates the texture of alias with new text
+int GUI_Alias_UpdateText(GUI_TextureAlias *alias_ttr, char *path, SDL_Color color, int point, char *text);
 
 // on success, writes on top of a passing texture
 int GUI_Alias_WriteFontOnTop(GUI_TextureAlias *txr_alias, char *path, SDL_Color color, int point, char *title);

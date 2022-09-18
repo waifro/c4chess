@@ -214,7 +214,7 @@ int GUI_HookList_Quit(PP4M_HOOK *hook_list) {
     return 0;
 }
 
-int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buf_arr, int key, int *code) {
+int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buf_arr, int key, int *code, int *socket) {
     if (link == NULL) return -1;
     
     int result = 0;
@@ -238,15 +238,23 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buf_arr, i
 		if (alias_ttr->obj == OBJ_NULL) continue;
 		
 		else if (alias_ttr->obj == OBJ_LINK_PTR) {
-			result = GUI_HookLink_Update(alias_ttr->link, input, buf_arr, key, code);
+			result = GUI_HookLink_Update(alias_ttr->link, input, buf_arr, key, code, socket);
 			continue;
+		}
+		
+		else if (alias_ttr->obj == OBJ_FUNC_CONTAINER) {
+			void (*func)(int *) = alias_ttr->add;
+			func(socket);
+			
+			continue;
+			
 		}
 		
         // hooked list update
         if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF || alias_ttr->obj == OBJ_BUTTON_LINK_ON) {
             alias_ptr = alias_ttr->link;
 
-            GUI_HookLink_Update(alias_ptr->link, input, buf_arr, key, code);
+            GUI_HookLink_Update(alias_ptr->link, input, buf_arr, key, code, socket);
         }
 
         // we should create a func for this
@@ -283,7 +291,7 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buf_arr, i
 					result = OBJ_BUTTON_PLAY;
 				
 				else if (alias_ttr->obj == OBJ_BUTTON_PLAY_ONLINE)
-					result = -1;
+					result = OBJ_BUTTON_PLAY_ONLINE;
 				
                 else if (alias_ttr->obj == OBJ_BUTTON_RETURN)
 					result = -1;

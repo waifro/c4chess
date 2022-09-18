@@ -217,7 +217,7 @@ int MIDDLE_UpdateChangeState(SDL_Event *event, CHESS_CORE_PLAYER *player, PP4M_I
 	if (key == -1) result = -1;
 
 	// update objects
-	GUI_HookLink_Update(glo_chess_event_hooklist, *input, buf_arr, key, &code);
+	GUI_HookLink_Update(glo_chess_event_hooklist, *input, buf_arr, key, &code, socket);
 
 	// updating chessboard
 	MIDDLE_InputChessboardState(socket, *input, glo_chess_core_tile, player, &position_old, &position_new, &code);
