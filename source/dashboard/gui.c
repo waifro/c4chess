@@ -123,7 +123,8 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
 
         if (alias_ttr->texture != NULL)
             SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->dst_rect);
-
+		
+		/*
         if (alias_ttr->obj == OBJ_LINK_PTR)
             GUI_HookLink_Render(alias_ttr->link);
 
@@ -135,15 +136,16 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
 
         else if (alias_ttr->obj == OBJ_WINDOW_CHAT)
             GUI_HookLink_Render(alias_ttr->link);
-
-        else if (alias_ttr->obj == OBJ_BUTTON_LINK_ON)
+		*/
+		
+        if (alias_ttr->obj == OBJ_BUTTON_LINK_ON)
             GUI_HookLink_RenderObj(alias_ttr->link);
-
+		
         else if (alias_ttr->obj == OBJ_WINDOW_INNER_OOB_CHAT) {
             GUI_Alias_InnerWindow_Render(alias_ttr);
             GUI_HookLink_Render(alias_ttr->link);
         }
-
+		
         // temporary fix
         else if (alias_ttr->obj == OBJ_TEXTBOX_ALIAS) {
             GUI_Textbox_UpdateRect(alias_ttr);
@@ -158,6 +160,10 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
                     SDL_RenderCopy(glo_render, alias_ptr->texture, &alias_ptr->src_rect, &alias_ptr->dst_rect);
                 }
         }
+        
+        // hopefully this wont break stuff
+		else if (alias_ttr->link != NULL)
+			GUI_HookLink_Render(alias_ttr->link);
     }
 
     return 0;
@@ -176,10 +182,10 @@ int GUI_HookList_Quit(PP4M_HOOK *hook_list) {
 
         alias = curr->ptr;
 
-		if (alias->obj == OBJ_DISPLAY_TIMER)
+		if (alias->obj == OBJ_DISPLAY_TIMER) {
 			GUI_Destroy_Timer(alias->link);
-
-        else if (alias->obj == OBJ_BUTTON_LINK_OFF || alias->obj == OBJ_BUTTON_LINK_ON) {
+			
+		} else if (alias->obj == OBJ_BUTTON_LINK_OFF || alias->obj == OBJ_BUTTON_LINK_ON) {
             alias_ptr = alias->link;
 
             if (alias_ptr->obj == OBJ_WINDOW_CHAT)
@@ -187,6 +193,13 @@ int GUI_HookList_Quit(PP4M_HOOK *hook_list) {
 
             if (alias_ptr->texture != NULL)
                 SDL_DestroyTexture(alias_ptr->texture);
+        } else {
+        	
+        	if (alias->link != NULL) {
+        		GUI_HookList_Quit(alias->link);
+        		alias->link = NULL;
+        	}
+        		
         }
 
         if (alias->texture != NULL)
@@ -268,7 +281,10 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buf_arr, i
 				
 				else if (alias_ttr->obj == OBJ_BUTTON_PLAY)
 					result = OBJ_BUTTON_PLAY;
-					
+				
+				else if (alias_ttr->obj == OBJ_BUTTON_PLAY_ONLINE)
+					result = -1;
+				
                 else if (alias_ttr->obj == OBJ_BUTTON_RETURN)
 					result = -1;
 					

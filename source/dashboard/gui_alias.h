@@ -143,6 +143,21 @@ int GUI_Alias_RectCopy(SDL_Rect *dest, SDL_Rect *src);
 // return -1 if outside of oob, otherwise 0 on success
 int GUI_Alias_RectUpdate_OOB(SDL_Rect *rect_1, SDL_Rect *rect_2, SDL_Rect *rect_oob);
 
+// on success, initializes an empty button
+void *GUI_Alias_CreateButton(PP4M_HOOK *hook_list, GUI_ALIAS_OBJ obj_flag, SDL_Color color, int alpha, int x, int y, int w, int h);
+
+// on success, initializes a linked list into alias_ttr->link
+int GUI_Alias_AddLinkedList(GUI_TextureAlias *alias_ttr);
+
+// on success, uses alias_ttr->link as linked list and places it inside a positioned image
+void *GUI_Alias_AddImage(GUI_TextureAlias *alias_ttr, char *path, int pp_x, int pp_y, int w, int h);
+
+// on success, uses alias_ttr->link as linked list and places it in the middle of alias_ttr
+int GUI_Alias_AddTitle(GUI_TextureAlias *alias_ttr, char *path, SDL_Color color, int point, char *text);
+
+// on success, uses alias_ttr->link as linked list and places it inside a positioned text
+int GUI_Alias_AddComment(GUI_TextureAlias *alias_ttr, char *path, SDL_Color color, int point, int pp_x, int pp_y, char *text);
+
 // on success, writes on top of a passing texture
 int GUI_Alias_WriteFontOnTop(GUI_TextureAlias *txr_alias, char *path, SDL_Color color, int point, char *title);
 

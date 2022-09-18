@@ -4,12 +4,13 @@
 #include "gui_alias.h"
 #include "../pp4m/pp4m.h"
 
-#define OPENSANS_REGULAR "./resources/OpenSans-Regular.ttf"
-#define OPENSANS_EXTRABOLD "./resources/OpenSans-ExtraBold.ttf"
+#define OPENSANS_REGULAR 				"./resources/OpenSans-Regular.ttf"
+#define OPENSANS_EXTRABOLD 				"./resources/OpenSans-ExtraBold.ttf"
 
-#define TEXTURE_C4_LOGO "./resources/c4chess-logo.jpg"
-#define TEXTURE_LOBBYCHAT "resources/logo_mesg.png"
-#define TEXTURE_LOBBYCHAT_SEND "resources/logo_direct.png"
+#define TEXTURE_C4_LOGO 				"./resources/c4chess-logo.jpg"
+#define TEXTURE_LOBBYCHAT 				"./resources/logo_mesg.png"
+#define TEXTURE_LOBBYCHAT_SEND 			"./resources/logo_direct.png"
+#define TEXTURE_GLOBE_WORLDWIDE 		"./resources/earth.png"
 
 /* prototypes */
 

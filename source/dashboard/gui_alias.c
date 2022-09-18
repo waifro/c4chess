@@ -154,6 +154,76 @@ int GUI_Alias_RectUpdate_OOB(SDL_Rect *rect_1, SDL_Rect *rect_2, SDL_Rect *rect_
     return 0;
 }
 
+void *GUI_Alias_CreateButton(PP4M_HOOK *hook_list, GUI_ALIAS_OBJ obj_flag, SDL_Color color, int alpha, int x, int y, int w, int h) {
+	
+	GUI_TextureAlias *button = GUI_Alias_InitAlias();
+	button->obj = obj_flag;
+	button->texture = pp4m_DRAW_TextureInitColor_Target(glo_render, color, alpha, &button->dst_rect, x, y, w, h);
+	
+	pp4m_HOOK_Next(hook_list, button);
+	
+	return button;
+}
+
+int GUI_Alias_AddLinkedList(GUI_TextureAlias *alias_ttr) {
+	if (alias_ttr == NULL) return -1;
+	
+	PP4M_HOOK *hook_list = pp4m_HOOK_Init();
+	alias_ttr->link = hook_list;
+
+	return 0;
+}
+
+void *GUI_Alias_AddImage(GUI_TextureAlias *alias_ttr, char *path, int pp_x, int pp_y, int w, int h) {
+	
+	if (alias_ttr->link == NULL)
+		GUI_Alias_AddLinkedList(alias_ttr);
+	
+	int x = pp_x + alias_ttr->dst_rect.x;
+	int y = pp_y + alias_ttr->dst_rect.y;
+	
+	GUI_TextureAlias *image = GUI_Alias_InitAlias();
+	image->obj = OBJ_NONE;
+	image->texture = pp4m_IMG_ImageToTexture(glo_render, NULL, path, &image->dst_rect, x, y, w, h);
+	
+	pp4m_HOOK_Next(alias_ttr->link, image);
+	
+	return image;
+}
+
+int GUI_Alias_AddTitle(GUI_TextureAlias *alias_ttr, char *path, SDL_Color color, int point, char *text) {
+	
+	if (alias_ttr->link == NULL)
+		GUI_Alias_AddLinkedList(alias_ttr);
+	
+	GUI_TextureAlias *title = GUI_Alias_InitAlias();
+	title->obj = OBJ_NONE;
+	title->texture = pp4m_TTF_TextureFont(glo_render, path, color, point, &title->dst_rect, 0, 0, text);
+	
+	GUI_Alias_AlignObject_Middle(alias_ttr, title);
+	
+	pp4m_HOOK_Next(alias_ttr->link, title);
+	
+	return 0;
+}
+
+int GUI_Alias_AddComment(GUI_TextureAlias *alias_ttr, char *path, SDL_Color color, int point, int pp_x, int pp_y, char *text) {
+	
+	if (alias_ttr->link == NULL)
+		GUI_Alias_AddLinkedList(alias_ttr);
+	
+	int x = pp_x + alias_ttr->dst_rect.x;
+	int y = pp_y + alias_ttr->dst_rect.y;
+	
+	GUI_TextureAlias *comment = GUI_Alias_InitAlias();
+	comment->obj = OBJ_NONE;
+	comment->texture = pp4m_TTF_TextureFont(glo_render, path, color, point, &comment->dst_rect, x, y, text);
+	
+	pp4m_HOOK_Next(alias_ttr->link, comment);
+	
+	return 0;
+}
+
 int GUI_Alias_WriteFontOnTop(GUI_TextureAlias *txr_alias, char *path, SDL_Color color, int point, char *title) {
 
 	GUI_TextureAlias *font = GUI_Alias_InitAlias();

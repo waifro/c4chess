@@ -89,7 +89,12 @@ PP4M_HOOK *MENU_Play_HookList(void) {
 	
 	PP4M_HOOK *hook_list = pp4m_HOOK_Init();
 	
-	printf("hello\n");
+	GUI_TextureAlias *play_online = NULL;
+	GUI_TextureAlias *image_globe = NULL;
+	
+	play_online = GUI_Alias_CreateButton(hook_list, OBJ_BUTTON_PLAY_ONLINE, PP4M_GREY_NORMAL, 255, 500, 50, 300, 300);
+	image_globe = GUI_Alias_AddImage(play_online, TEXTURE_GLOBE_WORLDWIDE, 0, 0, 270, 270);
+	GUI_Alias_AlignObject_Middle(play_online, image_globe);
 	
 	return hook_list;
 }
