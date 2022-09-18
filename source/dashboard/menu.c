@@ -53,9 +53,10 @@ int MENU_Core(SDL_Texture *background) {
 		pp4m_INPUT_GetMouseState(&event, &input);
 		if (event.type == SDL_QUIT) break;
 		
+		MENU_Core_UpdateRender(background, hook_list_arr[index]);
+		
 		// hop into a new hook_list
 		result = MENU_UpdateRedirect_HookLink(hook_list_arr, &index, &input);
-		MENU_Core_UpdateRender(background, hook_list_arr[index]);
 	}
 	
 	MENU_HookList_Quit(hook_list_arr, 32);
@@ -67,19 +68,19 @@ int MENU_UpdateRedirect_HookLink(PP4M_HOOK **hook_list_arr, int *index, PP4M_INP
 	int result = -1;
 	
 	result = GUI_HookLink_Update(hook_list_arr[*index], *input, NULL, -1, (int*){&(int){-1}});
-	
+
 	if (result == -1) {
-		
-		printf("result: %d\n", result);
-	
 		GUI_HookList_Quit(hook_list_arr[*index]);
 		*index -= 1;
 	}
 	
 	else if (result == OBJ_BUTTON_PLAY) {
-		*index += 1;	
+		*index += 1;
 		hook_list_arr[*index] = MENU_Play_HookList();
 	}
+	
+	// exit if index is below zero
+	if (*index < 0) result = -1;
 	
 	return result;
 }
