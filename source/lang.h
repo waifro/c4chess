@@ -50,7 +50,7 @@ typedef enum {
 /*
 "Error", "Attention", "There is something wrong", "Retry", "Yes", "No", "Okay", "Back to the game",
 "Back", "Exit", "Continue", "Cancel",
-"Play", "Info", "Settings", "Statistics", "Coming soon", "Are you sure?", "Press",
+"Play", "Info", "Settings", "Statistics", "Quit", "Coming soon", "Are you sure?", "Press",
 "style", "personalize", "insert", "background", "sounds", "music", "local", "global", "players",
 "lobby found", "address Ip", "to exit", "to enter", "in chat" };
 */

@@ -207,7 +207,7 @@ int GUI_Alias_AddTitle(GUI_TextureAlias *alias_ttr, char *path, SDL_Color color,
 	return 0;
 }
 
-int GUI_Alias_AddComment(GUI_TextureAlias *alias_ttr, char *path, SDL_Color color, int point, int pp_x, int pp_y, char *text) {
+void *GUI_Alias_AddComment(GUI_TextureAlias *alias_ttr, char *path, SDL_Color color, int point, int pp_x, int pp_y, char *text) {
 	
 	if (alias_ttr->link == NULL)
 		GUI_Alias_AddLinkedList(alias_ttr);
@@ -221,7 +221,7 @@ int GUI_Alias_AddComment(GUI_TextureAlias *alias_ttr, char *path, SDL_Color colo
 	
 	pp4m_HOOK_Next(alias_ttr->link, comment);
 	
-	return 0;
+	return comment;
 }
 
 int GUI_Alias_WriteFontOnTop(GUI_TextureAlias *txr_alias, char *path, SDL_Color color, int point, char *title) {

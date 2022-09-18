@@ -89,12 +89,16 @@ PP4M_HOOK *MENU_Play_HookList(void) {
 	
 	PP4M_HOOK *hook_list = pp4m_HOOK_Init();
 	
-	GUI_TextureAlias *play_online = NULL;
-	GUI_TextureAlias *image_globe = NULL;
+	GUI_TextureAlias *play_button = NULL;
+	GUI_TextureAlias *play_globe = NULL;
+	GUI_TextureAlias *play_comment = NULL;
 	
-	play_online = GUI_Alias_CreateButton(hook_list, OBJ_BUTTON_PLAY_ONLINE, PP4M_GREY_NORMAL, 255, 500, 50, 300, 300);
-	image_globe = GUI_Alias_AddImage(play_online, TEXTURE_GLOBE_WORLDWIDE, 0, 0, 270, 270);
-	GUI_Alias_AlignObject_Middle(play_online, image_globe);
+	play_button = GUI_Alias_CreateButton(hook_list, OBJ_BUTTON_PLAY_ONLINE, PP4M_GREY_NORMAL, 255, 500, 50, 300, 300);
+	play_globe = GUI_Alias_AddImage(play_button, TEXTURE_GLOBE_WORLDWIDE, 0, 0, 250, 250);
+	play_comment = GUI_Alias_AddComment(play_button, OPENSANS_REGULAR, PP4M_GREY_LIGHT, 24, 0, 0, glo_lang[_LANG_SET_GLOBAL]);
+	
+	GUI_Alias_AlignObject_Proportion(play_button, play_globe, 50, 45);
+	GUI_Alias_AlignObject_Proportion(play_button, play_comment, 50, 92);
 	
 	return hook_list;
 }
