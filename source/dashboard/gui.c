@@ -243,8 +243,12 @@ int GUI_HookLink_Update(PP4M_HOOK *link, PP4M_INPUT_POS input, char **buf_arr, i
 		}
 		
 		else if (alias_ttr->obj == OBJ_FUNC_CONTAINER) {
-			void (*func)(int *) = alias_ttr->add;
-			func(socket);
+		
+			int (*func)(int *) = alias_ttr->add;
+			
+			result = func(socket);
+			
+			if (result == 1) return -1;
 			
 			continue;
 			

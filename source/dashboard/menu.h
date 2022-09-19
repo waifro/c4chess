@@ -22,7 +22,7 @@ PP4M_HOOK *MENU_Play_HookList(void);
 
 PP4M_HOOK *MENU_Play_LoadingGame_Online_HookList(int *socket);
 
-void MENUPtr_SEQ_AssignLobby(int *socket);
+int MENUPtr_SEQ_AssignLobby(int *socket);
 
 int MENU_Submenu_Play_LocalButton(PP4M_HOOK *hook_list);
 int MENU_Submenu_Play_OnlineButton(PP4M_HOOK *hook_list);

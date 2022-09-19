@@ -48,6 +48,9 @@ int main (int argc, char *argv[]) {
 
     MENU_Core(background, &socket);
     
+    NET_CloseSocket(&socket);
+    GLOBAL_DestrUser(&glo_user);
+    
     /*
     DEBUG_PrintBox(1, "user: %s", glo_user.username);
 

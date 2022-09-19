@@ -5,6 +5,8 @@
 #include "../global.h"
 #include "../security/debug.h"
 
+#include "../chess/core.h"
+
 #include "../c4network/net.h"
 #include "../c4network/client.h"
 #include "../c4network/server.h"
@@ -112,8 +114,9 @@ PP4M_HOOK *MENU_Play_LoadingGame_Online_HookList(int *socket) {
 
 	// a object to containing a function under callbacks
 	GUI_TextureAlias *container = GUI_Alias_InitAlias();
+	container->obj = OBJ_FUNC_CONTAINER;
 	
-	void (*func)(int *) = &MENUPtr_SEQ_AssignLobby;
+	int (*func)(int *) = &MENUPtr_SEQ_AssignLobby;
 	container->add = func;
 	
 	GUI_TextureAlias *alias = GUI_Alias_InitAlias();
@@ -131,17 +134,30 @@ PP4M_HOOK *MENU_Play_LoadingGame_Online_HookList(int *socket) {
 	return hook_list;
 }
 
-void MENUPtr_SEQ_AssignLobby(int *socket) {
+int MENUPtr_SEQ_AssignLobby(int *socket) {
+	int result = 0;
 	
 	if (NET_DetectSignal(socket) > 0) {
 	
 		char buffer[256];
-		cl_GrabPacket(socket, buffer);
-	
+		
+		result = cl_GrabPacket(socket, buffer);
+		
 		printf("buf recieved: [%s]\n", buffer);
+		
+		if (result != SV_LOBBY_POST_INIT)
+			return -1;
+			
+		CHESS_CORE_PLAYER player;
+		
+		char *fen_notation = CORE_NET_ChessboardInit(&player, buffer);
+		
+		CORE_InitChess_Play(player, fen_notation, socket);
+		
+		return 1;
 	}
 	
-	return;
+	return 0;
 }
 
 int MENU_Submenu_Play_LocalButton(PP4M_HOOK *hook_list) {
