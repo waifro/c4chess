@@ -117,10 +117,15 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
     for (int i = 0; i < val; i++) {
         alias_ttr = current->ptr;
         current = current->next;
-
+		
+		// ignore certain objects
         if (alias_ttr == NULL) continue;
-        if (alias_ttr->obj == OBJ_NULL || alias_ttr->obj == OBJ_WINDOW_OOB_RENDER) continue;
-
+        
+        if (alias_ttr->obj == OBJ_NULL ||
+        	alias_ttr->obj == OBJ_WINDOW_OOB_RENDER ||
+        	alias_ttr->obj == OBJ_FUNC_CONTAINER) continue;
+		
+		// check if a texture exists
         if (alias_ttr->texture != NULL)
             SDL_RenderCopy(glo_render, alias_ttr->texture, NULL, &alias_ttr->dst_rect);
 		
@@ -162,11 +167,22 @@ int GUI_HookLink_Render(PP4M_HOOK *link) {
         }
         
         // hopefully this wont break stuff
-		else if (alias_ttr->link != NULL)
+		else if (GUI_HookLink_ValidRender(alias_ttr) == 0)
 			GUI_HookLink_Render(alias_ttr->link);
     }
 
     return 0;
+}
+
+int GUI_HookLink_ValidRender(GUI_TextureAlias *alias_ttr) {
+	
+	if (alias_ttr->obj == OBJ_BUTTON_LINK_OFF || alias_ttr->obj == OBJ_BUTTON_LINK_ON)
+		return -2;
+	
+	if (alias_ttr->link == NULL)
+		return -1;
+
+	return 0;
 }
 
 int GUI_HookList_Quit(PP4M_HOOK *hook_list) {
