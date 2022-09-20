@@ -301,7 +301,12 @@ void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *soc
         CORE_RenderUpdate(background, CLOCKS_PER_SEC / 60, &fps_timer);
 
     }
-
+	
+	// send a leaving command to server
+	char buffer[256];
+	cl_redirect_clcode_LOBBY_POST(CL_LOBBY_POST_LEAVE, socket, buffer, NULL, NULL, NULL);
+    NET_SendPacketToServer(socket, buffer, strlen(buffer)+1);
+	
     SDL_DestroyTexture(background);
     GUI_HookList_Quit(glo_chess_event_hooklist);
 
