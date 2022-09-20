@@ -119,6 +119,22 @@ PP4M_HOOK *MENU_Play_HookList(void) {
 	MENU_Submenu_Play_OnlineButton(hook_list);
 	MENU_Submenu_Play_LocalButton(hook_list);	
 	
+	GUI_TextureAlias *alias	= GUI_Alias_InitAlias();
+	alias->obj = OBJ_LINK_PTR;
+	
+	// positioning a dinamyc rectangle to place the buttons inside
+	alias->dst_rect.x = 50;
+	alias->dst_rect.y = 600;
+	alias->dst_rect.w = 400;
+	alias->dst_rect.h = 50;
+	
+	// create a linked list to host the buttons
+	alias->link = pp4m_HOOK_Init();
+	
+	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_BUTTON_RETURN, glo_lang[_LANG_SET_BACK], PP4M_GREY_LIGHT, 26, PP4M_GREY_NORMAL);	
+	
+	pp4m_HOOK_Next(hook_list, alias);
+	
 	return hook_list;
 }
 
@@ -266,11 +282,11 @@ int MENU_ListInit_Buttons(PP4M_HOOK *hook_list) {
 	// create a linked list to host the buttons
 	alias->link = pp4m_HOOK_Init();
 	
-	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_BUTTON_PLAY, glo_lang[_LANG_SET_PLAY], PP4M_BLACK, 26, PP4M_GREY_NORMAL);	
-	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_NONE, glo_lang[_LANG_SET_STATISTICS], PP4M_GREY_NORMAL, 26, PP4M_GREY_LIGHT);		
-	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_NONE, glo_lang[_LANG_SET_INFO], PP4M_GREY_NORMAL, 26, PP4M_GREY_LIGHT);	
-	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_NONE, glo_lang[_LANG_SET_SETTINGS], PP4M_GREY_NORMAL, 26, PP4M_GREY_LIGHT);		
-	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_BUTTON_RETURN, glo_lang[_LANG_SET_QUIT], PP4M_BLACK, 26, PP4M_GREY_NORMAL);	
+	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_BUTTON_PLAY, glo_lang[_LANG_SET_PLAY], PP4M_GREY_LIGHT, 26, PP4M_GREY_NORMAL);	
+	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_NONE, glo_lang[_LANG_SET_STATISTICS], PP4M_GREY_LIGHT, 26, PP4M_GREY_LIGHT);		
+	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_NONE, glo_lang[_LANG_SET_INFO], PP4M_GREY_LIGHT, 26, PP4M_GREY_LIGHT);	
+	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_NONE, glo_lang[_LANG_SET_SETTINGS], PP4M_GREY_LIGHT, 26, PP4M_GREY_LIGHT);		
+	MENU_ListButtons_InitButton(alias, OPENSANS_REGULAR, OBJ_BUTTON_RETURN, glo_lang[_LANG_SET_QUIT], PP4M_GREY_LIGHT, 26, PP4M_GREY_NORMAL);	
 	
 	pp4m_HOOK_Next(hook_list, alias);
 	
