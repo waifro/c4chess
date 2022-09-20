@@ -50,62 +50,6 @@ int main (int argc, char *argv[]) {
     
     NET_CloseSocket(&socket);
     GLOBAL_DestrUser(&glo_user);
-    
-    /*
-    DEBUG_PrintBox(1, "user: %s", glo_user.username);
-
-    CHESS_CORE_PLAYER player = WHITE_PLAYER;
-
-    char *server_addr = NET_DEFAULT_SERVER;
-    cli_t socket = pp4m_NET_Init(TCP);
-
-    
-
-    if (NET_ConnectSocketToServer(&socket, server_addr, NET_PORT_TESTNET) < 0) {
-        DEBUG_PrintBox(1, "error socket: %s, %d", strerror(errno), pp4m_NET_RecieveError());
-
-        while(1) {
-            SDL_RenderClear(glo_render);
-            DEBUG_UpdateBox_Render();
-            SDL_RenderPresent(glo_render);
-        }
-    }
-
-    DEBUG_PrintBox(1, "connection established to [%s:%d]", server_addr, NET_PORT_TESTNET);
-
-    // make CL_REQ_ASSIGN_LOBBY in network
-    char buf_1[256]; char buf_2[256];
-    cl_redirect_clcode_REQ(CL_REQ_ASSIGN_LOBBY, buf_2);
-    NET_SendPacketToServer(&socket, buf_2, strlen(buf_2)+1);
-    DEBUG_PrintBox(2, "crafted buf_2: [%s]", buf_2);
-    DEBUG_PrintBox(2, "REQ sended, waiting for lobby confirm...");
-
-    while(1) {
-
-        if (NET_DetectSignal(&socket) > 0) {
-            cl_GrabPacket(&socket, buf_1);
-            DEBUG_PrintBox(2, "recieved buf_1: [%s]", buf_1);
-            DEBUG_PrintBox(2, "Initialized room, ready");
-            break;
-        }
-
-        SDL_RenderClear(glo_render);
-        DEBUG_UpdateBox_Render();
-        SDL_RenderPresent(glo_render);
-    }
-
-    char *fen_notation = CORE_NET_ChessboardInit(&player, buf_1);
-    DEBUG_PrintBox(1, "configured chessboard, ready");
-
-    CORE_InitChess_Play(player, fen_notation, &socket);
-
-    NET_CloseSocket(&socket);
-    GLOBAL_DestrUser(&glo_user);
-
-    /*
-    GUI_PopupWindow_Core(100, 50, 1080, 590, "test");
-    GUI_Testing();
-    */
 
     // Exiting from game
     DEBUG_QuitBox();

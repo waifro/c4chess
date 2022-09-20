@@ -107,10 +107,7 @@ int MENU_UpdateRedirect_HookLink(PP4M_HOOK **hook_list_arr, int *index, PP4M_INP
 	}
 	
 	// exit if index is below zero
-	if (*index < 0) {
-		result = -1;
-		printf("exiting from game..\n");
-	}
+	if (*index < 0) result = -1;
 	
 	return result;
 }
@@ -151,6 +148,7 @@ PP4M_HOOK *MENU_Play_LoadingGame_Online_HookList(int *socket) {
 	return hook_list;
 }
 
+// THIS IS TEMPORARY UNTILL PROPPER ALTERNATIVE CORE FOR LOADING STUFF
 int MENUPtr_SEQ_AssignLobby(int *socket) {
 	int result = 0;
 	
@@ -160,15 +158,13 @@ int MENUPtr_SEQ_AssignLobby(int *socket) {
 		
 		result = cl_GrabPacket(socket, buffer);
 		
-		printf("buf recieved: [%s]\n", buffer);
+		DEBUG_PrintBox(1, "buf recieved: [%s]\n", buffer);
 		
 		if (result != SV_LOBBY_POST_INIT)
 			return -1;
 			
 		CHESS_CORE_PLAYER player;
-		
 		char *fen_notation = CORE_NET_ChessboardInit(&player, buffer);
-		
 		CORE_InitChess_Play(player, fen_notation, socket);
 		
 		return 1;
