@@ -342,6 +342,11 @@ int GUI_HoverMouse_Highlight(PP4M_INPUT_POS *input, GUI_TextureAlias **alias_ttr
 	GUI_TextureAlias *ttr = *alias_ttr;
 	GUI_TextureAlias *ptr = *alias_ptr;
 	
+	if (ttr->obj == OBJ_NONE ||
+		ttr->obj == OBJ_BUTTON_LINK_OFF ||
+		ttr->obj == OBJ_BUTTON_LINK_ON)
+		return -1;
+	
 	// mouse hovering on top of object
 	if (ttr != ptr) {
 			
