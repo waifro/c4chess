@@ -72,6 +72,16 @@ int MENU_Core(SDL_Texture *background, cli_t *socket) {
 	return 0;
 }
 
+int MENU_HookLisk_ReturnToMenu(PP4M_HOOK **hook_list_arr, int *index) {
+	
+	for ( ; *index > 0; ) {
+		GUI_HookList_Quit(hook_list_arr[*index]);
+		*index -= 1;
+	}
+	
+	return 0;
+}
+
 int MENU_UpdateRedirect_HookLink(PP4M_HOOK **hook_list_arr, int *index, PP4M_INPUT_POS *input, int *socket) {
 	int result = -1;
 	
@@ -80,6 +90,7 @@ int MENU_UpdateRedirect_HookLink(PP4M_HOOK **hook_list_arr, int *index, PP4M_INP
 	if (result == -1) {
 		GUI_HookList_Quit(hook_list_arr[*index]);
 		*index -= 1;
+		result = 0; // resetting to stable
 	}
 	
 	else if (result == OBJ_BUTTON_PLAY) {
@@ -88,12 +99,18 @@ int MENU_UpdateRedirect_HookLink(PP4M_HOOK **hook_list_arr, int *index, PP4M_INP
 	}
 	
 	else if (result == OBJ_BUTTON_PLAY_ONLINE) {
+		
+		MENU_HookLisk_ReturnToMenu(hook_list_arr, index);
+	
 		*index += 1;
 		hook_list_arr[*index] = MENU_Play_LoadingGame_Online_HookList(socket);
 	}
 	
 	// exit if index is below zero
-	if (*index < 0) result = -1;
+	if (*index < 0) {
+		result = -1;
+		printf("exiting from game..\n");
+	}
 	
 	return result;
 }
