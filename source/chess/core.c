@@ -250,6 +250,40 @@ void CORE_RenderUpdate(SDL_Texture *background, int frames_per_sec, int *timer) 
     return;
 }
 
+// wait for a *SV_STATE* command from the server
+int *CORE_NET_AwaitCommand_SV_STATE(int *socket) {
+    int result = 0:
+
+    // socket invalid
+    if (verify_socket(socket) < 0)
+        return -1;
+
+    // signal an incoming packet
+    if (NET_DetectSignal(socket) > 0) {
+
+        // we aren't verifying the packet if valid
+        char buffer[256];
+        if (NET_RecvPacket(socket, buffer, 255) > 0)
+            result = retrieve_code(buffer);
+    }
+
+    return result;
+}
+
+int *CORE_NET_SeqRedirect_LoadSeq(int cmd_init) {
+
+    int *list_seq_cmd =
+
+    return (list_seq_cmd);
+}
+
+int CORE_NET_InitSeqCommand(int cmd) {
+
+    CORE_NET_SeqRedirect_LoadSeq
+
+    return 0;
+}
+
 void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *socket) {
 
     /* preserve player */
