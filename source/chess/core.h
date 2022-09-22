@@ -89,12 +89,18 @@ int CORE_NET_UpdateLobby(int *code, int *socket, char **buf_arr, int *position_o
 
 int CORE_NET_SocketRedirect(int *socket, CHESS_CORE_PLAYER *player);
 
+/* on success, it follows the sequence of the requested behavior */
+int CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY(int *socket, int *buf_cmd);
+
+/* on success, redirects to requested behavior */
+int CORE_NET_CommandSequence(int *socket, CLIENT_CMD *master_cmd, int *buf_cmd);
+
 /*
     on success, returns a *SV_STATE* command
      0 on nothing
     -1 on error
 */
-int *CORE_NET_AwaitCommand_SV_STATE(int *socket);
+int CORE_NET_AwaitCommand_SV_STATE(int *socket);
 
 void CORE_RenderUpdate(SDL_Texture *background, int frames_per_sec, int *timer);
 
