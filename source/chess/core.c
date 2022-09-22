@@ -270,20 +270,6 @@ int *CORE_NET_AwaitCommand_SV_STATE(int *socket) {
     return result;
 }
 
-int *CORE_NET_SeqRedirect_LoadSeq(int cmd_init) {
-
-    int *list_seq_cmd =
-
-    return (list_seq_cmd);
-}
-
-int CORE_NET_InitSeqCommand(int cmd) {
-
-    CORE_NET_SeqRedirect_LoadSeq
-
-    return 0;
-}
-
 void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *socket) {
 
     /* preserve player */
