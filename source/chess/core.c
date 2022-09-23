@@ -263,10 +263,7 @@ int CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY(int *socket, int *buf_cmd, char *b
         result = NET_SendPacket(socket, buffer, strlen(buffer)+1);
     }
 
-    else if (*buf_cmd == CL_REQ_ASSIGN_LOBBY)
-        result = NET_RecvPacket(socket, buffer, strlen(buffer)+1);
-
-    else if (*buf_cmd == SV_STATE_CONFIRM)
+    else if (NET_DetectSignal(socket) > 0)
         result = NET_RecvPacket(socket, buffer, strlen(buffer)+1);
 
     if (result != -1) {
