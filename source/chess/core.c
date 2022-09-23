@@ -253,34 +253,36 @@ void CORE_RenderUpdate(SDL_Texture *background, int frames_per_sec, int *timer) 
 
 int CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY(int *socket, int *buf_cmd, char *buffer) {
     int result = 0;
-
-    // verify that we recieve at least this few packets:
-
-    // first one is SV_STATE_CONFIRM
-    // second one is SV_LOBBY_POST_INIT
-
-    if (*buf_cmd == 0) {
+	
+	if (*buf_cmd == -1) return 0;
+    else if (*buf_cmd == 0) {
         cl_redirect_clcode_REQ(CL_REQ_ASSIGN_LOBBY, buffer);
         result = NET_SendPacket(socket, buffer, strlen(buffer)+1);
         DEBUG_PrintBox(2, "CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY: sent mesg");
         
         if (result != -1)
         	*buf_cmd = CL_REQ_ASSIGN_LOBBY;
+        	
+        return 0;
     }
 
     else if (NET_DetectSignal(socket) > 0) {
         result = NET_RecvPacket(socket, buffer, strlen(buffer)+1);
         DEBUG_PrintBox(2, "CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY: recieved mesg");
         
-        if (result != -1)
-        	*buf_cmd = retrieve_code(buffer);
+        int cmd = retrieve_code(buffer);
+
+		if (cmd == SV_LOBBY_POST_INIT)
+			return 1;
 	}
 
     // handling at least here few errors
-    if (result < 0)
-        DEBUG_PrintBox(2, "CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY: error %d", result);
-
-    return result;
+    if (result < 0) {
+    	DEBUG_PrintBox(2, "CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY: error %d", result);
+    	return -1;
+	}
+	
+    return 0;
 }
 
 int CORE_NET_CommandSequence(int *socket, int *master_cmd, int *buf_cmd, char *buffer) {
@@ -299,14 +301,14 @@ int CORE_InitGame_AwaitServer(SDL_Texture *bg, int *socket) {
 	
 	char buffer[256];
 	int master_cmd = CL_REQ_ASSIGN_LOBBY;
-	int buf_cmd = 0;
-	int result = 0, result_bak = -1;
+	int buf_cmd = 0, timer = 0;
+	int result = 0;
 	
 	PP4M_HOOK *hook_list = pp4m_HOOK_Init();
 	
 	GUI_TextureAlias *alias = GUI_Alias_InitAlias();
 	alias->obj = OBJ_NONE;
-	alias->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_BLACK, 24, &alias->dst_rect, 25, 0, ".");
+	alias->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_BLACK, 24, &alias->dst_rect, 25, 0, "loading...");
 	alias->dst_rect.y = glo_screen_h - alias->dst_rect.h - 25;
 	
 	pp4m_HOOK_Next(hook_list, alias);
@@ -318,26 +320,30 @@ int CORE_InitGame_AwaitServer(SDL_Texture *bg, int *socket) {
 		if (event.type == SDL_QUIT) break;
 		
 		result = CORE_NET_CommandSequence(socket, &master_cmd, &buf_cmd, buffer);
-		if (result != result_bak) {
+		if (result != 0) {
 		
-			if (result < 0)
+			if (result < 0) {
 				GUI_Alias_UpdateText(alias, OPENSANS_REGULAR, PP4M_RED, 24, "an error occurred");
-			else if (result == 0) 
-				GUI_Alias_UpdateText(alias, OPENSANS_REGULAR, PP4M_BLACK, 24, "loading...");
-			else if (result == 1) {
-				GUI_Alias_UpdateText(alias, OPENSANS_REGULAR, PP4M_GREEN, 24, "lobby ready");
-				
-				DEBUG_PrintBox(2, "buffer: %s", buffer);
+				buf_cmd = -1;
 			}
 			
-			result_bak = result;
+			else if (result == 1) {
+				GUI_Alias_UpdateText(alias, OPENSANS_REGULAR, PP4M_GREEN, 24, "lobby ready");
+				buf_cmd = -1;
+				DEBUG_PrintBox(2, "buffer: %s", buffer);
+			}
 		}
 		
-		SDL_RenderClear(glo_render);
-		SDL_RenderCopy(glo_render, bg, NULL, NULL);
-		GUI_HookLink_Render(hook_list);
-		DEBUG_UpdateBox_Render();
-		SDL_RenderPresent(glo_render);
+		if (pp4m_FramerateTimer(CLOCKS_PER_SEC / 60, &timer, 0) == true) {
+
+			SDL_RenderClear(glo_render);
+
+			SDL_RenderCopy(glo_render, bg, NULL, NULL);
+			GUI_HookLink_Render(hook_list);
+			DEBUG_UpdateBox_Render();
+
+			SDL_RenderPresent(glo_render);
+		}
 		
 	}
 
