@@ -10,6 +10,7 @@
 
 #include "../pp4m/pp4m.h"
 #include "../pp4m/pp4m_net.h"
+#include "../pp4m/pp4m_ttf.h"
 #include "../pp4m/pp4m_draw.h"
 #include "../pp4m/pp4m_image.h"
 #include "../pp4m/pp4m_input.h"
@@ -224,7 +225,7 @@ int CORE_NET_UpdateLobby(int *code, int *socket, char **buf_arr, int *position_o
     // recieve packets
     if (NET_DetectSignal(socket) > 0) {
 
-            cl_svcode_redirect(cl_GrabPacket(socket, buf_arr[0]), buf_arr[0], position_old, position_new, promotn);
+            cl_svcode_redirect(NET_HandlePacket(socket, buf_arr[0]), buf_arr[0], position_old, position_new, promotn);
             DEBUG_PrintBox(2, "recieved buf: [%s] [%d] [%d] [%d]", buf_arr[0], *position_old, *position_new, *promotn);
 
     } else memset(buf_arr[0], 0x00, 255);
@@ -261,24 +262,28 @@ int CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY(int *socket, int *buf_cmd, char *b
     if (*buf_cmd == 0) {
         cl_redirect_clcode_REQ(CL_REQ_ASSIGN_LOBBY, buffer);
         result = NET_SendPacket(socket, buffer, strlen(buffer)+1);
+        DEBUG_PrintBox(2, "CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY: sent mesg");
+        
+        if (result != -1)
+        	*buf_cmd = CL_REQ_ASSIGN_LOBBY;
     }
 
-    else if (NET_DetectSignal(socket) > 0)
+    else if (NET_DetectSignal(socket) > 0) {
         result = NET_RecvPacket(socket, buffer, strlen(buffer)+1);
-
-    if (result != -1) {
-        if (verify_mesg(buffer) == 1)
-            *buf_cmd = result;
-    }
+        DEBUG_PrintBox(2, "CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY: recieved mesg");
+        
+        if (result != -1)
+        	*buf_cmd = retrieve_code(buffer);
+	}
 
     // handling at least here few errors
-    if (result != 1 && result != 0)
+    if (result < 0)
         DEBUG_PrintBox(2, "CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY: error %d", result);
 
     return result;
 }
 
-int CORE_NET_CommandSequence(int *socket, CLIENT_CMD *master_cmd, int *buf_cmd, char *buffer) {
+int CORE_NET_CommandSequence(int *socket, int *master_cmd, int *buf_cmd, char *buffer) {
     int result = 0;
 
     // buf_cmd is used to keep track of last recorded cmd
@@ -288,6 +293,55 @@ int CORE_NET_CommandSequence(int *socket, CLIENT_CMD *master_cmd, int *buf_cmd, 
 
     if (result == -1) DEBUG_PrintBox(2, "CORE_NET_CommandSequence: error");
     return result;
+}
+
+int CORE_InitGame_AwaitServer(SDL_Texture *bg, int *socket) {
+	
+	char buffer[256];
+	int master_cmd = CL_REQ_ASSIGN_LOBBY;
+	int buf_cmd = 0;
+	int result = 0, result_bak = -1;
+	
+	PP4M_HOOK *hook_list = pp4m_HOOK_Init();
+	
+	GUI_TextureAlias *alias = GUI_Alias_InitAlias();
+	alias->obj = OBJ_NONE;
+	alias->texture = pp4m_TTF_TextureFont(glo_render, OPENSANS_REGULAR, PP4M_BLACK, 24, &alias->dst_rect, 25, 0, ".");
+	alias->dst_rect.y = glo_screen_h - alias->dst_rect.h - 25;
+	
+	pp4m_HOOK_Next(hook_list, alias);
+	
+	SDL_Event event;
+	
+	while(1) {
+		SDL_PollEvent(&event);
+		if (event.type == SDL_QUIT) break;
+		
+		result = CORE_NET_CommandSequence(socket, &master_cmd, &buf_cmd, buffer);
+		if (result != result_bak) {
+		
+			if (result < 0)
+				GUI_Alias_UpdateText(alias, OPENSANS_REGULAR, PP4M_RED, 24, "an error occurred");
+			else if (result == 0) 
+				GUI_Alias_UpdateText(alias, OPENSANS_REGULAR, PP4M_BLACK, 24, "loading...");
+			else if (result == 1) {
+				GUI_Alias_UpdateText(alias, OPENSANS_REGULAR, PP4M_GREEN, 24, "lobby ready");
+				
+				DEBUG_PrintBox(2, "buffer: %s", buffer);
+			}
+			
+			result_bak = result;
+		}
+		
+		SDL_RenderClear(glo_render);
+		SDL_RenderCopy(glo_render, bg, NULL, NULL);
+		GUI_HookLink_Render(hook_list);
+		DEBUG_UpdateBox_Render();
+		SDL_RenderPresent(glo_render);
+		
+	}
+
+	return 0;
 }
 
 void CORE_InitChess_Play(CHESS_CORE_PLAYER player_view, char *fen_init, int *socket) {

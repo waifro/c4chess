@@ -93,14 +93,9 @@ int CORE_NET_SocketRedirect(int *socket, CHESS_CORE_PLAYER *player);
 int CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY(int *socket, int *buf_cmd, char *buffer);
 
 /* on success, redirects to requested behavior */
-int CORE_NET_CommandSequence(int *socket, CLIENT_CMD *master_cmd, int *buf_cmd, char *buffer);
+int CORE_NET_CommandSequence(int *socket, int *master_cmd, int *buf_cmd, char *buffer);
 
-/*
-    on success, returns a *SV_STATE* command
-     0 on nothing
-    -1 on error
-*/
-int CORE_NET_AwaitCommand_SV_STATE(int *socket);
+int CORE_InitGame_AwaitServer(SDL_Texture *bg, int *socket);
 
 void CORE_RenderUpdate(SDL_Texture *background, int frames_per_sec, int *timer);
 

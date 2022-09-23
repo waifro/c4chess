@@ -19,7 +19,7 @@ int MENU_Core(SDL_Texture *background, cli_t *socket);
 // on success, return to main menu, unless *index is less then 1
 int MENU_HookList_ReturnToMenu(PP4M_HOOK **hook_list_arr, int *index);
 
-int MENU_UpdateRedirect_HookLink(PP4M_HOOK **hook_list_arr, int *index, PP4M_INPUT_POS *input, int *socket);
+int MENU_UpdateRedirect_HookLink(PP4M_HOOK **hook_list_arr, SDL_Texture *bg, int *index, PP4M_INPUT_POS *input, int *socket);
 
 PP4M_HOOK *MENU_Play_HookList(void);
 

@@ -64,7 +64,7 @@ int MENU_Core(SDL_Texture *background, cli_t *socket) {
 		MENU_Core_UpdateRender(background, hook_list_arr[index], &fps_timer);
 
 		// hop into a new hook_list
-		result = MENU_UpdateRedirect_HookLink(hook_list_arr, &index, &input, socket);
+		result = MENU_UpdateRedirect_HookLink(hook_list_arr, background, &index, &input, socket);
 	}
 
 	MENU_HookList_Quit(hook_list_arr, 32);
@@ -82,7 +82,7 @@ int MENU_HookList_ReturnToMenu(PP4M_HOOK **hook_list_arr, int *index) {
 	return 0;
 }
 
-int MENU_UpdateRedirect_HookLink(PP4M_HOOK **hook_list_arr, int *index, PP4M_INPUT_POS *input, int *socket) {
+int MENU_UpdateRedirect_HookLink(PP4M_HOOK **hook_list_arr, SDL_Texture *bg, int *index, PP4M_INPUT_POS *input, int *socket) {
 	int result = -1;
 
 	result = GUI_HookLink_Update(hook_list_arr[*index], *input, NULL, -1, (int*){&(int){-1}}, socket);
@@ -103,7 +103,8 @@ int MENU_UpdateRedirect_HookLink(PP4M_HOOK **hook_list_arr, int *index, PP4M_INP
 		MENU_HookList_ReturnToMenu(hook_list_arr, index);
 
 		*index += 1;
-		hook_list_arr[*index] = MENU_Play_LoadingGame_Online_HookList(socket);
+		CORE_InitGame_AwaitServer(bg, socket);
+		//hook_list_arr[*index] = MENU_Play_LoadingGame_Online_HookList(socket);
 	}
 
 	// exit if index is below zero
@@ -172,7 +173,7 @@ int MENUPtr_SEQ_AssignLobby(int *socket) {
 
 		char buffer[256];
 
-		result = cl_GrabPacket(socket, buffer);
+		result = NET_HandlePacket(socket, buffer);
 
 		DEBUG_PrintBox(1, "buf recieved: [%s]\n", buffer);
 
