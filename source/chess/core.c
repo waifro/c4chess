@@ -250,30 +250,11 @@ void CORE_RenderUpdate(SDL_Texture *background, int frames_per_sec, int *timer) 
     return;
 }
 
-// wait for a *SV_STATE* command from the server
-int CORE_NET_AwaitCommand_SV_STATE(int *socket) {
-    int result = 0:
-
-    // socket invalid
-    if (verify_socket(socket) < 0)
-        return -1;
-
-    // signal an incoming packet
-    if (NET_DetectSignal(socket) > 0) {
-
-        // we aren't verifying the packet if valid
-        char buffer[256];
-        if (NET_RecvPacket(socket, buffer, 255) > 0)
-            result = retrieve_code(buffer);
-    }
-
-    return result;
-}
-
 int CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY(int *socket, int *buf_cmd, char *buffer) {
     int result = 0;
 
-    // we should verify that we recieve two packets:
+    // verify that we recieve at least this few packets:
+
     // first one is SV_STATE_CONFIRM
     // second one is SV_LOBBY_POST_INIT
 
@@ -283,19 +264,19 @@ int CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY(int *socket, int *buf_cmd, char *b
     }
 
     else if (*buf_cmd == CL_REQ_ASSIGN_LOBBY)
-        result = CORE_NET_AwaitCommand_SV_STATE(socket);
-
+        result = NET_RecvPacket(socket, buffer, strlen(buffer)+1);
 
     else if (*buf_cmd == SV_STATE_CONFIRM)
         result = NET_RecvPacket(socket, buffer, strlen(buffer)+1);
 
     if (result != -1) {
-        result = retrieve_code(buffer);
+        if (verify_mesg(buffer) == 1)
+            *buf_cmd = result;
+    }
 
-        // we dont know what code we have
-        // we could just assume that it works
-        *buf_cmd = result;
-    } else DEBUG_PrintBox(2, "CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY: error");
+    // handling at least here few errors
+    if (result != 1 && result != 0)
+        DEBUG_PrintBox(2, "CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY: error %d", result);
 
     return result;
 }
