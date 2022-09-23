@@ -90,10 +90,10 @@ int CORE_NET_UpdateLobby(int *code, int *socket, char **buf_arr, int *position_o
 int CORE_NET_SocketRedirect(int *socket, CHESS_CORE_PLAYER *player);
 
 /* on success, it follows the sequence of the requested behavior */
-int CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY(int *socket, int *buf_cmd);
+int CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY(int *socket, int *buf_cmd, char *buffer);
 
 /* on success, redirects to requested behavior */
-int CORE_NET_CommandSequence(int *socket, CLIENT_CMD *master_cmd, int *buf_cmd);
+int CORE_NET_CommandSequence(int *socket, CLIENT_CMD *master_cmd, int *buf_cmd, char *buffer);
 
 /*
     on success, returns a *SV_STATE* command

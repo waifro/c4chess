@@ -270,7 +270,7 @@ int CORE_NET_AwaitCommand_SV_STATE(int *socket) {
     return result;
 }
 
-int CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY(int *socket, int *buf_cmd) {
+int CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY(int *socket, int *buf_cmd, char *buffer) {
     int result = 0;
 
     // we should verify that we recieve two packets:
@@ -278,58 +278,35 @@ int CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY(int *socket, int *buf_cmd) {
     // second one is SV_LOBBY_POST_INIT
 
     if (*buf_cmd == 0) {
-        char buffer[256];
         cl_redirect_clcode_REQ(CL_REQ_ASSIGN_LOBBY, buffer);
         result = NET_SendPacket(socket, buffer, strlen(buffer)+1);
-
-        if (result != -1) {
-            result = retrieve_code(buffer);
-
-            // we dont know what code we have
-            // we could just assume that it works
-            *buf_cmd = result;
-        }
     }
 
-    else if (*buf_cmd == CL_REQ_ASSIGN_LOBBY) {
-
+    else if (*buf_cmd == CL_REQ_ASSIGN_LOBBY)
         result = CORE_NET_AwaitCommand_SV_STATE(socket);
 
-        if (result != -1) {
-            result = retrieve_code(buffer);
 
-            // we dont know what code we have
-            // we could just assume that it works
-            *buf_cmd = result;
-        }
-    }
-
-    else if (*buf_cmd == SV_STATE_CONFIRM) {
-
+    else if (*buf_cmd == SV_STATE_CONFIRM)
         result = NET_RecvPacket(socket, buffer, strlen(buffer)+1);
 
-        if (result != -1) {
-            result = retrieve_code(buffer);
+    if (result != -1) {
+        result = retrieve_code(buffer);
 
-            // we dont know what code we have
-            // we could just assume that it works
-            *buf_cmd = result;
-        }
-    }
-
-    if (result == -1)
-        DEBUG_PrintBox(2, "CORE_NET_CommandSequence: error socket");
+        // we dont know what code we have
+        // we could just assume that it works
+        *buf_cmd = result;
+    } else DEBUG_PrintBox(2, "CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY: error");
 
     return result;
 }
 
-int CORE_NET_CommandSequence(int *socket, CLIENT_CMD *master_cmd, int *buf_cmd) {
+int CORE_NET_CommandSequence(int *socket, CLIENT_CMD *master_cmd, int *buf_cmd, char *buffer) {
     int result = 0;
 
     // buf_cmd is used to keep track of last recorded cmd
 
     if (*master_cmd == CL_REQ_ASSIGN_LOBBY)
-        result = CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY(socket, buf_cmd);
+        result = CORE_NET_CommandSequence_REQ_ASSIGN_LOBBY(socket, buf_cmd, buffer);
 
     if (result == -1) DEBUG_PrintBox(2, "CORE_NET_CommandSequence: error");
     return result;
