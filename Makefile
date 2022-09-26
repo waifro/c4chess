@@ -12,6 +12,7 @@ SOURCE_ANIMATION := 	source/animation/animation.c
 SOURCE_CHESS := 	source/chess/core.c source/chess/middle.c source/chess/chess.c source/chess/dot.c source/chess/event.c source/chess/fen.c source/chess/archive.c
 SOURCE_DASHBOARD := 	source/dashboard/gui.c source/dashboard/gui_alias.c source/dashboard/menu.c source/dashboard/popup.c source/dashboard/ingame.c source/dashboard/textbox.c source/dashboard/destroy.c
 SOURCE_SECURITY	:= 	source/security/sec.c source/security/debug.c
+SOURCE_ENGINE 	:=	source/engine/engine.c
 
 SOURCE_PROJECT := $(SOURCE_MAIN) $(SOURCE_ANIMATION) $(SOURCE_CHESS) $(SOURCE_DASHBOARD) $(SOURCE_SECURITY)
 
