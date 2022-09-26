@@ -7,13 +7,19 @@ extern PP4M_HOOK *glo_engine_net_buffer;
 
 /* prototypes */
 
-// allocates a buffer under first in - last out
-int ENGINE_NET_AllocBuffer(char *buffer);
+// defaults to glo_engine_net_buffer if head is NULL
+int ENGINE_NET_CheckHead(PP4M_HOOK **head);
 
-// compares a buffer into the list and returns the pointer to the list, otherwise NULL on error
-void *ENGINE_NET_CmpBuffer(char *buffer);
+// initializes a linked list
+int ENGINE_NET_InitFifo(PP4M_HOOK *head);
 
-// remove a buffer from the list (requires the original pointer)
-int ENGINE_NET_DeallocBuffer(char *buffer);
+// quits the entire linked list
+int ENGINE_NET_QuitFifo(PP4M_HOOK *head);
+
+// allocates a buffer under first in - first out (FIFO)
+int ENGINE_NET_AllocBuffer(PP4M_HOOK *head, char *buffer);
+
+// deallocates a buffer under first in - first out (FIFO)
+int ENGINE_NET_DeallocBuffer(PP4M_HOOK *head);
 
 #endif
