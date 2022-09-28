@@ -14,7 +14,7 @@ SOURCE_DASHBOARD := 	source/dashboard/gui.c source/dashboard/gui_alias.c source/
 SOURCE_SECURITY	:= 	source/security/sec.c source/security/debug.c
 SOURCE_ENGINE 	:=	source/engine/engine.c
 
-SOURCE_PROJECT := $(SOURCE_MAIN) $(SOURCE_ANIMATION) $(SOURCE_CHESS) $(SOURCE_DASHBOARD) $(SOURCE_SECURITY)
+SOURCE_PROJECT := $(SOURCE_MAIN) $(SOURCE_ANIMATION) $(SOURCE_CHESS) $(SOURCE_DASHBOARD) $(SOURCE_SECURITY) $(SOURCE_ENGINE)
 
 ODIR := output
 dummy_build_folder := $(shell mkdir $(ODIR))

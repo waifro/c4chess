@@ -8,7 +8,7 @@ extern PP4M_HOOK *glo_engine_net_buffer;
 /* prototypes */
 
 // defaults to glo_engine_net_buffer if head is NULL
-int ENGINE_NET_CheckHead(PP4M_HOOK **head);
+void *ENGINE_NET_CheckHead(PP4M_HOOK *head);
 
 // initializes a linked list
 int ENGINE_NET_InitFifo(PP4M_HOOK *head);

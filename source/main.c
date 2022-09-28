@@ -17,6 +17,7 @@
 #include "dashboard/gui.h"
 #include "dashboard/menu.h"
 #include "security/debug.h"
+#include "engine/engine.h"
 
 #include "c4network/net.h"
 #include "c4network/client.h"
@@ -46,7 +47,32 @@ int main (int argc, char *argv[]) {
     	DEBUG_PrintBox(2, "error socket: [%d] %s, %d", socket, strerror(errno), pp4m_NET_RecieveError());
 	else DEBUG_PrintBox(2, "connection established to [%s:%d]", server_addr, NET_PORT_TESTNET);
 
-    MENU_Core(background, &socket);
+    ENGINE_NET_InitFifo(NULL);
+
+    char *sniff = "ciao";
+    char *clocf = "bruh";
+
+    ENGINE_NET_AllocBuffer(NULL, sniff);
+    ENGINE_NET_AllocBuffer(NULL, clocf);
+    
+    printf("glo_engine 1: %s\n", (char*)glo_engine_net_buffer->ptr);
+    printf("glo_engine 2: %s\n", (char*)glo_engine_net_buffer->next->ptr);
+
+    char *buffer = NULL;
+
+    for (int i = 0; i < 10; i++) {
+
+        if (glo_engine_net_buffer != NULL) {
+            buffer = glo_engine_net_buffer->ptr;
+            printf("buffer [%s]\n", buffer);
+        }
+
+        ENGINE_NET_DeallocBuffer(NULL);
+    }
+
+    ENGINE_NET_QuitFifo(NULL);
+
+    //MENU_Core(background, &socket);
     
     NET_CloseSocket(&socket);
     GLOBAL_DestrUser(&glo_user);

@@ -4,37 +4,42 @@
 
 #include "engine.h"
 
-PP4M_HOOK *glo_engine_net_buffer = NULL;
+PP4M_HOOK *glo_engine_net_buffer;
 
-int ENGINE_NET_CheckHead(PP4M_HOOK **head) {
-    if (*head == NULL) *head = glo_engine_net_buffer;
-    return 0;
+void *ENGINE_NET_CheckHead(PP4M_HOOK *head) {
+    if (head == NULL) return glo_engine_net_buffer;
+    return head;
 }
 
 int ENGINE_NET_InitFifo(PP4M_HOOK *head) {
-    ENGINE_NET_CheckHead(&head);
     head = pp4m_HOOK_Init();
+    glo_engine_net_buffer = head;
     return 0;
 }
 
 int ENGINE_NET_QuitFifo(PP4M_HOOK *head) {
-    ENGINE_NET_CheckHead(&head);
+    head = ENGINE_NET_CheckHead(head);
 
-    int size = pp4m_HOOK_Size(glo_engine_net_buffer);
+    int size = pp4m_HOOK_Size(head);
     for (int i = 0; i < size; i++)
-        pp4m_HOOK_Remove(glo_engine_net_buffer);
+        pp4m_HOOK_Remove(head);
 
     return 0;
 }
 
 int ENGINE_NET_AllocBuffer(PP4M_HOOK *head, char *buffer) {
-    ENGINE_NET_CheckHead(&head);
+    head = ENGINE_NET_CheckHead(head);
     pp4m_HOOK_Next(head, buffer);
     return 0;
 }
 
 int ENGINE_NET_DeallocBuffer(PP4M_HOOK *head) {
-    ENGINE_NET_CheckHead(&head);
+    head = ENGINE_NET_CheckHead(head);
     pp4m_HOOK_RemoveHead(&head);
+
+    // storing new pointer to global buffer
+    glo_engine_net_buffer = head;
+    
     return 0;
 }
+
