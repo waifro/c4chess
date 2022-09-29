@@ -22,4 +22,7 @@ int ENGINE_NET_AllocBuffer(PP4M_HOOK *head, char *buffer);
 // deallocates a buffer under first in - first out (FIFO)
 int ENGINE_NET_DeallocBuffer(PP4M_HOOK *head);
 
+// on success, sends the buffer and deallocates it from the list
+int ENGINE_NET_SendToSocket(PP4M_HOOK *head, int *socket);
+
 #endif
