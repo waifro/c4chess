@@ -47,6 +47,8 @@ int main (int argc, char *argv[]) {
     	DEBUG_PrintBox(2, "error socket: [%d] %s, %d", socket, strerror(errno), pp4m_NET_RecieveError());
 	else DEBUG_PrintBox(2, "connection established to [%s:%d]", server_addr, NET_PORT_TESTNET);
 
+    printf("glo_engine strt: %p\n", glo_engine_net_buffer);
+
     ENGINE_NET_InitFifo(NULL);
 
     char *sniff = "ciao";
@@ -58,19 +60,9 @@ int main (int argc, char *argv[]) {
     printf("glo_engine 1: %s\n", (char*)glo_engine_net_buffer->ptr);
     printf("glo_engine 2: %s\n", (char*)glo_engine_net_buffer->next->ptr);
 
-    char *buffer = NULL;
-
-    for (int i = 0; i < 10; i++) {
-
-        if (glo_engine_net_buffer != NULL) {
-            buffer = glo_engine_net_buffer->ptr;
-            printf("buffer [%s]\n", buffer);
-        }
-
-        ENGINE_NET_DeallocBuffer(NULL);
-    }
-
     ENGINE_NET_QuitFifo(NULL);
+
+    printf("glo_engine end: %p\n", glo_engine_net_buffer);
 
     //MENU_Core(background, &socket);
     

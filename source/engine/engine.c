@@ -24,6 +24,8 @@ int ENGINE_NET_QuitFifo(PP4M_HOOK *head) {
     for (int i = 0; i < size; i++)
         pp4m_HOOK_Remove(head);
 
+    glo_engine_net_buffer = NULL;
+
     return 0;
 }
 
