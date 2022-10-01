@@ -10,7 +10,7 @@ COMPILER := gcc #x86_64-w64-mingw32-gcc # decide what compiler to use
 dir_sources := source
 
 ifeq ($(OS), Windows_NT)
-	subpath := $(wildcard $(foreach var, $(dir_sources), $(shell dir /b /ad /S $(var))))
+	subpath := $(wildcard $(dir_sources) $(foreach var, $(dir_sources), $(shell dir /b /ad /S $(var))))
 else
 	subpath := $(wildcard $(patsubst %:, %, $(shell ls -R $(dir_sources) | grep :)))
 endif
