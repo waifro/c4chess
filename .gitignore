@@ -1,6 +1,5 @@
 **/bin
 **/obj
-**/.deps
 **/autom4te.cache
 **/*.o
 **/.dirstamp
